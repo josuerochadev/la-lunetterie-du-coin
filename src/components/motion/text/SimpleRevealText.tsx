@@ -29,10 +29,7 @@ export default function SimpleRevealText({
 
   return (
     <Component
-      className={cn(
-        'animate-reveal-text opacity-0',
-        className
-      )}
+      className={cn('animate-reveal-text opacity-0', className)}
       style={{
         animationDelay: `${delay}s`,
         animationFillMode: 'forwards',

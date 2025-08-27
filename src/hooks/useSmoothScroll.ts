@@ -47,13 +47,13 @@ export function useSmoothScroll() {
     // Idle detection to pause animation when not scrolling
     const handleScroll = () => {
       clearTimeout(idleTimeout);
-      
+
       // Resume animation if idle
       if (isIdle) {
         isIdle = false;
         animationFrame = requestAnimationFrame(raf);
       }
-      
+
       // Set idle timeout
       idleTimeout = setTimeout(() => {
         isIdle = true;

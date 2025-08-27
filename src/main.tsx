@@ -49,7 +49,12 @@ const initSentry = async () => {
 };
 
 // Initialize Sentry after a delay to not block initial page load
-setTimeout(initSentry, 2000);
+// Use requestIdleCallback for better back/forward cache compatibility
+if ('requestIdleCallback' in window) {
+  requestIdleCallback(() => setTimeout(initSentry, 1000));
+} else {
+  setTimeout(initSentry, 2000);
+}
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(

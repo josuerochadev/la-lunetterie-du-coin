@@ -52,7 +52,7 @@ const Hero = forwardRef<HTMLElement>(() => {
 
       <div className="w-full space-y-section-gap">
         {/* Punchline - Optimized for performance */}
-        <SimpleRevealText 
+        <SimpleRevealText
           text={currentPhrase}
           delay={0.2}
           className="text-title-xl font-black uppercase"

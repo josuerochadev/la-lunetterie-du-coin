@@ -8,7 +8,7 @@
   src: url('/fonts/league-spartan/league-spartan-v14-latin-200.woff2') format('woff2');
 }
 @font-face {
-  font-display: swap;
+  font-display: fallback; /* Faster fallback for critical font */
   font-family: 'League Spartan';
   font-style: normal;
   font-weight: 400;

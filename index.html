@@ -5,23 +5,37 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Critical CSS inline pour éviter render blocking -->
+  <style>
+    /* Critical above-the-fold styles */
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+    #root { min-height: 100vh; }
+    .loading-skeleton { 
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+  </style>
+  
   <title>La Lunetterie du Coin</title>
-<link rel="preload" as="font"
-      href="/fonts/league-spartan/league-spartan-v14-latin-400.woff2"
-      type="font/woff2" crossorigin="anonymous">
-
-<link rel="preload" as="font"
-      href="/fonts/imbue/imbue-v28-latin-400.woff2"
-      type="font/woff2" crossorigin="anonymous">
-
-<link rel="preload" as="font"
-      href="/fonts/imbue/imbue-v28-latin-600.woff2"
-      type="font/woff2" crossorigin="anonymous">
+  
+  <!-- Preload critical fonts only -->
+  <link rel="preload" as="font"
+        href="/fonts/league-spartan/league-spartan-v14-latin-400.woff2"
+        type="font/woff2" crossorigin="anonymous">
+  
+  <!-- Preconnect to speed up other resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 </head>
 
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
+  <script type="module" src="/src/main.tsx" defer></script>
 </body>
 
 </html>
