@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Évite l'indexation de la page 404 explicite
+Disallow: /404
+
+Sitemap: https://www.lalunetterieducoin.fr/sitemap.xml
+Host: https://www.lalunetterieducoin.fr

@@ -1,0 +1,77 @@
+/* ====== CSS VARIABLES (THEME) - PALETTE BICOLORE ====== */
+:root {
+  /* Couleur Brand - Orange (inchangé) */
+  --color-orange-rgb: 255, 132, 0;
+
+  /* Couleur Texte - Mauve foncé élégant (nouveau) */
+  --color-mauve-dark-rgb: 42, 25, 60; /* Plus foncé et raffiné */
+
+  /* Couleur Surface - Violet très clair (nouveau) */
+  --color-violet-light-rgb: 251, 248, 255; /* Très subtil, presque blanc */
+}
+
+/* ====== BASE ====== */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    position: relative;
+    height: 100%;
+    min-height: 100dvh;
+    background-color: rgb(
+      var(--color-orange-rgb)
+    ); /* TODO: migrer vers bg-background en Tailwind */
+  }
+
+  body {
+    @apply font-sans text-body text-text antialiased;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Typo sémantique par défaut (DRY) */
+  h1 {
+    @apply text-title-xl font-extrabold;
+  }
+  h2 {
+    @apply text-title-lg font-extrabold;
+  }
+  h3 {
+    @apply text-title-md font-semibold;
+  }
+  p {
+    @apply leading-relaxed;
+  }
+  small {
+    @apply text-body-sm;
+  }
+
+  a {
+    @apply underline-offset-2;
+  }
+  a:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-accent;
+  }
+
+  /* Motion safety global */
+  @media (prefers-reduced-motion: reduce) {
+    html:focus-within {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

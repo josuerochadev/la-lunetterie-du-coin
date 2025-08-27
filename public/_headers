@@ -1,0 +1,54 @@
+# Headers for improved security and performance
+# This file is used by Netlify, Vercel, and other static hosting platforms
+
+/*
+  # Content Security Policy (CSP)
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://browser.sentry-cdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.sentry.io; media-src 'self'; object-src 'none'; child-src 'none'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  
+  # Security headers
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  X-XSS-Protection: 1; mode=block
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+  
+  # HSTS (HTTP Strict Transport Security)
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  
+  # Performance headers
+  X-DNS-Prefetch-Control: on
+  
+  # Cache control for static assets
+  Cache-Control: public, max-age=31536000, immutable
+
+# Specific rules for HTML files
+/*.html
+  # More restrictive CSP for HTML pages
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://*.sentry.io; media-src 'self'; object-src 'none'; child-src 'none'; worker-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self';
+  
+  # Cache control for HTML (shorter cache)
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Font files
+/fonts/*
+  # Long cache for fonts
+  Cache-Control: public, max-age=31536000, immutable
+  # CORS for fonts
+  Access-Control-Allow-Origin: *
+
+# Static assets (JS, CSS, images)
+/assets/*
+  # Long cache for hashed assets
+  Cache-Control: public, max-age=31536000, immutable
+  
+# Images
+/images/*
+  # Medium cache for images
+  Cache-Control: public, max-age=86400
+
+# Manifest and icons
+/favicon.ico
+  Cache-Control: public, max-age=86400
+
+/manifest.json
+  Cache-Control: public, max-age=86400

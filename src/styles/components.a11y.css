@@ -1,0 +1,25 @@
+/* ====== ACCESSIBILITÉ ====== */
+@layer components {
+  /* Focus utilitaire unifié */
+  .focus-ring:focus-visible {
+    @apply rounded-sm outline-none ring-2 ring-accent ring-offset-2;
+  }
+
+  /* Focus pour boutons circulaires */
+  .focus-ring-circular:focus-visible {
+    @apply rounded-full outline-none ring-2 ring-accent ring-offset-4;
+  }
+
+  /* Accessibilité : utile pour les labels visuels non visibles */
+  .visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+}

@@ -1,0 +1,61 @@
+/* ========= League Spartan ========= */
+
+@font-face {
+  font-display: swap;
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 200;
+  src: url('/fonts/league-spartan/league-spartan-v14-latin-200.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/league-spartan/league-spartan-v14-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/league-spartan/league-spartan-v14-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'League Spartan';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/fonts/league-spartan/league-spartan-v14-latin-900.woff2') format('woff2');
+}
+
+/* ========= Imbue ========= */
+
+@font-face {
+  font-display: swap;
+  font-family: 'Imbue';
+  font-style: normal;
+  font-weight: 200;
+  src: url('/fonts/imbue/imbue-v28-latin-200.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Imbue';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/imbue/imbue-v28-latin-400.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Imbue';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/imbue/imbue-v28-latin-600.woff2') format('woff2');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Imbue';
+  font-style: normal;
+  font-weight: 900;
+  src: url('/fonts/imbue/imbue-v28-latin-900.woff2') format('woff2');
+}

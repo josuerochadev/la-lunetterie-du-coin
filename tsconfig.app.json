@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    /* Somente flags necessárias ao bundle React */
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"]
+  },
+  "include": [
+    "src"
+  ] /* checa todos os .ts/.tsx do app */
+}
