@@ -3,8 +3,7 @@
  */
 
 const requiredEnvVars = {
-  // Sentry configuration (optional but recommended for production)
-  VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
+  // Add truly required environment variables here
 } as const;
 
 const optionalEnvVars = {
@@ -12,6 +11,8 @@ const optionalEnvVars = {
   MODE: import.meta.env.MODE,
   PROD: import.meta.env.PROD,
   DEV: import.meta.env.DEV,
+  // Sentry configuration (optional but recommended for production)
+  VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
 } as const;
 
 /**
@@ -26,16 +27,14 @@ export function validateEnvironment() {
   // Check required environment variables
   Object.entries(requiredEnvVars).forEach(([key, value]) => {
     if (!value) {
-      if (key === 'VITE_SENTRY_DSN') {
-        // Sentry is optional in development but recommended in production
-        if (import.meta.env.PROD) {
-          missingRequired.push(key);
-        } else {
-          missingOptional.push(key);
-        }
-      } else {
-        missingRequired.push(key);
-      }
+      missingRequired.push(key);
+    }
+  });
+
+  // Check optional environment variables
+  Object.entries(optionalEnvVars).forEach(([key, value]) => {
+    if (!value && key !== 'MODE' && key !== 'PROD' && key !== 'DEV') {
+      missingOptional.push(key);
     }
   });
 
