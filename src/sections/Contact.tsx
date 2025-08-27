@@ -14,8 +14,8 @@ import ContactForm from '@/components/contact/ContactForm';
  */
 export default function Contact() {
   return (
-    <SectionContainer 
-      id="contact" 
+    <SectionContainer
+      id="contact"
       className="bg-boat relative text-accent shadow-xl"
       overlayClassName="bg-transparent"
     >

@@ -4,7 +4,7 @@ import Calendar from 'lucide-react/dist/esm/icons/calendar';
 
 import AnimatedItem from '@/components/motion/AnimatedItem';
 import { fadeInUp } from '@/components/motion/variants/fade';
-import SplitText from '@/components/motion/text/SplitText';
+import SimpleRevealText from '@/components/motion/text/SimpleRevealText';
 import LogoEye from '@/assets/logo/logo-eye.svg?react';
 import Button from '@/components/common/Button';
 import { HERO_PHRASES } from '@/config/constants';
@@ -51,10 +51,12 @@ const Hero = forwardRef<HTMLElement>(() => {
       </AnimatedItem>
 
       <div className="w-full space-y-section-gap">
-        {/* Punchline */}
-        <div className="text-title-xl font-black uppercase">
-          <SplitText text={currentPhrase} className="" priority={false} />
-        </div>
+        {/* Punchline - Optimized for performance */}
+        <SimpleRevealText 
+          text={currentPhrase}
+          delay={0.2}
+          className="text-title-xl font-black uppercase"
+        />
 
         {/* Titre - Animation non-bloquante pour LCP */}
         <AnimatedItem index={1.5} variant={fadeInUp} nonBlocking>

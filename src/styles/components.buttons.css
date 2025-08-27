@@ -61,26 +61,25 @@
 
     /* Forme moderne arrondie */
     border-radius: 12px;
-    
+
     /* Glassmorphism plus opaque pour visibilité sur image */
     background: rgba(var(--color-violet-light-rgb), 0.4);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    
+
     /* Bordure plus marquée */
     border: 2px solid rgba(var(--color-mauve-dark-rgb), 0.9);
-    
+
     /* Texte mauve contrasté */
     color: rgba(var(--color-mauve-dark-rgb), 0.9);
-    
+
     /* Ombre douce moderne */
-    box-shadow: 
+    box-shadow:
       0 4px 16px rgba(var(--color-mauve-dark-rgb), 0.1),
       0 2px 8px rgba(var(--color-mauve-dark-rgb), 0.05);
 
     /* Transition fluide */
-    transition:
-      all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   @media (hover: hover) {
@@ -88,15 +87,15 @@
       /* Glassmorphism renforcé au hover */
       background: rgba(var(--color-violet-light-rgb), 0.55);
       border-color: rgba(var(--color-mauve-dark-rgb), 1);
-      
+
       /* Légère élévation moderne */
       transform: translateY(-2px);
-      
+
       /* Ombre plus marquée */
-      box-shadow: 
+      box-shadow:
         0 8px 24px rgba(var(--color-mauve-dark-rgb), 0.15),
         0 4px 12px rgba(var(--color-mauve-dark-rgb), 0.1);
-      
+
       /* Texte plus contrasté */
       color: rgba(var(--color-mauve-dark-rgb), 1);
     }
@@ -104,13 +103,13 @@
     .button-primary:active {
       /* Effet de pression moderne */
       transform: translateY(-1px);
-      
+
       /* Glassmorphism plus intense */
       background: rgba(var(--color-violet-light-rgb), 0.65);
       border-color: rgba(var(--color-mauve-dark-rgb), 1);
-      
+
       /* Ombre réduite */
-      box-shadow: 
+      box-shadow:
         0 4px 16px rgba(var(--color-mauve-dark-rgb), 0.2),
         0 2px 8px rgba(var(--color-mauve-dark-rgb), 0.1);
     }
@@ -122,8 +121,7 @@
     box-shadow:
       /* Ring de focus */
       0 0 0 3px rgba(var(--color-violet-light-rgb), 0.6),
-      /* Ombres normales préservées */
-      0 4px 16px rgba(var(--color-mauve-dark-rgb), 0.1),
+      /* Ombres normales préservées */ 0 4px 16px rgba(var(--color-mauve-dark-rgb), 0.1),
       0 2px 8px rgba(var(--color-mauve-dark-rgb), 0.05);
   }
 

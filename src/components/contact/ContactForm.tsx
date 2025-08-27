@@ -148,9 +148,7 @@ export default function ContactForm() {
             required
             minLength={2}
             maxLength={50}
-            className={`form-input ${
-              fieldErrors.name ? 'form-input--error' : ''
-            }`}
+            className={`form-input ${fieldErrors.name ? 'form-input--error' : ''}`}
             placeholder="Votre nom"
             autoComplete="name"
             aria-describedby="name-hint name-error"
@@ -191,9 +189,7 @@ export default function ContactForm() {
             type="email"
             required
             maxLength={64}
-            className={`form-input ${
-              fieldErrors.email ? 'form-input--error' : ''
-            }`}
+            className={`form-input ${fieldErrors.email ? 'form-input--error' : ''}`}
             placeholder="Votre email"
             autoComplete="email"
             aria-describedby="email-hint email-error"
@@ -235,9 +231,7 @@ export default function ContactForm() {
             required
             minLength={10}
             maxLength={1000}
-            className={`form-input resize-none ${
-              fieldErrors.message ? 'form-input--error' : ''
-            }`}
+            className={`form-input resize-none ${fieldErrors.message ? 'form-input--error' : ''}`}
             placeholder="Votre message..."
             autoComplete="message"
             aria-describedby="message-hint message-error"
