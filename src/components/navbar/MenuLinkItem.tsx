@@ -57,10 +57,10 @@ export default function MenuLinkItem({ label, href, index, onClick }: MenuLinkIt
 
   const content = (
     <>
-      <span className={`mr-4 text-title-sm font-thin ${isActive ? 'text-orange' : ''}`}>
+      <span className={`mr-4 text-body sm:text-title-sm font-thin ${isActive ? 'text-orange' : ''}`}>
         {index + 1}.
       </span>
-      <span className="flex flex-wrap gap-x-1 text-title-lg">
+      <span className="flex flex-wrap gap-x-1 text-title-md sm:text-title-lg">
         <span className={`font-thin ${isActive ? 'text-orange' : ''}`}>{first}</span>
         {last && <span className={`font-extrabold ${isActive ? 'text-orange' : ''}`}>{last}</span>}
       </span>

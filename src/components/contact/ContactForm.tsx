@@ -130,7 +130,7 @@ export default function ContactForm() {
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 gap-md lg:grid-cols-2"
+        className="grid grid-cols-1 gap-sm sm:gap-md lg:grid-cols-2"
         aria-busy={status === 'sending'}
       >
         {/* Champ Nom */}

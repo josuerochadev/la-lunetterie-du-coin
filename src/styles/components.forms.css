@@ -2,7 +2,7 @@
 @layer components {
   /* Formulaire de contact - Glassmorphism sur image de fond */
   .form-input {
-    @apply w-full p-md font-sans tracking-normal transition-all duration-300;
+    @apply w-full p-sm sm:p-md font-sans tracking-normal transition-all duration-300;
 
     /* Glassmorphism élégant qui laisse voir l'image */
     background: rgba(var(--color-violet-light-rgb), 0.15);

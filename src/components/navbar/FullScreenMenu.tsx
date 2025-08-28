@@ -76,7 +76,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         {/* Groupe des liens principaux */}
         <section
           aria-label="Navigation principale"
-          className="mx-auto flex w-fit flex-1 items-center justify-center space-y-6 text-left sm:space-y-sm"
+          className="mx-auto flex w-fit flex-1 items-center justify-center space-y-4 sm:space-y-6 text-left"
         >
           <ul>
             {LINKS.map((link, i) => (
@@ -86,7 +86,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                   index={i}
                   duration={0.4}
                   variant={fadeInDown}
-                  className="block py-2 sm:py-0"
+                  className="block py-1 sm:py-2"
                 >
                   <MenuLinkItem {...link} index={i} onClick={onClose} />
                 </AnimatedItem>
