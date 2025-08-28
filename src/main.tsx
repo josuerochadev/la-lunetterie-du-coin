@@ -17,30 +17,34 @@ import { validateEnvironment } from '@/lib/env';
 // Validate environment variables
 validateEnvironment();
 
-// Lazy load Sentry only when needed (after app is interactive)
+// Ultra-minimal Sentry for mobile performance
 const initSentry = async () => {
   if (import.meta.env.VITE_SENTRY_DSN) {
     try {
       const Sentry = await import('@sentry/react');
+
+      // Skip Sentry on mobile for performance
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      if (isMobile) {
+        console.log('Sentry disabled on mobile for performance');
+        return;
+      }
+
       Sentry.init({
         dsn: import.meta.env.VITE_SENTRY_DSN,
         integrations: [
+          // Only basic error tracking - no replay, no canvas, no feedback
           Sentry.browserTracingIntegration(),
-          // Replay seulement en production pour éviter le spam en dev
-          ...(import.meta.env.PROD
-            ? [
-                Sentry.replayIntegration({
-                  maskAllText: false,
-                  blockAllMedia: false,
-                }),
-              ]
-            : []),
         ],
-        tracesSampleRate: import.meta.env.DEV ? 1.0 : 0.1, // 100% en dev, 10% en prod
-        replaysSessionSampleRate: import.meta.env.PROD ? 0.05 : 0,
-        replaysOnErrorSampleRate: import.meta.env.PROD ? 1.0 : 0,
+        tracesSampleRate: 0.01, // Very low sampling for performance
         environment: import.meta.env.MODE,
-        debug: import.meta.env.DEV, // Logs Sentry en dev
+        debug: false, // Never debug in production
+        // Disable all expensive features
+        beforeSend(event) {
+          // Skip non-critical errors for performance
+          if (event.level === 'warning') return null;
+          return event;
+        },
       });
     } catch (error) {
       console.warn('Failed to initialize Sentry:', error);

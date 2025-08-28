@@ -24,8 +24,12 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 const Background = memo(function Background() {
   const prm = usePrefersReducedMotion();
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    // Détection mobile pour désactiver les animations lourdes
+    setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+
     // Monte après la 1re peinture / quand le thread est calme
     const cb = () => setMounted(true);
     if ('requestIdleCallback' in window) {
@@ -41,7 +45,9 @@ const Background = memo(function Background() {
 
   // Rien du tout si PRM
   if (prm) return null;
-  // Différer l’arrière-plan pour ne pas impacter le LCP
+  // Désactiver complètement sur mobile pour les performances
+  if (isMobile) return null;
+  // Différer l'arrière-plan pour ne pas impacter le LCP
   if (!mounted) return null;
 
   return (

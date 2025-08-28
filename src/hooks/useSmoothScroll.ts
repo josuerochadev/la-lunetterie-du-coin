@@ -1,16 +1,10 @@
 import { useEffect } from 'react';
-import Lenis from '@studio-freight/lenis';
 
 /**
- * Hook React optimisé pour un défilement fluide avec gestion intelligente des ressources.
+ * Hook React ultra-léger pour mobile - plus de smooth scroll lourd
  *
- * Ce hook initialise Lenis avec une gestion optimisée qui:
- * - Pause l'animation quand l'utilisateur n'interagit pas
- * - Respecte les préférences de mouvement réduit
- * - Réduit l'usage CPU/batterie sur mobile
- *
- * @example
- * useSmoothScroll();
+ * Sur mobile, le smooth scroll natif est suffisant et plus performant
+ * Lenis est désactivé pour éviter les 76kB de JS inutilisé
  */
 export function useSmoothScroll() {
   useEffect(() => {
@@ -19,60 +13,57 @@ export function useSmoothScroll() {
       return;
     }
 
-    const lenis = new Lenis({
-      duration: 1,
-      easing: (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2),
-      wheelMultiplier: 1.15,
-      touchMultiplier: 1.2,
-      smoothWheel: true,
-      gestureOrientation: 'vertical',
-      infinite: false,
-    });
+    // Skip Lenis on mobile - use native smooth scroll instead
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      // Enable native smooth scrolling only
+      document.documentElement.style.scrollBehavior = 'smooth';
+      return () => {
+        document.documentElement.style.scrollBehavior = '';
+      };
+    }
 
-    let animationFrame: number;
-    let isIdle = false;
-    let idleTimeout: ReturnType<typeof setTimeout>;
+    // For desktop, we can lazy load Lenis if needed
+    let cleanup: (() => void) | undefined;
 
-    // Performance-optimized RAF loop with idle detection
-    const raf = (time: number) => {
-      if (!isIdle) {
-        lenis.raf(time);
+    const initLenis = async () => {
+      try {
+        const Lenis = (await import('@studio-freight/lenis')).default;
+
+        const lenis = new Lenis({
+          duration: 1,
+          easing: (t) => (t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2),
+          wheelMultiplier: 1.15,
+          touchMultiplier: 1.2,
+          smoothWheel: true,
+          gestureOrientation: 'vertical',
+          infinite: false,
+        });
+
+        let animationFrame: number;
+
+        const raf = (time: number) => {
+          lenis.raf(time);
+          animationFrame = requestAnimationFrame(raf);
+        };
+
         animationFrame = requestAnimationFrame(raf);
+
+        cleanup = () => {
+          cancelAnimationFrame(animationFrame);
+          lenis.destroy();
+        };
+      } catch (error) {
+        console.warn('Failed to load Lenis:', error);
       }
     };
 
-    // Start animation loop
-    animationFrame = requestAnimationFrame(raf);
-
-    // Idle detection to pause animation when not scrolling
-    const handleScroll = () => {
-      clearTimeout(idleTimeout);
-
-      // Resume animation if idle
-      if (isIdle) {
-        isIdle = false;
-        animationFrame = requestAnimationFrame(raf);
-      }
-
-      // Set idle timeout
-      idleTimeout = setTimeout(() => {
-        isIdle = true;
-        cancelAnimationFrame(animationFrame);
-      }, 150);
-    };
-
-    // Listen for scroll events to manage animation state
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('wheel', handleScroll, { passive: true });
-    window.addEventListener('touchmove', handleScroll, { passive: true });
+    // Initialize after a delay to not block initial render
+    const timeoutId = setTimeout(initLenis, 1000);
 
     return () => {
-      clearTimeout(idleTimeout);
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('wheel', handleScroll);
-      window.removeEventListener('touchmove', handleScroll);
-      lenis.destroy();
+      clearTimeout(timeoutId);
+      cleanup?.();
     };
   }, []);
 }

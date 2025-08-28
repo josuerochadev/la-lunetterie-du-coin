@@ -8,18 +8,7 @@
   
   <!-- Critical CSS inline pour éviter render blocking -->
   <style>
-    /* Critical above-the-fold styles */
-    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
-    #root { min-height: 100vh; }
-    .loading-skeleton { 
-      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-      background-size: 200% 100%;
-      animation: loading 1.5s infinite;
-    }
-    @keyframes loading {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
+    :root{--color-orange-rgb:255,132,0;--color-mauve-dark-rgb:42,25,60;--color-violet-light-rgb:251,248,255}*,*::before,*::after{box-sizing:border-box}html,body,#root{position:relative;height:100%;min-height:100dvh;background-color:rgb(var(--color-orange-rgb))}body{font-family:'League Spartan',sans-serif;font-size:clamp(1rem,1.5vw,3.5rem);line-height:1.5;color:rgb(var(--color-mauve-dark-rgb));-webkit-font-smoothing:antialiased;overflow-x:hidden;margin:0;padding:0}@font-face{font-display:fallback;font-family:'League Spartan';font-style:normal;font-weight:400;src:url('/fonts/league-spartan/league-spartan-v14-latin-400.woff2') format('woff2')}@font-face{font-display:swap;font-family:'League Spartan';font-style:normal;font-weight:900;src:url('/fonts/league-spartan/league-spartan-v14-latin-900.woff2') format('woff2')}h1{font-size:clamp(1.5rem,2.5vw,5rem);line-height:1.2;font-weight:900}.text-title-xl{font-size:clamp(3.5rem,5vw,15rem);line-height:1.0;font-weight:900}.text-title-md{font-size:clamp(1.5rem,2.5vw,5rem);line-height:1.2}.font-thin{font-weight:200}.font-black{font-weight:900}.flex{display:flex}.items-center{align-items:center}.justify-center{justify-content:center}.min-h-[100dvh]{min-height:100dvh}.w-full{width:100%}.relative{position:relative}.uppercase{text-transform:uppercase}.space-y-section-gap>:not([hidden])~:not([hidden]){margin-top:clamp(1rem,5vw,3rem)}.mb-section-gap{margin-bottom:clamp(1rem,5vw,3rem)}.px-container-x{padding-left:clamp(1rem,5vw,3rem);padding-right:clamp(1rem,5vw,3rem)}.py-container-y{padding-top:clamp(2rem,5vw,4rem);padding-bottom:clamp(2rem,5vw,4rem)}.button-primary{display:inline-flex;align-items:center;justify-content:center;padding:clamp(1.25rem,1vw,2.5rem) clamp(1.5rem,2vw,3rem);font-family:'Imbue',serif;font-size:clamp(1.25rem,2vw,3.5rem);font-weight:700;cursor:pointer;user-select:none;border-radius:12px;background:rgba(var(--color-violet-light-rgb),0.4);backdrop-filter:blur(20px);border:2px solid rgba(var(--color-mauve-dark-rgb),0.9);color:rgba(var(--color-mauve-dark-rgb),0.9);box-shadow:0 4px 16px rgba(var(--color-mauve-dark-rgb),0.1),0 2px 8px rgba(var(--color-mauve-dark-rgb),0.05);transition:all 200ms cubic-bezier(0.4,0,0.2,1)}@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}.button-primary{transform:none!important;transition-duration:0.01ms!important}}
   </style>
   
   <title>La Lunetterie du Coin</title>

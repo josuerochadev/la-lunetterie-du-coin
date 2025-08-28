@@ -5,6 +5,7 @@
 @import './components.layout.css';
 @import './components.buttons.css';
 @import './components.forms.css';
+@import './mobile-animations.css';
 
 @tailwind base;
 @tailwind components;
