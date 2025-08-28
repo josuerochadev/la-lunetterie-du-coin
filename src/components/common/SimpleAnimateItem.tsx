@@ -13,7 +13,7 @@ interface SimpleAnimateItemProps {
 
 /**
  * Composant d'animation ultra-simple et performant
- * 
+ *
  * Utilise uniquement du CSS natif, pas de JS
  * Parfait pour remplacer tous les AnimatedItem lourds
  */
@@ -26,18 +26,14 @@ export function SimpleAnimateItem({
 }: SimpleAnimateItemProps) {
   // Limiter l'index pour éviter des délais trop longs
   const staggerIndex = Math.min(index, 10);
-  
+
   // Construction de la classe d'animation
-  const animationClass = staggerIndex > 0 
-    ? `simple-${type}-in simple-${type}-in-${staggerIndex}`
-    : `simple-${type}-in`;
-  
+  const animationClass =
+    staggerIndex > 0 ? `simple-${type}-in simple-${type}-in-${staggerIndex}` : `simple-${type}-in`;
+
   return (
-    <Component 
-      className={cn('simple-animate-item', animationClass, className)}
-    >
+    <Component className={cn('simple-animate-item', animationClass, className)}>
       {children}
     </Component>
   );
 }
-

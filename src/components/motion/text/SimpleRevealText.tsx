@@ -13,19 +13,15 @@ interface SimpleRevealTextProps {
  * Version ultra-simplifiée de SimpleRevealText
  * Utilise des animations CSS au lieu de Framer Motion
  */
-export default function SimpleRevealText({ 
-  text, 
-  delay = 0, 
-  className 
-}: SimpleRevealTextProps) {
+export default function SimpleRevealText({ text, delay = 0, className }: SimpleRevealTextProps) {
   const delayIndex = Math.min(Math.floor(delay * 10), 10);
-  
+
   return (
-    <div 
+    <div
       className={cn(
         'simple-fade-in-up',
         delayIndex > 0 && `simple-fade-in-${delayIndex}`,
-        className
+        className,
       )}
     >
       {text}

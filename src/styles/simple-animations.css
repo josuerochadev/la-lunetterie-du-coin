@@ -37,16 +37,36 @@
 }
 
 /* Stagger delays - jusqu'à 10 éléments */
-.simple-fade-in-1 { animation-delay: calc(1 * var(--stagger-delay)); }
-.simple-fade-in-2 { animation-delay: calc(2 * var(--stagger-delay)); }
-.simple-fade-in-3 { animation-delay: calc(3 * var(--stagger-delay)); }
-.simple-fade-in-4 { animation-delay: calc(4 * var(--stagger-delay)); }
-.simple-fade-in-5 { animation-delay: calc(5 * var(--stagger-delay)); }
-.simple-fade-in-6 { animation-delay: calc(6 * var(--stagger-delay)); }
-.simple-fade-in-7 { animation-delay: calc(7 * var(--stagger-delay)); }
-.simple-fade-in-8 { animation-delay: calc(8 * var(--stagger-delay)); }
-.simple-fade-in-9 { animation-delay: calc(9 * var(--stagger-delay)); }
-.simple-fade-in-10 { animation-delay: calc(10 * var(--stagger-delay)); }
+.simple-fade-in-1 {
+  animation-delay: calc(1 * var(--stagger-delay));
+}
+.simple-fade-in-2 {
+  animation-delay: calc(2 * var(--stagger-delay));
+}
+.simple-fade-in-3 {
+  animation-delay: calc(3 * var(--stagger-delay));
+}
+.simple-fade-in-4 {
+  animation-delay: calc(4 * var(--stagger-delay));
+}
+.simple-fade-in-5 {
+  animation-delay: calc(5 * var(--stagger-delay));
+}
+.simple-fade-in-6 {
+  animation-delay: calc(6 * var(--stagger-delay));
+}
+.simple-fade-in-7 {
+  animation-delay: calc(7 * var(--stagger-delay));
+}
+.simple-fade-in-8 {
+  animation-delay: calc(8 * var(--stagger-delay));
+}
+.simple-fade-in-9 {
+  animation-delay: calc(9 * var(--stagger-delay));
+}
+.simple-fade-in-10 {
+  animation-delay: calc(10 * var(--stagger-delay));
+}
 
 /* ========================================
    FADE IN UP - Légère translation vers le haut
@@ -101,7 +121,9 @@
 }
 
 .simple-hover-lift {
-  transition: transform 0.2s var(--animation-easing), box-shadow 0.2s var(--animation-easing);
+  transition:
+    transform 0.2s var(--animation-easing),
+    box-shadow 0.2s var(--animation-easing);
 }
 
 .simple-hover-lift:hover {
@@ -119,7 +141,7 @@
     --animation-duration: 0.4s;
     --stagger-delay: 0.05s;
   }
-  
+
   @keyframes simple-fade-in {
     from {
       opacity: 0;
@@ -130,7 +152,7 @@
       transform: translateY(0);
     }
   }
-  
+
   @keyframes simple-fade-in-up {
     from {
       opacity: 0;
@@ -149,7 +171,7 @@
     --animation-duration: 0.01ms;
     --stagger-delay: 0s;
   }
-  
+
   .simple-fade-in,
   .simple-fade-in-up,
   .simple-fade-in-scale,

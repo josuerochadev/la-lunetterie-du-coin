@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 
 /**
  * Hook ultra-léger pour smooth scroll natif
- * 
+ *
  * Remplace Lenis par du CSS scroll-behavior natif
  * 0kB de JavaScript - 100% CSS natif !
  */
@@ -16,7 +16,7 @@ export function useNativeScroll() {
 
     // Activer le smooth scroll CSS natif
     document.documentElement.style.scrollBehavior = 'smooth';
-    
+
     // Optionnel: Améliorer l'expérience avec scroll-padding
     document.documentElement.style.scrollPaddingTop = '2rem';
 
@@ -35,11 +35,11 @@ export function scrollToElement(elementId: string, offset: number = 0) {
   if (!element) return;
 
   const elementPosition = element.offsetTop - offset;
-  
+
   // Utiliser scrollTo avec behavior smooth natif
   window.scrollTo({
     top: elementPosition,
-    behavior: 'smooth'
+    behavior: 'smooth',
   });
 }
 
@@ -49,6 +49,6 @@ export function scrollToElement(elementId: string, offset: number = 0) {
 export function scrollToTop() {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
+    behavior: 'smooth',
   });
 }

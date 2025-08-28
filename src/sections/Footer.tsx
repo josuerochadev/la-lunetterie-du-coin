@@ -94,7 +94,8 @@ export default function Footer({
                 href="tel:+33388512440"
                 className={clsx(
                   footerLinkBase,
-                  !isMenu && 'text-body-lg font-bold text-orange hover:font-black hover:text-primary',
+                  !isMenu &&
+                    'text-body-lg font-bold text-orange hover:font-black hover:text-primary',
                 )}
               >
                 03&nbsp;88&nbsp;51&nbsp;24&nbsp;40

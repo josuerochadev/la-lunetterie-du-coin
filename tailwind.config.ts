@@ -94,8 +94,8 @@ const config: Config = {
         'flow': 'clamp(0.75rem, 2vw, 1.5rem)',         // ≈ xs-sm responsive
         
         // Composants
-        'btn-x': 'clamp(1rem, 2vw, 3rem)',             // Padding horizontal boutons - ajusté pour mobile S
-        'btn-y': 'clamp(0.75rem, 1vw, 2.5rem)',        // Padding vertical boutons - ajusté pour mobile S
+        'btn-x': 'clamp(0.75rem, 2vw, 3rem)',          // Padding horizontal boutons - optimisé mobile S
+        'btn-y': 'clamp(0.5rem, 1vw, 2.5rem)',         // Padding vertical boutons - optimisé mobile S
         'word-gap': 'clamp(1rem, 1.5vw, 2rem)',        // Gap entre mots
         
         // Containers

@@ -14,13 +14,6 @@ interface TiltCardProps {
  * Version ultra-simplifiée de TiltCard
  * Remplace l'effet tilt 3D par un simple hover scale
  */
-export default function TiltCard({ 
-  children, 
-  className 
-}: TiltCardProps) {
-  return (
-    <div className={cn('simple-hover-scale touch-optimized', className)}>
-      {children}
-    </div>
-  );
+export default function TiltCard({ children, className }: TiltCardProps) {
+  return <div className={cn('simple-hover-scale touch-optimized', className)}>{children}</div>;
 }

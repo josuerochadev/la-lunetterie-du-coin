@@ -10,7 +10,7 @@
   --mobile-padding-x: 1rem;
   --mobile-padding-y: 1.5rem;
   --mobile-gap: 1rem;
-  
+
   /* Typography mobile-first */
   --mobile-text-sm: 0.875rem;
   --mobile-text-base: 1rem;
@@ -131,11 +131,11 @@
     --mobile-padding-y: 1rem;
     --mobile-gap: 0.75rem;
   }
-  
+
   .hero-punchline-mobile {
     font-size: clamp(1.25rem, 7vw, 2rem);
   }
-  
+
   .hero-title-mobile {
     font-size: clamp(1rem, 5vw, 1.5rem);
   }
@@ -146,7 +146,7 @@
   .services-mobile-layout {
     gap: calc(var(--mobile-gap) * 1.25);
   }
-  
+
   .service-image-mobile {
     max-width: 350px;
   }
@@ -157,11 +157,11 @@
   .services-mobile-layout {
     padding: calc(var(--mobile-padding-y) * 1.5) var(--mobile-padding-x);
   }
-  
+
   .service-card-mobile {
     padding: calc(var(--mobile-padding-y) * 1.25) calc(var(--mobile-padding-x) * 1.25);
   }
-  
+
   .button-mobile-optimized {
     max-width: 320px;
     min-height: 48px;
@@ -175,11 +175,11 @@
     align-items: flex-start;
     gap: calc(var(--mobile-gap) * 2);
   }
-  
+
   .service-image-mobile {
     flex: 0 0 40%;
   }
-  
+
   .service-card-mobile {
     flex: 0 0 55%;
   }
@@ -208,13 +208,13 @@
 .mobile-performance-optimized {
   /* Éviter les repaints */
   backface-visibility: hidden;
-  
+
   /* Optimiser les transformations */
   transform: translateZ(0);
-  
+
   /* Scroll fluide */
   -webkit-overflow-scrolling: touch;
-  
+
   /* Font rendering */
   text-rendering: optimizeSpeed;
   -webkit-font-smoothing: antialiased;

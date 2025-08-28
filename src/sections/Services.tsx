@@ -36,11 +36,15 @@ export default function Services() {
 
       <div className="mx-auto flex flex-col items-center md:flex-row md:items-center md:justify-center">
         {/* Colonne gauche : image + miniatures */}
-        <SimpleAnimateItem index={1} type="fade-up" className="flex flex-col items-center px-container-x py-container-y">
+        <SimpleAnimateItem
+          index={1}
+          type="fade-up"
+          className="flex flex-col items-center px-container-x py-container-y"
+        >
           {/* Image principale - simple transition avec CSS */}
-          <div 
+          <div
             key={selected.imageBase}
-            className="h-auto w-service-img max-w-full simple-fade-in-scale"
+            className="simple-fade-in-scale h-auto w-service-img max-w-full"
           >
             <Picture
               srcBase={selected.imageBase}
@@ -72,11 +76,12 @@ export default function Services() {
         </SimpleAnimateItem>
 
         {/* Colonne droite : carte de service */}
-        <SimpleAnimateItem index={6} type="fade-up" className="relative w-[clamp(18rem,42vw,120rem)] self-center">
-          <ServiceCard
-            key={selected.title}
-            service={selected}
-          />
+        <SimpleAnimateItem
+          index={6}
+          type="fade-up"
+          className="relative w-[clamp(18rem,42vw,120rem)] self-center"
+        >
+          <ServiceCard key={selected.title} service={selected} />
         </SimpleAnimateItem>
       </div>
     </SectionContainer>

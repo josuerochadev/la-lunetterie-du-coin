@@ -48,7 +48,7 @@ export default function Concept() {
         <SimpleAnimateItem
           index={1}
           type="fade-up"
-          className="group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card simple-hover-lift"
+          className="simple-hover-lift group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
         >
           <Picture
             srcBase="/photos/glasses"
@@ -70,7 +70,7 @@ export default function Concept() {
         <SimpleAnimateItem
           index={2}
           type="fade-up"
-          className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3] simple-hover-lift"
+          className="simple-hover-lift group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
         >
           <Picture
             srcBase="/photos/romain"

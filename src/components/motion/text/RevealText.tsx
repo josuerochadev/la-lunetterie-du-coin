@@ -12,52 +12,52 @@ interface RevealTextProps {
   baseDelay?: number;
   className?: string;
   preserveWordSpacing?: boolean;
-  renderPart?: (item: string) => React.ReactNode;
+  renderPart?: (word: string) => React.ReactNode;
 }
 
 /**
  * Version ultra-simplifiée de RevealText
  * Compatible avec les props complexes mais affiche simplement le texte
  */
-export default function RevealText({ 
-  children, 
+export default function RevealText({
+  children,
   text,
-  delay = 0, 
+  delay = 0,
   baseDelay = 0,
   className,
   preserveWordSpacing = true,
-  renderPart
+  renderPart,
 }: RevealTextProps) {
   const delayIndex = Math.min(Math.floor((delay + baseDelay) * 10), 10);
   const content = text || children;
-  
+
   // Si on a une fonction renderPart et un texte, on l'applique
   if (renderPart && typeof content === 'string') {
     const words = content.split(' ');
     return (
-      <div 
+      <div
         className={cn(
           'simple-fade-in-up',
           delayIndex > 0 && `simple-fade-in-${delayIndex}`,
-          className
+          className,
         )}
       >
-        {words.map((item, index) => (
+        {words.map((word, index) => (
           <React.Fragment key={index}>
-            {renderPart(item)}
+            {renderPart(word)}
             {index < words.length - 1 && preserveWordSpacing && ' '}
           </React.Fragment>
         ))}
       </div>
     );
   }
-  
+
   return (
-    <div 
+    <div
       className={cn(
         'simple-fade-in-up',
         delayIndex > 0 && `simple-fade-in-${delayIndex}`,
-        className
+        className,
       )}
     >
       {content}
