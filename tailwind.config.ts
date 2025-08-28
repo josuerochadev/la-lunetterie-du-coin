@@ -44,7 +44,7 @@ const config: Config = {
       fontSize: {
         /* ===== HIÉRARCHIE STANDARDISÉE ===== */
         // Titres - line-height serré pour impact
-        'title-xl': ['clamp(2.75rem, 5vw, 15rem)', '1.0'],    // Hero principal - ajusté pour mobile S
+        'title-xl': ['clamp(2.5rem, 5vw, 15rem)', '1.0'],    // Hero principal - ajusté pour mobile S
         'title-lg': ['clamp(2rem, 3vw, 10rem)', '1.1'],      // Sections principales  
         'title-md': ['clamp(1.5rem, 2.5vw, 5rem)', '1.2'],   // Sous-sections
         'title-sm': ['clamp(1.25rem, 2vw, 3.5rem)', '1.3'],  // Petits titres
@@ -94,8 +94,8 @@ const config: Config = {
         'flow': 'clamp(0.75rem, 2vw, 1.5rem)',         // ≈ xs-sm responsive
         
         // Composants
-        'btn-x': 'clamp(1.5rem, 2vw, 3rem)',           // Padding horizontal boutons
-        'btn-y': 'clamp(1.25rem, 1vw, 2.5rem)',        // Padding vertical boutons
+        'btn-x': 'clamp(1rem, 2vw, 3rem)',             // Padding horizontal boutons - ajusté pour mobile S
+        'btn-y': 'clamp(0.75rem, 1vw, 2.5rem)',        // Padding vertical boutons - ajusté pour mobile S
         'word-gap': 'clamp(1rem, 1.5vw, 2rem)',        // Gap entre mots
         
         // Containers
