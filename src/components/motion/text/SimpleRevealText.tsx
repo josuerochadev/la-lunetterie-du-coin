@@ -1,41 +1,34 @@
-import type { JSX } from 'react';
+// src/components/motion/text/SimpleRevealText.tsx
+import React from 'react';
 
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
 
-type Props = {
+interface SimpleRevealTextProps {
   text: string;
   delay?: number;
   className?: string;
-  as?: keyof JSX.IntrinsicElements;
-};
+}
 
 /**
- * Lightweight text reveal using CSS animations instead of JS
- * Much more performant than word-by-word Framer Motion animations
+ * Version ultra-simplifiée de SimpleRevealText
+ * Utilise des animations CSS au lieu de Framer Motion
  */
-export default function SimpleRevealText({
-  text,
-  delay = 0,
-  className = '',
-  as: Component = 'div',
-}: Props) {
-  const prefersReducedMotion = usePrefersReducedMotion();
-
-  // No animation for users who prefer reduced motion
-  if (prefersReducedMotion) {
-    return <Component className={className}>{text}</Component>;
-  }
-
+export default function SimpleRevealText({ 
+  text, 
+  delay = 0, 
+  className 
+}: SimpleRevealTextProps) {
+  const delayIndex = Math.min(Math.floor(delay * 10), 10);
+  
   return (
-    <Component
-      className={cn('animate-reveal-text opacity-0', className)}
-      style={{
-        animationDelay: `${delay}s`,
-        animationFillMode: 'forwards',
-      }}
+    <div 
+      className={cn(
+        'simple-fade-in-up',
+        delayIndex > 0 && `simple-fade-in-${delayIndex}`,
+        className
+      )}
     >
       {text}
-    </Component>
+    </div>
   );
 }

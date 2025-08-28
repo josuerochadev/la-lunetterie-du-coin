@@ -3,7 +3,6 @@ import type React from 'react';
 import Navbar from '../navbar/Navbar';
 import Footer from '../../sections/Footer';
 
-import Background from '@/components/common/Background';
 import SkipLink from '@/components/common/SkipLink';
 
 type LayoutProps = {
@@ -19,10 +18,7 @@ type LayoutProps = {
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="relative min-h-screen text-primary">
-      {/* Fond site-wide */}
-      <Background />
-
-      {/* Contenu au-dessus du fond */}
+      {/* Contenu simplifié - plus de Background animé */}
       <div className="relative z-base">
         <SkipLink />
         <Navbar />

@@ -1,27 +1,25 @@
-import type { ReactNode } from 'react';
+// src/components/motion/interactive/TiltCard.tsx
+// Version simplifiée pour compatibilité - sans effet tilt lourd
 
-import { use3DTilt } from '@/hooks/use3DTilt';
+import React, { ReactNode } from 'react';
+
+import { cn } from '@/lib/cn';
+
+interface TiltCardProps {
+  children: ReactNode;
+  className?: string;
+}
 
 /**
- * Composant React qui applique un effet de tilt 3D à son contenu enfant.
- *
- * @param children Les éléments React à afficher à l'intérieur de la carte avec effet tilt.
- * @returns Un conteneur `<div>` avec un effet de perspective 3D appliqué.
- *
+ * Version ultra-simplifiée de TiltCard
+ * Remplace l'effet tilt 3D par un simple hover scale
  */
-
-export default function TiltCard({ children }: { children: ReactNode }) {
-  const ref = use3DTilt();
-
+export default function TiltCard({ 
+  children, 
+  className 
+}: TiltCardProps) {
   return (
-    <div
-      ref={ref}
-      className="relative"
-      style={{
-        perspective: 1000,
-        transformStyle: 'preserve-3d',
-      }}
-    >
+    <div className={cn('simple-hover-scale touch-optimized', className)}>
       {children}
     </div>
   );

@@ -5,12 +5,12 @@ import Services from '@/sections/Services';
 import Concept from '@/sections/Concept';
 import Contact from '@/sections/Contact';
 import FloatingCTA from '@/components/common/FloatingCTA';
-import { useSmoothScroll } from '@/hooks/useSmoothScroll';
+import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 import { LocalBusinessJsonLd } from '@/seo/LocalBusinessJsonLd';
 
 export default function HomePage() {
-  useSmoothScroll();
+  useNativeScroll();
   return (
     <>
       <Seo

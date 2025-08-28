@@ -1,0 +1,221 @@
+/* src/styles/responsive-improvements.css */
+
+/* ========================================
+   AMÉLIORATIONS RESPONSIVE CIBLÉES
+   ======================================== */
+
+/* Variables responsive */
+:root {
+  /* Spacing mobile-first */
+  --mobile-padding-x: 1rem;
+  --mobile-padding-y: 1.5rem;
+  --mobile-gap: 1rem;
+  
+  /* Typography mobile-first */
+  --mobile-text-sm: 0.875rem;
+  --mobile-text-base: 1rem;
+  --mobile-text-lg: 1.25rem;
+  --mobile-text-xl: 1.5rem;
+  --mobile-text-2xl: 2rem;
+}
+
+/* ========================================
+   HERO SECTION - Mobile First
+   ======================================== */
+
+.hero-mobile-optimized {
+  padding: var(--mobile-padding-y) var(--mobile-padding-x);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero-logo-mobile {
+  width: clamp(4rem, 15vw, 8rem);
+  height: auto;
+  margin-bottom: var(--mobile-gap);
+}
+
+.hero-punchline-mobile {
+  font-size: clamp(1.5rem, 8vw, 3rem);
+  line-height: 1.1;
+  margin-bottom: var(--mobile-gap);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.hero-title-mobile {
+  font-size: clamp(1.25rem, 6vw, 2.5rem);
+  line-height: 1.2;
+  margin-bottom: calc(var(--mobile-gap) * 1.5);
+}
+
+/* ========================================
+   SERVICES SECTION - Mobile Layout
+   ======================================== */
+
+.services-mobile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--mobile-gap);
+  padding: var(--mobile-padding-y) var(--mobile-padding-x);
+}
+
+.service-image-mobile {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  margin: 0 auto var(--mobile-gap);
+}
+
+.service-thumbnails-mobile {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: calc(var(--mobile-gap) * 0.5);
+  margin-bottom: var(--mobile-gap);
+}
+
+.service-card-mobile {
+  width: 100%;
+  max-width: none;
+  padding: var(--mobile-padding-y) var(--mobile-padding-x);
+}
+
+/* ========================================
+   BUTTONS ET INTERACTIONS - Mobile
+   ======================================== */
+
+.button-mobile-optimized {
+  min-height: 44px; /* Touch target minimum */
+  padding: 0.75rem 1.5rem;
+  font-size: var(--mobile-text-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 280px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   CARDS ET CONTENEURS - Mobile
+   ======================================== */
+
+.card-mobile-optimized {
+  padding: var(--mobile-padding-y) var(--mobile-padding-x);
+  margin-bottom: var(--mobile-gap);
+  border-radius: 0.75rem;
+}
+
+/* ========================================
+   NAVIGATION - Mobile Improvements
+   ======================================== */
+
+.nav-mobile-optimized {
+  padding: 0.5rem var(--mobile-padding-x);
+}
+
+/* ========================================
+   BREAKPOINTS RESPONSIVES
+   ======================================== */
+
+/* Très petits écrans (≤320px) */
+@media (max-width: 320px) {
+  :root {
+    --mobile-padding-x: 0.75rem;
+    --mobile-padding-y: 1rem;
+    --mobile-gap: 0.75rem;
+  }
+  
+  .hero-punchline-mobile {
+    font-size: clamp(1.25rem, 7vw, 2rem);
+  }
+  
+  .hero-title-mobile {
+    font-size: clamp(1rem, 5vw, 1.5rem);
+  }
+}
+
+/* Petits écrans (321px - 480px) */
+@media (min-width: 321px) and (max-width: 480px) {
+  .services-mobile-layout {
+    gap: calc(var(--mobile-gap) * 1.25);
+  }
+  
+  .service-image-mobile {
+    max-width: 350px;
+  }
+}
+
+/* Écrans moyens mobiles (481px - 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  .services-mobile-layout {
+    padding: calc(var(--mobile-padding-y) * 1.5) var(--mobile-padding-x);
+  }
+  
+  .service-card-mobile {
+    padding: calc(var(--mobile-padding-y) * 1.25) calc(var(--mobile-padding-x) * 1.25);
+  }
+  
+  .button-mobile-optimized {
+    max-width: 320px;
+    min-height: 48px;
+  }
+}
+
+/* Tablettes (769px - 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .services-mobile-layout {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: calc(var(--mobile-gap) * 2);
+  }
+  
+  .service-image-mobile {
+    flex: 0 0 40%;
+  }
+  
+  .service-card-mobile {
+    flex: 0 0 55%;
+  }
+}
+
+/* ========================================
+   OPTIMISATIONS TOUCH
+   ======================================== */
+
+/* Améliorer les zones de touch */
+.touch-optimized {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.touch-target-large {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ========================================
+   PERFORMANCES MOBILES
+   ======================================== */
+
+/* Optimisations rendering mobile */
+.mobile-performance-optimized {
+  /* Éviter les repaints */
+  backface-visibility: hidden;
+  
+  /* Optimiser les transformations */
+  transform: translateZ(0);
+  
+  /* Scroll fluide */
+  -webkit-overflow-scrolling: touch;
+  
+  /* Font rendering */
+  text-rendering: optimizeSpeed;
+  -webkit-font-smoothing: antialiased;
+}

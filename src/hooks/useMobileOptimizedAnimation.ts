@@ -6,7 +6,7 @@ import { shouldLoadHeavyAnimations } from '@/lib/deviceDetection';
  */
 export function useMobileOptimizedAnimation(index: number = 0) {
   const shouldAnimate = shouldLoadHeavyAnimations();
-  
+
   if (!shouldAnimate) {
     const delay = Math.min(index, 5);
     return {
@@ -14,7 +14,7 @@ export function useMobileOptimizedAnimation(index: number = 0) {
       isAnimated: true,
     };
   }
-  
+
   return {
     className: '',
     isAnimated: false,

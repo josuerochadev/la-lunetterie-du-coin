@@ -1,53 +1,27 @@
 // src/components/motion/variants/fade.ts
-
-type FadeInOptions = {
-  y?: number;
-  x?: number;
-  opacity?: number;
-  scale?: number;
-};
+// Fallback minimal pour compatibilité - remplace les variants Framer Motion lourds
 
 /**
- * Génère des variantes d'animation pour un effet de fondu en entrée (fade-in).
- *
- * @param options - Options pour personnaliser l'animation de fondu.
- * @param options.y - Décalage vertical initial (en pixels). Par défaut à 30.
- * @param options.x - Décalage horizontal initial (en pixels). Par défaut à 0.
- * @param options.opacity - Opacité initiale. Par défaut à 0.
- * @param options.scale - Échelle initiale (optionnelle).
- * @returns Un objet contenant les états `hidden` (caché) et `visible` (visible) pour l'animation.
- *
- * @example
- * const variants = makeFadeIn({ y: 50, opacity: 0.2 });
- * // Utilisez `variants.hidden` et `variants.visible` dans vos composants animés.
+ * Variant fade simple pour compatibilité
+ * Ces variants ne sont plus utilisés avec le nouveau système SimpleAnimateItem
  */
-export function makeFadeIn({ y = 30, x = 0, opacity = 0, scale }: FadeInOptions = {}) {
-  const hidden: {
-    opacity: number;
-    y: number;
-    x: number;
-    scale?: number;
-  } = { opacity, y, x };
-  if (scale !== undefined) hidden.scale = scale;
+export const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+};
 
-  const visible: {
-    opacity: number;
-    y: number;
-    x: number;
-    scale?: number;
-  } = {
-    opacity: 1,
-    y: 0,
-    x: 0,
-  };
-  if (scale !== undefined) visible.scale = 1;
+export const fadeInDown = {
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0 }
+};
 
-  return { hidden, visible };
-}
+export const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 }
+};
 
-// Prêts à l’emploi pour usages courants
-export const fadeInUp = makeFadeIn({ y: 30 });
-export const menuFade = makeFadeIn({ y: 40 });
-export const fadeInDown = makeFadeIn({ y: -30 });
-export const fadeInLeft = makeFadeIn({ x: -30 });
-export const fadeInRight = makeFadeIn({ x: 30 });
+// Transition par défaut
+export const defaultTransition = {
+  duration: 0.4,
+  ease: "easeOut"
+};

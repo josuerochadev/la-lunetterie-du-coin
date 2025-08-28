@@ -36,4 +36,3 @@ export function SmartAnimatedItem({
   // Pour l'instant, on utilise une div simple - on peut importer l'ancien plus tard
   return <div className={className}>{children}</div>;
 }
-

@@ -4,7 +4,7 @@ import SectionTitle from '@/components/common/SectionTitle';
 import RevealText from '@/components/motion/text/RevealText';
 import { CONCEPT_PLAIN } from '@/config/constants';
 import Picture from '@/components/common/Picture';
-import AnimatedItem from '@/components/motion/AnimatedItem';
+import { SimpleAnimateItem } from '@/components/common/SimpleAnimateItem';
 
 export default function Concept() {
   // Mots-clés à mettre en emphase
@@ -45,11 +45,10 @@ export default function Concept() {
       </div>
 
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap py-container-y md:grid-cols-2">
-        <AnimatedItem
-          index={1.2}
-          className="group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
-          viewport={{ once: true, amount: 0.35 }}
-          duration={0.6}
+        <SimpleAnimateItem
+          index={1}
+          type="fade-up"
+          className="group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card simple-hover-lift"
         >
           <Picture
             srcBase="/photos/glasses"
@@ -66,13 +65,12 @@ export default function Concept() {
               Montures neuves et d'occasion soigneusement choisies pour allier style et durabilité.
             </p>
           </div>
-        </AnimatedItem>
+        </SimpleAnimateItem>
 
-        <AnimatedItem
-          index={1.5}
-          className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
-          viewport={{ once: true, amount: 0.35 }}
-          duration={0.6}
+        <SimpleAnimateItem
+          index={2}
+          type="fade-up"
+          className="group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3] simple-hover-lift"
         >
           <Picture
             srcBase="/photos/romain"
@@ -89,7 +87,7 @@ export default function Concept() {
               Conseil personnalisé et passion de l'optique depuis plus de 10 ans à Strasbourg.
             </p>
           </div>
-        </AnimatedItem>
+        </SimpleAnimateItem>
       </div>
     </SectionContainer>
   );

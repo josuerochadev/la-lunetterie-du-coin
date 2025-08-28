@@ -1,0 +1,179 @@
+/* src/styles/simple-animations.css */
+
+/* ========================================
+   ANIMATIONS ULTRA-SIMPLES ET PERFORMANTES
+   ======================================== */
+
+/* Variables pour personnalisation */
+:root {
+  --animation-duration: 0.6s;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --stagger-delay: 0.1s;
+}
+
+/* Reset pour éviter les conflits */
+.simple-animate-item {
+  will-change: transform, opacity;
+}
+
+/* ========================================
+   FADE IN - Animation de base
+   ======================================== */
+
+@keyframes simple-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.simple-fade-in {
+  animation: simple-fade-in var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* Stagger delays - jusqu'à 10 éléments */
+.simple-fade-in-1 { animation-delay: calc(1 * var(--stagger-delay)); }
+.simple-fade-in-2 { animation-delay: calc(2 * var(--stagger-delay)); }
+.simple-fade-in-3 { animation-delay: calc(3 * var(--stagger-delay)); }
+.simple-fade-in-4 { animation-delay: calc(4 * var(--stagger-delay)); }
+.simple-fade-in-5 { animation-delay: calc(5 * var(--stagger-delay)); }
+.simple-fade-in-6 { animation-delay: calc(6 * var(--stagger-delay)); }
+.simple-fade-in-7 { animation-delay: calc(7 * var(--stagger-delay)); }
+.simple-fade-in-8 { animation-delay: calc(8 * var(--stagger-delay)); }
+.simple-fade-in-9 { animation-delay: calc(9 * var(--stagger-delay)); }
+.simple-fade-in-10 { animation-delay: calc(10 * var(--stagger-delay)); }
+
+/* ========================================
+   FADE IN UP - Légère translation vers le haut
+   ======================================== */
+
+@keyframes simple-fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.simple-fade-in-up {
+  animation: simple-fade-in-up var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* ========================================
+   FADE IN SCALE - Légère mise à l'échelle
+   ======================================== */
+
+@keyframes simple-fade-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.simple-fade-in-scale {
+  animation: simple-fade-in-scale var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* ========================================
+   TRANSITIONS POUR INTERACTIONS
+   ======================================== */
+
+.simple-hover-scale {
+  transition: transform 0.2s var(--animation-easing);
+}
+
+.simple-hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.simple-hover-lift {
+  transition: transform 0.2s var(--animation-easing), box-shadow 0.2s var(--animation-easing);
+}
+
+.simple-hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ========================================
+   RESPONSIVE ET ACCESSIBILITÉ
+   ======================================== */
+
+/* Réduire l'intensité sur mobile */
+@media (max-width: 768px) {
+  :root {
+    --animation-duration: 0.4s;
+    --stagger-delay: 0.05s;
+  }
+  
+  @keyframes simple-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes simple-fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(15px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Respecter prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --animation-duration: 0.01ms;
+    --stagger-delay: 0s;
+  }
+  
+  .simple-fade-in,
+  .simple-fade-in-up,
+  .simple-fade-in-scale,
+  .simple-hover-scale,
+  .simple-hover-lift {
+    animation: none !important;
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* ========================================
+   UTILITIES POUR DÉVELOPPEMENT RAPIDE
+   ======================================== */
+
+/* Classes pour appliquer rapidement */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all var(--animation-duration) var(--animation-easing);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
