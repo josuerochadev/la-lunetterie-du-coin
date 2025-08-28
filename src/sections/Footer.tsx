@@ -94,7 +94,7 @@ export default function Footer({
                 href="tel:+33388512440"
                 className={clsx(
                   footerLinkBase,
-                  !isMenu && 'text-lg font-bold text-orange hover:font-black hover:text-primary',
+                  !isMenu && 'text-body-lg font-bold text-orange hover:font-black hover:text-primary',
                 )}
               >
                 03&nbsp;88&nbsp;51&nbsp;24&nbsp;40
@@ -148,7 +148,7 @@ export default function Footer({
                   key={link.href}
                   className={clsx(
                     footerLinkBase,
-                    isMenu && 'text-sm text-primary hover:text-orange',
+                    isMenu && 'text-body-sm text-primary hover:text-orange',
                   )}
                   to={link.href}
                   onClick={onLinkClick} // Ferme le menu si callback fourni

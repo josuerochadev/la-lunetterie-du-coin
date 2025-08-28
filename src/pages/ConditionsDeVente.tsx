@@ -71,18 +71,18 @@ export default function ConditionsDeVente() {
             <div className="space-y-3">
               <div className="grid grid-cols-1 gap-sm md:grid-cols-3">
                 <div className="text-center">
-                  <p className="text-lg font-bold text-primary">0</p>
-                  <p className="text-sm text-primary/80">
+                  <p className="text-body-lg font-bold text-primary">0</p>
+                  <p className="text-body-sm text-primary/80">
                     droit de rétractation pour produits personnalisés
                   </p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold text-primary">30</p>
-                  <p className="text-sm text-primary/80">jours pour retours produits neufs</p>
+                  <p className="text-body-lg font-bold text-primary">30</p>
+                  <p className="text-body-sm text-primary/80">jours pour retours produits neufs</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-lg font-bold text-primary">✗</p>
-                  <p className="text-sm text-primary/80">
+                  <p className="text-body-lg font-bold text-primary">✗</p>
+                  <p className="text-body-sm text-primary/80">
                     montures personnalisées non retournables
                   </p>
                 </div>
@@ -127,17 +127,17 @@ export default function ConditionsDeVente() {
             <HighlightBox title="Tarifs des franchises" variant="info">
               <div className="grid grid-cols-1 gap-md md:grid-cols-2">
                 <div className="p-4 text-center">
-                  <p className="text-2xl font-bold text-primary">90€</p>
+                  <p className="text-title-md font-bold text-primary">90€</p>
                   <p className="font-semibold text-primary">Verres progressifs</p>
-                  <p className="text-sm text-primary/80">Franchise appliquée</p>
+                  <p className="text-body-sm text-primary/80">Franchise appliquée</p>
                 </div>
                 <div className="p-4 text-center">
-                  <p className="text-2xl font-bold text-primary">45€</p>
+                  <p className="text-title-md font-bold text-primary">45€</p>
                   <p className="font-semibold text-primary">Verres unifocaux</p>
-                  <p className="text-sm text-primary/80">Franchise appliquée</p>
+                  <p className="text-body-sm text-primary/80">Franchise appliquée</p>
                 </div>
               </div>
-              <p className="mt-4 text-center text-sm text-primary/80">
+              <p className="mt-4 text-center text-body-sm text-primary/80">
                 <strong>Délai :</strong> 30 jours après livraison
               </p>
             </HighlightBox>

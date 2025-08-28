@@ -12,7 +12,7 @@ interface RevealTextProps {
   baseDelay?: number;
   className?: string;
   preserveWordSpacing?: boolean;
-  renderPart?: (word: string) => React.ReactNode;
+  renderPart?: (item: string) => React.ReactNode;
 }
 
 /**
@@ -42,9 +42,9 @@ export default function RevealText({
           className
         )}
       >
-        {words.map((word, index) => (
+        {words.map((item, index) => (
           <React.Fragment key={index}>
-            {renderPart(word)}
+            {renderPart(item)}
             {index < words.length - 1 && preserveWordSpacing && ' '}
           </React.Fragment>
         ))}

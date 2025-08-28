@@ -66,7 +66,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           <div className="mx-auto max-w-md text-center">
             <div className="mb-md">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange/20">
-                <span className="text-2xl">⚠️</span>
+                <span className="text-title-md">⚠️</span>
               </div>
               <h1 className="mb-4 text-title-md font-bold text-primary">
                 Oups ! Quelque chose s'est mal passé
@@ -111,7 +111,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
             {import.meta.env.DEV && this.state.error && (
               <details className="mt-6 text-left">
-                <summary className="cursor-pointer text-sm text-primary/60">
+                <summary className="cursor-pointer text-body-sm text-primary/60">
                   Détails de l'erreur (dev uniquement)
                 </summary>
                 <pre className="mt-2 whitespace-pre-wrap rounded bg-primary/10 p-3 text-xs text-primary">

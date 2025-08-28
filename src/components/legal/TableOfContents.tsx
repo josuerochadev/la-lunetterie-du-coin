@@ -52,7 +52,7 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
                 >
                   <span className="min-w-[2rem] text-title-sm font-thin">{index + 1}.</span>
                   <span className="flex flex-wrap gap-x-1">
-                    <span className="font-futura text-title-sm font-bold tracking-wider transition-all duration-200 group-hover:tracking-widest">
+                    <span className="font-serif text-title-sm font-bold tracking-wider transition-all duration-200 group-hover:tracking-widest">
                       {section.title}
                     </span>
                   </span>

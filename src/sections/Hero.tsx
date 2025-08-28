@@ -41,7 +41,7 @@ const Hero = forwardRef<HTMLElement>(() => {
       </SimpleAnimateItem>
 
       <div className="w-full space-y-section-gap">
-        {/* Punchline avec animation simple */}
+        {/* Punchline avec animation simple - utilise le DS title-xl */}
         <SimpleRevealText
           text={currentPhrase}
           delay={0.2}

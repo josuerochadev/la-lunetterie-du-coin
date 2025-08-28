@@ -48,7 +48,7 @@ export default function LegalPageLayout({
               {lastUpdated && (
                 <AnimatedItem index={1} variant={fadeInUp}>
                   <div className="border-dark-green mb-2 border-l-4 py-2 pl-6">
-                    <p className="text-sm text-primary">
+                    <p className="text-body-sm text-primary">
                       <span className="font-semibold">Dernière mise à jour :</span> {lastUpdated}
                     </p>
                   </div>
