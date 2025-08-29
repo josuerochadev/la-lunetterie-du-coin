@@ -50,6 +50,18 @@ export default function ContactForm() {
 
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
+    
+    // Honeypot spam protection
+    const honeypot = data.get('_gotcha');
+    if (honeypot) {
+      // Silently fail if honeypot is filled (bot detected)
+      setStatus('success');
+      form.reset();
+      setTimeout(() => {
+        setStatus('idle');
+      }, 5000);
+      return;
+    }
 
     // Create abort controller for timeout
     const controller = new AbortController();
@@ -71,6 +83,12 @@ export default function ContactForm() {
         if ('vibrate' in navigator) {
           navigator.vibrate([100, 50, 100]); // Success pattern
         }
+        
+        // Reset status after showing success message for 5 seconds
+        setTimeout(() => {
+          setStatus('idle');
+        }, 5000);
+        
         setTimeout(() => {
           messageRef.current?.focus();
         }, 100);
@@ -96,6 +114,11 @@ export default function ContactForm() {
           setError('Une erreur est survenue. Vérifiez votre connexion ou réessayez plus tard.');
         }
 
+        // Reset status after showing error for 8 seconds
+        setTimeout(() => {
+          setStatus('idle');
+        }, 8000);
+
         setTimeout(() => {
           messageRef.current?.focus();
         }, 100);
@@ -110,11 +133,14 @@ export default function ContactForm() {
         setError('Impossible de contacter le serveur. Veuillez réessayer plus tard.');
       }
 
+      // Reset status after showing error for 8 seconds
+      setTimeout(() => {
+        setStatus('idle');
+      }, 8000);
+
       setTimeout(() => {
         messageRef.current?.focus();
       }, 100);
-    } finally {
-      setStatus('idle');
     }
   };
 
@@ -123,7 +149,13 @@ export default function ContactForm() {
       {/* Área de mensagens (status/sucesso/erro) */}
       <div ref={messageRef} tabIndex={-1} aria-live="polite" className="mb-flow outline-none">
         {status === 'success' && (
-          <div className="form-message--success">✅ Votre message a bien été envoyé !</div>
+          <div className="form-message--success">
+            ✅ <strong>Message envoyé avec succès !</strong>
+            <br />
+            <span className="text-sm opacity-90">
+              Nous vous répondrons dans les plus brefs délais à l'adresse email indiquée.
+            </span>
+          </div>
         )}
         {status === 'error' && <div className="form-message--error">{error}</div>}
       </div>
@@ -256,6 +288,17 @@ export default function ContactForm() {
               {fieldErrors.message}
             </div>
           )}
+        </div>
+
+        {/* Honeypot field - hidden from users, visible to bots */}
+        <div className="hidden" aria-hidden="true">
+          <input
+            name="_gotcha"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            style={{ position: 'absolute', left: '-9999px' }}
+          />
         </div>
 
         {/* Bouton (alinha à esquerda e ocupa a linha inteira em lg+) */}
