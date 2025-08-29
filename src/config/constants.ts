@@ -33,7 +33,7 @@ export const OFFERS = [
     imageBase: '/illustrations/two-eyeframes',
     summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
     details:
-      '59€ : monture + verres unifocaux\n89€ : verres progressifs\nVerres antireflet durci ou solaires UV cat.3\nOrigine France Garantie — Ophtalmic Vision.',
+      '59€ : monture + verres unifocaux\n89€ : verres progressifs\nVerres antireflet durci ou solaires UV cat.3\nOrigine France Garantie — Ophtalmic Vision.\n\nVoir conditions en magasin.',
   },
 ];
 
@@ -45,7 +45,7 @@ export const SERVICES = [
   },
   {
     title: 'Lentilles de contact',
-    description: 'Conseils personnalisés et adaptation pour tous types de lentilles.',
+    description: 'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, Coopervision, etc.).',
     imageBase: '/illustrations/contact-lenses',
   },
   {

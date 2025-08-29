@@ -12,7 +12,7 @@ interface RevealTextProps {
   baseDelay?: number;
   className?: string;
   preserveWordSpacing?: boolean;
-  renderPart?: (word: string) => React.ReactNode;
+  renderPart?: (_word: string) => React.ReactNode;
 }
 
 /**

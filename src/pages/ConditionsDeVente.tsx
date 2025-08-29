@@ -121,20 +121,20 @@ export default function ConditionsDeVente() {
           <div className="space-y-6">
             <p className="text-body leading-relaxed">
               En cas de changement de puissance des verres dans les trente (30) jours suivant la
-              livraison, une franchise s'applique pour l'ensemble de la commande.
+              livraison, des frais de montage s'appliquent pour l'ensemble de la commande.
             </p>
 
-            <HighlightBox title="Tarifs des franchises" variant="info">
+            <HighlightBox title="Tarifs des frais de montage" variant="info">
               <div className="grid grid-cols-1 gap-md md:grid-cols-2">
                 <div className="p-4 text-center">
                   <p className="text-title-md font-bold text-primary">90€</p>
                   <p className="font-semibold text-primary">Verres progressifs</p>
-                  <p className="text-body-sm text-primary/80">Franchise appliquée</p>
+                  <p className="text-body-sm text-primary/80">Frais de montage</p>
                 </div>
                 <div className="p-4 text-center">
                   <p className="text-title-md font-bold text-primary">45€</p>
                   <p className="font-semibold text-primary">Verres unifocaux</p>
-                  <p className="text-body-sm text-primary/80">Franchise appliquée</p>
+                  <p className="text-body-sm text-primary/80">Frais de montage</p>
                 </div>
               </div>
               <p className="mt-4 text-center text-body-sm text-primary/80">
