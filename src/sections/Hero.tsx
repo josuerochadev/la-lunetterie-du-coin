@@ -5,7 +5,7 @@ import { SimpleAnimateItem } from '@/components/common/SimpleAnimateItem';
 import SimpleRevealText from '@/components/motion/text/SimpleRevealText';
 import LogoEye from '@/assets/logo/logo-eye.svg?react';
 import Button from '@/components/common/Button';
-import { HERO_PHRASES } from '@/config/constants';
+import { HERO_PHRASES, CALENDLY_URL } from '@/config/constants';
 import { getRandomHeroPhrase } from '@/lib/hero';
 import SectionContainer from '@/components/common/SectionContainer';
 
@@ -63,12 +63,19 @@ const Hero = forwardRef<HTMLElement>(() => {
 
         {/* CTA */}
         <SimpleAnimateItem index={3} type="fade-up">
-          <Button id="hero-cta" aria-label="Prendre rendez-vous">
-            <span className="flex items-center gap-2">
-              <Calendar className="button-icon" />
-              Prendre rendez-vous
-            </span>
-          </Button>
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Prendre rendez-vous"
+          >
+            <Button id="hero-cta">
+              <span className="flex items-center gap-2">
+                <Calendar className="button-icon" />
+                Prendre rendez-vous
+              </span>
+            </Button>
+          </a>
         </SimpleAnimateItem>
       </div>
     </SectionContainer>
