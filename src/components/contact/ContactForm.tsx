@@ -51,6 +51,10 @@ export default function ContactForm() {
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
     
+    // Force readable subject for client-side
+    data.append('_subject', 'Nouveau message - La Lunetterie du Coin');
+    // data.append('_cc', '[email protected]'); // si tu veux te mettre en copie
+    
     // Honeypot spam protection
     const honeypot = data.get('_gotcha');
     if (honeypot) {
@@ -74,6 +78,19 @@ export default function ContactForm() {
         headers: { Accept: 'application/json' },
         signal: controller.signal,
       });
+
+      // Add debug logs to diagnose dashboard vs. code issues
+      let payload: unknown = null;
+      try {
+        payload = await response.clone().json(); // attempt to read JSON if it exists
+      } catch {
+        // no-op
+      }
+
+      if (!response.ok) {
+        // Short log for dev; remove in prod
+        console.warn('[Formspree Error]', response.status, payload);
+      }
 
       clearTimeout(timeoutId);
 
