@@ -67,7 +67,7 @@ export default function MenuLinkItem({ label, href, index, onClick }: MenuLinkIt
         {last && <span className={`font-extrabold ${isActive ? 'text-orange' : ''}`}>{last}</span>}
       </span>
       {isActive && (
-        <span className="ml-2 text-orange" aria-hidden="true">
+        <span className="ml-2 text-mauve-dark" aria-hidden="true">
           •
         </span>
       )}

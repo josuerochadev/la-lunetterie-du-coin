@@ -18,15 +18,13 @@ export default defineConfig(({ mode }) => {
           icon: true,
         },
       }),
-      // Sentry plugin pour source maps (production seulement)
-      // Les variables VITE_SENTRY_* doivent être définies en production
-      isProduction && 
-      sentryVitePlugin({
+      // Sentry plugin pour source maps (production seulement et si configuré)
+      ...(isProduction && import.meta.env.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
         telemetry: false,
         sourcemaps: {
           assets: ["./dist/**"],
         },
-      }),
+      })] : []),
     ].filter(Boolean),
     optimizeDeps: {
       include: [
