@@ -19,7 +19,8 @@ export default defineConfig(({ mode }) => {
         },
       }),
       // Sentry plugin pour source maps (production seulement et si configuré)
-      ...(isProduction && import.meta.env.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
+      // eslint-disable-next-line no-undef
+      ...(isProduction && process.env?.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
         telemetry: false,
         sourcemaps: {
           assets: ["./dist/**"],

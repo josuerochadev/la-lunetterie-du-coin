@@ -12,7 +12,8 @@ interface RevealTextProps {
   baseDelay?: number;
   className?: string;
   preserveWordSpacing?: boolean;
-  renderPart?: (_word: string) => React.ReactNode;
+  // eslint-disable-next-line no-unused-vars
+  renderPart?: (word: string) => React.ReactNode;
 }
 
 /**

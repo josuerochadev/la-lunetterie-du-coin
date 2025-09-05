@@ -1,7 +1,7 @@
 import { useState, forwardRef } from 'react';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 
-import { SimpleAnimateItem } from '@/components/common/SimpleAnimateItem';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 import SimpleRevealText from '@/components/motion/text/SimpleRevealText';
 import LogoEye from '@/assets/logo/logo-eye.svg?react';
 import Button from '@/components/common/Button';
@@ -33,12 +33,12 @@ const Hero = forwardRef<HTMLElement>(() => {
       className="section-shell relative flex min-h-[100dvh] items-center justify-center"
       aria-labelledby="hero-title"
     >
-      {/* Logo avec animation simple */}
-      <SimpleAnimateItem index={0} type="fade-up">
+      {/* Logo avec animation immédiate (above-the-fold) */}
+      <OptimizedAnimateItem index={0} type="fade-up" immediate={true}>
         <div className="mb-section-gap aspect-[146/85] w-[clamp(5rem,10vw,20rem)]">
           <LogoEye aria-hidden="true" focusable="false" className="h-full w-full" />
         </div>
-      </SimpleAnimateItem>
+      </OptimizedAnimateItem>
 
       <div className="w-full space-y-section-gap">
         {/* Punchline avec animation simple - utilise le DS title-xl */}
@@ -49,7 +49,7 @@ const Hero = forwardRef<HTMLElement>(() => {
         />
 
         {/* Titre principal */}
-        <SimpleAnimateItem index={2} type="fade-up">
+        <OptimizedAnimateItem index={1} type="fade-up" immediate={true} customDelay={100}>
           <header>
             <h1 id="hero-title" className="text-title-md">
               <span className="font-thin">－</span>
@@ -59,10 +59,10 @@ const Hero = forwardRef<HTMLElement>(() => {
               <span className="font-black">COIN</span>
             </h1>
           </header>
-        </SimpleAnimateItem>
+        </OptimizedAnimateItem>
 
         {/* CTA */}
-        <SimpleAnimateItem index={3} type="fade-up">
+        <OptimizedAnimateItem index={2} type="fade-up" immediate={true} customDelay={200}>
           <a
             href={CALENDLY_URL}
             target="_blank"
@@ -76,7 +76,7 @@ const Hero = forwardRef<HTMLElement>(() => {
               </span>
             </Button>
           </a>
-        </SimpleAnimateItem>
+        </OptimizedAnimateItem>
       </div>
     </SectionContainer>
   );

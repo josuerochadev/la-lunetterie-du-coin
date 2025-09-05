@@ -50,11 +50,11 @@ export default function ContactForm() {
 
     const form = e.target as HTMLFormElement;
     const data = new FormData(form);
-    
+
     // Force readable subject for client-side
     data.append('_subject', 'Nouveau message - La Lunetterie du Coin');
     // data.append('_cc', '[email protected]'); // si tu veux te mettre en copie
-    
+
     // Honeypot spam protection
     const honeypot = data.get('_gotcha');
     if (honeypot) {
@@ -100,12 +100,12 @@ export default function ContactForm() {
         if ('vibrate' in navigator) {
           navigator.vibrate([100, 50, 100]); // Success pattern
         }
-        
+
         // Reset status after showing success message for 5 seconds
         setTimeout(() => {
           setStatus('idle');
         }, 5000);
-        
+
         setTimeout(() => {
           messageRef.current?.focus();
         }, 100);
