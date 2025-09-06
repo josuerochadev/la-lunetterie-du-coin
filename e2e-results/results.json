@@ -1,0 +1,387 @@
+{
+  "config": {
+    "configFile": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/playwright.config.ts",
+    "rootDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 4
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "html",
+        {
+          "outputFolder": "e2e-results"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "e2e-results/results.json"
+        }
+      ],
+      [
+        "list",
+        null
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "firefox",
+        "name": "firefox",
+        "testDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "mobile-chrome",
+        "name": "mobile-chrome",
+        "testDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      },
+      {
+        "outputDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "id": "tablet",
+        "name": "tablet",
+        "testDir": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e",
+        "testIgnore": [
+          "**/node_modules/**",
+          "**/dist/**"
+        ],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.55.0",
+    "workers": 4,
+    "webServer": {
+      "command": "npm run dev",
+      "port": 5173,
+      "reuseExistingServer": true,
+      "timeout": 120000
+    }
+  },
+  "suites": [
+    {
+      "title": "contact-form.spec.ts",
+      "file": "contact-form.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Contact Form - E2E Tests",
+          "file": "contact-form.spec.ts",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "should be accessible via keyboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 1508,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:06:56.986Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "19bfce10c51128c14abd-e8bd99b6c3de090f3117",
+              "file": "contact-form.spec.ts",
+              "line": 157,
+              "column": 3
+            },
+            {
+              "title": "should be accessible via keyboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+                  "results": [
+                    {
+                      "workerIndex": 1,
+                      "parallelIndex": 1,
+                      "status": "passed",
+                      "duration": 2084,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:06:56.979Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "19bfce10c51128c14abd-cba3af6295645866d426",
+              "file": "contact-form.spec.ts",
+              "line": 157,
+              "column": 3
+            },
+            {
+              "title": "should be accessible via keyboard",
+              "ok": false,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+                  "results": [
+                    {
+                      "workerIndex": 2,
+                      "parallelIndex": 2,
+                      "status": "failed",
+                      "duration": 11967,
+                      "error": {
+                        "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m()\u001b[22m failed\n\nLocator:  locator('button[type=\"submit\"], input[type=\"submit\"]').first()\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[type=\"submit\"], input[type=\"submit\"]').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"submit\" class=\"button-primary font-semibold group mt-2\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n",
+                        "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m()\u001b[22m failed\n\nLocator:  locator('button[type=\"submit\"], input[type=\"submit\"]').first()\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[type=\"submit\"], input[type=\"submit\"]').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"submit\" class=\"button-primary font-semibold group mt-2\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n    at /Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e/contact-form.spec.ts:175:32",
+                        "location": {
+                          "file": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e/contact-form.spec.ts",
+                          "column": 32,
+                          "line": 175
+                        },
+                        "snippet": "  173 |     await page.keyboard.press('Tab');\n  174 |     const submitButton = page.locator('button[type=\"submit\"], input[type=\"submit\"]').first();\n> 175 |     await expect(submitButton).toBeFocused();\n      |                                ^\n  176 |\n  177 |     // Vérifier que Enter soumet le formulaire\n  178 |     await nameInput.focus();"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e/contact-form.spec.ts",
+                            "column": 32,
+                            "line": 175
+                          },
+                          "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeFocused\u001b[2m()\u001b[22m failed\n\nLocator:  locator('button[type=\"submit\"], input[type=\"submit\"]').first()\nExpected: focused\nReceived: inactive\nTimeout:  10000ms\n\nCall log:\n\u001b[2m  - Expect \"toBeFocused\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('button[type=\"submit\"], input[type=\"submit\"]').first()\u001b[22m\n\u001b[2m    14 × locator resolved to <button type=\"submit\" class=\"button-primary font-semibold group mt-2\">…</button>\u001b[22m\n\u001b[2m       - unexpected value \"inactive\"\u001b[22m\n\n\n  173 |     await page.keyboard.press('Tab');\n  174 |     const submitButton = page.locator('button[type=\"submit\"], input[type=\"submit\"]').first();\n> 175 |     await expect(submitButton).toBeFocused();\n      |                                ^\n  176 |\n  177 |     // Vérifier que Enter soumet le formulaire\n  178 |     await nameInput.focus();\n    at /Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e/contact-form.spec.ts:175:32"
+                        }
+                      ],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:06:56.978Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results/contact-form-Contact-Form--25b1a--be-accessible-via-keyboard-webkit/test-failed-1.png"
+                        },
+                        {
+                          "name": "video",
+                          "contentType": "video/webm",
+                          "path": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results/contact-form-Contact-Form--25b1a--be-accessible-via-keyboard-webkit/video.webm"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/test-results/contact-form-Contact-Form--25b1a--be-accessible-via-keyboard-webkit/error-context.md"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/josuexavierrocha/Projets/la-lunetterie-du-coin/e2e/contact-form.spec.ts",
+                        "column": 32,
+                        "line": 175
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "19bfce10c51128c14abd-d60ffca2189730a85d80",
+              "file": "contact-form.spec.ts",
+              "line": 157,
+              "column": 3
+            },
+            {
+              "title": "should be accessible via keyboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+                  "results": [
+                    {
+                      "workerIndex": 3,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 1778,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:06:56.991Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "19bfce10c51128c14abd-a916401e2567e8f3bc31",
+              "file": "contact-form.spec.ts",
+              "line": 157,
+              "column": 3
+            },
+            {
+              "title": "should be accessible via keyboard",
+              "ok": true,
+              "tags": [],
+              "tests": [
+                {
+                  "timeout": 30000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 0,
+                      "status": "passed",
+                      "duration": 817,
+                      "errors": [],
+                      "stdout": [],
+                      "stderr": [],
+                      "retry": 0,
+                      "startTime": "2025-09-06T14:06:59.391Z",
+                      "annotations": [],
+                      "attachments": []
+                    }
+                  ],
+                  "status": "expected"
+                }
+              ],
+              "id": "19bfce10c51128c14abd-9ced6eb6ae886f66169d",
+              "file": "contact-form.spec.ts",
+              "line": 157,
+              "column": 3
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2025-09-06T14:06:56.416Z",
+    "duration": 12868.550000000001,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

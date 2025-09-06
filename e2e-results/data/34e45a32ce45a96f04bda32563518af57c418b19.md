@@ -1,0 +1,209 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e5]:
+  - link "Aller au contenu" [ref=e6]:
+    - /url: "#main"
+  - button "Ouvrir le menu" [ref=e9] [cursor=pointer]:
+    - generic [ref=e14] [cursor=pointer]: Menu
+  - main [ref=e15]:
+    - generic [ref=e17]:
+      - img [ref=e20]
+      - generic [ref=e26]:
+        - generic [ref=e28]: Des lunettes qui ont du style, une démarche qui a du sens
+        - heading "－LALUNETTERIEDUCOIN" [level=1] [ref=e31]:
+          - generic [ref=e32]: －
+          - generic [ref=e33]: LA
+          - generic [ref=e34]: LUNETTERIE
+          - generic [ref=e35]: DU
+          - generic [ref=e36]: COIN
+        - link "Prendre rendez-vous" [ref=e39]:
+          - /url: https://calendly.com/lalunetterieducoin
+          - button "Prendre rendez-vous" [ref=e40] [cursor=pointer]:
+            - generic [ref=e41] [cursor=pointer]:
+              - img [ref=e42] [cursor=pointer]
+              - text: Prendre rendez-vous
+    - generic [ref=e44]:
+      - heading "Nos Offres" [level=2] [ref=e46]
+      - generic [ref=e47]:
+        - button "Recyclage Recyclage" [ref=e49] [cursor=pointer]:
+          - img "Recyclage" [ref=e50] [cursor=pointer]
+          - region "Recyclage":
+            - heading "Recyclage" [level=3]
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Résumé
+                  - paragraph: Jusqu’à 70€ de remise en rapportant vos anciennes montures.
+            - generic:
+              - generic: En savoir plus
+              - generic:
+                - img
+        - button "Deuxième paire Deuxième paire" [ref=e52] [cursor=pointer]:
+          - img "Deuxième paire" [ref=e53] [cursor=pointer]
+          - region "Deuxième paire":
+            - heading "Deuxième paire" [level=3]
+            - generic:
+              - generic:
+                - generic:
+                  - paragraph: Résumé
+                  - paragraph: Obtenez une deuxième paire à partir de 59€ selon vos besoins.
+            - generic:
+              - generic: En savoir plus
+              - generic:
+                - img
+    - generic [ref=e55]:
+      - heading "Nos Services" [level=2] [ref=e57]
+      - generic [ref=e58]:
+        - generic [ref=e59]:
+          - img "Lunettes neuves et d’occasion" [ref=e62]
+          - tablist "Liste des services" [ref=e63]:
+            - tab "Voir Lunettes neuves et d’occasion" [selected] [ref=e65] [cursor=pointer]:
+              - img "Lunettes neuves et d’occasion" [ref=e68] [cursor=pointer]
+            - tab "Voir Lentilles de contact" [ref=e70] [cursor=pointer]:
+              - img "Lentilles de contact" [ref=e73] [cursor=pointer]
+            - tab "Voir Examens de vue" [ref=e75] [cursor=pointer]:
+              - img "Examens de vue" [ref=e78] [cursor=pointer]
+        - tabpanel "Voir Lunettes neuves et d’occasion" [ref=e80]:
+          - heading "Lunettes neuves et d’occasion" [level=3] [ref=e81]
+          - paragraph [ref=e82]: Large choix de montures neuves et de seconde main, soigneusement sélectionnées.
+    - generic [ref=e84]:
+      - heading "Le Concept" [level=2] [ref=e86]
+      - generic [ref=e88]:
+        - generic [ref=e89]: ✷
+        - generic [ref=e90]: Depuis
+        - generic [ref=e91]: 2016,
+        - generic [ref=e92]: "on"
+        - generic [ref=e93]: mixe
+        - generic [ref=e94]: style
+        - generic [ref=e95]: ☆
+        - generic [ref=e96]: et
+        - generic [ref=e97]: conscience
+        - generic [ref=e98]: ◇
+        - generic [ref=e99]: en
+        - generic [ref=e100]: plein
+        - generic [ref=e101]: Strasbourg.
+        - generic [ref=e102]: Des
+        - generic [ref=e103]: lunettes
+        - generic [ref=e104]: neuves,
+        - generic [ref=e105]: oui
+        - generic [ref=e106]: —
+        - generic [ref=e107]: mais
+        - generic [ref=e108]: aussi
+        - generic [ref=e109]: des
+        - generic [ref=e110]: montures
+        - generic [ref=e111]: recyclées
+        - generic [ref=e112]: ✷
+        - generic [ref=e113]: restaurées
+        - generic [ref=e114]: avec
+        - generic [ref=e115]: soin.
+        - generic [ref=e116]: Ramenez
+        - generic [ref=e117]: vos
+        - generic [ref=e118]: anciennes
+        - generic [ref=e119]: paires.
+        - generic [ref=e120]: →
+        - generic [ref=e121]: Jusqu'à
+        - generic [ref=e122]: 70€
+        - generic [ref=e123]: de
+        - generic [ref=e124]: réduction.
+        - generic [ref=e125]: ✧
+        - generic [ref=e126]: Donnez-leur
+        - generic [ref=e127]: une
+        - generic [ref=e128]: seconde
+        - generic [ref=e129]: vie.
+        - generic [ref=e130]: "On"
+        - generic [ref=e131]: voit
+        - generic [ref=e132]: clair,
+        - generic [ref=e133]: ○
+        - generic [ref=e134]: sans
+        - generic [ref=e135]: fermer
+        - generic [ref=e136]: les
+        - generic [ref=e137]: yeux
+        - generic [ref=e138]: sur
+        - generic [ref=e139]: l'impact
+        - generic [ref=e140]: écologique.
+        - generic [ref=e141]: ▲
+        - generic [ref=e142]: La
+        - generic [ref=e143]: mode
+        - generic [ref=e144]: change.
+        - generic [ref=e145]: ◆
+        - generic [ref=e146]: La
+        - generic [ref=e147]: planète,
+        - generic [ref=e148]: non.
+      - generic [ref=e149]:
+        - generic [ref=e150] [cursor=pointer]:
+          - img "Sélection de montures exposées, éclairage doux et matériaux premium." [ref=e152] [cursor=pointer]
+          - generic [ref=e154] [cursor=pointer]:
+            - heading "Notre Sélection" [level=3] [ref=e155] [cursor=pointer]
+            - paragraph [ref=e156] [cursor=pointer]: Montures neuves et d'occasion soigneusement choisies pour allier style et durabilité.
+        - generic [ref=e157] [cursor=pointer]:
+          - img "Romain en conseil client à la boutique, essayage de montures." [ref=e159] [cursor=pointer]
+          - generic [ref=e161] [cursor=pointer]:
+            - heading "L'Expertise Romain" [level=3] [ref=e162] [cursor=pointer]
+            - paragraph [ref=e163] [cursor=pointer]: Conseil personnalisé et passion de l'optique depuis plus de 10 ans à Strasbourg.
+    - generic [ref=e165]:
+      - heading "Nous contacter" [level=2] [ref=e167]
+      - generic [ref=e170]:
+        - generic [ref=e172]:
+          - generic [ref=e173]:
+            - text: Nom
+            - generic "requis" [ref=e174]: "*"
+          - textbox "Nom requis" [ref=e175]
+          - generic [ref=e176]: 2 à 50 caractères
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - text: Email
+            - generic "requis" [ref=e180]: "*"
+          - textbox "Email requis" [ref=e181]
+          - generic [ref=e182]: "Format : exemple@domaine.com"
+        - generic [ref=e184]:
+          - generic [ref=e185]:
+            - text: Message
+            - generic "requis" [ref=e186]: "*"
+          - textbox "Message requis" [ref=e187]
+          - generic [ref=e188]: 10 à 1000 caractères
+        - button "Envoyer" [ref=e191] [cursor=pointer]:
+          - generic [ref=e192] [cursor=pointer]:
+            - img [ref=e193] [cursor=pointer]
+            - text: Envoyer
+    - link "Prendre rendez-vous" [ref=e197]:
+      - /url: https://calendly.com/lalunetterieducoin
+      - button "Prendre rendez-vous" [ref=e198] [cursor=pointer]:
+        - generic [ref=e199] [cursor=pointer]:
+          - img [ref=e200] [cursor=pointer]
+          - text: Prendre rendez-vous
+  - contentinfo [ref=e202]:
+    - generic [ref=e204]:
+      - heading "LALUNETTERIEDUCOIN" [level=2] [ref=e205]:
+        - generic [ref=e206]: LA
+        - text: LUNETTERIE
+        - generic [ref=e207]: DU
+        - text: COIN
+      - generic [ref=e208]:
+        - generic "Adresse et horaires de la boutique" [ref=e209]:
+          - paragraph [ref=e210]: 24 Rue du Faubourg-de-Pierre 67000 STRASBOURG
+          - paragraph [ref=e211]:
+            - link "03 88 51 24 40" [ref=e212]:
+              - /url: tel:+33388512440
+          - paragraph [ref=e213]: "Du lundi au samedi : 10 h–14 h / 15 h–19 h"
+          - paragraph [ref=e214]: "Dimanche : fermé"
+        - navigation "Navigation de bas de page" [ref=e215]:
+          - generic "Réseaux sociaux" [ref=e216]:
+            - link "Facebook" [ref=e217]:
+              - /url: https://www.facebook.com/LaLunetterieDuCoinStrasbourg/
+              - img [ref=e218]
+              - generic [ref=e220]: Facebook
+            - link "Instagram" [ref=e221]:
+              - /url: https://www.instagram.com/lalunetterieducoin/
+              - img [ref=e222]
+              - generic [ref=e225]: Instagram
+          - generic [ref=e226]:
+            - link "Mentions légales" [ref=e227]:
+              - /url: /mentions-legales
+            - link "Conditions de vente" [ref=e228]:
+              - /url: /conditions-de-vente
+          - paragraph [ref=e229]:
+            - text: Développé par
+            - link "Josué Rocha" [ref=e230]:
+              - /url: https://josuerochadev.github.io/portfolio/
+```
