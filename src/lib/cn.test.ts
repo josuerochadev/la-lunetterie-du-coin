@@ -11,7 +11,9 @@ describe('cn (className utility)', () => {
   it('should handle conditional classes', () => {
     const isConditional = true;
     const isHidden = false;
-    expect(cn('base', isConditional && 'conditional', isHidden && 'hidden')).toBe('base conditional');
+    expect(cn('base', isConditional && 'conditional', isHidden && 'hidden')).toBe(
+      'base conditional',
+    );
   });
 
   it('should handle undefined and null values', () => {
@@ -29,11 +31,13 @@ describe('cn (className utility)', () => {
   });
 
   it('should handle complex object syntax', () => {
-    expect(cn({
-      'base-class': true,
-      'conditional-class': false,
-      'active': true
-    })).toBe('base-class active');
+    expect(
+      cn({
+        'base-class': true,
+        'conditional-class': false,
+        active: true,
+      }),
+    ).toBe('base-class active');
   });
 
   it('should handle mixed array and string inputs', () => {

@@ -35,17 +35,18 @@ describe('retryLogic', () => {
     });
 
     it('should retry on failure and succeed', async () => {
-      const mockFn = vi.fn()
+      const mockFn = vi
+        .fn()
         .mockRejectedValueOnce(new Error('First failure'))
         .mockResolvedValue('success');
 
       const onRetryAttempt = vi.fn();
       const onMaxAttemptsReached = vi.fn();
 
-      const promise = withRetry(mockFn, { 
+      const promise = withRetry(mockFn, {
         maxAttempts: 3,
         onRetryAttempt,
-        onMaxAttemptsReached 
+        onMaxAttemptsReached,
       });
 
       // Advance timers to handle delays
@@ -57,7 +58,6 @@ describe('retryLogic', () => {
       expect(onRetryAttempt).toHaveBeenCalledWith(1, 100);
       expect(onMaxAttemptsReached).not.toHaveBeenCalled();
     });
-
 
     it('should not retry when shouldRetryError returns false', async () => {
       const { shouldRetryError } = await import('./networkErrors');
@@ -106,7 +106,7 @@ describe('retryLogic', () => {
       vi.mocked(shouldRetryError).mockReturnValue(true);
 
       const promise = fetchWithRetry('https://api.example.com', {}, { maxAttempts: 2 });
-      
+
       await vi.runAllTimersAsync();
       const result = await promise;
 
