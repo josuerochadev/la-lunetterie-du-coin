@@ -17,38 +17,55 @@ import { validateEnvironment } from '@/lib/env';
 // Validate environment variables
 validateEnvironment();
 
-// Ultra-minimal Sentry for mobile performance
+// Ultra-minimal Sentry loading strategy
 const initSentry = async () => {
-  if (import.meta.env.VITE_SENTRY_DSN) {
-    try {
-      const Sentry = await import('@sentry/react');
+  // Only load Sentry in production with DSN configured
+  if (import.meta.env.MODE !== 'production' || !import.meta.env.VITE_SENTRY_DSN) {
+    return;
+  }
 
-      // Skip Sentry on mobile for performance
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      if (isMobile) {
-        console.log('Sentry disabled on mobile for performance');
-        return;
-      }
+  try {
+    // Skip Sentry on mobile and slow connections for performance
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isSlowConnection =
+      'connection' in navigator &&
+      // @ts-ignore - NetworkInformation not in standard types
+      navigator.connection?.effectiveType === 'slow-2g';
 
-      Sentry.init({
-        dsn: import.meta.env.VITE_SENTRY_DSN,
-        integrations: [
-          // Only basic error tracking - no replay, no canvas, no feedback
-          Sentry.browserTracingIntegration(),
-        ],
-        tracesSampleRate: 0.01, // Very low sampling for performance
-        environment: import.meta.env.MODE,
-        debug: false, // Never debug in production
-        // Disable all expensive features
-        beforeSend(event) {
-          // Skip non-critical errors for performance
-          if (event.level === 'warning') return null;
-          return event;
-        },
-      });
-    } catch (error) {
-      console.warn('Failed to initialize Sentry:', error);
+    if (isMobile || isSlowConnection) {
+      console.log('Sentry disabled for performance (mobile/slow connection)');
+      return;
     }
+
+    // Dynamic import only when needed
+    const { init, browserTracingIntegration } = await import('@sentry/react');
+
+    init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      integrations: [
+        browserTracingIntegration({
+          // Minimal tracing for better performance
+          enableInp: false,
+          enableLongTask: false,
+        }),
+      ],
+      tracesSampleRate: 0.005, // Ultra low sampling (0.5%)
+      environment: import.meta.env.MODE,
+      debug: false,
+      beforeSend(event) {
+        // Only log critical errors
+        if (event.level === 'warning' || event.level === 'info') return null;
+        return event;
+      },
+      // Reduce bundle size
+      beforeSendTransaction(event) {
+        // Skip most transactions
+        return Math.random() < 0.01 ? event : null;
+      },
+    });
+  } catch (error) {
+    // Silently fail to avoid blocking app startup
+    console.warn('Sentry init failed:', error);
   }
 };
 

@@ -43,29 +43,55 @@ export default defineConfig(({ mode }) => {
       sourcemap: true, // Important pour Sentry
       rollupOptions: {
         output: {
-          // Stratégie de chunking optimisée pour cache et performance
-          manualChunks: {
-            // Core React (rarement mis à jour)
-            vendor: ['react', 'react-dom'],
+          // Stratégie de chunking ultra-optimisée
+          manualChunks(id) {
+            // Sentry chunk séparé (chargé conditionnellement)
+            if (id.includes('@sentry')) {
+              return 'sentry';
+            }
             
-            // Routing (change avec les features)
-            router: ['react-router-dom'],
+            // Core React (stable, cache long terme)
+            if (id.includes('react') || id.includes('react-dom')) {
+              return 'react-vendor';
+            }
             
-            // Animation (gros module séparé)
-            motion: ['framer-motion', 'split-type'],
+            // Routing système  
+            if (id.includes('react-router')) {
+              return 'router';
+            }
             
-            // Forms (utilisé uniquement sur contact)
-            forms: ['react-hook-form'],
+            // Animation (grosse librairie)
+            if (id.includes('framer-motion') || id.includes('split-type')) {
+              return 'motion';
+            }
             
-            // Monitoring (production uniquement)
-            sentry: ['@sentry/react'],
+            // Forms (lazy-loaded sur page contact)
+            if (id.includes('react-hook-form')) {
+              return 'forms';
+            }
             
-            // UI utilities (stable)
-            utils: ['clsx', '@dr.pogodin/react-helmet', 'tailwind-merge'],
+            // Utilitaires légers (groupés)
+            if (id.includes('clsx') || 
+                id.includes('@dr.pogodin/react-helmet') || 
+                id.includes('tailwind-merge')) {
+              return 'utils';
+            }
             
-            // Icons (chargés à la demande)
-            icons: ['lucide-react/dist/esm/icons/facebook', 'lucide-react/dist/esm/icons/instagram'],
+            // Icons Lucide (lazy-loaded)
+            if (id.includes('lucide-react')) {
+              return 'icons';
+            }
+            
+            // Node modules dans vendor par défaut
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
           },
+          
+          // Noms de fichiers avec hash pour cache busting
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]',
         },
       },
       // Réduire le seuil d'avertissement pour forcer le splitting
