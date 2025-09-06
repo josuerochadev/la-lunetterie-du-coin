@@ -184,6 +184,6 @@ test.describe('Contact Form - E2E Tests', () => {
     await page.keyboard.press('Enter');
 
     // Le formulaire devrait tenter la soumission
-    await expect(page.locator(':has-text("envoi"), :has-text("Envoi en cours")')).toBeVisible({ timeout: 2000 });
+    await expect(page.getByRole('button', { name: /envoi en cours/i })).toBeVisible({ timeout: 2000 });
   });
 });

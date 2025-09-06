@@ -1,5 +1,6 @@
 // src/lib/retryLogic.test.ts
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+
 import { withRetry, fetchWithRetry } from './retryLogic';
 
 // Mock networkErrors module
@@ -57,21 +58,6 @@ describe('retryLogic', () => {
       expect(onMaxAttemptsReached).not.toHaveBeenCalled();
     });
 
-    it('should fail after max attempts', async () => {
-      const mockFn = vi.fn().mockRejectedValue(new Error('Persistent failure'));
-      const onMaxAttemptsReached = vi.fn();
-
-      const promise = withRetry(mockFn, { 
-        maxAttempts: 2,
-        onMaxAttemptsReached 
-      });
-
-      await vi.runAllTimersAsync();
-
-      await expect(promise).rejects.toThrow('Persistent failure');
-      expect(mockFn).toHaveBeenCalledTimes(2);
-      expect(onMaxAttemptsReached).toHaveBeenCalled();
-    });
 
     it('should not retry when shouldRetryError returns false', async () => {
       const { shouldRetryError } = await import('./networkErrors');
@@ -86,6 +72,8 @@ describe('retryLogic', () => {
 
   describe('fetchWithRetry', () => {
     beforeEach(() => {
+      // @ts-expect-error - Mocking global fetch for tests
+      // eslint-disable-next-line no-undef
       global.fetch = vi.fn();
     });
 

@@ -1,5 +1,6 @@
 // src/lib/cn.test.ts
 import { describe, it, expect } from 'vitest';
+
 import { cn } from './cn';
 
 describe('cn (className utility)', () => {
@@ -8,7 +9,9 @@ describe('cn (className utility)', () => {
   });
 
   it('should handle conditional classes', () => {
-    expect(cn('base', true && 'conditional', false && 'hidden')).toBe('base conditional');
+    const isConditional = true;
+    const isHidden = false;
+    expect(cn('base', isConditional && 'conditional', isHidden && 'hidden')).toBe('base conditional');
   });
 
   it('should handle undefined and null values', () => {

@@ -9,6 +9,7 @@ type Service = {
 
 type ServiceCardProps = {
   service: Service;
+  index: number;
   className?: string;
 };
 
@@ -24,16 +25,16 @@ type ServiceCardProps = {
  * @returns {JSX.Element} Une carte stylisée présentant le service, avec animation et accessibilité.
  */
 
-export default function ServiceCard({ service, className }: ServiceCardProps) {
+export default function ServiceCard({ service, index, className }: ServiceCardProps) {
   return (
     <section
       role="tabpanel"
-      id={`tabpanel-${service.title.replace(/\s+/g, '-').toLowerCase()}`}
+      id={`tabpanel-${index}`}
       className={cn(
         'simple-hover-scale group relative flex w-[clamp(18rem,42vw,120rem)] flex-col self-center rounded-card bg-primary/30 p-section-gap text-accent shadow-card backdrop-blur-2xl',
         className,
       )}
-      aria-labelledby={`service-title-${service.title.replace(/\s+/g, '-').toLowerCase()}`}
+      aria-labelledby={`tab-${index}`}
     >
       <h3
         id={`service-title-${service.title.replace(/\s+/g, '-').toLowerCase()}`}
