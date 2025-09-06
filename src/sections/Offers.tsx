@@ -35,11 +35,7 @@ export default function Offers() {
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap md:grid-cols-2">
         {OFFERS.map((offer, index) => (
           <OptimizedAnimateItem key={offer.id} index={index} type="fade-up" threshold={0.3}>
-            <OfferCard
-              offer={offer}
-              isOpen={openCards.includes(offer.id)}
-              onToggle={toggleCard}
-            />
+            <OfferCard offer={offer} isOpen={openCards.includes(offer.id)} onToggle={toggleCard} />
           </OptimizedAnimateItem>
         ))}
       </div>

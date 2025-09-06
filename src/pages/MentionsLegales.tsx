@@ -42,57 +42,57 @@ export default function MentionsLegales() {
 
       <OptimizedAnimateItem index={0} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
-            <h2
-              id="editeur"
-              className="font-serif text-title-lg font-bold text-primary"
-              tabIndex={-1}
-            >
-              Éditeur du site
-            </h2>
+          <h2
+            id="editeur"
+            className="font-serif text-title-lg font-bold text-primary"
+            tabIndex={-1}
+          >
+            Éditeur du site
+          </h2>
 
-            <div className="space-y-sm">
-              <div className="grid grid-cols-1 gap-md md:grid-cols-2">
-                <div>
-                  <p className="text-body leading-relaxed">
-                    <strong className="font-semibold text-primary">Nom :</strong>
-                    <br />
-                    {COMPANY_NAME}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-body leading-relaxed">
-                    <strong className="font-semibold text-primary">Forme juridique :</strong>
-                    <br />
-                    {COMPANY_LEGAL_FORM}{' '}
-                    {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-4">
+          <div className="space-y-sm">
+            <div className="grid grid-cols-1 gap-md md:grid-cols-2">
+              <div>
                 <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">Siège social :</strong>
+                  <strong className="font-semibold text-primary">Nom :</strong>
                   <br />
-                  {COMPANY_ADDRESS}
+                  {COMPANY_NAME}
                 </p>
+              </div>
+              <div>
                 <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">SIRET :</strong> {COMPANY_SIRET}
-                  <span className="mx-4">•</span>
-                  <strong className="font-semibold text-primary">RCS :</strong> {COMPANY_RCS}
-                </p>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">TVA intracommunautaire :</strong>{' '}
-                  {COMPANY_VAT || 'N/A'}
-                </p>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">
-                    Directeur de la publication :
-                  </strong>{' '}
-                  {PUBLICATION_DIRECTOR}
+                  <strong className="font-semibold text-primary">Forme juridique :</strong>
+                  <br />
+                  {COMPANY_LEGAL_FORM}{' '}
+                  {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
                 </p>
               </div>
             </div>
-          </section>
+
+            <div className="space-y-3 pt-4">
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">Siège social :</strong>
+                <br />
+                {COMPANY_ADDRESS}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">SIRET :</strong> {COMPANY_SIRET}
+                <span className="mx-4">•</span>
+                <strong className="font-semibold text-primary">RCS :</strong> {COMPANY_RCS}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">TVA intracommunautaire :</strong>{' '}
+                {COMPANY_VAT || 'N/A'}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">
+                  Directeur de la publication :
+                </strong>{' '}
+                {PUBLICATION_DIRECTOR}
+              </p>
+            </div>
+          </div>
+        </section>
       </OptimizedAnimateItem>
 
       <OptimizedAnimateItem index={1} type="fade-down" threshold={0.3}>
