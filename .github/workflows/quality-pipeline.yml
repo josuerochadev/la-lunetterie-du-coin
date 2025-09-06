@@ -48,7 +48,7 @@ jobs:
         run: pnpm lint
         
       - name: 💅 Prettier check
-        run: pnpm format -- --check
+        run: pnpm format:check
         
       - name: 📊 Upload lint results
         if: always()

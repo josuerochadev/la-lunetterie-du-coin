@@ -10,7 +10,7 @@ import tseslint from "typescript-eslint";
 import tsParser from "@typescript-eslint/parser";
 
 export default tseslint.config(
-	{ ignores: ["dist", "build"] },
+	{ ignores: ["dist", "build", "coverage", "e2e-results", "test-results", "lighthouse-results"] },
 	{
 		files: ["**/*.{ts,tsx}"],
 		languageOptions: {
