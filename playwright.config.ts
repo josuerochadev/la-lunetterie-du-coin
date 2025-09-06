@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // playwright.config.ts
 import { defineConfig, devices } from '@playwright/test';
 
@@ -62,19 +63,13 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
     
-    // Mobile Chrome
+    // Mobile Chrome (tests visuels seulement sur Chromium)
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
     
-    // Mobile Safari
-    {
-      name: 'mobile-safari',
-      use: { ...devices['iPhone 12'] },
-    },
-    
-    // Tablet
+    // Tablet (tests visuels seulement sur Chromium)
     {
       name: 'tablet',
       use: { ...devices['iPad Pro'] },

@@ -43,7 +43,7 @@ jobs:
         run: pnpm build
         
       - name: 🎭 Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+        run: pnpm exec playwright install --with-deps chromium
         
       - name: 📸 Run visual regression tests
         run: pnpm e2e:visual
