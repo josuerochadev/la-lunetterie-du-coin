@@ -40,7 +40,7 @@ export default function MentionsLegales() {
     >
       <TableOfContents sections={sections} />
 
-      <OptimizedAnimateItem index={0} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={0} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="editeur"
@@ -95,7 +95,7 @@ export default function MentionsLegales() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={1} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={1} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="contact"
@@ -132,7 +132,7 @@ export default function MentionsLegales() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={2} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={2} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="hebergeur"
@@ -151,7 +151,7 @@ export default function MentionsLegales() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={3} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={3} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="propriete-intellectuelle"
@@ -169,7 +169,7 @@ export default function MentionsLegales() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={4} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={4} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="donnees-personnelles"
@@ -187,7 +187,7 @@ export default function MentionsLegales() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={5} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={5} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="mediation"

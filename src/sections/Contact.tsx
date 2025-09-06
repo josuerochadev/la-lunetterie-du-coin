@@ -21,7 +21,7 @@ export default function Contact() {
       overlayClassName="bg-transparent"
     >
       <SectionTitle title="Nous contacter" />
-      <OptimizedAnimateItem index={0} type="fade-up" threshold={0.3}>
+      <OptimizedAnimateItem index={0} type="slide-up" threshold={0.35}>
         <div className="mx-auto max-w-4xl lg:max-w-5xl">
           <ContactForm />
         </div>

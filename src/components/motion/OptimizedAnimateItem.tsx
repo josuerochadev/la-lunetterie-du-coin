@@ -8,7 +8,7 @@ interface OptimizedAnimateItemProps {
   children: ReactNode;
   index?: number;
   className?: string;
-  type?: 'fade' | 'fade-up' | 'fade-down' | 'scale';
+  type?: 'slide-up' | 'slide-down' | 'slide-left' | 'slide-right' | 'fade';
   as?: keyof React.JSX.IntrinsicElements;
   /** Threshold pour déclencher l'animation (0-1) */
   threshold?: number;
@@ -19,26 +19,27 @@ interface OptimizedAnimateItemProps {
 }
 
 /**
- * Composant d'animation optimisé avec Intersection Observer
+ * Composant d'animation smooth et minimaliste avec Intersection Observer
  *
- * ✅ Ne se déclenche que quand l'élément est visible
- * ✅ Stagger delays optimisés (50ms au lieu de 100ms)
- * ✅ Support animation immédiate pour hero sections
- * ✅ Threshold configurable pour un contrôle précis
+ * ✅ Slides subtils et élégants (24px max)
+ * ✅ Courbe cubic-bezier sophistiquée
+ * ✅ Animation déclenchée uniquement quand visible
+ * ✅ Support pour slide-up, slide-down, slide-left, slide-right, fade
+ * ✅ Stagger delays optimisés et threshold configurable
  */
 export function OptimizedAnimateItem({
   children,
   index = 0,
   className,
-  type = 'fade',
+  type = 'slide-up',
   as: Component = 'div',
-  threshold = 0.3,
+  threshold = 0.35,
   customDelay,
   immediate = false,
 }: OptimizedAnimateItemProps) {
-  const [shouldAnimate, setShouldAnimate] = useState(immediate);
+  const [shouldAnimate, setShouldAnimate] = useState(false); // Toujours commencer invisible
   const [isIntersecting, setIsIntersecting] = useState(immediate);
-  const targetRef = useRef<HTMLElement>(null);
+  const targetRef = useRef<Element>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
   // Calcul du délai optimisé pour plus de visibilité
@@ -63,33 +64,49 @@ export function OptimizedAnimateItem({
     return () => observer.unobserve(currentTarget);
   }, [threshold, immediate]);
 
-  // Déclencher l'animation quand l'élément devient visible
+  // Déclencher l'animation quand l'élément devient visible OU immédiatement
   useEffect(() => {
-    if (isIntersecting && !shouldAnimate) {
+    if ((isIntersecting || immediate) && !shouldAnimate) {
+      if (immediate && staggerDelay > 0) {
+        // Pour les éléments immédiats avec délai, on attend le stagger delay
+        const timeout = setTimeout(() => {
+          setShouldAnimate(true);
+        }, staggerDelay);
+        return () => clearTimeout(timeout);
+      }
       setShouldAnimate(true);
     }
-  }, [isIntersecting, shouldAnimate]);
+  }, [isIntersecting, shouldAnimate, immediate, staggerDelay]);
 
   // Classes d'animation conditionnelles
   const getAnimationClass = () => {
     if (prefersReducedMotion) return ''; // Pas d'animation
     if (!shouldAnimate) return 'opacity-0'; // État initial invisible
 
-    const baseClass = `simple-${type}-in`;
+    const baseClass = `simple-${type.replace('-', '-in-')}`;
+    // Pour les éléments immédiats avec délai custom, pas de classe de délai CSS
     const delayClass =
-      staggerDelay > 0 ? `animate-delay-${Math.min(Math.floor(staggerDelay / 80) + 1, 6)}` : '';
+      staggerDelay > 0 && !(immediate && customDelay)
+        ? `animate-delay-${Math.min(Math.floor(staggerDelay / 80) + 1, 6)}`
+        : '';
 
     return cn(baseClass, delayClass);
   };
+
+  // Style conditionnel pour éviter les unions complexes
+  const animationStyle: React.CSSProperties = {};
+  if (shouldAnimate && !prefersReducedMotion && !(immediate && customDelay)) {
+    animationStyle.animationDelay = `${staggerDelay}ms`;
+  }
+  if (prefersReducedMotion) {
+    animationStyle.opacity = 1;
+  }
 
   return (
     <Component
       ref={targetRef as any}
       className={cn('simple-animate-item transition-opacity', getAnimationClass(), className)}
-      style={{
-        animationDelay: shouldAnimate && !prefersReducedMotion ? `${staggerDelay}ms` : undefined,
-        opacity: prefersReducedMotion ? 1 : undefined,
-      }}
+      style={animationStyle}
     >
       {children}
     </Component>

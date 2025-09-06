@@ -23,7 +23,7 @@ export default function ConditionsDeVente() {
     >
       <TableOfContents sections={sections} />
 
-      <OptimizedAnimateItem index={0} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={0} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="introduction"
@@ -56,7 +56,7 @@ export default function ConditionsDeVente() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={1} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={1} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="politique-retour"
@@ -107,7 +107,7 @@ export default function ConditionsDeVente() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={2} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={2} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="changement-puissance"
@@ -144,7 +144,7 @@ export default function ConditionsDeVente() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={3} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={3} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="reglement"
@@ -169,7 +169,7 @@ export default function ConditionsDeVente() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={4} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={4} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="offres-commerciales"
@@ -233,7 +233,7 @@ export default function ConditionsDeVente() {
         </section>
       </OptimizedAnimateItem>
 
-      <OptimizedAnimateItem index={5} type="fade-down" threshold={0.3}>
+      <OptimizedAnimateItem index={5} type="slide-down" threshold={0.35}>
         <PrintButton />
       </OptimizedAnimateItem>
     </LegalPageLayout>

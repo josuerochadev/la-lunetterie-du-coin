@@ -26,7 +26,7 @@ export default function PrintButton({ className = '' }: PrintButtonProps) {
 
   return (
     <div className="flex justify-center">
-      <OptimizedAnimateItem index={2} type="fade-up" threshold={0.4}>
+      <OptimizedAnimateItem index={2} type="slide-up" threshold={0.35}>
         <Button
           type="button"
           onClick={handlePrint}

@@ -1,7 +1,6 @@
 // sections/Concept.tsx
 import SectionContainer from '@/components/common/SectionContainer';
 import SectionTitle from '@/components/common/SectionTitle';
-import RevealText from '@/components/motion/text/RevealText';
 import { CONCEPT_PLAIN } from '@/config/constants';
 import Picture from '@/components/common/Picture';
 import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
@@ -23,32 +22,30 @@ export default function Concept() {
     <SectionContainer id="concept">
       <SectionTitle title="Le Concept" />
 
-      <div className="mt-4 font-serif text-body font-semibold leading-relaxed tracking-wider">
-        <RevealText
-          text={CONCEPT_PLAIN}
-          className=""
-          baseDelay={0.1}
-          preserveWordSpacing={true}
-          renderPart={(word) => (
+      <OptimizedAnimateItem type="slide-up" threshold={0.35}>
+        <div className="mt-4 font-serif text-body font-semibold leading-relaxed tracking-wider">
+          {CONCEPT_PLAIN.split(' ').map((word, index, array) => (
             <span
-              className={`inline-block ${
+              key={`${word}-${index}`}
+              className={`${
                 keywords.some((keyword) => word.toLowerCase().includes(keyword.toLowerCase()))
                   ? 'font-black'
                   : ''
               }`}
             >
               {word}
+              {index < array.length - 1 ? ' ' : ''}
             </span>
-          )}
-        />
-      </div>
+          ))}
+        </div>
+      </OptimizedAnimateItem>
 
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap py-container-y md:grid-cols-2">
         <OptimizedAnimateItem
           index={0}
-          type="fade-up"
-          threshold={0.3}
-          className="simple-hover-lift group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
+          type="slide-up"
+          threshold={0.35}
+          className="simple-hover-scale group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
         >
           <Picture
             srcBase="/photos/glasses"
@@ -69,9 +66,9 @@ export default function Concept() {
 
         <OptimizedAnimateItem
           index={1}
-          type="fade-up"
-          threshold={0.3}
-          className="simple-hover-lift group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
+          type="slide-up"
+          threshold={0.35}
+          className="simple-hover-scale group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
         >
           <Picture
             srcBase="/photos/romain"

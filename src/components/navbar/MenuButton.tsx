@@ -27,7 +27,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ isOpen, onClick, id = 'menu-toggle' }, ref) => {
     return (
       <div className="fixed left-0 right-0 z-overlay flex justify-start px-container-x py-section-gap sm:justify-center">
-        <OptimizedAnimateItem type="fade-down" immediate={true}>
+        <OptimizedAnimateItem type="fade" immediate={true}>
           <button
             ref={ref}
             type="button"

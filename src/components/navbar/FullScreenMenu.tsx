@@ -83,7 +83,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 <OptimizedAnimateItem
                   key={link.href}
                   index={i}
-                  type="fade-up"
+                  type="slide-up"
                   immediate={true}
                   className="block py-1 sm:py-2"
                 >
@@ -98,7 +98,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         <footer className="w-full">
           <OptimizedAnimateItem
             index={LINKS.length}
-            type="fade-up"
+            type="slide-up"
             immediate={true}
             className="p-section-gap"
           >

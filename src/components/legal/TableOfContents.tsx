@@ -35,14 +35,14 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
   };
 
   return (
-    <OptimizedAnimateItem index={2} type="fade-up" threshold={0.4}>
+    <OptimizedAnimateItem index={2} type="slide-up" threshold={0.35}>
       <nav aria-label="Table des matières" className={`mb-20 ${className}`}>
-        <OptimizedAnimateItem index={0} type="fade-down" immediate={true}>
+        <OptimizedAnimateItem index={0} type="slide-down" immediate={true}>
           <h2 className="mb-8 font-serif text-title-lg font-bold text-primary">Sommaire</h2>
         </OptimizedAnimateItem>
         <ul className="space-y-6">
           {sections.map((section, index) => (
-            <OptimizedAnimateItem key={section.id} index={index} type="fade-up" threshold={0.5}>
+            <OptimizedAnimateItem key={section.id} index={index} type="slide-up" threshold={0.35}>
               <li>
                 <a
                   href={`#${section.id}`}

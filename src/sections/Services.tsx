@@ -38,8 +38,8 @@ export default function Services() {
         {/* Colonne gauche : image + miniatures */}
         <OptimizedAnimateItem
           index={0}
-          type="fade-up"
-          threshold={0.2}
+          type="slide-up"
+          threshold={0.35}
           className="flex flex-col items-center px-container-x py-container-y"
         >
           {/* Image principale - simple transition avec CSS */}
@@ -67,7 +67,7 @@ export default function Services() {
                 key={service.title}
                 index={index + 1}
                 type="fade"
-                threshold={0.3}
+                threshold={0.35}
               >
                 <ServiceThumbnail
                   imageBase={service.imageBase}
@@ -84,8 +84,8 @@ export default function Services() {
         {/* Colonne droite : carte de service */}
         <OptimizedAnimateItem
           index={1}
-          type="fade-up"
-          threshold={0.2}
+          type="slide-up"
+          threshold={0.35}
           className="relative w-[clamp(18rem,42vw,120rem)] self-center"
         >
           <ServiceCard key={selected.title} service={selected} />
