@@ -211,7 +211,7 @@ jobs:
               }
             }
 
-  # 🎭 Tests E2E avec Playwright
+  # 🎭 Tests E2E avec Playwright 
   e2e-tests:
     name: 🎭 E2E Tests
     runs-on: ubuntu-latest
@@ -248,14 +248,60 @@ jobs:
       - name: 🎭 Install Playwright browsers
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
         
-      - name: 🎭 Run E2E tests
-        run: pnpm exec playwright test --project=${{ matrix.browser }}
+      - name: 🎭 Run E2E tests (excluding visual regression)
+        run: pnpm exec playwright test --project=${{ matrix.browser }} --ignore-pattern="**/visual-regression.spec.ts"
         
       - name: 📊 Upload E2E test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: e2e-results-${{ matrix.browser }}
+          path: |
+            e2e-results/
+            test-results/
+          retention-days: 7
+
+  # 📸 Tests de régression visuelle (Chromium uniquement)
+  visual-regression-tests:
+    name: 📸 Visual Regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: 🎭 Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
+        
+      - name: 📸 Run visual regression tests
+        run: pnpm exec playwright test --project=chromium visual-regression.spec.ts
+        
+      - name: 📊 Upload visual regression results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-results
           path: |
             e2e-results/
             test-results/
@@ -310,7 +356,7 @@ jobs:
     name: 📊 Quality Report
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [lighthouse-ci, e2e-tests, accessibility-tests]
+    needs: [lighthouse-ci, e2e-tests, visual-regression-tests, accessibility-tests]
     if: always()
     
     steps:
