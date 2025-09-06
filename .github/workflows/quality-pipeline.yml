@@ -17,7 +17,7 @@ permissions:
 
 # Variables d'environnement globales
 env:
-  NODE_VERSION: '18'
+  NODE_VERSION: '20'
   CACHE_KEY: 'node-modules'
 
 jobs:
