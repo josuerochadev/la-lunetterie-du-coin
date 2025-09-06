@@ -13,6 +13,8 @@ const optionalEnvVars = {
   DEV: import.meta.env.DEV,
   // Sentry configuration (optional but recommended for production)
   VITE_SENTRY_DSN: import.meta.env.VITE_SENTRY_DSN,
+  // Analytics domain (optional - for Plausible or GA4)
+  VITE_ANALYTICS_DOMAIN: import.meta.env.VITE_ANALYTICS_DOMAIN,
 } as const;
 
 /**

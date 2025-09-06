@@ -4,6 +4,7 @@ import { analyzeNetworkError, shouldRetryError, getRetryDelay } from './networkE
 
 export interface RetryConfig {
   maxAttempts: number;
+  // eslint-disable-next-line no-unused-vars
   onRetryAttempt?: (attemptNumber: number, delay: number) => void;
   onMaxAttemptsReached?: () => void;
 }
@@ -13,7 +14,7 @@ export interface RetryConfig {
  */
 export async function withRetry<T>(
   fn: () => Promise<T>,
-  config: RetryConfig = { maxAttempts: 3 }
+  config: RetryConfig = { maxAttempts: 3 },
 ): Promise<T> {
   const { maxAttempts, onRetryAttempt, onMaxAttemptsReached } = config;
   let lastError: unknown;
@@ -49,12 +50,12 @@ export async function withRetry<T>(
 
       // Calcul du délai avant retry
       const delay = getRetryDelay(attempt);
-      
+
       // Notification du retry
       onRetryAttempt?.(attempt, delay);
 
       // Attendre avant le prochain essai
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
 
@@ -67,19 +68,19 @@ export async function withRetry<T>(
  */
 export async function fetchWithRetry(
   url: string,
-  options: RequestInit,
-  config: RetryConfig = { maxAttempts: 3 }
+  options: globalThis.RequestInit,
+  config: RetryConfig = { maxAttempts: 3 },
 ): Promise<Response> {
   return withRetry(async () => {
     const response = await fetch(url, options);
-    
+
     // Si la réponse n'est pas ok, on lance une erreur avec la réponse
     if (!response.ok) {
       const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as any;
       error.response = response;
       throw error;
     }
-    
+
     return response;
   }, config);
 }

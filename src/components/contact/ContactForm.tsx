@@ -100,7 +100,7 @@ export default function ContactForm() {
               console.log('Max retry attempts reached');
             }
           },
-        }
+        },
       );
 
       // Add debug logs to diagnose dashboard vs. code issues
@@ -220,7 +220,10 @@ export default function ContactForm() {
             {error}
             {networkError && retryCount > 0 && (
               <div className="mt-2 text-sm opacity-80">
-                🔄 Tentative {retryCount}/3 - {networkError.type === 'timeout' ? 'Connexion lente détectée' : 'Reconnexion en cours...'}
+                🔄 Tentative {retryCount}/3 -{' '}
+                {networkError.type === 'timeout'
+                  ? 'Connexion lente détectée'
+                  : 'Reconnexion en cours...'}
               </div>
             )}
           </div>

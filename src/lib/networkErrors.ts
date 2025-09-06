@@ -3,7 +3,7 @@
 /**
  * Types d'erreurs réseau pour une gestion granulaire
  */
-export type NetworkErrorType = 
+export type NetworkErrorType =
   | 'offline'
   | 'timeout'
   | 'server_error'
@@ -70,7 +70,7 @@ export function analyzeNetworkError(error: unknown, response?: Response): Networ
           statusCode: status,
         };
       }
-      
+
       if (status === 429) {
         return {
           type: 'rate_limited',
@@ -106,7 +106,7 @@ export function analyzeNetworkError(error: unknown, response?: Response): Networ
   return {
     type: 'unknown',
     message: error instanceof Error ? error.message : 'Unknown error',
-    userMessage: 'Une erreur inattendue s\'est produite. Réessayez plus tard.',
+    userMessage: "Une erreur inattendue s'est produite. Réessayez plus tard.",
     canRetry: true,
   };
 }
@@ -115,7 +115,10 @@ export function analyzeNetworkError(error: unknown, response?: Response): Networ
  * Détermine si une erreur justifie un retry automatique
  */
 export function shouldRetryError(errorInfo: NetworkError): boolean {
-  return errorInfo.canRetry && ['timeout', 'server_error', 'network_error', 'rate_limited'].includes(errorInfo.type);
+  return (
+    errorInfo.canRetry &&
+    ['timeout', 'server_error', 'network_error', 'rate_limited'].includes(errorInfo.type)
+  );
 }
 
 /**
@@ -123,8 +126,8 @@ export function shouldRetryError(errorInfo: NetworkError): boolean {
  */
 export function getRetryDelay(attemptNumber: number): number {
   const baseDelay = 1000; // 1 seconde
-  const maxDelay = 8000;   // 8 secondes max
-  
+  const maxDelay = 8000; // 8 secondes max
+
   const delay = baseDelay * Math.pow(2, attemptNumber - 1);
   return Math.min(delay, maxDelay);
 }

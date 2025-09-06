@@ -12,10 +12,21 @@ import { MotionProvider } from '@/a11y/MotionProvider';
 import ScrollToTop from '@/components/routing/ScrollToTop';
 import { loadFeatures } from '@/lib/loadMotionFeatures';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
-import { validateEnvironment } from '@/lib/env';
+import { validateEnvironment, env } from '@/lib/env';
+import { initPerformanceMonitoring, logNavigationTiming } from '@/lib/performance';
+import { initPlausible } from '@/lib/analytics';
 
 // Validate environment variables
 validateEnvironment();
+
+// Initialize performance monitoring (dev only)
+initPerformanceMonitoring();
+logNavigationTiming();
+
+// Initialize analytics (production only)
+if (env.VITE_ANALYTICS_DOMAIN) {
+  initPlausible({ domain: env.VITE_ANALYTICS_DOMAIN });
+}
 
 // Ultra-minimal Sentry loading strategy
 const initSentry = async () => {
