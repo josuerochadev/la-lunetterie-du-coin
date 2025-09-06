@@ -1,7 +1,6 @@
 import { forwardRef } from 'react';
 
-import { fadeInDown } from '@/components/motion/variants/fade';
-import AnimatedItem from '@/components/motion/AnimatedItem';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 
 type MenuButtonProps = {
   isOpen: boolean;
@@ -28,7 +27,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ isOpen, onClick, id = 'menu-toggle' }, ref) => {
     return (
       <div className="fixed left-0 right-0 z-overlay flex justify-start px-container-x py-section-gap sm:justify-center">
-        <AnimatedItem variant={fadeInDown} duration={0.6} viewport={{ once: true }}>
+        <OptimizedAnimateItem type="fade-down" immediate={true}>
           <button
             ref={ref}
             type="button"
@@ -47,7 +46,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
             </div>
             <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
           </button>
-        </AnimatedItem>
+        </OptimizedAnimateItem>
       </div>
     );
   },

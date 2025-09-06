@@ -4,7 +4,7 @@ import SectionTitle from '@/components/common/SectionTitle';
 import RevealText from '@/components/motion/text/RevealText';
 import { CONCEPT_PLAIN } from '@/config/constants';
 import Picture from '@/components/common/Picture';
-import { SimpleAnimateItem } from '@/components/common/SimpleAnimateItem';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 
 export default function Concept() {
   // Mots-clés à mettre en emphase
@@ -26,7 +26,6 @@ export default function Concept() {
       <div className="mt-4 font-serif text-body font-semibold leading-relaxed tracking-wider">
         <RevealText
           text={CONCEPT_PLAIN}
-          splitBy="word"
           className=""
           baseDelay={0.1}
           preserveWordSpacing={true}
@@ -45,9 +44,10 @@ export default function Concept() {
       </div>
 
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap py-container-y md:grid-cols-2">
-        <SimpleAnimateItem
-          index={1}
+        <OptimizedAnimateItem
+          index={0}
           type="fade-up"
+          threshold={0.3}
           className="simple-hover-lift group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
         >
           <Picture
@@ -65,11 +65,12 @@ export default function Concept() {
               Montures neuves et d'occasion soigneusement choisies pour allier style et durabilité.
             </p>
           </div>
-        </SimpleAnimateItem>
+        </OptimizedAnimateItem>
 
-        <SimpleAnimateItem
-          index={2}
+        <OptimizedAnimateItem
+          index={1}
           type="fade-up"
+          threshold={0.3}
           className="simple-hover-lift group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
         >
           <Picture
@@ -87,7 +88,7 @@ export default function Concept() {
               Conseil personnalisé et passion de l'optique depuis plus de 10 ans à Strasbourg.
             </p>
           </div>
-        </SimpleAnimateItem>
+        </OptimizedAnimateItem>
       </div>
     </SectionContainer>
   );

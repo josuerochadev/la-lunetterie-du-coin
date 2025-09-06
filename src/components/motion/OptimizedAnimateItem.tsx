@@ -8,7 +8,7 @@ interface OptimizedAnimateItemProps {
   children: ReactNode;
   index?: number;
   className?: string;
-  type?: 'fade' | 'fade-up' | 'scale';
+  type?: 'fade' | 'fade-up' | 'fade-down' | 'scale';
   as?: keyof React.JSX.IntrinsicElements;
   /** Threshold pour déclencher l'animation (0-1) */
   threshold?: number;
@@ -20,9 +20,9 @@ interface OptimizedAnimateItemProps {
 
 /**
  * Composant d'animation optimisé avec Intersection Observer
- * 
+ *
  * ✅ Ne se déclenche que quand l'élément est visible
- * ✅ Stagger delays optimisés (50ms au lieu de 100ms)  
+ * ✅ Stagger delays optimisés (50ms au lieu de 100ms)
  * ✅ Support animation immédiate pour hero sections
  * ✅ Threshold configurable pour un contrôle précis
  */
@@ -32,7 +32,7 @@ export function OptimizedAnimateItem({
   className,
   type = 'fade',
   as: Component = 'div',
-  threshold = 0.15,
+  threshold = 0.3,
   customDelay,
   immediate = false,
 }: OptimizedAnimateItemProps) {
@@ -41,9 +41,9 @@ export function OptimizedAnimateItem({
   const targetRef = useRef<HTMLElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Calcul du délai optimisé
-  const staggerDelay = customDelay ?? Math.min(index * 50, 300); // Max 300ms
-  
+  // Calcul du délai optimisé pour plus de visibilité
+  const staggerDelay = customDelay ?? Math.min(index * 80, 400); // Max 400ms
+
   // Setup Intersection Observer
   useEffect(() => {
     const currentTarget = targetRef.current;
@@ -56,13 +56,13 @@ export function OptimizedAnimateItem({
           observer.unobserve(currentTarget);
         }
       },
-      { threshold }
+      { threshold },
     );
 
     observer.observe(currentTarget);
     return () => observer.unobserve(currentTarget);
   }, [threshold, immediate]);
-  
+
   // Déclencher l'animation quand l'élément devient visible
   useEffect(() => {
     if (isIntersecting && !shouldAnimate) {
@@ -74,20 +74,21 @@ export function OptimizedAnimateItem({
   const getAnimationClass = () => {
     if (prefersReducedMotion) return ''; // Pas d'animation
     if (!shouldAnimate) return 'opacity-0'; // État initial invisible
-    
+
     const baseClass = `simple-${type}-in`;
-    const delayClass = staggerDelay > 0 ? `animate-delay-${Math.min(Math.floor(staggerDelay / 50) + 1, 6)}` : '';
-    
+    const delayClass =
+      staggerDelay > 0 ? `animate-delay-${Math.min(Math.floor(staggerDelay / 80) + 1, 6)}` : '';
+
     return cn(baseClass, delayClass);
   };
 
   return (
-    <Component 
+    <Component
       ref={targetRef as any}
       className={cn('simple-animate-item transition-opacity', getAnimationClass(), className)}
       style={{
         animationDelay: shouldAnimate && !prefersReducedMotion ? `${staggerDelay}ms` : undefined,
-        opacity: prefersReducedMotion ? 1 : undefined
+        opacity: prefersReducedMotion ? 1 : undefined,
       }}
     >
       {children}

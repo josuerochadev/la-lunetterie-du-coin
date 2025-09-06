@@ -2,8 +2,7 @@ import LegalPageLayout from '@/components/legal/LegalPageLayout';
 import TableOfContents from '@/components/legal/TableOfContents';
 import HighlightBox from '@/components/legal/HighlightBox';
 import PrintButton from '@/components/legal/PrintButton';
-import AnimatedItem from '@/components/motion/AnimatedItem';
-import { fadeInUp } from '@/components/motion/variants/fade';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 import {
   COMPANY_NAME,
   COMPANY_LEGAL_FORM,
@@ -41,9 +40,8 @@ export default function MentionsLegales() {
     >
       <TableOfContents sections={sections} />
 
-      <AnimatedItem index={3} variant={fadeInUp}>
-        <AnimatedItem index={6} variant={fadeInUp}>
-          <section className="space-y-md">
+      <OptimizedAnimateItem index={0} type="fade-down" threshold={0.3}>
+        <section className="space-y-md">
             <h2
               id="editeur"
               className="font-serif text-title-lg font-bold text-primary"
@@ -95,10 +93,9 @@ export default function MentionsLegales() {
               </div>
             </div>
           </section>
-        </AnimatedItem>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={1} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
           <h2
             id="contact"
@@ -133,9 +130,9 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={2} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
           <h2
             id="hebergeur"
@@ -152,9 +149,9 @@ export default function MentionsLegales() {
             <p className="text-body leading-relaxed text-primary/80">{HOST_ADDRESS}</p>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={3} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
           <h2
             id="propriete-intellectuelle"
@@ -170,9 +167,9 @@ export default function MentionsLegales() {
             partielle, sans autorisation préalable, est interdite.
           </p>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={4} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
           <h2
             id="donnees-personnelles"
@@ -188,9 +185,9 @@ export default function MentionsLegales() {
             confidentialité et une bannière cookies doivent être mises en place.
           </p>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={5} type="fade-down" threshold={0.3}>
         <section className="space-y-md">
           <h2
             id="mediation"
@@ -224,7 +221,7 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
       <PrintButton />
     </LegalPageLayout>

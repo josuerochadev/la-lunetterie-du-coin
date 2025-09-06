@@ -5,7 +5,6 @@ import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import Picture from '../common/Picture';
 
 import TiltCard from '@/components/motion/interactive/TiltCard';
-import AnimatedItem from '@/components/motion/AnimatedItem';
 import { isToggleKey } from '@/lib/keyboard';
 import { cn } from '@/lib/cn';
 
@@ -22,7 +21,6 @@ type OfferCardProps = {
   isOpen: boolean;
   // eslint-disable-next-line no-unused-vars
   onToggle: (id: number) => void;
-  index: number;
 };
 
 /**
@@ -34,11 +32,10 @@ type OfferCardProps = {
  * @param offer - Objet offre (id, title, imageBase, summary, details)
  * @param isOpen - État d'expansion de la carte
  * @param onToggle - Callback de basculement d'état (reçoit offer.id)
- * @param index - Index pour l'animation d'entrée
  *
  * @returns Carte d'offre interactive avec animations et accessibilité complète
  */
-export default function OfferCard({ offer, isOpen, onToggle, index }: OfferCardProps) {
+export default function OfferCard({ offer, isOpen, onToggle }: OfferCardProps) {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -54,8 +51,7 @@ export default function OfferCard({ offer, isOpen, onToggle, index }: OfferCardP
   };
 
   return (
-    <AnimatedItem index={index}>
-      <TiltCard>
+    <TiltCard>
         <button
           type="button"
           className="focus-style group relative h-card w-full cursor-pointer overflow-hidden rounded-card shadow-card transition-all duration-300 hover:shadow-lg"
@@ -164,6 +160,5 @@ export default function OfferCard({ offer, isOpen, onToggle, index }: OfferCardP
           </m.section>
         </button>
       </TiltCard>
-    </AnimatedItem>
   );
 }

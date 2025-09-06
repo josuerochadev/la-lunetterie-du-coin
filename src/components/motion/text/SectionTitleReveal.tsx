@@ -25,5 +25,5 @@ export default function SectionTitleReveal({
 }: SectionTitleRevealProps) {
   const content = title || children;
 
-  return <Component className={cn('simple-fade-in-up', className)}>{content}</Component>;
+  return <Component className={cn('simple-fade-in-down', className)}>{content}</Component>;
 }

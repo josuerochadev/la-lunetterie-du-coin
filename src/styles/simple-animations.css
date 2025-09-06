@@ -6,10 +6,10 @@
 
 /* Variables pour personnalisation */
 :root {
-  --animation-duration: 0.5s;
-  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  --stagger-delay: 0.05s; /* Optimisé: 50ms au lieu de 100ms */
-  --stagger-delay-mobile: 0.03s; /* Encore plus rapide sur mobile */
+  --animation-duration: 1.2s;
+  --animation-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --stagger-delay: 0.08s; /* Plus visible: 80ms */
+  --stagger-delay-mobile: 0.06s; /* Mobile plus visible aussi */
 }
 
 /* Reset pour éviter les conflits */
@@ -24,11 +24,11 @@
 @keyframes simple-fade-in {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(40px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -76,16 +76,36 @@
 @keyframes simple-fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(50px) scale(0.96);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .simple-fade-in-up {
   animation: simple-fade-in-up var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* ========================================
+   FADE IN DOWN - Animation vers le bas (pour titres)
+   ======================================== */
+
+@keyframes simple-fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.simple-fade-in-down {
+  animation: simple-fade-in-down var(--animation-duration) var(--animation-easing) forwards;
   opacity: 0;
 }
 
@@ -157,7 +177,18 @@
   @keyframes simple-fade-in-up {
     from {
       opacity: 0;
-      transform: translateY(15px);
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes simple-fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-15px);
     }
     to {
       opacity: 1;
@@ -175,6 +206,7 @@
 
   .simple-fade-in,
   .simple-fade-in-up,
+  .simple-fade-in-down,
   .simple-fade-in-scale,
   .simple-hover-scale,
   .simple-hover-lift {
@@ -206,12 +238,24 @@
    ======================================== */
 
 /* Délais dynamiques optimisés (utilisés par OptimizedAnimateItem) */
-.animate-delay-1 { animation-delay: calc(1 * var(--stagger-delay)); }
-.animate-delay-2 { animation-delay: calc(2 * var(--stagger-delay)); }
-.animate-delay-3 { animation-delay: calc(3 * var(--stagger-delay)); }
-.animate-delay-4 { animation-delay: calc(4 * var(--stagger-delay)); }
-.animate-delay-5 { animation-delay: calc(5 * var(--stagger-delay)); }
-.animate-delay-6 { animation-delay: calc(6 * var(--stagger-delay)); }
+.animate-delay-1 {
+  animation-delay: calc(1 * var(--stagger-delay));
+}
+.animate-delay-2 {
+  animation-delay: calc(2 * var(--stagger-delay));
+}
+.animate-delay-3 {
+  animation-delay: calc(3 * var(--stagger-delay));
+}
+.animate-delay-4 {
+  animation-delay: calc(4 * var(--stagger-delay));
+}
+.animate-delay-5 {
+  animation-delay: calc(5 * var(--stagger-delay));
+}
+.animate-delay-6 {
+  animation-delay: calc(6 * var(--stagger-delay));
+}
 
 /* État initial invisible pour intersection observer */
 .animate-on-intersection {

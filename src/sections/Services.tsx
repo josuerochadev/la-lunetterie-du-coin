@@ -63,7 +63,12 @@ export default function Services() {
             className="mt-3 flex w-full justify-center gap-word-gap"
           >
             {SERVICES.map((service, index) => (
-              <OptimizedAnimateItem key={service.title} index={index + 1} type="fade" threshold={0.3}>
+              <OptimizedAnimateItem
+                key={service.title}
+                index={index + 1}
+                type="fade"
+                threshold={0.3}
+              >
                 <ServiceThumbnail
                   imageBase={service.imageBase}
                   title={service.title}
