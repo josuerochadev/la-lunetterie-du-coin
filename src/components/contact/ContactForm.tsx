@@ -89,8 +89,10 @@ export default function ContactForm() {
       }
 
       if (!response.ok) {
-        // Short log for dev; remove in prod
-        console.warn('[Formspree Error]', response.status, payload);
+        // Error logging only in development
+        if (import.meta.env.DEV) {
+          console.warn('[Formspree Error]', response.status, payload);
+        }
       }
 
       clearTimeout(timeoutId);

@@ -33,7 +33,7 @@ const initSentry = async () => {
       navigator.connection?.effectiveType === 'slow-2g';
 
     if (isMobile || isSlowConnection) {
-      console.log('Sentry disabled for performance (mobile/slow connection)');
+      // Sentry disabled for performance reasons (mobile/slow connection)
       return;
     }
 
@@ -65,7 +65,9 @@ const initSentry = async () => {
     });
   } catch (error) {
     // Silently fail to avoid blocking app startup
-    console.warn('Sentry init failed:', error);
+    if (import.meta.env.DEV) {
+      console.warn('Sentry init failed:', error);
+    }
   }
 };
 
