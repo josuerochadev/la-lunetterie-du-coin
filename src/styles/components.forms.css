@@ -80,4 +80,8 @@
   .form-message--error {
     @apply font-semibold text-red-700;
   }
+
+  .form-message--info {
+    @apply font-semibold text-blue-700;
+  }
 }
