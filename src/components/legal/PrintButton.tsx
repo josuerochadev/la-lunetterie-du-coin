@@ -1,8 +1,7 @@
 import Printer from 'lucide-react/dist/esm/icons/printer';
 
 import Button from '@/components/common/Button';
-import AnimatedItem from '@/components/motion/AnimatedItem';
-import { fadeInUp } from '@/components/motion/variants/fade';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 
 type PrintButtonProps = {
   className?: string;
@@ -27,7 +26,7 @@ export default function PrintButton({ className = '' }: PrintButtonProps) {
 
   return (
     <div className="flex justify-center">
-      <AnimatedItem index={2} variant={fadeInUp}>
+      <OptimizedAnimateItem index={2} type="slide-up" threshold={0.35}>
         <Button
           type="button"
           onClick={handlePrint}
@@ -39,7 +38,7 @@ export default function PrintButton({ className = '' }: PrintButtonProps) {
             Imprimer cette page
           </span>
         </Button>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
     </div>
   );
 }

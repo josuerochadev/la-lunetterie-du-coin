@@ -1,7 +1,6 @@
 import type { MouseEvent } from 'react';
 
-import AnimatedItem from '@/components/motion/AnimatedItem';
-import { fadeInUp } from '@/components/motion/variants/fade';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 
 type TableOfContentsProps = {
   sections: Array<{
@@ -36,14 +35,14 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
   };
 
   return (
-    <AnimatedItem index={2} variant={fadeInUp}>
+    <OptimizedAnimateItem index={2} type="slide-up" threshold={0.35}>
       <nav aria-label="Table des matières" className={`mb-20 ${className}`}>
-        <AnimatedItem index={2.2} variant={fadeInUp}>
+        <OptimizedAnimateItem index={0} type="slide-down" immediate={true}>
           <h2 className="mb-8 font-serif text-title-lg font-bold text-primary">Sommaire</h2>
-        </AnimatedItem>
+        </OptimizedAnimateItem>
         <ul className="space-y-6">
           {sections.map((section, index) => (
-            <AnimatedItem key={section.id} index={2.4 + index * 0.1} variant={fadeInUp}>
+            <OptimizedAnimateItem key={section.id} index={index} type="slide-up" threshold={0.35}>
               <li>
                 <a
                   href={`#${section.id}`}
@@ -58,10 +57,10 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
                   </span>
                 </a>
               </li>
-            </AnimatedItem>
+            </OptimizedAnimateItem>
           ))}
         </ul>
       </nav>
-    </AnimatedItem>
+    </OptimizedAnimateItem>
   );
 }

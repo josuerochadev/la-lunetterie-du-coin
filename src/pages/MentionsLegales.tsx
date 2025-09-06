@@ -2,8 +2,7 @@ import LegalPageLayout from '@/components/legal/LegalPageLayout';
 import TableOfContents from '@/components/legal/TableOfContents';
 import HighlightBox from '@/components/legal/HighlightBox';
 import PrintButton from '@/components/legal/PrintButton';
-import AnimatedItem from '@/components/motion/AnimatedItem';
-import { fadeInUp } from '@/components/motion/variants/fade';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 import {
   COMPANY_NAME,
   COMPANY_LEGAL_FORM,
@@ -41,64 +40,62 @@ export default function MentionsLegales() {
     >
       <TableOfContents sections={sections} />
 
-      <AnimatedItem index={3} variant={fadeInUp}>
-        <AnimatedItem index={6} variant={fadeInUp}>
-          <section className="space-y-md">
-            <h2
-              id="editeur"
-              className="font-serif text-title-lg font-bold text-primary"
-              tabIndex={-1}
-            >
-              Éditeur du site
-            </h2>
+      <OptimizedAnimateItem index={0} type="slide-down" threshold={0.35}>
+        <section className="space-y-md">
+          <h2
+            id="editeur"
+            className="font-serif text-title-lg font-bold text-primary"
+            tabIndex={-1}
+          >
+            Éditeur du site
+          </h2>
 
-            <div className="space-y-sm">
-              <div className="grid grid-cols-1 gap-md md:grid-cols-2">
-                <div>
-                  <p className="text-body leading-relaxed">
-                    <strong className="font-semibold text-primary">Nom :</strong>
-                    <br />
-                    {COMPANY_NAME}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-body leading-relaxed">
-                    <strong className="font-semibold text-primary">Forme juridique :</strong>
-                    <br />
-                    {COMPANY_LEGAL_FORM}{' '}
-                    {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-3 pt-4">
+          <div className="space-y-sm">
+            <div className="grid grid-cols-1 gap-md md:grid-cols-2">
+              <div>
                 <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">Siège social :</strong>
+                  <strong className="font-semibold text-primary">Nom :</strong>
                   <br />
-                  {COMPANY_ADDRESS}
+                  {COMPANY_NAME}
                 </p>
+              </div>
+              <div>
                 <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">SIRET :</strong> {COMPANY_SIRET}
-                  <span className="mx-4">•</span>
-                  <strong className="font-semibold text-primary">RCS :</strong> {COMPANY_RCS}
-                </p>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">TVA intracommunautaire :</strong>{' '}
-                  {COMPANY_VAT || 'N/A'}
-                </p>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">
-                    Directeur de la publication :
-                  </strong>{' '}
-                  {PUBLICATION_DIRECTOR}
+                  <strong className="font-semibold text-primary">Forme juridique :</strong>
+                  <br />
+                  {COMPANY_LEGAL_FORM}{' '}
+                  {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
                 </p>
               </div>
             </div>
-          </section>
-        </AnimatedItem>
-      </AnimatedItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+            <div className="space-y-3 pt-4">
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">Siège social :</strong>
+                <br />
+                {COMPANY_ADDRESS}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">SIRET :</strong> {COMPANY_SIRET}
+                <span className="mx-4">•</span>
+                <strong className="font-semibold text-primary">RCS :</strong> {COMPANY_RCS}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">TVA intracommunautaire :</strong>{' '}
+                {COMPANY_VAT || 'N/A'}
+              </p>
+              <p className="text-body leading-relaxed">
+                <strong className="font-semibold text-primary">
+                  Directeur de la publication :
+                </strong>{' '}
+                {PUBLICATION_DIRECTOR}
+              </p>
+            </div>
+          </div>
+        </section>
+      </OptimizedAnimateItem>
+
+      <OptimizedAnimateItem index={1} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="contact"
@@ -133,9 +130,9 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={2} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="hebergeur"
@@ -152,9 +149,9 @@ export default function MentionsLegales() {
             <p className="text-body leading-relaxed text-primary/80">{HOST_ADDRESS}</p>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={3} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="propriete-intellectuelle"
@@ -170,9 +167,9 @@ export default function MentionsLegales() {
             partielle, sans autorisation préalable, est interdite.
           </p>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={4} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="donnees-personnelles"
@@ -188,9 +185,9 @@ export default function MentionsLegales() {
             confidentialité et une bannière cookies doivent être mises en place.
           </p>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={6} variant={fadeInUp}>
+      <OptimizedAnimateItem index={5} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="mediation"
@@ -224,7 +221,7 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
       <PrintButton />
     </LegalPageLayout>

@@ -3,8 +3,7 @@ import LegalPageLayout from '@/components/legal/LegalPageLayout';
 import TableOfContents from '@/components/legal/TableOfContents';
 import HighlightBox from '@/components/legal/HighlightBox';
 import PrintButton from '@/components/legal/PrintButton';
-import AnimatedItem from '@/components/motion/AnimatedItem';
-import { fadeInUp } from '@/components/motion/variants/fade';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 
 const sections = [
   { id: 'introduction', title: 'Fabrication et qualité' },
@@ -24,7 +23,7 @@ export default function ConditionsDeVente() {
     >
       <TableOfContents sections={sections} />
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={0} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="introduction"
@@ -55,9 +54,9 @@ export default function ConditionsDeVente() {
             </HighlightBox>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={1} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="politique-retour"
@@ -106,9 +105,9 @@ export default function ConditionsDeVente() {
             </p>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={2} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="changement-puissance"
@@ -143,9 +142,9 @@ export default function ConditionsDeVente() {
             </HighlightBox>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={3} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="reglement"
@@ -168,9 +167,9 @@ export default function ConditionsDeVente() {
             </p>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={5} variant={fadeInUp}>
+      <OptimizedAnimateItem index={4} type="slide-down" threshold={0.35}>
         <section className="space-y-md">
           <h2
             id="offres-commerciales"
@@ -232,11 +231,11 @@ export default function ConditionsDeVente() {
             </div>
           </div>
         </section>
-      </AnimatedItem>
+      </OptimizedAnimateItem>
 
-      <AnimatedItem index={10} variant={fadeInUp}>
+      <OptimizedAnimateItem index={5} type="slide-down" threshold={0.35}>
         <PrintButton />
-      </AnimatedItem>
+      </OptimizedAnimateItem>
     </LegalPageLayout>
   );
 }

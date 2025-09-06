@@ -1,14 +1,17 @@
 /* src/styles/simple-animations.css */
 
 /* ========================================
-   ANIMATIONS ULTRA-SIMPLES ET PERFORMANTES
+   ANIMATIONS SMOOTH & MINIMALISTES
    ======================================== */
 
-/* Variables pour personnalisation */
+/* Variables pour des animations élégantes */
 :root {
-  --animation-duration: 0.6s;
-  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
-  --stagger-delay: 0.1s;
+  --animation-duration: 0.8s; /* Plus réactif */
+  --animation-easing: cubic-bezier(0.16, 1, 0.3, 1); /* Courbe élégante "ease-out-expo" */
+  --stagger-delay: 0.08s; /* Délai stagger optimal */
+  --stagger-delay-mobile: 0.06s; /* Mobile légèrement plus rapide */
+  --slide-distance: 24px; /* Distance de slide subtile */
+  --slide-distance-large: 32px; /* Pour les éléments plus importants */
 }
 
 /* Reset pour éviter les conflits */
@@ -17,13 +20,13 @@
 }
 
 /* ========================================
-   FADE IN - Animation de base
+   SLIDE IN UP - Glissement smooth depuis le bas
    ======================================== */
 
-@keyframes simple-fade-in {
+@keyframes simple-slide-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(var(--slide-distance));
   }
   to {
     opacity: 1;
@@ -31,8 +34,8 @@
   }
 }
 
-.simple-fade-in {
-  animation: simple-fade-in var(--animation-duration) var(--animation-easing) forwards;
+.simple-slide-in-up {
+  animation: simple-slide-in-up var(--animation-duration) var(--animation-easing) forwards;
   opacity: 0;
 }
 
@@ -69,13 +72,13 @@
 }
 
 /* ========================================
-   FADE IN UP - Légère translation vers le haut
+   SLIDE IN DOWN - Glissement smooth depuis le haut
    ======================================== */
 
-@keyframes simple-fade-in-up {
+@keyframes simple-slide-in-down {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(calc(-1 * var(--slide-distance)));
   }
   to {
     opacity: 1;
@@ -83,28 +86,66 @@
   }
 }
 
-.simple-fade-in-up {
-  animation: simple-fade-in-up var(--animation-duration) var(--animation-easing) forwards;
+.simple-slide-in-down {
+  animation: simple-slide-in-down var(--animation-duration) var(--animation-easing) forwards;
   opacity: 0;
 }
 
 /* ========================================
-   FADE IN SCALE - Légère mise à l'échelle
+   SLIDE IN LEFT - Glissement depuis la gauche
    ======================================== */
 
-@keyframes simple-fade-in-scale {
+@keyframes simple-slide-in-left {
   from {
     opacity: 0;
-    transform: scale(0.95);
+    transform: translateX(calc(-1 * var(--slide-distance)));
   }
   to {
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(0);
   }
 }
 
-.simple-fade-in-scale {
-  animation: simple-fade-in-scale var(--animation-duration) var(--animation-easing) forwards;
+.simple-slide-in-left {
+  animation: simple-slide-in-left var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* ========================================
+   SLIDE IN RIGHT - Glissement depuis la droite
+   ======================================== */
+
+@keyframes simple-slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(var(--slide-distance));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.simple-slide-in-right {
+  animation: simple-slide-in-right var(--animation-duration) var(--animation-easing) forwards;
+  opacity: 0;
+}
+
+/* ========================================
+   FADE IN - Animation pure d'opacité
+   ======================================== */
+
+@keyframes simple-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.simple-fade-in {
+  animation: simple-fade-in var(--animation-duration) var(--animation-easing) forwards;
   opacity: 0;
 }
 
@@ -135,33 +176,13 @@
    RESPONSIVE ET ACCESSIBILITÉ
    ======================================== */
 
-/* Réduire l'intensité sur mobile */
+/* Optimisations mobiles */
 @media (max-width: 768px) {
   :root {
-    --animation-duration: 0.4s;
-    --stagger-delay: 0.05s;
-  }
-
-  @keyframes simple-fade-in {
-    from {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes simple-fade-in-up {
-    from {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    --animation-duration: 0.6s; /* Plus rapide sur mobile */
+    --stagger-delay: var(--stagger-delay-mobile);
+    --slide-distance: 16px; /* Distance réduite sur mobile */
+    --slide-distance-large: 20px;
   }
 }
 
@@ -172,9 +193,11 @@
     --stagger-delay: 0s;
   }
 
+  .simple-slide-in-up,
+  .simple-slide-in-down,
+  .simple-slide-in-left,
+  .simple-slide-in-right,
   .simple-fade-in,
-  .simple-fade-in-up,
-  .simple-fade-in-scale,
   .simple-hover-scale,
   .simple-hover-lift {
     animation: none !important;
@@ -198,4 +221,38 @@
 .animate-on-scroll.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ========================================
+   CLASSES UTILITAIRES POUR OPTIMISATIONS
+   ======================================== */
+
+/* Délais dynamiques optimisés (utilisés par OptimizedAnimateItem) */
+.animate-delay-1 {
+  animation-delay: calc(1 * var(--stagger-delay));
+}
+.animate-delay-2 {
+  animation-delay: calc(2 * var(--stagger-delay));
+}
+.animate-delay-3 {
+  animation-delay: calc(3 * var(--stagger-delay));
+}
+.animate-delay-4 {
+  animation-delay: calc(4 * var(--stagger-delay));
+}
+.animate-delay-5 {
+  animation-delay: calc(5 * var(--stagger-delay));
+}
+.animate-delay-6 {
+  animation-delay: calc(6 * var(--stagger-delay));
+}
+
+/* État initial invisible pour intersection observer */
+.animate-on-intersection {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.animate-on-intersection.visible {
+  opacity: 1;
 }

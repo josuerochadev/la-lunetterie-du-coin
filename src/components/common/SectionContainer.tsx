@@ -69,7 +69,6 @@ export default function SectionContainer({
         !noSpacing && 'section-shell',
         className,
       )}
-      role={id === 'hero' ? 'banner' : undefined}
     >
       {backgroundImage && (
         <div aria-hidden="true" className={cn('absolute inset-0 -z-base', overlayClassName)} />

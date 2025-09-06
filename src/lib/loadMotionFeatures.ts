@@ -10,8 +10,8 @@ export const loadFeatures = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     if (prefersReducedMotion) {
-      // Return minimal features for accessibility
-      return Promise.resolve(null);
+      // Import domAnimation anyway but won't be used by components
+      return import('@/components/motion/motionFeatures').then((res) => res.default);
     }
   }
 

@@ -38,7 +38,7 @@ export default function ServiceThumbnail({
       id={`tab-${index}`}
       aria-controls={`tabpanel-${index}`}
       aria-label={`Voir ${title}`}
-      aria-selected={isActive}
+      aria-selected={isActive ? 'true' : 'false'}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
       className={clsx(

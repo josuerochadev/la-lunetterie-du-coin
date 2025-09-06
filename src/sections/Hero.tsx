@@ -1,8 +1,7 @@
 import { useState, forwardRef } from 'react';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 
-import { SimpleAnimateItem } from '@/components/common/SimpleAnimateItem';
-import SimpleRevealText from '@/components/motion/text/SimpleRevealText';
+import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 import LogoEye from '@/assets/logo/logo-eye.svg?react';
 import Button from '@/components/common/Button';
 import { HERO_PHRASES, CALENDLY_URL } from '@/config/constants';
@@ -33,24 +32,22 @@ const Hero = forwardRef<HTMLElement>(() => {
       className="section-shell relative flex min-h-[100dvh] items-center justify-center"
       aria-labelledby="hero-title"
     >
-      {/* Logo avec animation simple */}
-      <SimpleAnimateItem index={0} type="fade-up">
+      {/* Logo avec slide-down smooth */}
+      <OptimizedAnimateItem index={0} type="slide-down" immediate={true} customDelay={0}>
         <div className="mb-section-gap aspect-[146/85] w-[clamp(5rem,10vw,20rem)]">
           <LogoEye aria-hidden="true" focusable="false" className="h-full w-full" />
         </div>
-      </SimpleAnimateItem>
+      </OptimizedAnimateItem>
 
       <div className="w-full space-y-section-gap">
-        {/* Punchline avec animation simple - utilise le DS title-xl */}
-        <SimpleRevealText
-          text={currentPhrase}
-          delay={0.2}
-          className="text-title-xl font-black uppercase"
-        />
+        {/* Punchline avec slide-up rapide */}
+        <OptimizedAnimateItem index={1} type="slide-up" immediate={true} customDelay={300}>
+          <div className="text-title-xl font-black uppercase">{currentPhrase}</div>
+        </OptimizedAnimateItem>
 
-        {/* Titre principal */}
-        <SimpleAnimateItem index={2} type="fade-up">
-          <header>
+        {/* Titre principal avec stagger court */}
+        <header className="space-y-1">
+          <OptimizedAnimateItem index={2} type="slide-up" immediate={true} customDelay={500}>
             <h1 id="hero-title" className="text-title-md">
               <span className="font-thin">－</span>
               <span className="font-thin">LA</span>
@@ -58,25 +55,27 @@ const Hero = forwardRef<HTMLElement>(() => {
               <span className="font-thin">DU</span>
               <span className="font-black">COIN</span>
             </h1>
-          </header>
-        </SimpleAnimateItem>
+          </OptimizedAnimateItem>
+        </header>
 
-        {/* CTA */}
-        <SimpleAnimateItem index={3} type="fade-up">
-          <a
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="Prendre rendez-vous"
-          >
-            <Button id="hero-cta">
-              <span className="flex items-center gap-2">
-                <Calendar className="button-icon" />
-                Prendre rendez-vous
-              </span>
-            </Button>
-          </a>
-        </SimpleAnimateItem>
+        {/* CTA avec délai court et fluide */}
+        <OptimizedAnimateItem index={3} type="slide-up" immediate={true} customDelay={700}>
+          <div className="pt-4">
+            <a
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Prendre rendez-vous"
+            >
+              <Button id="hero-cta">
+                <span className="flex items-center gap-2">
+                  <Calendar className="button-icon" />
+                  Prendre rendez-vous
+                </span>
+              </Button>
+            </a>
+          </div>
+        </OptimizedAnimateItem>
       </div>
     </SectionContainer>
   );

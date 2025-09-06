@@ -92,11 +92,7 @@ export default function Footer({
             <p>
               <a
                 href="tel:+33388512440"
-                className={clsx(
-                  footerLinkBase,
-                  !isMenu &&
-                    'text-body-lg font-bold text-orange hover:font-black hover:text-primary',
-                )}
+                className={clsx(footerLinkBase, !isMenu && 'text-body-lg')}
               >
                 03&nbsp;88&nbsp;51&nbsp;24&nbsp;40
               </a>
