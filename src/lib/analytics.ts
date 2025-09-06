@@ -27,7 +27,7 @@ export function initPlausible(options: PlausibleOptions) {
   script.defer = true;
   script.src = `${options.apiHost || 'https://plausible.io'}/js/script.js`;
   script.setAttribute('data-domain', options.domain);
-  
+
   // Load after page is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
@@ -41,9 +41,12 @@ export function initPlausible(options: PlausibleOptions) {
 /**
  * Track custom events (Plausible)
  */
-export function trackEvent(eventName: string, options?: { props?: Record<string, string | number> }) {
+export function trackEvent(
+  eventName: string,
+  options?: { props?: Record<string, string | number> },
+) {
   if (import.meta.env.DEV) return;
-  
+
   // @ts-ignore - Plausible global
   if (typeof window.plausible !== 'undefined') {
     // @ts-ignore

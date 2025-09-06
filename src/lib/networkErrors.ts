@@ -136,7 +136,7 @@ export function getRetryDelay(attemptNumber: number): number {
  * Vibration pattern pour les erreurs (si supporté)
  */
 export function vibrateError(): void {
-  if ('vibrate' in navigator) {
+  if ('vibrate' in navigator && typeof navigator.vibrate === 'function') {
     // Pattern d'erreur: long-court-long (différent du succès)
     navigator.vibrate([200, 50, 200]);
   }

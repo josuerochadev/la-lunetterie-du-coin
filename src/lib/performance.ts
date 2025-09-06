@@ -47,7 +47,8 @@ export function initPerformanceMonitoring() {
       console.log(`🎯 ${metric.name}:`, {
         value: `${metric.value}ms`,
         rating: metric.rating,
-        emoji: metric.rating === 'good' ? '✅' : metric.rating === 'needs-improvement' ? '⚠️' : '❌',
+        emoji:
+          metric.rating === 'good' ? '✅' : metric.rating === 'needs-improvement' ? '⚠️' : '❌',
       });
     }
   });
@@ -69,14 +70,17 @@ export function logNavigationTiming() {
   // Attendre que les métriques soient disponibles
   setTimeout(() => {
     const navigation = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
-    
+
     if (navigation) {
       const metrics = {
         'DNS Lookup': navigation.domainLookupEnd - navigation.domainLookupStart,
         'TCP Connect': navigation.connectEnd - navigation.connectStart,
-        'TLS Setup': navigation.secureConnectionStart > 0 ? navigation.connectEnd - navigation.secureConnectionStart : 0,
-        'Request': navigation.responseStart - navigation.requestStart,
-        'Response': navigation.responseEnd - navigation.responseStart,
+        'TLS Setup':
+          navigation.secureConnectionStart > 0
+            ? navigation.connectEnd - navigation.secureConnectionStart
+            : 0,
+        Request: navigation.responseStart - navigation.requestStart,
+        Response: navigation.responseEnd - navigation.responseStart,
         'DOM Parse': navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
         'Load Event': navigation.loadEventEnd - navigation.loadEventStart,
       };

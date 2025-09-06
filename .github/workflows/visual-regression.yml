@@ -1,0 +1,120 @@
+# .github/workflows/visual-regression.yml
+name: 📸 Visual Regression Tests
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+  # Permettre l'exécution manuelle
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  visual-tests:
+    name: 📸 Visual Regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          
+      - name: 📋 Install dependencies
+        run: npm ci
+        
+      - name: 🏗️ Build project
+        run: npm run build
+        
+      - name: 🎭 Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+        
+      - name: 📸 Run visual regression tests
+        run: npm run e2e:visual
+        
+      - name: 📊 Upload visual test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-test-results
+          path: |
+            test-results/
+            e2e-results/
+          retention-days: 30
+          
+      - name: 📸 Upload screenshots on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot-diffs
+          path: |
+            test-results/**/*-diff.png
+            test-results/**/*-actual.png
+            test-results/**/*-expected.png
+          retention-days: 30
+          
+      - name: 💬 Comment PR with visual changes
+        if: github.event_name == 'pull_request' && failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Chercher les fichiers de différences
+            const testResultsDir = './test-results';
+            let hasDiffs = false;
+            let diffFiles = [];
+            
+            if (fs.existsSync(testResultsDir)) {
+              const findDiffs = (dir) => {
+                const files = fs.readdirSync(dir);
+                for (const file of files) {
+                  const fullPath = path.join(dir, file);
+                  if (fs.statSync(fullPath).isDirectory()) {
+                    findDiffs(fullPath);
+                  } else if (file.endsWith('-diff.png')) {
+                    hasDiffs = true;
+                    diffFiles.push(fullPath);
+                  }
+                }
+              };
+              
+              findDiffs(testResultsDir);
+            }
+            
+            if (hasDiffs) {
+              const comment = `
+            ## 📸 Visual Regression Test Failures
+            
+            Des différences visuelles ont été détectées dans cette PR.
+            
+            **Fichiers avec différences:** ${diffFiles.length}
+            
+            🔍 **Comment résoudre:**
+            1. Vérifiez les différences dans les artifacts de ce build
+            2. Si les changements sont intentionnels, exécutez \`npm run e2e:visual:update\` localement
+            3. Committez les nouveaux screenshots de référence
+            
+            📎 Les screenshots de comparaison sont disponibles dans les artifacts de cette exécution.
+            `;
+            
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
