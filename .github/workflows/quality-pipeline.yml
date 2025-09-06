@@ -35,16 +35,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 🔍 ESLint check
-        run: npm run lint
+        run: pnpm lint
         
       - name: 💅 Prettier check
-        run: npm run format -- --check
+        run: pnpm format -- --check
         
       - name: 📊 Upload lint results
         if: always()
@@ -68,16 +72,20 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 🧪 Run unit tests
-        run: npm run test:run
+        run: pnpm test:run
         
       - name: 📊 Generate coverage report
-        run: npm run test:coverage
+        run: pnpm test:coverage
         
       - name: 📈 Upload coverage to Codecov
         if: always()
@@ -111,13 +119,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 🏗️ Build for production
-        run: npm run build
+        run: pnpm build
         
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -141,10 +153,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
@@ -153,10 +169,10 @@ jobs:
           path: dist/
           
       - name: 🚨 Run Lighthouse CI (Mobile)
-        run: npm run lighthouse:mobile
+        run: pnpm lighthouse:mobile
         
       - name: 🚨 Run Lighthouse CI (Desktop)  
-        run: npm run lighthouse:desktop
+        run: pnpm lighthouse:desktop
         
       - name: 📊 Upload Lighthouse reports
         if: always()
@@ -214,10 +230,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
@@ -256,10 +276,14 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
           
       - name: 📋 Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
         uses: actions/download-artifact@v4
@@ -271,7 +295,7 @@ jobs:
         uses: browser-actions/setup-firefox@latest
         
       - name: ♿ Run accessibility tests
-        run: npm run a11y
+        run: pnpm a11y
         
       - name: 📊 Upload accessibility reports
         if: always()
@@ -301,10 +325,10 @@ jobs:
       - name: 📊 Generate comprehensive quality report
         run: |
           # Installer les dépendances pour le script de génération
-          npm ci
+          pnpm install --frozen-lockfile
           
           # Générer le rapport de qualité complet
-          npm run quality:report || true
+          pnpm quality:report || true
           
           # Backup: Générer un rapport basique si le script échoue
           if [ ! -f quality-report.md ]; then
