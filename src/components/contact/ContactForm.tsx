@@ -6,6 +6,8 @@ import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 import Button from '@/components/common/Button';
 import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
 import { FORMSPREE_ENDPOINT } from '@/config/constants';
+import { analyzeNetworkError, vibrateError, type NetworkError } from '@/lib/networkErrors';
+import { fetchWithRetry } from '@/lib/retryLogic';
 
 type Status = 'idle' | 'sending' | 'success' | 'error';
 
@@ -36,6 +38,8 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
+  const [networkError, setNetworkError] = useState<NetworkError | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
   const messageRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -43,6 +47,8 @@ export default function ContactForm() {
     setStatus('sending');
     setError('');
     setFieldErrors({});
+    setNetworkError(null);
+    setRetryCount(0);
 
     // Tactile feedback on mobile
     if ('vibrate' in navigator) {
@@ -73,12 +79,29 @@ export default function ContactForm() {
     const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
-      const response = await fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        body: data,
-        headers: { Accept: 'application/json' },
-        signal: controller.signal,
-      });
+      const response = await fetchWithRetry(
+        FORMSPREE_ENDPOINT,
+        {
+          method: 'POST',
+          body: data,
+          headers: { Accept: 'application/json' },
+          signal: controller.signal,
+        },
+        {
+          maxAttempts: 3,
+          onRetryAttempt: (attemptNumber, delay) => {
+            setRetryCount(attemptNumber);
+            if (import.meta.env.DEV) {
+              console.log(`Retry attempt ${attemptNumber} in ${delay}ms`);
+            }
+          },
+          onMaxAttemptsReached: () => {
+            if (import.meta.env.DEV) {
+              console.log('Max retry attempts reached');
+            }
+          },
+        },
+      );
 
       // Add debug logs to diagnose dashboard vs. code issues
       let payload: unknown = null;
@@ -115,28 +138,40 @@ export default function ContactForm() {
       } else {
         setStatus('error');
 
-        // Try to get specific errors from response
-        try {
-          const errorData = await response.json();
-          if (errorData.errors) {
-            const newFieldErrors: FormErrors = {};
-            for (const err of errorData.errors) {
-              if (err?.field && err?.message && typeof err.field === 'string') {
-                newFieldErrors[err.field as keyof FormErrors] = err.message;
+        // Analyse granulaire de l'erreur
+        const errorInfo = analyzeNetworkError(null, response);
+        setNetworkError(errorInfo);
+
+        // Try to get specific errors from response for validation errors
+        if (errorInfo.type === 'validation_error') {
+          try {
+            const errorData = await response.json();
+            if (errorData.errors) {
+              const newFieldErrors: FormErrors = {};
+              for (const err of errorData.errors) {
+                if (err?.field && err?.message && typeof err.field === 'string') {
+                  newFieldErrors[err.field as keyof FormErrors] = err.message;
+                }
               }
+              setFieldErrors(newFieldErrors);
+              setError('Veuillez corriger les erreurs dans le formulaire.');
+            } else {
+              setError(errorInfo.userMessage);
             }
-            setFieldErrors(newFieldErrors);
-            setError('Veuillez corriger les erreurs dans le formulaire.');
-          } else {
-            setError('Une erreur est survenue. Vérifiez votre connexion ou réessayez plus tard.');
+          } catch {
+            setError(errorInfo.userMessage);
           }
-        } catch {
-          setError('Une erreur est survenue. Vérifiez votre connexion ou réessayez plus tard.');
+        } else {
+          setError(errorInfo.userMessage);
         }
+
+        // Vibration d'erreur
+        vibrateError();
 
         // Reset status after showing error for 8 seconds
         setTimeout(() => {
           setStatus('idle');
+          setNetworkError(null);
         }, 8000);
 
         setTimeout(() => {
@@ -147,15 +182,18 @@ export default function ContactForm() {
       clearTimeout(timeoutId);
       setStatus('error');
 
-      if (err instanceof Error && err.name === 'AbortError') {
-        setError('La requête a pris trop de temps. Vérifiez votre connexion et réessayez.');
-      } else {
-        setError('Impossible de contacter le serveur. Veuillez réessayer plus tard.');
-      }
+      // Analyse granulaire de l'erreur catch
+      const errorInfo = analyzeNetworkError(err);
+      setNetworkError(errorInfo);
+      setError(errorInfo.userMessage);
+
+      // Vibration d'erreur
+      vibrateError();
 
       // Reset status after showing error for 8 seconds
       setTimeout(() => {
         setStatus('idle');
+        setNetworkError(null);
       }, 8000);
 
       setTimeout(() => {
@@ -177,7 +215,24 @@ export default function ContactForm() {
             </span>
           </div>
         )}
-        {status === 'error' && <div className="form-message--error">{error}</div>}
+        {status === 'error' && (
+          <div className="form-message--error">
+            {error}
+            {networkError && retryCount > 0 && (
+              <div className="mt-2 text-sm opacity-80">
+                🔄 Tentative {retryCount}/3 -{' '}
+                {networkError.type === 'timeout'
+                  ? 'Connexion lente détectée'
+                  : 'Reconnexion en cours...'}
+              </div>
+            )}
+          </div>
+        )}
+        {status === 'sending' && retryCount > 0 && (
+          <div className="form-message--info">
+            🔄 Reconnexion en cours... (Tentative {retryCount}/3)
+          </div>
+        )}
       </div>
 
       <form

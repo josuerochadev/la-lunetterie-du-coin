@@ -1,0 +1,405 @@
+# .github/workflows/quality-pipeline.yml
+name: 🚀 Quality Pipeline - La Lunetterie du Coin
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+# Permissions nécessaires pour les actions
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+# Variables d'environnement globales
+env:
+  NODE_VERSION: '20'
+  CACHE_KEY: 'node-modules'
+
+jobs:
+  # 🔍 Analyse statique et linting
+  lint-and-format:
+    name: 🔍 Lint & Format
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 🔍 ESLint check
+        run: pnpm lint
+        
+      - name: 💅 Prettier check
+        run: pnpm format:check
+        
+      - name: 📊 Upload lint results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-results
+          path: eslint-results.xml
+          retention-days: 7
+
+  # 🧪 Tests unitaires
+  unit-tests:
+    name: 🧪 Unit Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 🧪 Run unit tests
+        run: pnpm test:run
+        
+      - name: 📊 Generate coverage report
+        run: pnpm test:coverage
+        
+      - name: 📈 Upload coverage to Codecov
+        if: always()
+        uses: codecov/codecov-action@v4
+        with:
+          file: ./coverage/lcov.info
+          flags: unittests
+          
+      - name: 📊 Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: |
+            coverage/
+            test-results.xml
+          retention-days: 7
+
+  # 🏗️ Build et validation
+  build:
+    name: 🏗️ Build & Validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [lint-and-format, unit-tests]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 🏗️ Build for production
+        run: pnpm build
+        
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          retention-days: 7
+
+  # 🚨 Lighthouse CI - Performance
+  lighthouse-ci:
+    name: 🚨 Lighthouse CI
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: build
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: 🚨 Run Lighthouse CI (Mobile)
+        run: pnpm lighthouse:mobile
+        
+      - name: 🚨 Run Lighthouse CI (Desktop)  
+        run: pnpm lighthouse:desktop
+        
+      - name: 📊 Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-reports
+          path: lighthouse-results/
+          retention-days: 30
+          
+      - name: 💬 Comment PR with Lighthouse results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Lire les résultats Lighthouse
+            const resultsDir = './lighthouse-results';
+            if (fs.existsSync(resultsDir)) {
+              const files = fs.readdirSync(resultsDir);
+              const jsonFiles = files.filter(f => f.endsWith('.json'));
+              
+              if (jsonFiles.length > 0) {
+                const results = JSON.parse(fs.readFileSync(path.join(resultsDir, jsonFiles[0])));
+                const scores = results.categories;
+                
+                const comment = \`## 🚨 Lighthouse Results\\n\\n| Category | Score |\\n|----------|-------|\\n| Performance | \${Math.round(scores.performance.score * 100)} |\\n| Accessibility | \${Math.round(scores.accessibility.score * 100)} |\\n| Best Practices | \${Math.round(scores['best-practices'].score * 100)} |\\n| SEO | \${Math.round(scores.seo.score * 100)} |\\n\\nView full report in the artifacts.\`;
+                
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              }
+            }
+
+  # 🎭 Tests E2E avec Playwright 
+  e2e-tests:
+    name: 🎭 E2E Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: build
+    
+    strategy:
+      matrix:
+        browser: [chromium, firefox, webkit]
+        
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: 🎭 Install Playwright browsers
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+        
+      - name: 🎭 Run E2E tests
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
+        
+      - name: 📊 Upload E2E test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results-${{ matrix.browser }}
+          path: |
+            e2e-results/
+            test-results/
+          retention-days: 7
+
+
+  # ♿ Tests d'accessibilité
+  accessibility-tests:
+    name: ♿ Accessibility Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: build
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: 🦊 Setup Firefox for axe-core
+        uses: browser-actions/setup-firefox@latest
+        
+      - name: ♿ Run accessibility tests
+        run: pnpm a11y
+        
+      - name: 📊 Upload accessibility reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: accessibility-results
+          path: accessibility-results.json
+          retention-days: 7
+
+  # 📊 Génération du rapport de qualité final
+  quality-report:
+    name: 📊 Quality Report
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [lighthouse-ci, e2e-tests, accessibility-tests]
+    if: always()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📥 Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: quality-results/
+          
+      - name: 📊 Generate comprehensive quality report
+        run: |
+          # Installer les dépendances pour le script de génération
+          pnpm install --frozen-lockfile
+          
+          # Générer le rapport de qualité complet
+          pnpm quality:report || true
+          
+          # Backup: Générer un rapport basique si le script échoue
+          if [ ! -f quality-report.md ]; then
+            echo "# 📊 Quality Report - La Lunetterie du Coin" > quality-report.md
+            echo "" >> quality-report.md
+            echo "## 🎯 Test Results Summary" >> quality-report.md
+            echo "" >> quality-report.md
+            
+            # Compter les artifacts pour estimer la couverture
+            echo "- 🧪 Unit Tests: $(find quality-results/unit-test* -name "*.xml" 2>/dev/null | wc -l) reports" >> quality-report.md
+            echo "- 🚨 Lighthouse: $(find quality-results/lighthouse* -name "*.json" 2>/dev/null | wc -l) audits" >> quality-report.md  
+            echo "- 🎭 E2E Tests: $(find quality-results/e2e* -type d 2>/dev/null | wc -l) browser(s)" >> quality-report.md
+            echo "- ♿ A11y Tests: $(find quality-results/accessibility* -name "*.json" 2>/dev/null | wc -l) report(s)" >> quality-report.md
+            echo "" >> quality-report.md
+            echo "View detailed reports in the individual artifacts." >> quality-report.md
+          fi
+          
+      - name: 📊 Upload final quality report
+        uses: actions/upload-artifact@v4
+        with:
+          name: quality-report
+          path: quality-report.md
+          retention-days: 30
+          
+      - name: 💬 Comment PR with quality summary
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const report = fs.readFileSync('./quality-report.md', 'utf8');
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: report
+            });
+
+  # 🚀 Déploiement des previews (si configuré)
+  deploy-preview:
+    name: 🚀 Deploy Preview
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [quality-report]
+    if: github.event_name == 'pull_request' && success()
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📥 Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: dist/
+          
+      - name: 🚀 Deploy to Netlify Preview
+        # Configuration à adapter selon votre plateforme de déploiement
+        run: |
+          echo "🚀 Ready to deploy preview"
+          echo "📁 Build files available in dist/"
+          echo "🔗 Configure your deployment platform here"

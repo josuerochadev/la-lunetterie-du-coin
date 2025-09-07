@@ -88,7 +88,7 @@ export default function Services() {
           threshold={0.35}
           className="relative w-[clamp(18rem,42vw,120rem)] self-center"
         >
-          <ServiceCard key={selected.title} service={selected} />
+          <ServiceCard key={selected.title} service={selected} index={selectedIndex} />
         </OptimizedAnimateItem>
       </div>
     </SectionContainer>
