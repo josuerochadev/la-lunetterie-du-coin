@@ -62,11 +62,7 @@ export default function Services() {
             className="mt-3 flex w-full justify-center gap-word-gap"
           >
             {SERVICES.map((service, index) => (
-              <SimpleAnimation
-                key={service.title}
-                type="fade"
-                delay={(index + 1) * 80}
-              >
+              <SimpleAnimation key={service.title} type="fade" delay={(index + 1) * 80}>
                 <ServiceThumbnail
                   imageBase={service.imageBase}
                   title={service.title}

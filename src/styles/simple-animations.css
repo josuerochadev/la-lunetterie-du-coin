@@ -39,7 +39,6 @@
   opacity: 0;
 }
 
-
 /* ========================================
    SLIDE IN DOWN - Glissement smooth depuis le haut
    ======================================== */
@@ -191,4 +190,3 @@
   opacity: 1;
   transform: translateY(0);
 }
-
