@@ -118,7 +118,7 @@ describe('OptimizedPicture - SOLID ISP Interface', () => {
         alt="Hero image"
         priority={true}
         fallbackSrc="/images/hero-fallback.jpg"
-      />
+      />,
     );
 
     const img = screen.getByRole('img');
@@ -138,7 +138,7 @@ describe('ResponsivePicture - SOLID ISP Interface', () => {
         width={800}
         height={600}
         sizes={customSizes}
-      />
+      />,
     );
 
     const img = screen.getByRole('img');

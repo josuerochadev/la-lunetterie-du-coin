@@ -1,7 +1,7 @@
 // src/lib/retryLogic.test.ts
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-import { withRetry, fetchWithRetry } from './retryLogic';
+import { withRetry, fetchWithRetry, FetchErrorWithResponse } from './retryLogic';
 
 // Mock networkErrors module
 vi.mock('./networkErrors', () => ({
@@ -120,10 +120,62 @@ describe('retryLogic', () => {
 
       try {
         await fetchWithRetry('https://api.example.com', {}, { maxAttempts: 1 });
-      } catch (error: any) {
-        expect(error.response).toBe(mockResponse);
-        expect(error.message).toBe('HTTP 500: Server Error');
+      } catch (error: unknown) {
+        expect(error).toBeInstanceOf(FetchErrorWithResponse);
+        if (FetchErrorWithResponse.isFetchErrorWithResponse(error)) {
+          expect(error.response).toBe(mockResponse);
+          expect(error.message).toBe('HTTP 500: Server Error');
+          expect(error.status).toBe(500);
+          expect(error.statusText).toBe('Server Error');
+          expect(error.name).toBe('FetchErrorWithResponse');
+        }
       }
+    });
+  });
+
+  describe('FetchErrorWithResponse - SOLID LSP', () => {
+    it('should create error with proper inheritance', () => {
+      const mockResponse = { status: 404, statusText: 'Not Found' } as Response;
+      const error = new FetchErrorWithResponse('Custom message', mockResponse);
+
+      // LSP compliance - behaves like Error
+      expect(error).toBeInstanceOf(Error);
+      expect(error).toBeInstanceOf(FetchErrorWithResponse);
+      expect(error.name).toBe('FetchErrorWithResponse');
+      expect(error.message).toBe('Custom message');
+      
+      // Additional properties without breaking LSP
+      expect(error.response).toBe(mockResponse);
+      expect(error.status).toBe(404);
+      expect(error.statusText).toBe('Not Found');
+    });
+
+    it('should work with fromResponse factory method', () => {
+      const mockResponse = { status: 500, statusText: 'Internal Error' } as Response;
+      const error = FetchErrorWithResponse.fromResponse(mockResponse);
+
+      expect(error.message).toBe('HTTP 500: Internal Error');
+      expect(error.response).toBe(mockResponse);
+      expect(error.status).toBe(500);
+      expect(error.statusText).toBe('Internal Error');
+    });
+
+    it('should work with custom message in fromResponse', () => {
+      const mockResponse = { status: 403, statusText: 'Forbidden' } as Response;
+      const error = FetchErrorWithResponse.fromResponse(mockResponse, 'Access denied');
+
+      expect(error.message).toBe('Access denied');
+      expect(error.response).toBe(mockResponse);
+    });
+
+    it('should correctly identify error type with type guard', () => {
+      const fetchError = new FetchErrorWithResponse('Test', {} as Response);
+      const regularError = new Error('Regular error');
+
+      expect(FetchErrorWithResponse.isFetchErrorWithResponse(fetchError)).toBe(true);
+      expect(FetchErrorWithResponse.isFetchErrorWithResponse(regularError)).toBe(false);
+      expect(FetchErrorWithResponse.isFetchErrorWithResponse(null)).toBe(false);
+      expect(FetchErrorWithResponse.isFetchErrorWithResponse(undefined)).toBe(false);
     });
   });
 });
