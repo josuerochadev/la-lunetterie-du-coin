@@ -1,6 +1,6 @@
 import { forwardRef } from 'react';
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 type MenuButtonProps = {
   isOpen: boolean;
@@ -27,7 +27,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ isOpen, onClick, id = 'menu-toggle' }, ref) => {
     return (
       <div className="fixed left-0 right-0 z-overlay flex justify-start px-container-x py-section-gap sm:justify-center">
-        <OptimizedAnimateItem type="fade" immediate={true}>
+        <SimpleAnimation type="fade" immediate={true}>
           <button
             ref={ref}
             type="button"
@@ -46,7 +46,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
             </div>
             <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
           </button>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
       </div>
     );
   },

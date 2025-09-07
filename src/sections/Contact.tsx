@@ -3,7 +3,7 @@
 import SectionContainer from '@/components/common/SectionContainer';
 import SectionTitle from '@/components/common/SectionTitle';
 import ContactForm from '@/components/contact/ContactForm';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
  * Composant principal pour la section "Nous contacter" de la page.
@@ -21,11 +21,11 @@ export default function Contact() {
       overlayClassName="bg-transparent"
     >
       <SectionTitle title="Nous contacter" />
-      <OptimizedAnimateItem index={0} type="slide-up" threshold={0.35}>
+      <SimpleAnimation type="slide-up" delay={0}>
         <div className="mx-auto max-w-4xl lg:max-w-5xl">
           <ContactForm />
         </div>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
     </SectionContainer>
   );
 }

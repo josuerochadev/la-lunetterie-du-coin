@@ -93,11 +93,7 @@ export default function FormField(props: FormFieldProps) {
   };
 
   return (
-    <SimpleAnimation
-      type="slide-up"
-      delay={animationIndex * 80}
-      className={className}
-    >
+    <SimpleAnimation type="slide-up" delay={animationIndex * 80} className={className}>
       <div className="flex min-w-0 flex-col">
         <label htmlFor={fieldId} className="form-label">
           {label}

@@ -14,11 +14,7 @@ export default function FormSubmitButton({ status, animationIndex }: FormSubmitB
   const isDisabled = status === 'sending';
 
   return (
-    <SimpleAnimation
-      type="slide-up"
-      delay={animationIndex * 80}
-      className="lg:col-span-2"
-    >
+    <SimpleAnimation type="slide-up" delay={animationIndex * 80} className="lg:col-span-2">
       <div>
         <Button type="submit" disabled={isDisabled} className="group mt-2">
           <span className="flex items-center gap-2">

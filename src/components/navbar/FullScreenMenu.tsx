@@ -6,7 +6,7 @@ import Footer from '../../sections/Footer';
 import MenuLinkItem from './MenuLinkItem';
 
 import { useClickOutside } from '@/hooks/useClickOutside';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { LINKS } from '@/config/constants';
 
 type FullScreenMenuProps = {
@@ -80,15 +80,15 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
           <ul>
             {LINKS.map((link, i) => (
               <li key={link.href} className="touch-manipulation">
-                <OptimizedAnimateItem
+                <SimpleAnimation
                   key={link.href}
-                  index={i}
                   type="slide-up"
+                  delay={i * 80}
                   immediate={true}
                   className="block py-1 sm:py-2"
                 >
                   <MenuLinkItem {...link} index={i} onClick={onClose} />
-                </OptimizedAnimateItem>
+                </SimpleAnimation>
               </li>
             ))}
           </ul>
@@ -96,14 +96,14 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
 
         {/* Footer du menu - maintenant dans menuRef */}
         <footer className="w-full">
-          <OptimizedAnimateItem
-            index={LINKS.length}
+          <SimpleAnimation
             type="slide-up"
+            delay={LINKS.length * 80}
             immediate={true}
             className="p-section-gap"
           >
             <Footer variant="menu" className="text-primary" onLinkClick={onClose} />
-          </OptimizedAnimateItem>
+          </SimpleAnimation>
         </footer>
       </div>
     </nav>

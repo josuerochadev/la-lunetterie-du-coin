@@ -2,7 +2,7 @@ import LegalPageLayout from '@/components/legal/LegalPageLayout';
 import TableOfContents from '@/components/legal/TableOfContents';
 import HighlightBox from '@/components/legal/HighlightBox';
 import PrintButton from '@/components/legal/PrintButton';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import {
   COMPANY_NAME,
   COMPANY_LEGAL_FORM,
@@ -40,7 +40,7 @@ export default function MentionsLegales() {
     >
       <TableOfContents sections={sections} />
 
-      <OptimizedAnimateItem index={0} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={0}>
         <section className="space-y-md">
           <h2
             id="editeur"
@@ -93,9 +93,9 @@ export default function MentionsLegales() {
             </div>
           </div>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
-      <OptimizedAnimateItem index={1} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={80}>
         <section className="space-y-md">
           <h2
             id="contact"
@@ -130,9 +130,9 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
-      <OptimizedAnimateItem index={2} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={160}>
         <section className="space-y-md">
           <h2
             id="hebergeur"
@@ -149,9 +149,9 @@ export default function MentionsLegales() {
             <p className="text-body leading-relaxed text-primary/80">{HOST_ADDRESS}</p>
           </div>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
-      <OptimizedAnimateItem index={3} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={240}>
         <section className="space-y-md">
           <h2
             id="propriete-intellectuelle"
@@ -167,9 +167,9 @@ export default function MentionsLegales() {
             partielle, sans autorisation préalable, est interdite.
           </p>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
-      <OptimizedAnimateItem index={4} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={320}>
         <section className="space-y-md">
           <h2
             id="donnees-personnelles"
@@ -185,9 +185,9 @@ export default function MentionsLegales() {
             confidentialité et une bannière cookies doivent être mises en place.
           </p>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
-      <OptimizedAnimateItem index={5} type="slide-down" threshold={0.35}>
+      <SimpleAnimation type="slide-down" delay={400}>
         <section className="space-y-md">
           <h2
             id="mediation"
@@ -221,7 +221,7 @@ export default function MentionsLegales() {
             </div>
           </HighlightBox>
         </section>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
       <PrintButton />
     </LegalPageLayout>

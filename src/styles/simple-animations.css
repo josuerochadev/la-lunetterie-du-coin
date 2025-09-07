@@ -39,37 +39,6 @@
   opacity: 0;
 }
 
-/* Stagger delays - jusqu'à 10 éléments */
-.simple-fade-in-1 {
-  animation-delay: calc(1 * var(--stagger-delay));
-}
-.simple-fade-in-2 {
-  animation-delay: calc(2 * var(--stagger-delay));
-}
-.simple-fade-in-3 {
-  animation-delay: calc(3 * var(--stagger-delay));
-}
-.simple-fade-in-4 {
-  animation-delay: calc(4 * var(--stagger-delay));
-}
-.simple-fade-in-5 {
-  animation-delay: calc(5 * var(--stagger-delay));
-}
-.simple-fade-in-6 {
-  animation-delay: calc(6 * var(--stagger-delay));
-}
-.simple-fade-in-7 {
-  animation-delay: calc(7 * var(--stagger-delay));
-}
-.simple-fade-in-8 {
-  animation-delay: calc(8 * var(--stagger-delay));
-}
-.simple-fade-in-9 {
-  animation-delay: calc(9 * var(--stagger-delay));
-}
-.simple-fade-in-10 {
-  animation-delay: calc(10 * var(--stagger-delay));
-}
 
 /* ========================================
    SLIDE IN DOWN - Glissement smooth depuis le haut
@@ -223,36 +192,3 @@
   transform: translateY(0);
 }
 
-/* ========================================
-   CLASSES UTILITAIRES POUR OPTIMISATIONS
-   ======================================== */
-
-/* Délais dynamiques optimisés (utilisés par OptimizedAnimateItem) */
-.animate-delay-1 {
-  animation-delay: calc(1 * var(--stagger-delay));
-}
-.animate-delay-2 {
-  animation-delay: calc(2 * var(--stagger-delay));
-}
-.animate-delay-3 {
-  animation-delay: calc(3 * var(--stagger-delay));
-}
-.animate-delay-4 {
-  animation-delay: calc(4 * var(--stagger-delay));
-}
-.animate-delay-5 {
-  animation-delay: calc(5 * var(--stagger-delay));
-}
-.animate-delay-6 {
-  animation-delay: calc(6 * var(--stagger-delay));
-}
-
-/* État initial invisible pour intersection observer */
-.animate-on-intersection {
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.animate-on-intersection.visible {
-  opacity: 1;
-}
