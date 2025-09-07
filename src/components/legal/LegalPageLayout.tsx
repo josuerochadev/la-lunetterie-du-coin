@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import Layout from '@/components/common/Layout';
 import SectionContainer from '@/components/common/SectionContainer';
 import PageHeader from '@/components/legal/PageHeader';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { Seo } from '@/seo/Seo';
 
 type LegalPageLayoutProps = {
@@ -40,18 +40,18 @@ export default function LegalPageLayout({
       <div className="relative z-base">
         <Layout>
           <SectionContainer className="pb-section pt-36">
-            <OptimizedAnimateItem index={0} type="slide-down" immediate={true}>
+            <SimpleAnimation type="slide-down" immediate={true}>
               <PageHeader title={title} />
-            </OptimizedAnimateItem>
+            </SimpleAnimation>
             <article className="mx-auto max-w-4xl space-y-16 px-8 text-body leading-relaxed">
               {lastUpdated && (
-                <OptimizedAnimateItem index={1} type="slide-up" threshold={0.35}>
+                <SimpleAnimation type="slide-up" delay={80}>
                   <div className="border-dark-green mb-2 border-l-4 py-2 pl-6">
                     <p className="text-body-sm text-primary">
                       <span className="font-semibold">Dernière mise à jour :</span> {lastUpdated}
                     </p>
                   </div>
-                </OptimizedAnimateItem>
+                </SimpleAnimation>
               )}
               {children}
             </article>

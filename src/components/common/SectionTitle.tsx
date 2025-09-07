@@ -1,6 +1,6 @@
 // SectionTitle.tsx
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 type SectionTitleProps = {
   title: string;
@@ -15,9 +15,9 @@ type SectionTitleProps = {
  */
 const SectionTitle = ({ title }: SectionTitleProps) => {
   return (
-    <OptimizedAnimateItem type="slide-down" threshold={0.35}>
+    <SimpleAnimation type="slide-down">
       <h2 className="mb-title-gap pt-lg text-title-xl uppercase">{title}</h2>
-    </OptimizedAnimateItem>
+    </SimpleAnimation>
   );
 };
 

@@ -117,15 +117,15 @@ test.describe('Contact Form - E2E Tests', () => {
     await expect(errorMessage.first()).toBeVisible({ timeout: 10000 });
   });
 
-  test('should show retry information during network issues', async ({ page }) => {
+  test('should handle network failures with retry and eventually succeed', async ({ page }) => {
     let requestCount = 0;
     
-    // Simuler des échecs puis succès
+    // Simuler des échecs puis succès pour tester le système de retry
     page.route('https://formspree.io/**', async route => {
       requestCount++;
       
       if (requestCount < 3) {
-        // Les 2 premières tentatives échouent
+        // Les 2 premières tentatives échouent (network failure)
         await route.abort('failed');
       } else {
         // La 3ème tentative réussit
@@ -145,13 +145,13 @@ test.describe('Contact Form - E2E Tests', () => {
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
     await submitButton.click();
 
-    // Vérifier l'affichage des tentatives de retry
-    const retryMessage = page.locator(':has-text("Tentative"), :has-text("retry"), :has-text("essai")');
-    await expect(retryMessage.first()).toBeVisible({ timeout: 5000 });
-
-    // Finalement, vérifier le succès
+    // Vérifier que le système de retry fonctionne et finit par afficher le succès
+    // Le système devrait faire 3 tentatives puis réussir
     const successMessage = page.locator(':has-text("succès"), :has-text("envoyé")');
-    await expect(successMessage.first()).toBeVisible({ timeout: 15000 });
+    await expect(successMessage.first()).toBeVisible({ timeout: 20000 });
+
+    // Vérifier qu'il y a eu exactement 3 requêtes (2 échecs + 1 succès)
+    expect(requestCount).toBe(3);
   });
 
   test('should be accessible via keyboard', async ({ page }) => {

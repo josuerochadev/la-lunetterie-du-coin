@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react';
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 type TableOfContentsProps = {
   sections: Array<{
@@ -35,14 +35,14 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
   };
 
   return (
-    <OptimizedAnimateItem index={2} type="slide-up" threshold={0.35}>
+    <SimpleAnimation type="slide-up" delay={160}>
       <nav aria-label="Table des matières" className={`mb-20 ${className}`}>
-        <OptimizedAnimateItem index={0} type="slide-down" immediate={true}>
+        <SimpleAnimation type="slide-down" immediate={true}>
           <h2 className="mb-8 font-serif text-title-lg font-bold text-primary">Sommaire</h2>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
         <ul className="space-y-6">
           {sections.map((section, index) => (
-            <OptimizedAnimateItem key={section.id} index={index} type="slide-up" threshold={0.35}>
+            <SimpleAnimation key={section.id} type="slide-up" delay={index * 80}>
               <li>
                 <a
                   href={`#${section.id}`}
@@ -57,10 +57,10 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
                   </span>
                 </a>
               </li>
-            </OptimizedAnimateItem>
+            </SimpleAnimation>
           ))}
         </ul>
       </nav>
-    </OptimizedAnimateItem>
+    </SimpleAnimation>
   );
 }

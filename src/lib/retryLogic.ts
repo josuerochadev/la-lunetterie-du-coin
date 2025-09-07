@@ -2,6 +2,59 @@
 
 import { analyzeNetworkError, shouldRetryError, getRetryDelay } from './networkErrors';
 
+// ========================================
+// SOLID LSP: Classe d'erreur dédiée
+// ========================================
+
+/**
+ * Classe d'erreur spécialisée pour les erreurs fetch avec réponse
+ * Respecte LSP - hérite proprement d'Error sans modification dynamique
+ */
+export class FetchErrorWithResponse extends Error {
+  constructor(
+    message: string,
+    // eslint-disable-next-line no-unused-vars
+    public readonly response: Response,
+  ) {
+    super(message);
+    this.name = 'FetchErrorWithResponse';
+
+    // Maintenir la pile d'erreurs correcte
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, FetchErrorWithResponse);
+    }
+  }
+
+  /**
+   * Status code de la réponse HTTP
+   */
+  get status(): number {
+    return this.response.status;
+  }
+
+  /**
+   * Status text de la réponse HTTP
+   */
+  get statusText(): string {
+    return this.response.statusText;
+  }
+
+  /**
+   * Méthode utilitaire pour vérifier si une erreur est de ce type
+   */
+  static isFetchErrorWithResponse(error: unknown): error is FetchErrorWithResponse {
+    return error instanceof FetchErrorWithResponse;
+  }
+
+  /**
+   * Crée une instance à partir d'une réponse fetch
+   */
+  static fromResponse(response: Response, customMessage?: string): FetchErrorWithResponse {
+    const message = customMessage || `HTTP ${response.status}: ${response.statusText}`;
+    return new FetchErrorWithResponse(message, response);
+  }
+}
+
 export interface RetryConfig {
   maxAttempts: number;
   // eslint-disable-next-line no-unused-vars
@@ -35,9 +88,9 @@ export async function withRetry<T>(
       let shouldRetry = false;
       let response: Response | undefined;
 
-      // Extraction de la response si c'est une erreur de fetch
-      if (error && typeof error === 'object' && 'response' in error) {
-        response = (error as any).response;
+      // Extraction de la response si c'est une FetchErrorWithResponse
+      if (FetchErrorWithResponse.isFetchErrorWithResponse(error)) {
+        response = error.response;
       }
 
       const errorInfo = analyzeNetworkError(error, response);
@@ -74,11 +127,9 @@ export async function fetchWithRetry(
   return withRetry(async () => {
     const response = await fetch(url, options);
 
-    // Si la réponse n'est pas ok, on lance une erreur avec la réponse
+    // Si la réponse n'est pas ok, on lance une FetchErrorWithResponse
     if (!response.ok) {
-      const error = new Error(`HTTP ${response.status}: ${response.statusText}`) as any;
-      error.response = response;
-      throw error;
+      throw FetchErrorWithResponse.fromResponse(response);
     }
 
     return response;

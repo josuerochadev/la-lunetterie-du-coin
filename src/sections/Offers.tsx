@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SectionTitle from '@/components/common/SectionTitle';
 import { OFFERS } from '@/config/constants';
 import OfferCard from '@/components/offers/OfferCard';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
  * Section "Nos Offres" - Cartes expandables des offres commerciales
@@ -34,9 +34,9 @@ export default function Offers() {
       <SectionTitle title="Nos Offres" />
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap md:grid-cols-2">
         {OFFERS.map((offer, index) => (
-          <OptimizedAnimateItem key={offer.id} index={index} type="slide-up" threshold={0.35}>
+          <SimpleAnimation key={offer.id} type="slide-up" delay={index * 80}>
             <OfferCard offer={offer} isOpen={openCards.includes(offer.id)} onToggle={toggleCard} />
-          </OptimizedAnimateItem>
+          </SimpleAnimation>
         ))}
       </div>
     </section>

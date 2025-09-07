@@ -3,7 +3,7 @@ import SectionContainer from '@/components/common/SectionContainer';
 import SectionTitle from '@/components/common/SectionTitle';
 import { CONCEPT_PLAIN } from '@/config/constants';
 import Picture from '@/components/common/Picture';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 export default function Concept() {
   // Mots-clés à mettre en emphase
@@ -22,7 +22,7 @@ export default function Concept() {
     <SectionContainer id="concept">
       <SectionTitle title="Le Concept" />
 
-      <OptimizedAnimateItem type="slide-up" threshold={0.35}>
+      <SimpleAnimation type="slide-up">
         <div className="mt-4 font-serif text-body font-semibold leading-relaxed tracking-wider">
           {CONCEPT_PLAIN.split(' ').map((word, index, array) => (
             <span
@@ -38,13 +38,12 @@ export default function Concept() {
             </span>
           ))}
         </div>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
       <div className="mx-auto grid max-w-content grid-cols-1 gap-section-gap py-container-y md:grid-cols-2">
-        <OptimizedAnimateItem
-          index={0}
+        <SimpleAnimation
           type="slide-up"
-          threshold={0.35}
+          delay={0}
           className="simple-hover-scale group relative aspect-[2/3] cursor-pointer overflow-hidden rounded-card"
         >
           <Picture
@@ -62,12 +61,11 @@ export default function Concept() {
               Montures neuves et d'occasion soigneusement choisies pour allier style et durabilité.
             </p>
           </div>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
 
-        <OptimizedAnimateItem
-          index={1}
+        <SimpleAnimation
           type="slide-up"
-          threshold={0.35}
+          delay={80}
           className="simple-hover-scale group relative aspect-[3/4] cursor-pointer overflow-hidden rounded-card md:aspect-[2/3]"
         >
           <Picture
@@ -85,7 +83,7 @@ export default function Concept() {
               Conseil personnalisé et passion de l'optique depuis plus de 10 ans à Strasbourg.
             </p>
           </div>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
       </div>
     </SectionContainer>
   );

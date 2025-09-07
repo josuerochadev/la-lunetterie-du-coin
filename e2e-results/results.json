@@ -161,7 +161,11 @@
           "column": 6,
           "specs": [
             {
+<<<<<<< HEAD
+              "title": "should handle network failures with retry and eventually succeed",
+=======
               "title": "should display contact form",
+>>>>>>> origin/main
               "ok": true,
               "tags": [],
               "tests": [
@@ -176,12 +180,20 @@
                       "workerIndex": 0,
                       "parallelIndex": 0,
                       "status": "passed",
+<<<<<<< HEAD
+                      "duration": 7127,
+=======
                       "duration": 2099,
+>>>>>>> origin/main
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
+<<<<<<< HEAD
+                      "startTime": "2025-09-07T20:49:14.763Z",
+=======
                       "startTime": "2025-09-07T12:37:20.378Z",
+>>>>>>> origin/main
                       "annotations": [],
                       "attachments": []
                     }
@@ -189,6 +201,15 @@
                   "status": "expected"
                 }
               ],
+<<<<<<< HEAD
+              "id": "19bfce10c51128c14abd-02ed940b2e074b793060",
+              "file": "contact-form.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "should handle network failures with retry and eventually succeed",
+=======
               "id": "19bfce10c51128c14abd-6fb70e04b3b2a5027b50",
               "file": "contact-form.spec.ts",
               "line": 18,
@@ -196,6 +217,7 @@
             },
             {
               "title": "should validate required fields",
+>>>>>>> origin/main
               "ok": true,
               "tags": [],
               "tests": [
@@ -203,19 +225,32 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
+<<<<<<< HEAD
+                  "projectId": "firefox",
+                  "projectName": "firefox",
+=======
                   "projectId": "chromium",
                   "projectName": "chromium",
+>>>>>>> origin/main
                   "results": [
                     {
                       "workerIndex": 1,
                       "parallelIndex": 1,
                       "status": "passed",
+<<<<<<< HEAD
+                      "duration": 7785,
+=======
                       "duration": 3123,
+>>>>>>> origin/main
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
+<<<<<<< HEAD
+                      "startTime": "2025-09-07T20:49:14.782Z",
+=======
                       "startTime": "2025-09-07T12:37:20.395Z",
+>>>>>>> origin/main
                       "annotations": [],
                       "attachments": []
                     }
@@ -223,6 +258,15 @@
                   "status": "expected"
                 }
               ],
+<<<<<<< HEAD
+              "id": "19bfce10c51128c14abd-534caa3e0535f5d35d81",
+              "file": "contact-form.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "should handle network failures with retry and eventually succeed",
+=======
               "id": "19bfce10c51128c14abd-e59fd96becebfa32621c",
               "file": "contact-form.spec.ts",
               "line": 38,
@@ -230,6 +274,7 @@
             },
             {
               "title": "should show field-specific validation",
+>>>>>>> origin/main
               "ok": true,
               "tags": [],
               "tests": [
@@ -237,19 +282,32 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
+<<<<<<< HEAD
+                  "projectId": "webkit",
+                  "projectName": "webkit",
+=======
                   "projectId": "chromium",
                   "projectName": "chromium",
+>>>>>>> origin/main
                   "results": [
                     {
                       "workerIndex": 2,
                       "parallelIndex": 2,
                       "status": "passed",
+<<<<<<< HEAD
+                      "duration": 7594,
+=======
                       "duration": 2097,
+>>>>>>> origin/main
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
+<<<<<<< HEAD
+                      "startTime": "2025-09-07T20:49:14.764Z",
+=======
                       "startTime": "2025-09-07T12:37:20.379Z",
+>>>>>>> origin/main
                       "annotations": [],
                       "attachments": []
                     }
@@ -257,6 +315,15 @@
                   "status": "expected"
                 }
               ],
+<<<<<<< HEAD
+              "id": "19bfce10c51128c14abd-8afb2756669759fd16ca",
+              "file": "contact-form.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "should handle network failures with retry and eventually succeed",
+=======
               "id": "19bfce10c51128c14abd-cd4f4f98135e2165078a",
               "file": "contact-form.spec.ts",
               "line": 58,
@@ -264,6 +331,7 @@
             },
             {
               "title": "should submit form successfully with valid data",
+>>>>>>> origin/main
               "ok": true,
               "tags": [],
               "tests": [
@@ -271,19 +339,32 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
+<<<<<<< HEAD
+                  "projectId": "mobile-chrome",
+                  "projectName": "mobile-chrome",
+=======
                   "projectId": "chromium",
                   "projectName": "chromium",
+>>>>>>> origin/main
                   "results": [
                     {
                       "workerIndex": 3,
                       "parallelIndex": 3,
                       "status": "passed",
+<<<<<<< HEAD
+                      "duration": 6041,
+=======
                       "duration": 3109,
+>>>>>>> origin/main
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
+<<<<<<< HEAD
+                      "startTime": "2025-09-07T20:49:14.761Z",
+=======
                       "startTime": "2025-09-07T12:37:20.368Z",
+>>>>>>> origin/main
                       "annotations": [],
                       "attachments": []
                     }
@@ -291,6 +372,15 @@
                   "status": "expected"
                 }
               ],
+<<<<<<< HEAD
+              "id": "19bfce10c51128c14abd-de4cf5c106409437e705",
+              "file": "contact-form.spec.ts",
+              "line": 120,
+              "column": 3
+            },
+            {
+              "title": "should handle network failures with retry and eventually succeed",
+=======
               "id": "19bfce10c51128c14abd-b55398d04a8c4615d5ca",
               "file": "contact-form.spec.ts",
               "line": 70,
@@ -298,6 +388,7 @@
             },
             {
               "title": "should handle network errors gracefully",
+>>>>>>> origin/main
               "ok": true,
               "tags": [],
               "tests": [
@@ -305,6 +396,16 @@
                   "timeout": 30000,
                   "annotations": [],
                   "expectedStatus": "passed",
+<<<<<<< HEAD
+                  "projectId": "tablet",
+                  "projectName": "tablet",
+                  "results": [
+                    {
+                      "workerIndex": 4,
+                      "parallelIndex": 3,
+                      "status": "passed",
+                      "duration": 6201,
+=======
                   "projectId": "chromium",
                   "projectName": "chromium",
                   "results": [
@@ -313,11 +414,16 @@
                       "parallelIndex": 0,
                       "status": "passed",
                       "duration": 5394,
+>>>>>>> origin/main
                       "errors": [],
                       "stdout": [],
                       "stderr": [],
                       "retry": 0,
+<<<<<<< HEAD
+                      "startTime": "2025-09-07T20:49:21.801Z",
+=======
                       "startTime": "2025-09-07T12:37:22.904Z",
+>>>>>>> origin/main
                       "annotations": [],
                       "attachments": []
                     }
@@ -325,6 +431,12 @@
                   "status": "expected"
                 }
               ],
+<<<<<<< HEAD
+              "id": "19bfce10c51128c14abd-b5a7a8a33c50420dcf29",
+              "file": "contact-form.spec.ts",
+              "line": 120,
+              "column": 3
+=======
               "id": "19bfce10c51128c14abd-36bc03cebc49133dc30b",
               "file": "contact-form.spec.ts",
               "line": 98,
@@ -636,6 +748,7 @@
               "file": "homepage.spec.ts",
               "line": 85,
               "column": 3
+>>>>>>> origin/main
             }
           ]
         }
@@ -644,10 +757,17 @@
   ],
   "errors": [],
   "stats": {
+<<<<<<< HEAD
+    "startTime": "2025-09-07T20:49:14.178Z",
+    "duration": 14086.96,
+    "expected": 5,
+    "skipped": 0,
+=======
     "startTime": "2025-09-07T12:37:19.864Z",
     "duration": 8468.125,
     "expected": 12,
     "skipped": 1,
+>>>>>>> origin/main
     "unexpected": 0,
     "flaky": 0
   }

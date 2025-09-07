@@ -1,7 +1,7 @@
 import { useState, forwardRef } from 'react';
 import Calendar from 'lucide-react/dist/esm/icons/calendar';
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LogoEye from '@/assets/logo/logo-eye.svg?react';
 import Button from '@/components/common/Button';
 import { HERO_PHRASES, CALENDLY_URL } from '@/config/constants';
@@ -33,21 +33,21 @@ const Hero = forwardRef<HTMLElement>(() => {
       aria-labelledby="hero-title"
     >
       {/* Logo avec slide-down smooth */}
-      <OptimizedAnimateItem index={0} type="slide-down" immediate={true} customDelay={0}>
+      <SimpleAnimation type="slide-down" delay={0} immediate={true}>
         <div className="mb-section-gap aspect-[146/85] w-[clamp(5rem,10vw,20rem)]">
           <LogoEye aria-hidden="true" focusable="false" className="h-full w-full" />
         </div>
-      </OptimizedAnimateItem>
+      </SimpleAnimation>
 
       <div className="w-full space-y-section-gap">
         {/* Punchline avec slide-up rapide */}
-        <OptimizedAnimateItem index={1} type="slide-up" immediate={true} customDelay={300}>
+        <SimpleAnimation type="slide-up" delay={300} immediate={true}>
           <div className="text-title-xl font-black uppercase">{currentPhrase}</div>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
 
         {/* Titre principal avec stagger court */}
         <header className="space-y-1">
-          <OptimizedAnimateItem index={2} type="slide-up" immediate={true} customDelay={500}>
+          <SimpleAnimation type="slide-up" delay={500} immediate={true}>
             <h1 id="hero-title" className="text-title-md">
               <span className="font-thin">－</span>
               <span className="font-thin">LA</span>
@@ -55,11 +55,11 @@ const Hero = forwardRef<HTMLElement>(() => {
               <span className="font-thin">DU</span>
               <span className="font-black">COIN</span>
             </h1>
-          </OptimizedAnimateItem>
+          </SimpleAnimation>
         </header>
 
         {/* CTA avec délai court et fluide */}
-        <OptimizedAnimateItem index={3} type="slide-up" immediate={true} customDelay={700}>
+        <SimpleAnimation type="slide-up" delay={700} immediate={true}>
           <div className="pt-4">
             <a
               href={CALENDLY_URL}
@@ -75,7 +75,7 @@ const Hero = forwardRef<HTMLElement>(() => {
               </Button>
             </a>
           </div>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
       </div>
     </SectionContainer>
   );

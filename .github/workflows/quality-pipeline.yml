@@ -200,7 +200,7 @@ jobs:
                 const results = JSON.parse(fs.readFileSync(path.join(resultsDir, jsonFiles[0])));
                 const scores = results.categories;
                 
-                const comment = \`## 🚨 Lighthouse Results\\n\\n| Category | Score |\\n|----------|-------|\\n| Performance | \${Math.round(scores.performance.score * 100)} |\\n| Accessibility | \${Math.round(scores.accessibility.score * 100)} |\\n| Best Practices | \${Math.round(scores['best-practices'].score * 100)} |\\n| SEO | \${Math.round(scores.seo.score * 100)} |\\n\\nView full report in the artifacts.\`;
+                const comment = "## 🚨 Lighthouse Results\n\n| Category | Score |\n|----------|-------|\n| Performance | " + Math.round(scores.performance.score * 100) + " |\n| Accessibility | " + Math.round(scores.accessibility.score * 100) + " |\n| Best Practices | " + Math.round(scores['best-practices'].score * 100) + " |\n| SEO | " + Math.round(scores.seo.score * 100) + " |\n\nView full report in the artifacts.";
                 
                 github.rest.issues.createComment({
                   issue_number: context.issue.number,

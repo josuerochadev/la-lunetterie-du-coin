@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
 import SectionTitle from '@/components/common/SectionTitle';
 import { SERVICES } from '@/config/constants';
@@ -36,10 +36,9 @@ export default function Services() {
 
       <div className="mx-auto flex flex-col items-center md:flex-row md:items-center md:justify-center">
         {/* Colonne gauche : image + miniatures */}
-        <OptimizedAnimateItem
-          index={0}
+        <SimpleAnimation
           type="slide-up"
-          threshold={0.35}
+          delay={0}
           className="flex flex-col items-center px-container-x py-container-y"
         >
           {/* Image principale - simple transition avec CSS */}
@@ -63,12 +62,7 @@ export default function Services() {
             className="mt-3 flex w-full justify-center gap-word-gap"
           >
             {SERVICES.map((service, index) => (
-              <OptimizedAnimateItem
-                key={service.title}
-                index={index + 1}
-                type="fade"
-                threshold={0.35}
-              >
+              <SimpleAnimation key={service.title} type="fade" delay={(index + 1) * 80}>
                 <ServiceThumbnail
                   imageBase={service.imageBase}
                   title={service.title}
@@ -76,20 +70,19 @@ export default function Services() {
                   index={index}
                   onClick={() => setSelectedIndex(index)}
                 />
-              </OptimizedAnimateItem>
+              </SimpleAnimation>
             ))}
           </div>
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
 
         {/* Colonne droite : carte de service */}
-        <OptimizedAnimateItem
-          index={1}
+        <SimpleAnimation
           type="slide-up"
-          threshold={0.35}
+          delay={80}
           className="relative w-[clamp(18rem,42vw,120rem)] self-center"
         >
           <ServiceCard key={selected.title} service={selected} index={selectedIndex} />
-        </OptimizedAnimateItem>
+        </SimpleAnimation>
       </div>
     </SectionContainer>
   );

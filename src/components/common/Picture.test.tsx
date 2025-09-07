@@ -2,7 +2,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 
-import Picture from './Picture';
+import Picture, { OptimizedPicture, ResponsivePicture } from './Picture';
 
 describe('Picture', () => {
   const defaultProps = {
@@ -107,5 +107,47 @@ describe('Picture', () => {
     sources.forEach((source) => {
       expect(source).toHaveAttribute('sizes', customSizes);
     });
+  });
+});
+
+describe('OptimizedPicture - SOLID ISP Interface', () => {
+  it('should render with optimization props', () => {
+    render(
+      <OptimizedPicture
+        srcBase="/images/hero"
+        alt="Hero image"
+        priority={true}
+        fallbackSrc="/images/hero-fallback.jpg"
+      />,
+    );
+
+    const img = screen.getByRole('img');
+    expect(img).toHaveAttribute('loading', 'eager');
+    expect(img).toHaveAttribute('fetchpriority', 'high');
+    expect(img).toHaveAttribute('src', '/images/hero-fallback.jpg');
+  });
+});
+
+describe('ResponsivePicture - SOLID ISP Interface', () => {
+  it('should render with responsive props', () => {
+    const customSizes = '(min-width: 1200px) 800px, 100vw';
+    const { container } = render(
+      <ResponsivePicture
+        srcBase="/images/responsive"
+        alt="Responsive image"
+        width={800}
+        height={600}
+        sizes={customSizes}
+      />,
+    );
+
+    const img = screen.getByRole('img');
+    expect(img).toHaveAttribute('width', '800');
+    expect(img).toHaveAttribute('height', '600');
+
+    const sources = container.querySelectorAll('source');
+    for (const source of sources) {
+      expect(source).toHaveAttribute('sizes', customSizes);
+    }
   });
 });
