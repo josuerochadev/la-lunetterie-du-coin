@@ -19,10 +19,12 @@ interface SubmissionResult {
 }
 
 interface UseFormSubmissionReturn {
+  // eslint-disable-next-line no-unused-vars
   submitForm: (e: React.FormEvent<HTMLFormElement>) => Promise<SubmissionResult>;
 }
 
 export function useFormSubmission(): UseFormSubmissionReturn {
+   
   const submitForm = async (e: React.FormEvent<HTMLFormElement>): Promise<SubmissionResult> => {
     e.preventDefault();
 
