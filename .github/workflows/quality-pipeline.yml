@@ -248,8 +248,8 @@ jobs:
       - name: 🎭 Install Playwright browsers
         run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
         
-      - name: 🎭 Run E2E tests (excluding visual regression)
-        run: pnpm exec playwright test --project=${{ matrix.browser }} --grep-invert="Visual Regression Tests"
+      - name: 🎭 Run E2E tests
+        run: pnpm exec playwright test --project=${{ matrix.browser }}
         
       - name: 📊 Upload E2E test results
         if: always()
