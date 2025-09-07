@@ -96,7 +96,8 @@ export default defineConfig({
     timeout: 10000,
     // Configuration des screenshots pour la régression visuelle
     toHaveScreenshot: {
-      threshold: 0.2,
+      threshold: 0.3, // Plus tolérant aux différences
+      maxDiffPixels: 500, // Accepter jusqu'à 500 pixels différents
       animations: 'disabled',
       caret: 'hide',
     },

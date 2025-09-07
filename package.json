@@ -26,7 +26,7 @@
     "e2e:visual:update": "playwright test visual-regression.spec.ts --project=chromium --update-snapshots",
     "lighthouse": "npm run build && start-server-and-test preview http://localhost:4173 'lhci autorun'",
     "lighthouse:mobile": "npm run lighthouse",
-    "lighthouse:desktop": "npm run build && start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.js'",
+    "lighthouse:desktop": "npm run build && start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'",
     "axe": "MOZ_HEADLESS=1 axe --exit --browser firefox http://localhost:4173",
     "a11y": "vite build && start-server-and-test preview http://localhost:4173 axe",
     "lint": "eslint . --ext ts,tsx --max-warnings=0",
