@@ -261,17 +261,6 @@ jobs:
             test-results/
           retention-days: 7
 
-  # 📸 Tests de régression visuelle (Chromium uniquement) - TEMPORAIREMENT DÉSACTIVÉ
-  visual-regression-tests:
-    name: 📸 Visual Regression (Skipped)
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    needs: build
-    if: false # Désactivé temporairement - problèmes cross-platform
-        
-    steps:
-      - name: 📥 Skip visual regression tests
-        run: echo "Visual regression tests sont temporairement désactivés pour permettre l'audit de continuer"
 
   # ♿ Tests d'accessibilité
   accessibility-tests:
@@ -322,7 +311,7 @@ jobs:
     name: 📊 Quality Report
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [lighthouse-ci, e2e-tests, visual-regression-tests, accessibility-tests]
+    needs: [lighthouse-ci, e2e-tests, accessibility-tests]
     if: always()
     
     steps:

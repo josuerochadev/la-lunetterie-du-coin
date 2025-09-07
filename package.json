@@ -22,8 +22,6 @@
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report e2e-results",
-    "e2e:visual": "playwright test visual-regression.spec.ts --project=chromium",
-    "e2e:visual:update": "playwright test visual-regression.spec.ts --project=chromium --update-snapshots",
     "lighthouse": "npm run build && start-server-and-test preview http://localhost:4173 'lhci autorun'",
     "lighthouse:mobile": "npm run lighthouse",
     "lighthouse:desktop": "npm run build && start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'",

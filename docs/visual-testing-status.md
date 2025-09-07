@@ -1,7 +1,7 @@
 # 📸 État des Tests de Régression Visuelle
 
-## Status Actuel
-🔴 **TEMPORAIREMENT DÉSACTIVÉ** dans le pipeline CI
+## Status Actuel  
+🗑️ **SUPPRIMÉS** - Retirés du projet pour simplifier la maintenance
 
 ## Raison
 Les tests de régression visuelle échouent en CI en raison de différences de rendu entre :
@@ -23,25 +23,23 @@ Les tests de régression visuelle échouent en CI en raison de différences de r
    - Tests visuels isolés des tests E2E
    - Exécution uniquement sur Chromium
 
-### 🔄 Réactivation Future
+### 🔄 Réimplémentation Future
 
-Pour réactiver les tests visuels :
+Si tu souhaites réimplémenter les tests visuels à l'avenir :
 
-1. **Modifier le workflow CI**
-   ```yaml
-   # Dans .github/workflows/quality-pipeline.yml
-   if: false # Changer en: if: true
-   ```
+1. **Utiliser un service externe comme Percy ou Chromatic**
+   - Rendu cross-platform cohérent
+   - Gestion automatique des baselines
+   - Interface de review visuelle
 
-2. **Ou utiliser une variable d'environnement**
-   ```yaml
-   if: ${{ vars.ENABLE_VISUAL_TESTS == 'true' }}
-   ```
+2. **Ou recréer avec approche Docker**
+   - Environnement Linux reproductible
+   - Configuration plus complexe mais stable
 
-3. **Tests locaux toujours disponibles**
+3. **Fichiers à recréer**
    ```bash
-   pnpm e2e:visual              # Exécuter tests visuels
-   pnpm e2e:visual:update       # Mettre à jour screenshots
+   e2e/visual-regression.spec.ts    # Fichier de tests
+   scripts/visual-baselines.js     # Générateur de baselines
    ```
 
 ## Alternatives Considérées

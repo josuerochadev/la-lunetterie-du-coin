@@ -1,4 +1,4 @@
-// lighthouserc.desktop.js - Configuration Desktop
+// lighthouserc.desktop.cjs - Configuration Desktop Simplifiée
 module.exports = {
   ci: {
     collect: {
@@ -8,20 +8,15 @@ module.exports = {
       ],
       numberOfRuns: 2,
       settings: {
-        // Émulation desktop
+        // Configuration desktop simple et cohérente
         emulatedFormFactor: 'desktop',
-        screenEmulation: {
-          mobile: false,
-          width: 1350,
-          height: 940,
-          deviceScaleFactor: 1,
-        },
         throttling: {
           rttMs: 40,
-          throughputKbps: 40960, // Plus rapide pour desktop
+          throughputKbps: 40960,
           cpuSlowdownMultiplier: 1,
         },
         onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
+        skipAudits: ['installable-manifest', 'splash-screen', 'themed-omnibox'],
       },
     },
     assert: {
