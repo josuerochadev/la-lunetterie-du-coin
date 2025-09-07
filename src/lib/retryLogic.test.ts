@@ -143,7 +143,7 @@ describe('retryLogic', () => {
       expect(error).toBeInstanceOf(FetchErrorWithResponse);
       expect(error.name).toBe('FetchErrorWithResponse');
       expect(error.message).toBe('Custom message');
-      
+
       // Additional properties without breaking LSP
       expect(error.response).toBe(mockResponse);
       expect(error.status).toBe(404);

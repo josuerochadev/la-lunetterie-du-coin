@@ -18,7 +18,7 @@ export class FetchErrorWithResponse extends Error {
   ) {
     super(message);
     this.name = 'FetchErrorWithResponse';
-    
+
     // Maintenir la pile d'erreurs correcte
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, FetchErrorWithResponse);
