@@ -29,11 +29,10 @@ export function useFormValidation(): UseFormValidationReturn {
     message: 'Votre message doit contenir au moins 10 caractères.',
   });
 
-   
   const handleInvalidInput = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const target = e.currentTarget;
     const messages = getValidationMessages();
-    
+
     if (target.name === 'name') {
       target.setCustomValidity(messages.name);
     } else if (target.name === 'email') {
@@ -44,18 +43,17 @@ export function useFormValidation(): UseFormValidationReturn {
   };
 
   const handleInputChange = (
-     
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-     
+
     fieldName: keyof FormErrors,
     // eslint-disable-next-line no-unused-vars
     clearFieldError: (field: keyof FormErrors) => void,
   ) => {
     const target = e.currentTarget;
-    
+
     // Clear custom validation message
     target.setCustomValidity('');
-    
+
     // Clear field error if it exists
     clearFieldError(fieldName);
   };

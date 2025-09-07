@@ -24,7 +24,6 @@ interface UseFormSubmissionReturn {
 }
 
 export function useFormSubmission(): UseFormSubmissionReturn {
-   
   const submitForm = async (e: React.FormEvent<HTMLFormElement>): Promise<SubmissionResult> => {
     e.preventDefault();
 

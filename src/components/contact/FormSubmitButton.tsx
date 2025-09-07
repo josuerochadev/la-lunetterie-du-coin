@@ -2,7 +2,7 @@ import Send from 'lucide-react/dist/esm/icons/send';
 import Loader2 from 'lucide-react/dist/esm/icons/loader-2';
 
 import Button from '@/components/common/Button';
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import type { Status } from '@/hooks/useFormStatus';
 
 interface FormSubmitButtonProps {
@@ -14,10 +14,9 @@ export default function FormSubmitButton({ status, animationIndex }: FormSubmitB
   const isDisabled = status === 'sending';
 
   return (
-    <OptimizedAnimateItem
-      index={animationIndex}
+    <SimpleAnimation
       type="slide-up"
-      threshold={0.35}
+      delay={animationIndex * 80}
       className="lg:col-span-2"
     >
       <div>
@@ -32,6 +31,6 @@ export default function FormSubmitButton({ status, animationIndex }: FormSubmitB
           </span>
         </Button>
       </div>
-    </OptimizedAnimateItem>
+    </SimpleAnimation>
   );
 }

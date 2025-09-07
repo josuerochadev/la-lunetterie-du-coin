@@ -37,7 +37,6 @@ export function useFormStatus(): UseFormStatusReturn {
     setRetryCount(0);
   };
 
-   
   const handleSubmissionResult = (result: SubmissionResult) => {
     if (result.success) {
       setStatus('success');
@@ -65,7 +64,6 @@ export function useFormStatus(): UseFormStatusReturn {
     }, 100);
   };
 
-   
   const clearFieldError = (field: keyof FormErrors) => {
     setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
   };

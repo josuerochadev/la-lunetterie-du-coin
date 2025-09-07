@@ -33,7 +33,7 @@ export default function FormStatusMessage({
           </span>
         </div>
       )}
-      
+
       {status === 'error' && (
         <div className="form-message--error">
           {error}
@@ -47,7 +47,7 @@ export default function FormStatusMessage({
           )}
         </div>
       )}
-      
+
       {status === 'sending' && retryCount > 0 && (
         <div className="form-message--info">
           🔄 Reconnexion en cours... (Tentative {retryCount}/3)

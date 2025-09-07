@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { OptimizedAnimateItem } from '@/components/motion/OptimizedAnimateItem';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import type { FormErrors } from '@/hooks/useFormSubmission';
 
 interface BaseFieldProps {
@@ -93,10 +93,9 @@ export default function FormField(props: FormFieldProps) {
   };
 
   return (
-    <OptimizedAnimateItem
-      index={animationIndex}
+    <SimpleAnimation
       type="slide-up"
-      threshold={0.35}
+      delay={animationIndex * 80}
       className={className}
     >
       <div className="flex min-w-0 flex-col">
@@ -104,23 +103,24 @@ export default function FormField(props: FormFieldProps) {
           {label}
           {required && (
             <span className="text-red-600" aria-label="requis">
-              {' '}*
+              {' '}
+              *
             </span>
           )}
         </label>
-        
+
         {renderField()}
-        
+
         <div id={hintId} className="form-hint">
           {hint}
         </div>
-        
+
         {hasError && errorMessage && (
           <div id={errorId} className="form-error" role="alert">
             {errorMessage}
           </div>
         )}
       </div>
-    </OptimizedAnimateItem>
+    </SimpleAnimation>
   );
 }
