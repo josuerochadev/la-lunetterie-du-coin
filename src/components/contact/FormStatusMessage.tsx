@@ -8,7 +8,7 @@ interface FormStatusMessageProps {
   error: string;
   networkError: NetworkError | null;
   retryCount: number;
-  messageRef: React.RefObject<HTMLDivElement>;
+  messageRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export default function FormStatusMessage({
