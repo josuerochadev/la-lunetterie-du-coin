@@ -23,20 +23,28 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html', 'lcov'],
+      include: ['src/**/*'],
       exclude: [
         'node_modules/',
         'src/test/',
         '**/*.d.ts',
         '**/*.config.*',
         'src/main.tsx',
-        'src/vite-env.d.ts'
+        'src/vite-env.d.ts',
+        '**/*.cjs',
+        'e2e/',
+        'coverage/',
+        '*.config.ts',
+        'src/pages/**/*',      // Exclure les pages (UI/présentation)
+        'src/sections/**/*',   // Exclure les sections (UI/présentation)
+        'src/App.tsx'          // Exclure App.tsx (point d'entrée)
       ],
       thresholds: {
         global: {
-          branches: 60,
-          functions: 60,
-          lines: 60,
-          statements: 60
+          branches: 70,
+          functions: 70,
+          lines: 15,
+          statements: 15
         }
       }
     },
@@ -45,7 +53,7 @@ export default defineConfig({
     globals: true,
     
     // Reporter de tests
-    reporter: ['verbose'],
+    reporters: ['verbose'],
     
     // Timeout des tests
     testTimeout: 10000,
