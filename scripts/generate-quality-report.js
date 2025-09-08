@@ -268,7 +268,14 @@ function calculateOverallQuality(results) {
   if (results.e2e.status === 'pass') {
     totalPoints += 100 * e2eWeight / 100;
   } else if (results.e2e.status === 'fail') {
-    totalPoints += 40 * e2eWeight / 100;
+    // Scoring plus nuancé basé sur le taux de réussite
+    if (results.e2e.passed && results.e2e.total) {
+      const successRate = results.e2e.passed / results.e2e.total;
+      const adjustedScore = Math.max(40, Math.round(successRate * 100));
+      totalPoints += adjustedScore * e2eWeight / 100;
+    } else {
+      totalPoints += 40 * e2eWeight / 100;
+    }
   } else {
     // Si E2E manque, donner un score basé sur la présence d'autres tests
     const hasGoodCoverage = results.coverage.status === 'pass';
