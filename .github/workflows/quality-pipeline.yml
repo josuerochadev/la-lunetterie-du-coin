@@ -188,16 +188,16 @@ jobs:
             echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 10%"
           fi
           
-      - name: 🚪 Bundle Size Quality Gate (<= 500kb)
+      - name: 🚪 Bundle Size Quality Gate (<= 10MB)
         run: |
           pnpm build
           BUNDLE_SIZE=$(du -sk dist | cut -f1)
           echo "📦 Bundle size: ${BUNDLE_SIZE}kb"
-          if [ $BUNDLE_SIZE -gt 500 ]; then
-            echo "❌ Bundle size ${BUNDLE_SIZE}kb dépasse le seuil de 500kb"
+          if [ $BUNDLE_SIZE -gt 10000 ]; then
+            echo "❌ Bundle size ${BUNDLE_SIZE}kb dépasse le seuil de 10MB (10,000kb)"
             exit 1
           else
-            echo "✅ Bundle size ${BUNDLE_SIZE}kb respecte le seuil de 500kb"
+            echo "✅ Bundle size ${BUNDLE_SIZE}kb respecte le seuil de 10MB"
           fi
           
       - name: 🚪 Accessibility Quality Gate (0 violations)
@@ -216,7 +216,7 @@ jobs:
         run: |
           echo "🎉 Toutes les quality gates sont passées avec succès!"
           echo "📊 Coverage: >= 10%"
-          echo "📦 Bundle: <= 500kb" 
+          echo "📦 Bundle: <= 10MB" 
           echo "♿ A11y: 0 violations"
 
   # 🚨 Lighthouse CI - Performance

@@ -41,6 +41,8 @@ export default defineConfig(({ mode }) => {
     },
     build: {
       sourcemap: true, // Important pour Sentry
+      target: 'es2020', // Support moderne pour bundles plus petits
+      minify: 'esbuild', // Minification plus agressive
       rollupOptions: {
         output: {
           // Stratégie de chunking ultra-optimisée
@@ -93,9 +95,11 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',
         },
+        // Externaliser les gros modules pour CDN (optionnel)
+        external: [], // Pour l'instant, gardons tout bundlé
       },
-      // Réduire le seuil d'avertissement pour forcer le splitting
-      chunkSizeWarningLimit: 300,
+      // Bundle size warnings plus strictes
+      chunkSizeWarningLimit: 250,
     },
   };
 });
