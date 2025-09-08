@@ -113,9 +113,22 @@ function analyzeCoverage() {
  * Analyse les résultats Lighthouse
  */
 function analyzeLighthouse() {
-  const lighthouseDir = path.join(ROOT_DIR, 'lighthouse-results');
+  // Priorité aux artifacts GitHub Actions puis aux résultats locaux  
+  const possibleDirs = [
+    path.join(ROOT_DIR, 'quality-results', 'lighthouse-reports'),
+    ...(process.env.CI ? [] : [path.join(ROOT_DIR, 'lighthouse-results')])
+  ];
   
-  if (!fs.existsSync(lighthouseDir)) {
+  let lighthouseDir = null;
+  for (const dir of possibleDirs) {
+    if (fs.existsSync(dir)) {
+      console.log(`📁 Lighthouse results found at: ${dir}`);
+      lighthouseDir = dir;
+      break;
+    }
+  }
+  
+  if (!lighthouseDir) {
     return {
       status: 'missing',
       message: 'Aucun résultat Lighthouse trouvé'
@@ -189,16 +202,19 @@ function analyzeLighthouse() {
  */
 function analyzeE2ETests() {
   // Essayer plusieurs endroits pour les résultats E2E
+  // Priorité aux artifacts GitHub Actions puis aux résultats locaux
   const possiblePaths = [
     path.join(ROOT_DIR, 'quality-results', 'e2e-results-chromium', 'results.json'),
     path.join(ROOT_DIR, 'quality-results', 'e2e-results-firefox', 'results.json'),  
     path.join(ROOT_DIR, 'quality-results', 'e2e-results-webkit', 'results.json'),
-    path.join(ROOT_DIR, 'e2e-results', 'results.json')
+    // Fallback vers résultats locaux seulement si pas d'artifacts GitHub Actions
+    ...(process.env.CI ? [] : [path.join(ROOT_DIR, 'e2e-results', 'results.json')])
   ];
   
   let e2eResultsPath = null;
   for (const possiblePath of possiblePaths) {
     if (fs.existsSync(possiblePath)) {
+      console.log(`📁 E2E results found at: ${possiblePath}`);
       e2eResultsPath = possiblePath;
       break;
     }
