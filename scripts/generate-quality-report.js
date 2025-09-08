@@ -152,7 +152,28 @@ function analyzeLighthouse() {
       fs.readFileSync(path.join(lighthouseDir, latestFile), 'utf8')
     );
     
+    // Validation robuste des données Lighthouse
+    if (!lighthouseData.categories) {
+      console.log('⚠️ Lighthouse data missing categories field');
+      return {
+        status: 'error',
+        message: 'Données Lighthouse incomplètes (pas de catégories)'
+      };
+    }
+    
     const categories = lighthouseData.categories;
+    
+    // Vérifier que toutes les catégories nécessaires existent
+    const requiredCategories = ['performance', 'accessibility', 'best-practices', 'seo'];
+    for (const category of requiredCategories) {
+      if (!categories[category] || typeof categories[category].score !== 'number') {
+        console.log(`⚠️ Missing or invalid Lighthouse category: ${category}`);
+        return {
+          status: 'error',
+          message: `Données Lighthouse incomplètes (catégorie ${category} manquante)`
+        };
+      }
+    }
     const scores = [
       {
         metric: 'Performance',
@@ -201,15 +222,42 @@ function analyzeLighthouse() {
  * Analyse les résultats des tests E2E
  */
 function analyzeE2ETests() {
-  // Essayer plusieurs endroits pour les résultats E2E
-  // Priorité aux artifacts GitHub Actions puis aux résultats locaux
-  const possiblePaths = [
-    path.join(ROOT_DIR, 'quality-results', 'e2e-results-chromium', 'results.json'),
-    path.join(ROOT_DIR, 'quality-results', 'e2e-results-firefox', 'results.json'),  
-    path.join(ROOT_DIR, 'quality-results', 'e2e-results-webkit', 'results.json'),
-    // Fallback vers résultats locaux seulement si pas d'artifacts GitHub Actions
-    ...(process.env.CI ? [] : [path.join(ROOT_DIR, 'e2e-results', 'results.json')])
-  ];
+  // Debug: Lister ce qui est disponible dans quality-results
+  const qualityResultsDir = path.join(ROOT_DIR, 'quality-results');
+  console.log(`🔍 Checking for E2E artifacts in: ${qualityResultsDir}`);
+  
+  if (fs.existsSync(qualityResultsDir)) {
+    const contents = fs.readdirSync(qualityResultsDir, { withFileTypes: true });
+    console.log(`📁 Found in quality-results:`, contents.map(d => d.name));
+    
+    // Lister les artifacts E2E disponibles
+    const e2eArtifacts = contents.filter(d => d.name.startsWith('e2e-results'));
+    console.log(`🎭 E2E artifacts found:`, e2eArtifacts.map(d => d.name));
+  } else {
+    console.log(`⚠️ quality-results directory does not exist`);
+  }
+  
+  // Construire les chemins possibles dynamiquement
+  let possiblePaths = [];
+  
+  // En CI: chercher dans les artifacts téléchargés
+  if (fs.existsSync(qualityResultsDir)) {
+    const contents = fs.readdirSync(qualityResultsDir, { withFileTypes: true });
+    const e2eArtifacts = contents.filter(d => d.isDirectory() && d.name.startsWith('e2e-results'));
+    
+    // Ajouter tous les artifacts E2E trouvés
+    for (const artifact of e2eArtifacts) {
+      const resultsPath = path.join(qualityResultsDir, artifact.name, 'results.json');
+      possiblePaths.push(resultsPath);
+    }
+  }
+  
+  // Fallback vers résultats locaux si pas en CI
+  if (!process.env.CI) {
+    possiblePaths.push(path.join(ROOT_DIR, 'e2e-results', 'results.json'));
+  }
+  
+  console.log('🔍 Searching E2E results in paths:', possiblePaths);
   
   let e2eResultsPath = null;
   for (const possiblePath of possiblePaths) {
