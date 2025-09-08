@@ -34,8 +34,7 @@
     "img:optimize": "node scripts/optimize-images.mjs",
     "kill:preview": "pkill -f 'vite preview' || true",
     "quality:report": "node scripts/generate-quality-report.js",
-    "quality:check": "npm run lint && npm run test:coverage && npm run quality:report",
-    "quality:codeclimate": "docker run --interactive --tty --rm --env CODECLIMATE_CODE=\"$PWD\" --volume \"$PWD\":/code --volume /var/run/docker.sock:/var/run/docker.sock --volume /tmp/cc:/tmp/cc codeclimate/codeclimate analyze"
+    "quality:check": "npm run lint && npm run test:coverage && npm run quality:report"
   },
   "dependencies": {
     "@dr.pogodin/react-helmet": "^3.0.2",

@@ -243,6 +243,9 @@ pnpm run a11y
 # Audit performance
 pnpm run lighthouse:mobile
 pnpm run lighthouse:desktop
+
+# Check qualité complète
+pnpm run quality:check
 ```
 
 ## 🔧 Outils de Développement

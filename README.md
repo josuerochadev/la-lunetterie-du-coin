@@ -4,8 +4,6 @@
 
 [![Quality Pipeline](https://github.com/josuerochadev/la-lunetterie-du-coin/actions/workflows/quality-pipeline.yml/badge.svg)](https://github.com/josuerochadev/la-lunetterie-du-coin/actions/workflows/quality-pipeline.yml)
 [![codecov](https://codecov.io/gh/josuerochadev/la-lunetterie-du-coin/branch/main/graph/badge.svg)](https://codecov.io/gh/josuerochadev/la-lunetterie-du-coin)
-[![Maintainability](https://api.codeclimate.com/v1/badges/YOUR_REPO_ID/maintainability)](https://codeclimate.com/github/josuerochadev/la-lunetterie-du-coin/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/YOUR_REPO_ID/test_coverage)](https://codeclimate.com/github/josuerochadev/la-lunetterie-du-coin/test_coverage)
 
 ## ✨ Fonctionnalités
 
