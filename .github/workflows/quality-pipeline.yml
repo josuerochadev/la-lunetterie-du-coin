@@ -94,6 +94,15 @@ jobs:
           file: ./coverage/lcov.info
           flags: unittests
           
+      - name: 🔍 CodeClimate Test Reporter
+        if: always()
+        uses: paambaati/codeclimate-action@v9.0.0
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        with:
+          coverageLocations: |
+            ${{github.workspace}}/coverage/lcov.info:lcov
+          
       - name: 📊 Upload test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -109,7 +118,7 @@ jobs:
     name: 🏗️ Build & Validate
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [lint-and-format, unit-tests]
+    needs: [quality-gates]
     
     steps:
       - name: 📥 Checkout code
@@ -137,6 +146,83 @@ jobs:
           name: dist-files
           path: dist/
           retention-days: 7
+          
+  # 🚪 Quality Gates - Vérifications qualité obligatoires
+  quality-gates:
+    name: 🚪 Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [lint-and-format, unit-tests]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📊 Generate test coverage
+        run: pnpm test:coverage
+        
+      - name: 🚪 Coverage Quality Gate (>= 85%)
+        run: |
+          COVERAGE=$(node -p "
+            const lcov = require('fs').readFileSync('./coverage/lcov.info', 'utf8');
+            const lines = lcov.match(/LF:(\d+)/g);
+            const found = lcov.match(/LH:(\d+)/g);
+            if (!lines || !found) process.exit(1);
+            const totalLines = lines.reduce((sum, line) => sum + parseInt(line.split(':')[1]), 0);
+            const hitLines = found.reduce((sum, line) => sum + parseInt(line.split(':')[1]), 0);
+            Math.round((hitLines / totalLines) * 100);
+          ")
+          echo "📊 Coverage: ${COVERAGE}%"
+          if [ $COVERAGE -lt 85 ]; then
+            echo "❌ Coverage ${COVERAGE}% est inférieur au seuil requis de 85%"
+            exit 1
+          else
+            echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 85%"
+          fi
+          
+      - name: 🚪 Bundle Size Quality Gate (<= 500kb)
+        run: |
+          pnpm build
+          BUNDLE_SIZE=$(du -sk dist | cut -f1)
+          echo "📦 Bundle size: ${BUNDLE_SIZE}kb"
+          if [ $BUNDLE_SIZE -gt 500 ]; then
+            echo "❌ Bundle size ${BUNDLE_SIZE}kb dépasse le seuil de 500kb"
+            exit 1
+          else
+            echo "✅ Bundle size ${BUNDLE_SIZE}kb respecte le seuil de 500kb"
+          fi
+          
+      - name: 🚪 Accessibility Quality Gate (0 violations)
+        run: |
+          pnpm a11y 2>&1 | tee a11y-output.txt
+          if grep -q "violations found!" a11y-output.txt; then
+            VIOLATIONS=$(grep "violations found!" a11y-output.txt | grep -o '[0-9]*' | head -1)
+            if [ "$VIOLATIONS" != "0" ]; then
+              echo "❌ $VIOLATIONS violations d'accessibilité trouvées"
+              exit 1
+            fi
+          fi
+          echo "✅ Aucune violation d'accessibilité détectée"
+          
+      - name: ✅ Quality Gates Passed
+        run: |
+          echo "🎉 Toutes les quality gates sont passées avec succès!"
+          echo "📊 Coverage: >= 85%"
+          echo "📦 Bundle: <= 500kb" 
+          echo "♿ A11y: 0 violations"
 
   # 🚨 Lighthouse CI - Performance
   lighthouse-ci:

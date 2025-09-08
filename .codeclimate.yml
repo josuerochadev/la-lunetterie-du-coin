@@ -1,0 +1,81 @@
+version: "2"
+
+# CodeClimate configuration for La Lunetterie du Coin
+# https://docs.codeclimate.com/docs/configuring-your-repository
+
+checks:
+  argument-count:
+    config:
+      threshold: 4
+  complex-logic:
+    config:
+      threshold: 4
+  file-lines:
+    config:
+      threshold: 300
+  method-complexity:
+    config:
+      threshold: 5
+  method-count:
+    config:
+      threshold: 20
+  method-lines:
+    config:
+      threshold: 25
+  nested-control-flow:
+    config:
+      threshold: 4
+  return-statements:
+    config:
+      threshold: 4
+  similar-code:
+    config:
+      threshold: 60 # Similar code blocks in chars
+  identical-code:
+    config:
+      threshold: 40 # Identical code blocks in chars
+
+plugins:
+  eslint:
+    enabled: true
+    config:
+      config: eslint.config.js
+  fixme:
+    enabled: true
+    config:
+      strings:
+      - FIXME
+      - BUG
+      - TODO
+      - HACK
+  nodesecurity:
+    enabled: true
+
+# Exclude patterns
+exclude_patterns:
+- "**/node_modules/"
+- "**/dist/"
+- "**/build/"
+- "**/coverage/"
+- "**/*.test.*"
+- "**/*.spec.*" 
+- "**/test/"
+- "**/tests/"
+- "**/__tests__/"
+- "**/e2e/"
+- "**/*.config.*"
+- "**/*.d.ts"
+- "**/vite.config.ts"
+- "**/playwright.config.ts"
+- "**/tailwind.config.js"
+- "**/postcss.config.js"
+- "**/eslint.config.js"
+- "**/.github/"
+- "**/docs/"
+- "**/scripts/"
+
+# Prepare commands to setup the environment
+prepare:
+  fetch:
+  - url: "https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore"
+    path: ".gitignore"
