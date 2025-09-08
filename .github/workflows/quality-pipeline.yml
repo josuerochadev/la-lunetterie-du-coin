@@ -481,16 +481,19 @@ jobs:
         with:
           run_install: false
           
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 🧪 Generate coverage for quality report
+        run: pnpm test:coverage
+          
       - name: 📥 Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: quality-results/
           
       - name: 📊 Generate comprehensive quality report
-        run: |
-          # Installer les dépendances pour le script de génération
-          pnpm install --frozen-lockfile
-          
+        run: |          
           # Générer le rapport de qualité complet
           pnpm quality:report || true
           
