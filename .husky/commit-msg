@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+# . "$(dirname "$0")/_/husky.sh" # DEPRECATED in Husky v10
+
+echo "🔍 Validating commit message format..."
+pnpm exec commitlint --edit $1
