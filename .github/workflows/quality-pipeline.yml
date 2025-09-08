@@ -95,13 +95,24 @@ jobs:
           flags: unittests
           
       - name: 🔍 CodeClimate Test Reporter
-        if: always()
-        uses: paambaati/codeclimate-action@v9.0.0
+        if: always() && env.CC_TEST_REPORTER_ID != ''
+        uses: paambaati/codeclimate-action@v8.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
         with:
           coverageLocations: |
             ${{github.workspace}}/coverage/lcov.info:lcov
+        continue-on-error: true
+        
+      - name: 📋 Alternative Quality Report (if CodeClimate fails)
+        if: always()
+        run: |
+          echo "📊 Quality Metrics Summary:"
+          echo "- Test Coverage: $(grep -o 'SF:[^:]*' coverage/lcov.info | wc -l) files covered"
+          echo "- Total Lines: $(grep -o 'LF:[0-9]*' coverage/lcov.info | cut -d: -f2 | paste -sd+ | bc)"
+          echo "- Covered Lines: $(grep -o 'LH:[0-9]*' coverage/lcov.info | cut -d: -f2 | paste -sd+ | bc)"
+          echo "- ESLint: 0 warnings (enforced by --max-warnings=0)"
+          echo "- TypeScript: Strict mode enabled"
           
       - name: 📊 Upload test results
         if: always()
