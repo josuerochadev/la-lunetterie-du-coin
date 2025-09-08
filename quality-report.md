@@ -1,11 +1,11 @@
 # 📊 Rapport de Qualité - La Lunetterie du Coin
 
-![Quality Score](https://img.shields.io/badge/Quality-76%25-yellow)
-![Status](https://img.shields.io/badge/Status-Moyen-yellow)
+![Quality Score](https://img.shields.io/badge/Quality-68%25-orange)
+![Status](https://img.shields.io/badge/Status-Faible-orange)
 
-_Généré le 08/09/2025 18:51:24_
+_Généré le 08/09/2025 18:57:14_
 
-## 🎯 Score Global: 76/100
+## 🎯 Score Global: 68/100
 
 ---
 
@@ -25,8 +25,13 @@ Aucun résultat Lighthouse trouvé
 
 ## 🎭 Tests E2E
 
-**Status:** ⚠️ Manquant
-Aucun résultat E2E trouvé
+**Status:** ❌ Échec
+59/61 tests E2E réussis
+
+- **Total**: 61 tests
+- **Réussis**: 59
+- **Échecs**: 2
+- **Instables**: 0
 
 ---
 
@@ -44,6 +49,12 @@ Aucun résultat E2E trouvé
 ---
 
 ## 🔧 Actions Recommandées
+
+### Priorité Haute
+
+1. Réviser les tests échoués
+2. Améliorer la couverture de code
+3. Optimiser les performances critiques
 
 ### Priorité Moyenne
 

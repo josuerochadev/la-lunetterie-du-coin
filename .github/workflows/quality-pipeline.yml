@@ -14,6 +14,8 @@ permissions:
   pull-requests: write
   pages: write
   id-token: write
+  security-events: write
+  actions: read
 
 # Variables d'environnement globales
 env:
@@ -245,7 +247,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: unit-test-results
-          path: coverage/
+          path: ./
         
       - name: 🚪 Coverage Quality Gate (>= 10%)
         run: |
