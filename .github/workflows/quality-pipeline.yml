@@ -150,12 +150,12 @@ jobs:
           path: dist/
           retention-days: 7
           
-  # 🚪 Quality Gates - Vérifications qualité obligatoires
-  quality-gates:
-    name: 🚪 Quality Gates
+  # 🔒 Security Scanning
+  security-scan:
+    name: 🔒 Security Scan
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [lint-and-format, unit-tests]
+    timeout-minutes: 15
+    needs: [lint-and-format]
     
     steps:
       - name: 📥 Checkout code
@@ -174,8 +174,65 @@ jobs:
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
-      - name: 📊 Generate test coverage
-        run: pnpm test:coverage
+      - name: 🔍 Run dependency audit
+        run: |
+          echo "🔍 Scanning dependencies for vulnerabilities..."
+          pnpm audit --audit-level moderate || {
+            echo "⚠️ Security vulnerabilities found. Run 'pnpm audit' locally to review."
+            echo "⚠️ Consider running 'pnpm audit --fix' to auto-fix issues."
+            exit 1
+          }
+          
+      - name: 🔒 Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: typescript, javascript
+          queries: security-extended,security-and-quality
+          
+      - name: 🔍 Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:typescript"
+          
+      - name: 📊 Upload security scan results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-results
+          path: |
+            security-audit.json
+            codeql-results/
+          retention-days: 30
+
+  # 🚪 Quality Gates - Vérifications qualité obligatoires
+  quality-gates:
+    name: 🚪 Quality Gates
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: [lint-and-format, unit-tests, security-scan]
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+          
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+        
+      - name: 📥 Download coverage artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: unit-test-results
+          path: coverage/
         
       - name: 🚪 Coverage Quality Gate (>= 10%)
         run: |

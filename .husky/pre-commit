@@ -1,6 +1,18 @@
 #!/usr/bin/env sh
-. "$(dirname "$0")/_/husky.sh"
+# . "$(dirname "$0")/_/husky.sh" # DEPRECATED in Husky v10
 
-npm run test:run
-npm run lint
-npm run format
+echo "🔍 Running pre-commit checks..."
+
+# Type checking (fast)
+echo "📝 Checking TypeScript types..."
+pnpm run typecheck || exit 1
+
+# Lint and format staged files only (much faster)
+echo "🧹 Linting and formatting staged files..."
+pnpm exec lint-staged || exit 1
+
+# Run tests related to changed files  
+echo "🧪 Running tests..."
+pnpm run test:run || exit 1
+
+echo "✅ Pre-commit checks passed!"
