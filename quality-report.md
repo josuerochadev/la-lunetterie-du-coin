@@ -3,7 +3,7 @@
 ![Quality Score](https://img.shields.io/badge/Quality-79%25-yellow)
 ![Status](https://img.shields.io/badge/Status-Moyen-yellow)
 
-_Généré le 08/09/2025 19:10:51_
+_Généré le 08/09/2025 21:59:18_
 
 ## 🎯 Score Global: 79/100
 
@@ -18,8 +18,13 @@ Couverture: 10% (basée sur lcov.info)
 
 ## 🚨 Performance Lighthouse
 
-**Status:** ⚠️ Manquant
-Aucun résultat Lighthouse trouvé
+**Status:** ❌ Échec
+Score Lighthouse moyen: 75/100
+
+- **Performance**: 0/100 (seuil: 75) ❌
+- **Accessibility**: 100/100 (seuil: 90) ✅
+- **Best Practices**: 100/100 (seuil: 85) ✅
+- **SEO**: 100/100 (seuil: 85) ✅
 
 ---
 

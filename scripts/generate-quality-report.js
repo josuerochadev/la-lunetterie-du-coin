@@ -136,8 +136,24 @@ function analyzeLighthouse() {
   }
 
   try {
-    const files = fs.readdirSync(lighthouseDir);
-    const jsonFiles = files.filter(f => f.endsWith('.json'));
+    // Recherche récursive des fichiers JSON Lighthouse
+    let jsonFiles = [];
+    
+    function findJsonFiles(dir) {
+      const items = fs.readdirSync(dir, { withFileTypes: true });
+      for (const item of items) {
+        const fullPath = path.join(dir, item.name);
+        if (item.isDirectory()) {
+          // Chercher récursivement dans les sous-dossiers (desktop, mobile, etc.)
+          findJsonFiles(fullPath);
+        } else if (item.name.endsWith('.json') && item.name.includes('report')) {
+          // Filtrer pour ne prendre que les vrais rapports Lighthouse
+          jsonFiles.push(fullPath);
+        }
+      }
+    }
+    
+    findJsonFiles(lighthouseDir);
     
     if (jsonFiles.length === 0) {
       return {
@@ -146,11 +162,10 @@ function analyzeLighthouse() {
       };
     }
 
-    // Prendre le fichier le plus récent
+    // Prendre le fichier le plus récent (par nom de fichier qui contient timestamp)
     const latestFile = jsonFiles.sort().pop();
-    const lighthouseData = JSON.parse(
-      fs.readFileSync(path.join(lighthouseDir, latestFile), 'utf8')
-    );
+    console.log(`📊 Using Lighthouse report: ${latestFile}`);
+    const lighthouseData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
     
     // Validation robuste des données Lighthouse
     if (!lighthouseData.categories) {
@@ -166,12 +181,17 @@ function analyzeLighthouse() {
     // Vérifier que toutes les catégories nécessaires existent
     const requiredCategories = ['performance', 'accessibility', 'best-practices', 'seo'];
     for (const category of requiredCategories) {
-      if (!categories[category] || typeof categories[category].score !== 'number') {
-        console.log(`⚠️ Missing or invalid Lighthouse category: ${category}`);
+      if (!categories[category]) {
+        console.log(`⚠️ Missing Lighthouse category: ${category}`);
         return {
           status: 'error',
           message: `Données Lighthouse incomplètes (catégorie ${category} manquante)`
         };
+      }
+      // Gérer les scores null (problème connu de Lighthouse)
+      if (categories[category].score === null || categories[category].score === undefined) {
+        console.log(`⚠️ Lighthouse category ${category} has null score - using fallback`);
+        categories[category].score = 0; // Score de secours pour éviter NaN
       }
     }
     const scores = [
