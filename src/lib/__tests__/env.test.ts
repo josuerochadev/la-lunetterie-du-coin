@@ -5,15 +5,14 @@ const mockConsoleLog = vi.fn();
 const mockConsoleWarn = vi.fn();
 const mockConsoleError = vi.fn();
 
-vi.stubGlobal('console', {
-  log: mockConsoleLog,
-  warn: mockConsoleWarn,
-  error: mockConsoleError,
-});
-
 describe('env', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Setup console mocks
+    vi.spyOn(console, 'log').mockImplementation(mockConsoleLog);
+    vi.spyOn(console, 'warn').mockImplementation(mockConsoleWarn);
+    vi.spyOn(console, 'error').mockImplementation(mockConsoleError);
   });
 
   afterEach(() => {
