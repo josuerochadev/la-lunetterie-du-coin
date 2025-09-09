@@ -57,21 +57,30 @@ describe('usePrefersReducedMotion', () => {
     });
 
     it('should handle server-side rendering gracefully', () => {
-      // Use vi.stubGlobal to mock window as undefined
-      vi.stubGlobal('window', undefined);
+      // Instead of removing window entirely (which breaks React), 
+      // just remove matchMedia to simulate SSR environment
+      const originalMatchMedia = window.matchMedia;
+      delete (window as any).matchMedia;
 
       const { result } = renderHook(() => usePrefersReducedMotion());
 
       expect(result.current).toBe(false);
+      
+      // Restore matchMedia
+      window.matchMedia = originalMatchMedia;
     });
 
     it('should handle browsers without matchMedia support', () => {
-      // Mock window without matchMedia
-      vi.stubGlobal('window', { ...window, matchMedia: undefined });
+      // Save and remove matchMedia temporarily
+      const originalMatchMedia = window.matchMedia;
+      delete (window as any).matchMedia;
 
       const { result } = renderHook(() => usePrefersReducedMotion());
 
       expect(result.current).toBe(false);
+      
+      // Restore matchMedia
+      window.matchMedia = originalMatchMedia;
     });
   });
 

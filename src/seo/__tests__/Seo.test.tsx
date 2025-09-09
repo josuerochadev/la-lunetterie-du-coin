@@ -1,25 +1,25 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 import { Seo } from '../Seo';
 
 // Mock Helmet
-const mockHelmet = vi.fn(({ children }) => <div data-testid="helmet">{children}</div>);
 vi.mock('@dr.pogodin/react-helmet', () => ({
-  Helmet: mockHelmet,
+  Helmet: vi.fn(({ children }) => <div data-testid="helmet">{children}</div>),
 }));
 
+const mockHelmet = vi.mocked(Helmet);
+
 // Mock SEO config
-const mockSeoConfig = {
+vi.mock('@/config/seo', () => ({
   DEFAULT_DESCRIPTION: 'Test default description',
   DEFAULT_OG_IMAGE: 'https://example.com/og-default.jpg',
   DEFAULT_TITLE: 'Test Default Title',
   OG_LOCALE: 'fr_FR',
   SITE_URL: 'https://example.com',
   TITLE_TEMPLATE: '%s · Test Brand',
-};
-
-vi.mock('@/config/seo', () => mockSeoConfig);
+}));
 
 describe('Seo', () => {
   beforeEach(() => {
@@ -52,7 +52,7 @@ describe('Seo', () => {
       const helmetCall = mockHelmet.mock.calls[0][0];
       const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
 
-      expect(titleElement?.props?.children).toBe(mockSeoConfig.DEFAULT_TITLE);
+      expect(titleElement?.props?.children).toBe("Test Default Title");
     });
 
     it('should use template when custom title provided', () => {
@@ -65,12 +65,12 @@ describe('Seo', () => {
     });
 
     it('should not use template when title matches default', () => {
-      render(<Seo title={mockSeoConfig.DEFAULT_TITLE} />);
+      render(<Seo title={"Test Default Title"} />);
 
       const helmetCall = mockHelmet.mock.calls[0][0];
       const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
 
-      expect(titleElement?.props?.children).toBe(mockSeoConfig.DEFAULT_TITLE);
+      expect(titleElement?.props?.children).toBe("Test Default Title");
     });
 
     it('should handle empty title', () => {
@@ -79,7 +79,7 @@ describe('Seo', () => {
       const helmetCall = mockHelmet.mock.calls[0][0];
       const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
 
-      expect(titleElement?.props?.children).toBe(mockSeoConfig.DEFAULT_TITLE);
+      expect(titleElement?.props?.children).toBe("Test Default Title");
     });
   });
 
@@ -92,7 +92,7 @@ describe('Seo', () => {
 
       const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
 
-      expect(descriptionMeta?.props?.content).toBe(mockSeoConfig.DEFAULT_DESCRIPTION);
+      expect(descriptionMeta?.props?.content).toBe("Test default description");
     });
 
     it('should use custom description when provided', () => {
@@ -128,7 +128,7 @@ describe('Seo', () => {
 
       const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
 
-      expect(canonicalLink?.props?.href).toBe(mockSeoConfig.SITE_URL);
+      expect(canonicalLink?.props?.href).toBe("https://example.com");
     });
 
     it('should construct proper canonical URL with path', () => {
@@ -144,8 +144,12 @@ describe('Seo', () => {
 
     it('should handle trailing slash in site URL', () => {
       const configWithTrailingSlash = {
-        ...mockSeoConfig,
+        DEFAULT_DESCRIPTION: "Test default description", 
+        DEFAULT_OG_IMAGE: "https://example.com/og-default.jpg", 
+        DEFAULT_TITLE: "Test Default Title", 
+        OG_LOCALE: "fr_FR", 
         SITE_URL: 'https://example.com/',
+        TITLE_TEMPLATE: "%s · Test Brand",
       };
 
       vi.mocked(vi.importActual('@/config/seo')).mockReturnValue(configWithTrailingSlash);
@@ -253,7 +257,7 @@ describe('Seo', () => {
 
       const ogTitle = metaElements.find((meta: any) => meta.props.property === 'og:title');
 
-      expect(ogTitle?.props?.content).toBe(mockSeoConfig.DEFAULT_TITLE);
+      expect(ogTitle?.props?.content).toBe("Test Default Title");
     });
 
     it('should use custom title in OG tags', () => {
@@ -311,7 +315,7 @@ describe('Seo', () => {
       const helmetCall = mockHelmet.mock.calls[0][0];
       const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
 
-      expect(titleElement?.props?.children).toBe(mockSeoConfig.DEFAULT_TITLE);
+      expect(titleElement?.props?.children).toBe("Test Default Title");
     });
 
     it('should handle null values gracefully', () => {
