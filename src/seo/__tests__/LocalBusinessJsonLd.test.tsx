@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { Helmet } from '@dr.pogodin/react-helmet';
 
 import {
   LocalBusinessJsonLd,
@@ -12,19 +13,18 @@ import {
 } from '../LocalBusinessJsonLd';
 
 // Mock Helmet
-const mockHelmet = vi.fn(({ children }) => <div data-testid="helmet">{children}</div>);
 vi.mock('@dr.pogodin/react-helmet', () => ({
-  Helmet: mockHelmet,
+  Helmet: vi.fn(({ children }) => <div data-testid="helmet">{children}</div>),
 }));
 
+const mockHelmet = vi.mocked(Helmet);
+
 // Mock SEO config
-const mockSeoConfig = {
+vi.mock('@/config/seo', () => ({
   SITE_URL: 'https://example.com',
   DEFAULT_OG_IMAGE: 'https://example.com/og-default.jpg',
   BRAND: 'Test Brand',
-};
-
-vi.mock('@/config/seo', () => mockSeoConfig);
+}));
 
 describe('LocalBusinessJsonLd', () => {
   beforeEach(() => {
@@ -102,10 +102,10 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should include basic business information', () => {
       expect(parsedJsonLd.name).toBe(COMPANY_NAME);
-      expect(parsedJsonLd.url).toBe(mockSeoConfig.SITE_URL);
-      expect(parsedJsonLd.image).toBe(mockSeoConfig.DEFAULT_OG_IMAGE);
+      expect(parsedJsonLd.url).toBe('https://example.com');
+      expect(parsedJsonLd.image).toBe('https://example.com/og-default.jpg');
       expect(parsedJsonLd.legalName).toBe(`${COMPANY_NAME} ${COMPANY_LEGAL_FORM}`);
-      expect(parsedJsonLd.brand).toBe(mockSeoConfig.BRAND);
+      expect(parsedJsonLd.brand).toBe('Test Brand');
     });
 
     it('should include telephone information', () => {
