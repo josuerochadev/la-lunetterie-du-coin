@@ -243,7 +243,9 @@ describe('Layout', () => {
         </Layout>,
       );
 
-      const rootContainer = document.querySelector('div');
+      // The root container is the first div with the layout classes
+      const rootContainer = document.querySelector('.relative.min-h-screen.text-primary');
+      expect(rootContainer).toBeInTheDocument();
       expect(rootContainer).toHaveClass('relative', 'min-h-screen', 'text-primary');
     });
 

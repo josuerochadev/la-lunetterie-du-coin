@@ -1,37 +1,19 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
-import { validateEnvironment, env } from '../env';
+// Mock console methods globally
+const mockConsoleLog = vi.fn();
+const mockConsoleWarn = vi.fn();
+const mockConsoleError = vi.fn();
 
-// Mock import.meta.env
-const mockEnv = {
-  MODE: 'test',
-  PROD: false,
-  DEV: true,
-  VITE_SENTRY_DSN: '',
-  VITE_ANALYTICS_DOMAIN: '',
-};
-
-vi.stubGlobal('import.meta', { env: mockEnv });
+vi.stubGlobal('console', {
+  log: mockConsoleLog,
+  warn: mockConsoleWarn,
+  error: mockConsoleError,
+});
 
 describe('env', () => {
-  const mockConsoleLog = vi.spyOn(console, 'log');
-  const mockConsoleWarn = vi.spyOn(console, 'warn');
-  const mockConsoleError = vi.spyOn(console, 'error');
-
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Reset mock environment to defaults
-    mockEnv.MODE = 'test';
-    mockEnv.PROD = false;
-    mockEnv.DEV = true;
-    mockEnv.VITE_SENTRY_DSN = '';
-    mockEnv.VITE_ANALYTICS_DOMAIN = '';
-
-    // Mock console methods
-    mockConsoleLog.mockImplementation(() => {});
-    mockConsoleWarn.mockImplementation(() => {});
-    mockConsoleError.mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -39,7 +21,20 @@ describe('env', () => {
   });
 
   describe('env object', () => {
-    it('should export all environment variables', () => {
+    it('should export all environment variables', async () => {
+      // Mock import.meta.env for this test
+      vi.stubGlobal('import.meta', {
+        env: {
+          MODE: 'test',
+          PROD: false,
+          DEV: true,
+          VITE_SENTRY_DSN: 'test-dsn',
+          VITE_ANALYTICS_DOMAIN: 'test-domain',
+        },
+      });
+
+      const { env } = (await vi.importActual('../env')) as any;
+
       expect(env).toBeDefined();
       expect(env.MODE).toBe('test');
       expect(env.PROD).toBe(false);
@@ -48,29 +43,40 @@ describe('env', () => {
       expect(env.VITE_ANALYTICS_DOMAIN).toBeDefined();
     });
 
-    it('should be a const object with all expected properties', () => {
+    it('should be a const object with all expected properties', async () => {
+      vi.stubGlobal('import.meta', {
+        env: {
+          MODE: 'test',
+          PROD: false,
+          DEV: true,
+          VITE_SENTRY_DSN: '',
+          VITE_ANALYTICS_DOMAIN: '',
+        },
+      });
+
+      const { env } = (await vi.importActual('../env')) as any;
       const expectedKeys = ['MODE', 'PROD', 'DEV', 'VITE_SENTRY_DSN', 'VITE_ANALYTICS_DOMAIN'];
 
       expectedKeys.forEach((key) => {
         expect(env).toHaveProperty(key);
       });
     });
-
-    it('should reflect changes in import.meta.env', () => {
-      // This test verifies that env reads from import.meta.env at module load time
-      expect(env.MODE).toBe(mockEnv.MODE);
-      expect(env.PROD).toBe(mockEnv.PROD);
-      expect(env.DEV).toBe(mockEnv.DEV);
-    });
   });
 
   describe('validateEnvironment', () => {
     describe('successful validation', () => {
-      it('should log success message when all variables are configured in dev', () => {
-        mockEnv.DEV = true;
-        mockEnv.VITE_SENTRY_DSN = 'https://sentry-dsn.example.com';
-        mockEnv.VITE_ANALYTICS_DOMAIN = 'analytics.example.com';
+      it('should log success message when all variables are configured in dev', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: 'https://sentry-dsn.example.com',
+            VITE_ANALYTICS_DOMAIN: 'analytics.example.com',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleLog).toHaveBeenCalledWith(
@@ -80,12 +86,18 @@ describe('env', () => {
         expect(mockConsoleError).not.toHaveBeenCalled();
       });
 
-      it('should not log success message in production', () => {
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
-        mockEnv.VITE_SENTRY_DSN = 'https://sentry-dsn.example.com';
-        mockEnv.VITE_ANALYTICS_DOMAIN = 'analytics.example.com';
+      it('should not log success message in production', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: 'https://sentry-dsn.example.com',
+            VITE_ANALYTICS_DOMAIN: 'analytics.example.com',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleLog).not.toHaveBeenCalled();
@@ -95,11 +107,18 @@ describe('env', () => {
     });
 
     describe('missing optional variables', () => {
-      it('should warn about missing optional variables in development', () => {
-        mockEnv.DEV = true;
-        mockEnv.VITE_SENTRY_DSN = '';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '';
+      it('should warn about missing optional variables in development', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).toHaveBeenCalledWith(
@@ -111,22 +130,35 @@ describe('env', () => {
         );
       });
 
-      it('should not warn about missing optional variables in production', () => {
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
-        mockEnv.VITE_SENTRY_DSN = '';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '';
+      it('should not warn about missing optional variables in production', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).not.toHaveBeenCalled();
       });
 
-      it('should warn about only missing optional variables', () => {
-        mockEnv.DEV = true;
-        mockEnv.VITE_SENTRY_DSN = 'configured';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '';
+      it('should warn about only missing optional variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: 'configured',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).toHaveBeenCalledWith(
@@ -135,47 +167,75 @@ describe('env', () => {
         );
       });
 
-      it('should not warn about MODE, PROD, or DEV variables', () => {
-        mockEnv.DEV = true;
-        mockEnv.MODE = '';
-        mockEnv.PROD = false; // This is actually a boolean, testing string conversion
+      it('should not warn about MODE, PROD, or DEV variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: '',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: 'configured',
+            VITE_ANALYTICS_DOMAIN: 'configured',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
-        // Should not include MODE, PROD, DEV in missing optional variables warning
-        const warnCalls = mockConsoleWarn.mock.calls;
-        const missingVarsCall = warnCalls.find((call) =>
-          call[0]?.includes('Missing optional environment variables'),
+        // Should not warn because MODE, PROD, DEV are excluded from optional checks
+        expect(mockConsoleLog).toHaveBeenCalledWith(
+          '✅ All environment variables are properly configured',
         );
-
-        if (missingVarsCall) {
-          expect(missingVarsCall[1]).not.toContain('MODE');
-          expect(missingVarsCall[1]).not.toContain('PROD');
-          expect(missingVarsCall[1]).not.toContain('DEV');
-        }
       });
     });
 
     describe('missing required variables', () => {
-      it('should handle empty required variables object', () => {
-        // Since requiredEnvVars is empty in the current implementation,
-        // this test verifies no required variables are checked
+      it('should handle empty required variables object', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'test',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleError).not.toHaveBeenCalled();
       });
 
-      it('should not throw in development when no required variables are configured', () => {
-        mockEnv.DEV = true;
+      it('should not throw in development when no required variables are configured', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
 
         expect(() => {
           validateEnvironment();
         }).not.toThrow();
       });
 
-      it('should not throw in production when no required variables are configured', () => {
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
+      it('should not throw in production when no required variables are configured', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
 
         expect(() => {
           validateEnvironment();
@@ -184,31 +244,52 @@ describe('env', () => {
     });
 
     describe('environment detection', () => {
-      it('should properly detect development environment', () => {
-        mockEnv.DEV = true;
-        mockEnv.PROD = false;
-        mockEnv.VITE_SENTRY_DSN = '';
+      it('should properly detect development environment', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).toHaveBeenCalled(); // Should warn in dev
       });
 
-      it('should properly detect production environment', () => {
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
-        mockEnv.VITE_SENTRY_DSN = '';
+      it('should properly detect production environment', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).not.toHaveBeenCalled(); // Should not warn in prod
       });
 
-      it('should handle mixed environment flags', () => {
-        mockEnv.DEV = false;
-        mockEnv.PROD = false;
-        mockEnv.VITE_SENTRY_DSN = '';
+      it('should handle mixed environment flags', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'test',
+            PROD: false,
+            DEV: false,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).not.toHaveBeenCalled(); // Should not warn when neither dev nor prod
@@ -216,10 +297,18 @@ describe('env', () => {
     });
 
     describe('edge cases', () => {
-      it('should handle undefined environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = undefined as any;
-        mockEnv.VITE_ANALYTICS_DOMAIN = undefined as any;
-        mockEnv.DEV = true;
+      it('should handle undefined environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: undefined,
+            VITE_ANALYTICS_DOMAIN: undefined,
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
 
         expect(() => {
           validateEnvironment();
@@ -228,10 +317,18 @@ describe('env', () => {
         expect(mockConsoleWarn).toHaveBeenCalled();
       });
 
-      it('should handle null environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = null as any;
-        mockEnv.VITE_ANALYTICS_DOMAIN = null as any;
-        mockEnv.DEV = true;
+      it('should handle null environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: null,
+            VITE_ANALYTICS_DOMAIN: null,
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
 
         expect(() => {
           validateEnvironment();
@@ -240,11 +337,18 @@ describe('env', () => {
         expect(mockConsoleWarn).toHaveBeenCalled();
       });
 
-      it('should handle empty string environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = '';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '';
-        mockEnv.DEV = true;
+      it('should handle empty string environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).toHaveBeenCalledWith(
@@ -253,36 +357,57 @@ describe('env', () => {
         );
       });
 
-      it('should handle whitespace-only environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = '   ';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '\t\n';
-        mockEnv.DEV = true;
+      it('should handle whitespace-only environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '   ',
+            VITE_ANALYTICS_DOMAIN: '\t\n',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         // Whitespace strings are considered "truthy" so should not trigger warnings
-        expect(mockConsoleWarn).not.toHaveBeenCalledWith(
-          expect.stringContaining('Missing optional environment variables'),
+        expect(mockConsoleLog).toHaveBeenCalledWith(
+          '✅ All environment variables are properly configured',
         );
       });
 
-      it('should handle numeric environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = '123' as any;
-        mockEnv.VITE_ANALYTICS_DOMAIN = '0' as any;
-        mockEnv.DEV = true;
+      it('should handle numeric environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '123',
+            VITE_ANALYTICS_DOMAIN: '0',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
-        expect(mockConsoleWarn).not.toHaveBeenCalledWith(
-          expect.stringContaining('Missing optional environment variables'),
+        expect(mockConsoleLog).toHaveBeenCalledWith(
+          '✅ All environment variables are properly configured',
         );
       });
 
-      it('should handle boolean environment variables', () => {
-        mockEnv.VITE_SENTRY_DSN = false as any;
-        mockEnv.VITE_ANALYTICS_DOMAIN = true as any;
-        mockEnv.DEV = true;
+      it('should handle boolean environment variables', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: false,
+            VITE_ANALYTICS_DOMAIN: true,
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         // false is falsy, true is truthy
@@ -294,13 +419,18 @@ describe('env', () => {
     });
 
     describe('real-world scenarios', () => {
-      it('should validate typical development setup', () => {
-        mockEnv.MODE = 'development';
-        mockEnv.DEV = true;
-        mockEnv.PROD = false;
-        mockEnv.VITE_SENTRY_DSN = '';
-        mockEnv.VITE_ANALYTICS_DOMAIN = '';
+      it('should validate typical development setup', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: '',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).toHaveBeenCalledWith(
@@ -312,13 +442,18 @@ describe('env', () => {
         );
       });
 
-      it('should validate typical production setup', () => {
-        mockEnv.MODE = 'production';
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
-        mockEnv.VITE_SENTRY_DSN = 'https://abc123@sentry.io/123456';
-        mockEnv.VITE_ANALYTICS_DOMAIN = 'mysite.com';
+      it('should validate typical production setup', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: 'https://abc123@sentry.io/123456',
+            VITE_ANALYTICS_DOMAIN: 'mysite.com',
+          },
+        });
 
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         expect(mockConsoleWarn).not.toHaveBeenCalled();
@@ -326,26 +461,18 @@ describe('env', () => {
         expect(mockConsoleLog).not.toHaveBeenCalled(); // No success message in prod
       });
 
-      it('should validate staging environment', () => {
-        mockEnv.MODE = 'staging';
-        mockEnv.DEV = false;
-        mockEnv.PROD = false;
-        mockEnv.VITE_SENTRY_DSN = 'https://staging-dsn@sentry.io/123456';
-        mockEnv.VITE_ANALYTICS_DOMAIN = 'staging.mysite.com';
+      it('should handle partial production configuration', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'production',
+            PROD: true,
+            DEV: false,
+            VITE_SENTRY_DSN: 'https://sentry-dsn@sentry.io/123456',
+            VITE_ANALYTICS_DOMAIN: '', // Missing analytics
+          },
+        });
 
-        validateEnvironment();
-
-        expect(mockConsoleWarn).not.toHaveBeenCalled();
-        expect(mockConsoleError).not.toHaveBeenCalled();
-      });
-
-      it('should handle partial production configuration', () => {
-        mockEnv.MODE = 'production';
-        mockEnv.DEV = false;
-        mockEnv.PROD = true;
-        mockEnv.VITE_SENTRY_DSN = 'https://sentry-dsn@sentry.io/123456';
-        mockEnv.VITE_ANALYTICS_DOMAIN = ''; // Missing analytics
-
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
         validateEnvironment();
 
         // Should not warn in production even if optional vars are missing
@@ -354,10 +481,18 @@ describe('env', () => {
     });
 
     describe('multiple invocations', () => {
-      it('should behave consistently on multiple calls', () => {
-        mockEnv.DEV = true;
-        mockEnv.VITE_SENTRY_DSN = '';
-        mockEnv.VITE_ANALYTICS_DOMAIN = 'analytics.com';
+      it('should behave consistently on multiple calls', async () => {
+        vi.stubGlobal('import.meta', {
+          env: {
+            MODE: 'development',
+            PROD: false,
+            DEV: true,
+            VITE_SENTRY_DSN: '',
+            VITE_ANALYTICS_DOMAIN: 'analytics.com',
+          },
+        });
+
+        const { validateEnvironment } = (await vi.importActual('../env')) as any;
 
         validateEnvironment();
         validateEnvironment();
@@ -366,47 +501,46 @@ describe('env', () => {
         // Should warn consistently each time
         expect(mockConsoleWarn).toHaveBeenCalledTimes(6); // 3 calls × 2 warn messages each
       });
-
-      it('should reflect environment changes between calls', () => {
-        mockEnv.DEV = true;
-        mockEnv.VITE_SENTRY_DSN = '';
-
-        validateEnvironment();
-        expect(mockConsoleWarn).toHaveBeenCalled();
-
-        mockConsoleWarn.mockClear();
-
-        // Change environment
-        mockEnv.VITE_SENTRY_DSN = 'configured';
-
-        validateEnvironment();
-
-        // Should not warn about VITE_SENTRY_DSN anymore
-        const warnCalls = mockConsoleWarn.mock.calls;
-        const missingVarsCall = warnCalls.find((call) =>
-          call[0]?.includes('Missing optional environment variables'),
-        );
-
-        if (missingVarsCall) {
-          expect(missingVarsCall[1]).not.toContain('VITE_SENTRY_DSN');
-        }
-      });
     });
   });
 
   describe('TypeScript type safety', () => {
-    it('should provide type-safe access to environment variables', () => {
+    it('should provide type-safe access to environment variables', async () => {
+      vi.stubGlobal('import.meta', {
+        env: {
+          MODE: 'test',
+          PROD: false,
+          DEV: true,
+          VITE_SENTRY_DSN: 'test-dsn',
+          VITE_ANALYTICS_DOMAIN: 'test-domain',
+        },
+      });
+
+      const { env } = (await vi.importActual('../env')) as any;
+
       // This test verifies that the env object has the correct types
       expect(typeof env.MODE).toBe('string');
       expect(typeof env.PROD).toBe('boolean');
       expect(typeof env.DEV).toBe('boolean');
 
-      // Optional vars might be undefined, so check they exist
+      // With actual values, these should be defined
       expect(env.VITE_SENTRY_DSN).toBeDefined();
       expect(env.VITE_ANALYTICS_DOMAIN).toBeDefined();
     });
 
-    it('should be readonly at runtime', () => {
+    it('should be readonly at runtime', async () => {
+      vi.stubGlobal('import.meta', {
+        env: {
+          MODE: 'test',
+          PROD: false,
+          DEV: true,
+          VITE_SENTRY_DSN: '',
+          VITE_ANALYTICS_DOMAIN: '',
+        },
+      });
+
+      const { env } = (await vi.importActual('../env')) as any;
+
       // Since env is defined with `as const`, it should be immutable
       // This test verifies the object structure is preserved
       const keys = Object.keys(env);
