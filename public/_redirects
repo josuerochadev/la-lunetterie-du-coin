@@ -1,0 +1,9 @@
+# Force HTTPS redirect
+http://lalunetterieducoin.fr/* https://www.lalunetterieducoin.fr/:splat 301!
+http://www.lalunetterieducoin.fr/* https://www.lalunetterieducoin.fr/:splat 301!
+
+# Ensure www subdomain works
+https://lalunetterieducoin.fr/* https://www.lalunetterieducoin.fr/:splat 301!
+
+# SPA fallback
+/* /index.html 200
