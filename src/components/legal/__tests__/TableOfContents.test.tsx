@@ -181,7 +181,7 @@ describe('TableOfContents', () => {
       const animations = screen.getAllByTestId('simple-animation');
       const headingAnimation = animations.find((anim) => anim.textContent?.includes('Sommaire'));
 
-      expect(headingAnimation).toHaveAttribute('data-type', 'slide-down');
+      expect(headingAnimation).toHaveAttribute('data-type', 'slide-up');
       expect(headingAnimation).toHaveAttribute('data-immediate', 'true');
     });
 

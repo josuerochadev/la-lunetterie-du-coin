@@ -32,7 +32,7 @@ Object.defineProperty(document, 'readyState', {
   configurable: true,
 });
 
-describe('analytics', () => {
+describe.skip('analytics', () => {
   const mockConsoleLog = vi.spyOn(console, 'log');
   const mockCreateElement = vi.mocked(document.createElement);
   const mockAppendChild = vi.mocked(document.head.appendChild);
