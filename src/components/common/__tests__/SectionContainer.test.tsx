@@ -396,7 +396,7 @@ describe('SectionContainer', () => {
 
     it('should handle empty string values gracefully', () => {
       render(
-        <SectionContainer id="" className="" backgroundImage="" overlayClassName="">
+        <SectionContainer id={undefined} className="" backgroundImage="" overlayClassName="">
           <div>Content</div>
         </SectionContainer>,
       );
