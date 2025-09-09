@@ -179,7 +179,7 @@ describe('TableOfContents', () => {
       render(<TableOfContents sections={defaultSections} />);
 
       const animations = screen.getAllByTestId('simple-animation');
-      const headingAnimation = animations.find((anim) => anim.textContent?.includes('Sommaire'));
+      const headingAnimation = animations.find((anim) => anim.textContent === 'Sommaire');
 
       expect(headingAnimation).toHaveAttribute('data-type', 'slide-up');
       expect(headingAnimation).toHaveAttribute('data-immediate', 'true');

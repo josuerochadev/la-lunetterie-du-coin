@@ -17,12 +17,14 @@ describe('usePrefersReducedMotion', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Reset mock matchMedia
-    mockMatchMedia.mockReturnValue(mockMediaQueryList);
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: mockMatchMedia,
-    });
+    // Ensure window exists and reset mock matchMedia
+    if (typeof window !== 'undefined') {
+      mockMatchMedia.mockReturnValue(mockMediaQueryList);
+      Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: mockMatchMedia,
+      });
+    }
 
     // Reset media query list
     mockMediaQueryList.matches = false;
@@ -34,6 +36,7 @@ describe('usePrefersReducedMotion', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+    vi.unstubAllGlobals();
   });
 
   describe('initialization', () => {
@@ -54,20 +57,17 @@ describe('usePrefersReducedMotion', () => {
     });
 
     it('should handle server-side rendering gracefully', () => {
-      // Mock window as undefined
-      const originalWindow = globalThis.window;
-      delete (globalThis as any).window;
+      // Use vi.stubGlobal to mock window as undefined
+      vi.stubGlobal('window', undefined);
 
       const { result } = renderHook(() => usePrefersReducedMotion());
 
       expect(result.current).toBe(false);
-
-      // Restore window
-      (globalThis as any).window = originalWindow;
     });
 
     it('should handle browsers without matchMedia support', () => {
-      delete (window as any).matchMedia;
+      // Mock window without matchMedia
+      vi.stubGlobal('window', { ...window, matchMedia: undefined });
 
       const { result } = renderHook(() => usePrefersReducedMotion());
 

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 /**
  * Hook React permettant de détecter un clic en dehors d'un élément référencé.
@@ -22,14 +22,37 @@ export function useClickOutside(
   handler: () => void,
   active: boolean,
 ) {
+  // Use useRef to store the current values to avoid recreating the effect
+  const handlerRef = useRef(handler);
+  const refRef = useRef(ref);
+  
+  handlerRef.current = handler;
+  refRef.current = ref;
+
+  const handleClick = useCallback((event: MouseEvent) => {
+    // Guard against non-Node targets
+    const target = event.target;
+    if (!target || !(target instanceof Node)) {
+      handlerRef.current();
+      return;
+    }
+    
+    // If ref is null, consider all clicks as "outside"
+    if (!refRef.current.current) {
+      handlerRef.current();
+      return;
+    }
+    
+    // Check if click is outside the referenced element
+    if (!refRef.current.current.contains(target)) {
+      handlerRef.current();
+    }
+  }, []);
+
   useEffect(() => {
     if (!active) return;
-    function handleClick(event: MouseEvent) {
-      if (ref.current && !ref.current.contains(event.target as Node)) {
-        handler();
-      }
-    }
+    
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [ref, handler, active]);
+  }, [active, handleClick]);
 }
