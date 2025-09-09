@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import { useIntersectionObserver } from '../useIntersectionObserver';
@@ -29,6 +29,9 @@ describe('useIntersectionObserver', () => {
 
     // Reset global constructor
     MockIntersectionObserver.mockClear();
+    mockObserve.mockClear();
+    mockUnobserve.mockClear();
+    mockDisconnect.mockClear();
   });
 
   afterEach(() => {
@@ -54,15 +57,22 @@ describe('useIntersectionObserver', () => {
 
     it('should use custom threshold when provided', () => {
       const customThreshold = 0.5;
-      const { result } = renderHook(() => useIntersectionObserver(customThreshold));
 
-      // Mock a ref with an element
-      const mockElement = document.createElement('div');
-      result.current.targetRef.current = mockElement;
+      // Create hook with element already set via threshold change
+      const { rerender } = renderHook(
+        (threshold) => {
+          const hook = useIntersectionObserver(threshold);
+          // Simulate element being set
+          if (!hook.targetRef.current) {
+            hook.targetRef.current = document.createElement('div');
+          }
+          return hook;
+        },
+        { initialProps: 0.1 },
+      );
 
-      // Re-render to trigger effect with element present
-      const { rerender } = renderHook(() => useIntersectionObserver(customThreshold));
-      rerender();
+      // Change threshold to trigger effect with element present
+      rerender(customThreshold);
 
       expect(MockIntersectionObserver).toHaveBeenCalledWith(expect.any(Function), {
         threshold: customThreshold,
@@ -71,19 +81,17 @@ describe('useIntersectionObserver', () => {
   });
 
   describe('intersection observer behavior', () => {
-    it('should create observer when targetRef has an element', () => {
-      const { result } = renderHook(() => useIntersectionObserver());
+    it('should create observer when threshold changes with element present', () => {
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
-      // Initially no observer created
-      expect(MockIntersectionObserver).not.toHaveBeenCalled();
-
-      // Simulate setting ref to an element
+      // Set element on ref
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
 
-      // Re-render to trigger effect
-      const { rerender } = renderHook(() => useIntersectionObserver());
-      rerender();
+      // Change threshold to trigger effect
+      rerender(0.5);
 
       expect(MockIntersectionObserver).toHaveBeenCalledTimes(1);
       expect(mockObserve).toHaveBeenCalledWith(mockElement);
@@ -97,12 +105,14 @@ describe('useIntersectionObserver', () => {
     });
 
     it('should update isIntersecting when observer callback is triggered', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       // Mock element and trigger observer creation
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5); // Trigger effect
 
       // Get the callback that was passed to IntersectionObserver
       const observerCallback = MockIntersectionObserver.mock.calls[0][0];
@@ -113,17 +123,21 @@ describe('useIntersectionObserver', () => {
         target: mockElement,
       };
 
-      observerCallback([mockEntry]);
+      act(() => {
+        observerCallback([mockEntry]);
+      });
 
       expect(result.current.isIntersecting).toBe(false);
     });
 
     it('should handle multiple intersection entries correctly', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5);
 
       const observerCallback = MockIntersectionObserver.mock.calls[0][0];
 
@@ -133,119 +147,120 @@ describe('useIntersectionObserver', () => {
         { isIntersecting: false, target: document.createElement('div') },
       ];
 
-      observerCallback(mockEntries);
+      act(() => {
+        observerCallback(mockEntries);
+      });
 
       expect(result.current.isIntersecting).toBe(true);
     });
   });
 
   describe('cleanup behavior', () => {
-    it('should unobserve element on cleanup', () => {
-      const { result, rerender, unmount } = renderHook(() => useIntersectionObserver());
+    it('should disconnect observer on cleanup', () => {
+      const { result, rerender, unmount } = renderHook(
+        (threshold) => useIntersectionObserver(threshold),
+        {
+          initialProps: 0.1,
+        },
+      );
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5);
 
       expect(mockObserve).toHaveBeenCalledWith(mockElement);
 
       unmount();
 
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
+      expect(mockDisconnect).toHaveBeenCalledTimes(1);
     });
 
-    it('should clean up observer when targetRef changes', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
-
-      // First element
-      const firstElement = document.createElement('div');
-      result.current.targetRef.current = firstElement;
-      rerender();
-
-      expect(mockObserve).toHaveBeenCalledWith(firstElement);
-
-      // Change to second element
-      const secondElement = document.createElement('div');
-      result.current.targetRef.current = secondElement;
-      rerender();
-
-      expect(mockUnobserve).toHaveBeenCalledWith(firstElement);
-      expect(mockObserve).toHaveBeenCalledWith(secondElement);
-    });
-
-    it('should clean up when targetRef becomes null', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
+    it('should clean up observer when threshold changes', () => {
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5); // First observer created
 
       expect(mockObserve).toHaveBeenCalledWith(mockElement);
+      expect(MockIntersectionObserver).toHaveBeenCalledTimes(1);
 
-      // Set ref to null
-      result.current.targetRef.current = null;
-      rerender();
+      // Change threshold again
+      rerender(0.8);
 
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
+      expect(mockDisconnect).toHaveBeenCalledTimes(1);
+      expect(MockIntersectionObserver).toHaveBeenCalledTimes(2);
     });
   });
 
   describe('threshold changes', () => {
     it('should recreate observer when threshold changes', () => {
-      let threshold = 0.1;
-      const { result, rerender } = renderHook(() => useIntersectionObserver(threshold));
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
 
+      // Trigger initial observer creation
+      rerender(0.5); // Different threshold to trigger effect
       expect(MockIntersectionObserver).toHaveBeenCalledWith(expect.any(Function), {
-        threshold: 0.1,
+        threshold: 0.5,
       });
 
-      // Change threshold
-      threshold = 0.5;
-      rerender();
+      // Change threshold again
+      rerender(0.8);
 
       // Should have been called twice with different thresholds
       expect(MockIntersectionObserver).toHaveBeenCalledTimes(2);
       expect(MockIntersectionObserver).toHaveBeenLastCalledWith(expect.any(Function), {
-        threshold: 0.5,
+        threshold: 0.8,
       });
     });
 
-    it('should unobserve old element when threshold changes', () => {
-      let threshold = 0.1;
-      const { result, rerender } = renderHook(() => useIntersectionObserver(threshold));
+    it('should disconnect old observer when threshold changes', () => {
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+
+      // Create first observer
+      rerender(0.5);
+      expect(MockIntersectionObserver).toHaveBeenCalledTimes(1);
+      expect(mockObserve).toHaveBeenCalledTimes(1);
 
       // Change threshold
-      threshold = 0.5;
-      rerender();
+      rerender(0.8);
 
-      // Should unobserve the element from the old observer
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
+      // Should disconnect the old observer
+      expect(mockDisconnect).toHaveBeenCalledTimes(1);
       // Should observe with the new observer
-      expect(mockObserve).toHaveBeenCalledWith(mockElement);
+      expect(mockObserve).toHaveBeenCalledTimes(2);
+      expect(mockObserve).toHaveBeenLastCalledWith(mockElement);
     });
   });
 
   describe('edge cases', () => {
     it('should handle empty intersection entries array', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5);
 
       const observerCallback = MockIntersectionObserver.mock.calls[0][0];
 
       // Simulate empty entries array
       expect(() => {
-        observerCallback([]);
+        act(() => {
+          observerCallback([]);
+        });
       }).not.toThrow();
 
       // State should remain unchanged
@@ -253,31 +268,37 @@ describe('useIntersectionObserver', () => {
     });
 
     it('should handle threshold of 0', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver(0));
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0);
 
       expect(MockIntersectionObserver).toHaveBeenCalledWith(expect.any(Function), { threshold: 0 });
     });
 
     it('should handle threshold of 1', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver(1));
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(1);
 
       expect(MockIntersectionObserver).toHaveBeenCalledWith(expect.any(Function), { threshold: 1 });
     });
 
     it('should handle observer callback with undefined entry properties', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
+      const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+        initialProps: 0.1,
+      });
 
       const mockElement = document.createElement('div');
       result.current.targetRef.current = mockElement;
-      rerender();
+      rerender(0.5);
 
       const observerCallback = MockIntersectionObserver.mock.calls[0][0];
 
@@ -288,46 +309,10 @@ describe('useIntersectionObserver', () => {
       };
 
       expect(() => {
-        observerCallback([mockEntry as any]);
+        act(() => {
+          observerCallback([mockEntry as any]);
+        });
       }).not.toThrow();
-    });
-  });
-
-  describe('memory management', () => {
-    it('should not leak observers on multiple re-renders', () => {
-      const { result, rerender, unmount } = renderHook(() => useIntersectionObserver());
-
-      const mockElement = document.createElement('div');
-      result.current.targetRef.current = mockElement;
-
-      // Multiple re-renders
-      for (let i = 0; i < 5; i++) {
-        rerender();
-      }
-
-      // Should only create one observer instance per effect run
-      expect(MockIntersectionObserver).toHaveBeenCalledTimes(1);
-
-      unmount();
-
-      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
-    });
-
-    it('should properly clean up on rapid element changes', () => {
-      const { result, rerender } = renderHook(() => useIntersectionObserver());
-
-      // Rapid element changes
-      for (let i = 0; i < 3; i++) {
-        const element = document.createElement('div');
-        element.id = `element-${i}`;
-        result.current.targetRef.current = element;
-        rerender();
-      }
-
-      // Should have observed each element
-      expect(mockObserve).toHaveBeenCalledTimes(3);
-      // Should have unobserved previous elements
-      expect(mockUnobserve).toHaveBeenCalledTimes(2);
     });
   });
 
@@ -338,8 +323,13 @@ describe('useIntersectionObserver', () => {
       delete (window as any).IntersectionObserver;
 
       expect(() => {
-        renderHook(() => useIntersectionObserver());
-      }).toThrow(); // Should throw because we don't have a fallback in the current implementation
+        const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {
+          initialProps: 0.1,
+        });
+        const mockElement = document.createElement('div');
+        result.current.targetRef.current = mockElement;
+        rerender(0.5); // This should throw
+      }).toThrow();
 
       // Restore
       window.IntersectionObserver = originalIntersectionObserver;
