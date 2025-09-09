@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
 // Import the IntersectionObserverInit type for TypeScript
 type IntersectionObserverInit = ConstructorParameters<typeof IntersectionObserver>[1];
@@ -26,14 +26,23 @@ export function useActiveSection(
 ): string | null {
   const [activeSection, setActiveSection] = useState<string | null>(null);
 
+  // Extract individual option values for stable dependencies
+  const rootMargin = options.rootMargin;
+  const threshold = options.threshold;
+  const root = options.root;
+
+  // Memoize the combined options to avoid unnecessary re-renders
+  const finalOptions = useMemo(
+    (): IntersectionObserverInit => ({
+      rootMargin: rootMargin || '-20% 0px -70% 0px', // Section considérée active quand elle est dans le tiers supérieur
+      threshold: threshold || 0,
+      root,
+    }),
+    [rootMargin, threshold, root],
+  );
+
   useEffect(() => {
     if (!sectionIds.length) return;
-
-    const defaultOptions: IntersectionObserverInit = {
-      rootMargin: '-20% 0px -70% 0px', // Section considérée active quand elle est dans le tiers supérieur
-      threshold: 0,
-      ...options,
-    };
 
     const observer = new IntersectionObserver((entries) => {
       // Trouve la section la plus visible
@@ -49,7 +58,7 @@ export function useActiveSection(
       if (mostVisible) {
         setActiveSection(mostVisible.target.id);
       }
-    }, defaultOptions);
+    }, finalOptions);
 
     // Observe toutes les sections
     for (const id of sectionIds) {
@@ -58,7 +67,7 @@ export function useActiveSection(
     }
 
     return () => observer.disconnect();
-  }, [sectionIds, options]);
+  }, [sectionIds, finalOptions]);
 
   return activeSection;
 }
