@@ -37,7 +37,7 @@ export default function TableOfContents({ sections, className = '' }: TableOfCon
   return (
     <SimpleAnimation type="slide-up" delay={160}>
       <nav aria-label="Table des matières" className={`mb-20 ${className}`}>
-        <SimpleAnimation type="slide-down" immediate={true}>
+        <SimpleAnimation type="slide-up" immediate={true}>
           <h2 className="mb-8 font-serif text-title-lg font-bold text-primary">Sommaire</h2>
         </SimpleAnimation>
         <ul className="space-y-6">

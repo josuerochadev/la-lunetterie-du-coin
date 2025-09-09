@@ -86,6 +86,10 @@ export function SimpleAnimation({
         className,
       ),
       style: prefersReducedMotion ? { opacity: 1 } : undefined,
+      'data-testid': 'simple-animation',
+      'data-type': type,
+      'data-immediate': immediate.toString(),
+      'data-delay': delay.toString(),
     },
     children,
   );

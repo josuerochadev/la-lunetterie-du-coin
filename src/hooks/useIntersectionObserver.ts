@@ -18,20 +18,36 @@ import { useState, useEffect, useRef } from 'react';
 export function useIntersectionObserver(threshold = 0.1) {
   const [isIntersecting, setIsIntersecting] = useState(true);
   const targetRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {
     const currentTarget = targetRef.current;
+
+    // Cleanup previous observer if it exists
+    if (observerRef.current) {
+      observerRef.current.disconnect();
+      observerRef.current = null;
+    }
+
     if (!currentTarget) return;
 
     const observer = new IntersectionObserver(
-      ([entry]) => setIsIntersecting(entry.isIntersecting),
+      ([entry]) => {
+        if (entry) {
+          setIsIntersecting(entry.isIntersecting);
+        }
+      },
       { threshold },
     );
 
+    observerRef.current = observer;
     observer.observe(currentTarget);
 
     return () => {
-      observer.unobserve(currentTarget);
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+        observerRef.current = null;
+      }
     };
   }, [threshold]);
 

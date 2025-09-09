@@ -19,9 +19,20 @@ type PrintButtonProps = {
  */
 export default function PrintButton({ className = '' }: PrintButtonProps) {
   const handlePrint = () => {
-    // Focus sur le document avant impression pour assurer l'accessibilité
-    document.body.focus();
-    window.print();
+    try {
+      // Focus sur le document avant impression pour assurer l'accessibilité
+      if (document.body && typeof document.body.focus === 'function') {
+        document.body.focus();
+      }
+
+      // Vérifier que l'API print est disponible
+      if (typeof window.print === 'function') {
+        window.print();
+      }
+    } catch (error) {
+      // Afficher une erreur utilisateur en cas de problème
+      console.error("Erreur lors de l'impression:", error);
+    }
   };
 
   return (

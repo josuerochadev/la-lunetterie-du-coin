@@ -4,15 +4,27 @@ import { useEffect, useState } from 'react';
 export function usePrefersReducedMotion(): boolean {
   const [prm, setPrm] = useState<boolean>(() => {
     if (typeof window === 'undefined' || !('matchMedia' in window)) return false;
-    return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    try {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    } catch {
+      return false;
+    }
   });
 
   useEffect(() => {
     if (typeof window === 'undefined' || !('matchMedia' in window)) return;
 
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const handler = (e: MediaQueryListEvent) => {
-      setPrm((prev) => (prev !== e.matches ? e.matches : prev));
+    let mq: MediaQueryList;
+    try {
+      mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    } catch {
+      return;
+    }
+
+    const handler = (e: MediaQueryListEvent | MediaQueryList | null) => {
+      const matches = e?.matches ?? false;
+      setPrm((prev) => (prev !== matches ? matches : prev));
     };
 
     // Sync immédiat sans re-render inutile
@@ -24,7 +36,11 @@ export function usePrefersReducedMotion(): boolean {
     }
     if (typeof mq.addListener === 'function') {
       mq.addListener(handler);
-      return () => mq.removeListener(handler);
+      return () => {
+        if (typeof mq.removeListener === 'function') {
+          mq.removeListener(handler);
+        }
+      };
     }
   }, []);
 
