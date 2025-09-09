@@ -1,9 +1,8 @@
+import type React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
 import { useFormValidation } from '../useFormValidation';
-
-import type { FormErrors } from '../useFormSubmission';
 
 describe('useFormValidation', () => {
   beforeEach(() => {
@@ -49,7 +48,7 @@ describe('useFormValidation', () => {
 
     beforeEach(() => {
       mockSetCustomValidity = vi.fn();
-      
+
       mockEvent = {
         currentTarget: {
           name: 'name',
@@ -67,7 +66,9 @@ describe('useFormValidation', () => {
         result.current.handleInvalidInput(mockEvent as React.FormEvent<HTMLInputElement>);
       });
 
-      expect(mockSetCustomValidity).toHaveBeenCalledWith('Veuillez entrer votre nom (2 caractères minimum).');
+      expect(mockSetCustomValidity).toHaveBeenCalledWith(
+        'Veuillez entrer votre nom (2 caractères minimum).',
+      );
     });
 
     it('should set custom validity message for email field', () => {
@@ -79,7 +80,9 @@ describe('useFormValidation', () => {
         result.current.handleInvalidInput(mockEvent as React.FormEvent<HTMLInputElement>);
       });
 
-      expect(mockSetCustomValidity).toHaveBeenCalledWith('Veuillez entrer une adresse email valide.');
+      expect(mockSetCustomValidity).toHaveBeenCalledWith(
+        'Veuillez entrer une adresse email valide.',
+      );
     });
 
     it('should set custom validity message for message field', () => {
@@ -91,7 +94,9 @@ describe('useFormValidation', () => {
         result.current.handleInvalidInput(mockEvent as React.FormEvent<HTMLTextAreaElement>);
       });
 
-      expect(mockSetCustomValidity).toHaveBeenCalledWith('Votre message doit contenir au moins 10 caractères.');
+      expect(mockSetCustomValidity).toHaveBeenCalledWith(
+        'Votre message doit contenir au moins 10 caractères.',
+      );
     });
 
     it('should not set custom validity for unknown field', () => {
@@ -117,10 +122,14 @@ describe('useFormValidation', () => {
       };
 
       act(() => {
-        result.current.handleInvalidInput(mockTextareaEvent as React.FormEvent<HTMLTextAreaElement>);
+        result.current.handleInvalidInput(
+          mockTextareaEvent as React.FormEvent<HTMLTextAreaElement>,
+        );
       });
 
-      expect(mockSetCustomValidity).toHaveBeenCalledWith('Votre message doit contenir au moins 10 caractères.');
+      expect(mockSetCustomValidity).toHaveBeenCalledWith(
+        'Votre message doit contenir au moins 10 caractères.',
+      );
     });
   });
 
@@ -132,7 +141,7 @@ describe('useFormValidation', () => {
     beforeEach(() => {
       mockSetCustomValidity = vi.fn();
       mockClearFieldError = vi.fn();
-      
+
       mockEvent = {
         currentTarget: {
           name: 'name',
@@ -148,7 +157,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'name',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -162,7 +171,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'name',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -176,7 +185,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'email',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -190,7 +199,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'message',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -211,7 +220,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockTextareaEvent as React.FormEvent<HTMLTextAreaElement>,
           'message',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -227,7 +236,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'name',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -241,7 +250,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'email',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -274,7 +283,9 @@ describe('useFormValidation', () => {
         result.current.handleInvalidInput(mockInvalidEvent as React.FormEvent<HTMLInputElement>);
       });
 
-      expect(mockSetCustomValidity).toHaveBeenCalledWith('Veuillez entrer votre nom (2 caractères minimum).');
+      expect(mockSetCustomValidity).toHaveBeenCalledWith(
+        'Veuillez entrer votre nom (2 caractères minimum).',
+      );
 
       mockSetCustomValidity.mockClear();
 
@@ -283,7 +294,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockChangeEvent as React.FormEvent<HTMLInputElement>,
           'name',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 
@@ -312,7 +323,7 @@ describe('useFormValidation', () => {
         result.current.handleInputChange(
           mockEvent as React.FormEvent<HTMLInputElement>,
           'name',
-          mockClearFieldError
+          mockClearFieldError,
         );
       });
 

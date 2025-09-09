@@ -2,8 +2,8 @@ import { act, renderHook } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import { useFormStatus } from '../useFormStatus';
-
 import type { SubmissionResult } from '../useFormSubmission';
+
 import type { NetworkError } from '@/lib/networkErrors';
 
 // Mock timers
@@ -50,7 +50,11 @@ describe('useFormStatus', () => {
           success: false,
           error: 'Test error',
           fieldErrors: { name: 'Name error', email: 'Email error' },
-          networkError: { type: 'network', message: 'Network error', isRetryable: true } as NetworkError,
+          networkError: {
+            type: 'network',
+            message: 'Network error',
+            isRetryable: true,
+          } as NetworkError,
           retryCount: 2,
         };
         result.current.handleSubmissionResult(errorResult);

@@ -1,11 +1,12 @@
+import type React from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import { useFormSubmission } from '../useFormSubmission';
+import type { FormErrors } from '../useFormSubmission';
+
 import { analyzeNetworkError, vibrateError } from '@/lib/networkErrors';
 import { fetchWithRetry } from '@/lib/retryLogic';
-
-import type { FormErrors, SubmissionResult } from '../useFormSubmission';
 import type { NetworkError } from '@/lib/networkErrors';
 
 // Mock external dependencies
@@ -24,8 +25,8 @@ Object.defineProperty(navigator, 'vibrate', {
 });
 
 // Mock setTimeout and clearTimeout
-global.setTimeout = vi.fn();
-global.clearTimeout = vi.fn();
+globalThis.setTimeout = vi.fn();
+globalThis.clearTimeout = vi.fn();
 
 describe('useFormSubmission', () => {
   const mockAnalyzeNetworkError = vi.mocked(analyzeNetworkError);
@@ -35,8 +36,10 @@ describe('useFormSubmission', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockVibrate.mockClear();
-    (global.setTimeout as ReturnType<typeof vi.fn>).mockImplementation((fn: () => void) => fn());
-    (global.clearTimeout as ReturnType<typeof vi.fn>).mockImplementation(() => {});
+    (globalThis.setTimeout as ReturnType<typeof vi.fn>).mockImplementation((fn: () => void) =>
+      fn(),
+    );
+    (globalThis.clearTimeout as ReturnType<typeof vi.fn>).mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -66,7 +69,7 @@ describe('useFormSubmission', () => {
       };
 
       // Mock FormData constructor
-      global.FormData = vi.fn(() => mockFormData) as any;
+      globalThis.FormData = vi.fn(() => mockFormData) as any;
       mockFormData.append = vi.fn();
       mockFormData.get = vi.fn();
     });
@@ -107,7 +110,10 @@ describe('useFormSubmission', () => {
         await result.current.submitForm(mockEvent as React.FormEvent<HTMLFormElement>);
       });
 
-      expect(mockFormData.append).toHaveBeenCalledWith('_subject', 'Nouveau message - La Lunetterie du Coin');
+      expect(mockFormData.append).toHaveBeenCalledWith(
+        '_subject',
+        'Nouveau message - La Lunetterie du Coin',
+      );
     });
 
     describe('honeypot protection', () => {
@@ -404,8 +410,6 @@ describe('useFormSubmission', () => {
           json: vi.fn().mockResolvedValue({}),
         });
 
-        const onMaxAttemptsReached = vi.fn();
-
         mockFetchWithRetry.mockImplementation(async (url, options, retryOptions) => {
           if (retryOptions?.onMaxAttemptsReached) {
             retryOptions.onMaxAttemptsReached();
@@ -451,8 +455,8 @@ describe('useFormSubmission', () => {
           await result.current.submitForm(mockEvent as React.FormEvent<HTMLFormElement>);
         });
 
-        expect(global.setTimeout).toHaveBeenCalledWith(expect.any(Function), 10000);
-        expect(global.clearTimeout).toHaveBeenCalled();
+        expect(globalThis.setTimeout).toHaveBeenCalledWith(expect.any(Function), 10000);
+        expect(globalThis.clearTimeout).toHaveBeenCalled();
       });
 
       it('should clear timeout on error', async () => {
@@ -474,7 +478,7 @@ describe('useFormSubmission', () => {
           await result.current.submitForm(mockEvent as React.FormEvent<HTMLFormElement>);
         });
 
-        expect(global.clearTimeout).toHaveBeenCalled();
+        expect(globalThis.clearTimeout).toHaveBeenCalled();
       });
     });
 
@@ -541,7 +545,9 @@ describe('useFormSubmission', () => {
           await result.current.submitForm(mockEvent as React.FormEvent<HTMLFormElement>);
         });
 
-        expect(console.warn).toHaveBeenCalledWith('[Formspree Error]', 400, { error: 'Bad request' });
+        expect(console.warn).toHaveBeenCalledWith('[Formspree Error]', 400, {
+          error: 'Bad request',
+        });
       });
     });
   });

@@ -1,12 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
-import type { ComponentProps } from 'react';
 
 import ContactForm from '../ContactForm';
+
 import { useFormSubmission } from '@/hooks/useFormSubmission';
 import { useFormStatus } from '@/hooks/useFormStatus';
 import { useFormValidation } from '@/hooks/useFormValidation';
-
 import type { SubmissionResult } from '@/hooks/useFormSubmission';
 
 // Mock the hooks
@@ -50,7 +49,9 @@ vi.mock('../FormStatusMessage', () => ({
     <div data-testid="form-status-message">
       <span data-status={status}>{status}</span>
       {error && <span data-error={error}>{error}</span>}
-      {networkError && <span data-network-error={networkError.message}>{networkError.message}</span>}
+      {networkError && (
+        <span data-network-error={networkError.message}>{networkError.message}</span>
+      )}
       {retryCount > 0 && <span data-retry-count={retryCount}>{retryCount}</span>}
     </div>
   ),
@@ -117,7 +118,7 @@ describe('ContactForm', () => {
       render(<ContactForm />);
 
       const honeypotInput = document.querySelector('input[name="_gotcha"]') as HTMLInputElement;
-      
+
       expect(honeypotInput).toBeInTheDocument();
       expect(honeypotInput).toHaveAttribute('name', '_gotcha');
       expect(honeypotInput).toHaveAttribute('tabIndex', '-1');
@@ -196,7 +197,7 @@ describe('ContactForm', () => {
       fireEvent.submit(form);
 
       expect(mockHandleSubmissionStart).toHaveBeenCalledTimes(1);
-      
+
       await waitFor(() => {
         expect(mockSubmitForm).toHaveBeenCalledTimes(1);
         expect(mockHandleSubmissionResult).toHaveBeenCalledWith(mockResult);
@@ -204,10 +205,10 @@ describe('ContactForm', () => {
     });
 
     it('should handle submission errors', async () => {
-      const mockResult: SubmissionResult = { 
-        success: false, 
+      const mockResult: SubmissionResult = {
+        success: false,
         error: 'Network error',
-        fieldErrors: { email: 'Invalid email' }
+        fieldErrors: { email: 'Invalid email' },
       };
       mockSubmitForm.mockResolvedValue(mockResult);
 
@@ -217,7 +218,7 @@ describe('ContactForm', () => {
       fireEvent.submit(form);
 
       expect(mockHandleSubmissionStart).toHaveBeenCalledTimes(1);
-      
+
       await waitFor(() => {
         expect(mockSubmitForm).toHaveBeenCalledTimes(1);
         expect(mockHandleSubmissionResult).toHaveBeenCalledWith(mockResult);
@@ -231,7 +232,7 @@ describe('ContactForm', () => {
       render(<ContactForm />);
 
       const form = document.querySelector('form')!;
-      const submitEvent = fireEvent.submit(form);
+      fireEvent.submit(form);
 
       await waitFor(() => {
         expect(mockSubmitForm).toHaveBeenCalledWith(expect.any(Object));
@@ -254,7 +255,7 @@ describe('ContactForm', () => {
       expect(mockHandleInputChange).toHaveBeenCalledWith(
         expect.any(Object),
         'name',
-        mockClearFieldError
+        mockClearFieldError,
       );
     });
 
@@ -278,7 +279,7 @@ describe('ContactForm', () => {
       expect(mockHandleInputChange).toHaveBeenCalledWith(
         expect.any(Object),
         'name',
-        mockClearFieldError
+        mockClearFieldError,
       );
 
       // Test email field
@@ -287,7 +288,7 @@ describe('ContactForm', () => {
       expect(mockHandleInputChange).toHaveBeenCalledWith(
         expect.any(Object),
         'email',
-        mockClearFieldError
+        mockClearFieldError,
       );
 
       // Test message field
@@ -296,7 +297,7 @@ describe('ContactForm', () => {
       expect(mockHandleInputChange).toHaveBeenCalledWith(
         expect.any(Object),
         'message',
-        mockClearFieldError
+        mockClearFieldError,
       );
     });
   });
@@ -317,10 +318,16 @@ describe('ContactForm', () => {
       const emailField = screen.getByTestId('form-field-email');
 
       expect(nameField.querySelector('input')).toHaveAttribute('data-error', 'true');
-      expect(nameField.querySelector('input')).toHaveAttribute('data-error-message', 'Name is required');
-      
+      expect(nameField.querySelector('input')).toHaveAttribute(
+        'data-error-message',
+        'Name is required',
+      );
+
       expect(emailField.querySelector('input')).toHaveAttribute('data-error', 'true');
-      expect(emailField.querySelector('input')).toHaveAttribute('data-error-message', 'Invalid email format');
+      expect(emailField.querySelector('input')).toHaveAttribute(
+        'data-error-message',
+        'Invalid email format',
+      );
     });
 
     it('should not show errors when fields are valid', () => {
@@ -369,7 +376,9 @@ describe('ContactForm', () => {
 
         const { rerender } = render(<ContactForm />);
 
-        expect(screen.getByTestId('form-status-message').querySelector(`[data-status="${status}"]`)).toBeInTheDocument();
+        expect(
+          screen.getByTestId('form-status-message').querySelector(`[data-status="${status}"]`),
+        ).toBeInTheDocument();
         expect(screen.getByTestId('submit-button')).toHaveAttribute('data-status', status);
 
         rerender(<div />); // Clear between tests
@@ -383,7 +392,7 @@ describe('ContactForm', () => {
 
       const form = document.querySelector('form');
       expect(form).toBeInTheDocument();
-      
+
       // Should have labels for form fields
       expect(screen.getByLabelText('Nom')).toBeInTheDocument();
       expect(screen.getByLabelText('Email')).toBeInTheDocument();
