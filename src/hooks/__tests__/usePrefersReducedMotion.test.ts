@@ -5,12 +5,17 @@ import { usePrefersReducedMotion } from '../usePrefersReducedMotion';
 
 // Mock matchMedia
 const mockMatchMedia = vi.fn();
+const mockAddEventListener = vi.fn();
+const mockRemoveEventListener = vi.fn();
+const mockAddListener = vi.fn();
+const mockRemoveListener = vi.fn();
+
 const mockMediaQueryList = {
   matches: false,
-  addEventListener: vi.fn(),
-  removeEventListener: vi.fn(),
-  addListener: vi.fn(),
-  removeListener: vi.fn(),
+  addEventListener: mockAddEventListener,
+  removeEventListener: mockRemoveEventListener,
+  addListener: mockAddListener,
+  removeListener: mockRemoveListener,
 };
 
 describe('usePrefersReducedMotion', () => {
@@ -28,10 +33,10 @@ describe('usePrefersReducedMotion', () => {
 
     // Reset media query list
     mockMediaQueryList.matches = false;
-    mockMediaQueryList.addEventListener.mockClear();
-    mockMediaQueryList.removeEventListener.mockClear();
-    mockMediaQueryList.addListener.mockClear();
-    mockMediaQueryList.removeListener.mockClear();
+    mockAddEventListener.mockClear();
+    mockRemoveEventListener.mockClear();
+    mockAddListener.mockClear();
+    mockRemoveListener.mockClear();
   });
 
   afterEach(() => {
@@ -57,7 +62,7 @@ describe('usePrefersReducedMotion', () => {
     });
 
     it('should handle server-side rendering gracefully', () => {
-      // Instead of removing window entirely (which breaks React), 
+      // Instead of removing window entirely (which breaks React),
       // just remove matchMedia to simulate SSR environment
       const originalMatchMedia = window.matchMedia;
       delete (window as any).matchMedia;
@@ -65,7 +70,7 @@ describe('usePrefersReducedMotion', () => {
       const { result } = renderHook(() => usePrefersReducedMotion());
 
       expect(result.current).toBe(false);
-      
+
       // Restore matchMedia
       window.matchMedia = originalMatchMedia;
     });
@@ -78,7 +83,7 @@ describe('usePrefersReducedMotion', () => {
       const { result } = renderHook(() => usePrefersReducedMotion());
 
       expect(result.current).toBe(false);
-      
+
       // Restore matchMedia
       window.matchMedia = originalMatchMedia;
     });
@@ -102,24 +107,18 @@ describe('usePrefersReducedMotion', () => {
 
   describe('event listeners', () => {
     it('should add modern addEventListener when available', () => {
-      mockMediaQueryList.addEventListener = vi.fn();
-
       renderHook(() => usePrefersReducedMotion());
 
-      expect(mockMediaQueryList.addEventListener).toHaveBeenCalledWith(
-        'change',
-        expect.any(Function),
-      );
+      expect(mockAddEventListener).toHaveBeenCalledWith('change', expect.any(Function));
     });
 
     it('should add legacy addListener when modern API not available', () => {
       // Remove modern API
       delete (mockMediaQueryList as any).addEventListener;
-      mockMediaQueryList.addListener = vi.fn();
 
       renderHook(() => usePrefersReducedMotion());
 
-      expect(mockMediaQueryList.addListener).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockAddListener).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('should remove modern removeEventListener on cleanup', () => {
@@ -127,24 +126,19 @@ describe('usePrefersReducedMotion', () => {
 
       unmount();
 
-      expect(mockMediaQueryList.removeEventListener).toHaveBeenCalledWith(
-        'change',
-        expect.any(Function),
-      );
+      expect(mockRemoveEventListener).toHaveBeenCalledWith('change', expect.any(Function));
     });
 
     it('should remove legacy removeListener on cleanup', () => {
       // Remove modern API
       delete (mockMediaQueryList as any).addEventListener;
       delete (mockMediaQueryList as any).removeEventListener;
-      mockMediaQueryList.addListener = vi.fn();
-      mockMediaQueryList.removeListener = vi.fn();
 
       const { unmount } = renderHook(() => usePrefersReducedMotion());
 
       unmount();
 
-      expect(mockMediaQueryList.removeListener).toHaveBeenCalledWith(expect.any(Function));
+      expect(mockRemoveListener).toHaveBeenCalledWith(expect.any(Function));
     });
 
     it('should handle missing both modern and legacy APIs gracefully', () => {
@@ -167,7 +161,7 @@ describe('usePrefersReducedMotion', () => {
       expect(result.current).toBe(false);
 
       // Simulate preference change
-      const changeHandler = mockMediaQueryList.addEventListener.mock.calls[0][1];
+      const changeHandler = mockAddEventListener.mock.calls[0][1];
       act(() => {
         changeHandler({ matches: true });
       });
@@ -183,7 +177,7 @@ describe('usePrefersReducedMotion', () => {
       expect(result.current).toBe(true);
 
       // Simulate preference change
-      const changeHandler = mockMediaQueryList.addEventListener.mock.calls[0][1];
+      const changeHandler = mockAddEventListener.mock.calls[0][1];
       act(() => {
         changeHandler({ matches: false });
       });
@@ -215,7 +209,7 @@ describe('usePrefersReducedMotion', () => {
       expect(result.current).toBe(false);
 
       // Simulate preference change with legacy API
-      const changeHandler = mockMediaQueryList.addListener.mock.calls[0][0];
+      const changeHandler = mockAddListener.mock.calls[0][0];
       act(() => {
         changeHandler({ matches: true });
       });

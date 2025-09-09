@@ -25,7 +25,7 @@ export function useClickOutside(
   // Use useRef to store the current values to avoid recreating the effect
   const handlerRef = useRef(handler);
   const refRef = useRef(ref);
-  
+
   handlerRef.current = handler;
   refRef.current = ref;
 
@@ -36,13 +36,13 @@ export function useClickOutside(
       handlerRef.current();
       return;
     }
-    
+
     // If ref is null, consider all clicks as "outside"
     if (!refRef.current.current) {
       handlerRef.current();
       return;
     }
-    
+
     // Check if click is outside the referenced element
     if (!refRef.current.current.contains(target)) {
       handlerRef.current();
@@ -51,7 +51,7 @@ export function useClickOutside(
 
   useEffect(() => {
     if (!active) return;
-    
+
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
   }, [active, handleClick]);

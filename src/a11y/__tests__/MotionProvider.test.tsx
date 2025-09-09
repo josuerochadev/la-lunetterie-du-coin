@@ -5,11 +5,15 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { MotionProvider } from '../MotionProvider';
 import { MotionCtx } from '../MotionContext';
 
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+
 // Mock usePrefersReducedMotion hook
-const mockUsePrefersReducedMotion = vi.fn();
 vi.mock('@/hooks/usePrefersReducedMotion', () => ({
-  usePrefersReducedMotion: mockUsePrefersReducedMotion,
+  usePrefersReducedMotion: vi.fn(),
 }));
+
+// Get the mocked function
+const mockUsePrefersReducedMotion = vi.mocked(usePrefersReducedMotion);
 
 // Test component that uses motion context
 const TestChild = () => <div data-testid="test-child">Test Content</div>;
@@ -315,7 +319,7 @@ describe('MotionProvider', () => {
     });
 
     it('should handle hook returning undefined', () => {
-      mockUsePrefersReducedMotion.mockReturnValue(undefined);
+      mockUsePrefersReducedMotion.mockReturnValue(undefined as any);
 
       render(
         <MotionProvider>

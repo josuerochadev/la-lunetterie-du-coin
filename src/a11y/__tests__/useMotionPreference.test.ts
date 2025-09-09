@@ -1,18 +1,21 @@
 import { renderHook } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
+import { useContext } from 'react';
 
 import { useMotionPreference } from '../useMotionPreference';
 import { MotionCtx } from '../MotionContext';
 
 // Mock React context
-const mockUseContext = vi.fn();
 vi.mock('react', async () => {
   const actual = await vi.importActual('react');
   return {
     ...actual,
-    useContext: mockUseContext,
+    useContext: vi.fn(),
   };
 });
+
+// Get the mocked useContext
+const mockUseContext = vi.mocked(useContext);
 
 describe('useMotionPreference', () => {
   beforeEach(() => {

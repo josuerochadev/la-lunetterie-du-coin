@@ -14,7 +14,7 @@ describe('useClickOutside', () => {
 
   // Helper function to get mousedown event handler
   const getMousedownHandler = () => {
-    const mousedownCall = mockAddEventListener.mock.calls.find(call => call[0] === 'mousedown');
+    const mousedownCall = mockAddEventListener.mock.calls.find((call) => call[0] === 'mousedown');
     return mousedownCall?.[1];
   };
 
@@ -46,7 +46,9 @@ describe('useClickOutside', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
       // Filter for mousedown events only
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(1);
       expect(mockAddEventListener).toHaveBeenCalledWith('mousedown', expect.any(Function));
     });
@@ -55,7 +57,9 @@ describe('useClickOutside', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, false));
 
       // Filter for mousedown events only
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(0);
     });
 
@@ -67,7 +71,9 @@ describe('useClickOutside', () => {
 
       unmount();
 
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownRemoveCalls).toHaveLength(1);
       expect(mockRemoveEventListener).toHaveBeenCalledWith('mousedown', addedHandler);
     });
@@ -77,21 +83,25 @@ describe('useClickOutside', () => {
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, active));
 
       // Initially inactive - no mousedown listeners
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      let mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(0);
 
       // Activate
       active = true;
       rerender();
 
-      mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
       expect(mousedownCalls).toHaveLength(1);
 
       // Deactivate
       active = false;
       rerender();
 
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownRemoveCalls).toHaveLength(1);
     });
   });
@@ -174,7 +184,9 @@ describe('useClickOutside', () => {
         renderHook(() => useClickOutside(nullRef, mockHandler, true));
       }).not.toThrow();
 
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(1);
     });
 
@@ -307,17 +319,21 @@ describe('useClickOutside', () => {
     it('should not recreate event listener unnecessarily', () => {
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      let mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(1);
 
       // Re-render without changing dependencies
       rerender();
 
       // Should not add another event listener
-      mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
       expect(mousedownCalls).toHaveLength(1);
-      
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+
+      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownRemoveCalls).toHaveLength(0);
     });
 
@@ -325,7 +341,9 @@ describe('useClickOutside', () => {
       let active = true;
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, active));
 
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      let mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(1);
 
       // Rapidly toggle active state
@@ -335,10 +353,12 @@ describe('useClickOutside', () => {
       }
 
       // Should end up with listener active (active = false after loop)
-      mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
       expect(mousedownCalls).toHaveLength(3); // 1 + 2 toggles back to true
-      
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+
+      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownRemoveCalls).toHaveLength(3); // 3 toggles to false
     });
   });
@@ -355,9 +375,11 @@ describe('useClickOutside', () => {
       renderHook(() => useClickOutside(secondRef, secondHandler, true));
 
       // Verify we have 2 mousedown listeners and get both event handlers
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(call => call[0] === 'mousedown');
+      const mousedownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'mousedown',
+      );
       expect(mousedownCalls).toHaveLength(2);
-      
+
       const firstEventHandler = mousedownCalls[0][1];
       const secondEventHandler = mousedownCalls[1][1];
 
