@@ -40,6 +40,7 @@ L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 ## 🏗️ Stack Technique
 
 ### Frontend
+
 - **React 19** - Framework UI moderne
 - **TypeScript** - Typage statique
 - **Vite** - Build tool ultra-rapide
@@ -47,6 +48,7 @@ L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 - **Framer Motion** - Animations performantes
 
 ### Outils de Qualité
+
 - **Vitest** + **Testing Library** - Tests unitaires
 - **Playwright** - Tests E2E
 - **ESLint** + **Prettier** - Linting et formatting
@@ -55,13 +57,13 @@ L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 
 ## 📊 Métriques de Qualité
 
-| Métrique | Valeur Actuelle | Objectif |
-|----------|----------------|----------|
-| **Test Coverage** | 95.49% | ≥ 85% |
-| **Lighthouse Performance** | 90+ | ≥ 90 |
-| **Bundle Size** | ~300kb | ≤ 500kb |
-| **A11y Violations** | 0 | 0 |
-| **ESLint Warnings** | 0 | 0 |
+| Métrique                   | Valeur Actuelle | Objectif |
+| -------------------------- | --------------- | -------- |
+| **Test Coverage**          | 95.49%          | ≥ 85%    |
+| **Lighthouse Performance** | 90+             | ≥ 90     |
+| **Bundle Size**            | ~300kb          | ≤ 500kb  |
+| **A11y Violations**        | 0               | 0        |
+| **ESLint Warnings**        | 0               | 0        |
 
 ## 🧪 Tests
 
@@ -131,6 +133,7 @@ Optimisations implémentées :
 Nous accueillons les contributions ! Consultez notre [Guide de Contribution](./CONTRIBUTING.md) pour commencer.
 
 ### Workflow de contribution
+
 1. Fork le projet
 2. Créer une branche feature (`git checkout -b feat/amazing-feature`)
 3. Commit des changements (`git commit -m 'feat: add amazing feature'`)
@@ -154,4 +157,4 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus d
 
 ---
 
-**Développé avec ❤️ pour La Lunetterie du Coin**
+**Développé avec ❤️ pour La Lunetterie du Coin**# Build trigger Mer 10 sep 2025 11:26:07 CEST
