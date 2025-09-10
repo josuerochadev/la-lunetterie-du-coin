@@ -5,11 +5,6 @@
   "devCommand": "pnpm run dev",
   "installCommand": "pnpm install",
   "framework": "vite",
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
