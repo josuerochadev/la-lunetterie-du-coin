@@ -73,7 +73,7 @@
   },
   "build": {
     "env": {
-      "VITE_BUILD_TIME": "@now"
+      "VITE_BUILD_TIME": "$VERCEL_GIT_COMMIT_SHA"
     }
   }
 }
