@@ -1,0 +1,39 @@
+# Vercel ignore file
+# Files and directories to ignore during deployment
+
+# Development files
+.env.local
+.env.development
+
+# Test files
+**/*.test.*
+**/*.spec.*
+e2e/
+test-results/
+e2e-results/
+coverage/
+
+# Documentation (deployed separately if needed)
+docs/
+*.md
+!README.md
+
+# Development artifacts
+.cache
+.temp
+tmp/
+
+# Source maps (only if not needed in production)
+# *.map
+
+# Large development dependencies
+node_modules/.cache/
+.pnpm/
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db

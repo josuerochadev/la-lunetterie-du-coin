@@ -35,7 +35,11 @@
     "img:optimize": "node scripts/optimize-images.mjs",
     "kill:preview": "pkill -f 'vite preview' || true",
     "quality:report": "node scripts/generate-quality-report.js",
-    "quality:check": "npm run lint && npm run test:coverage && npm run quality:report"
+    "quality:check": "npm run lint && npm run test:coverage && npm run quality:report",
+    "security:scan": "node scripts/security-scan.js",
+    "health:check": "node scripts/health-check.js",
+    "env:validate": "node -e \"import('./src/lib/env.js').then(m => m.validateEnvironment())\"",
+    "deploy:check": "pnpm run typecheck && pnpm run lint && pnpm run test:run && pnpm run security:scan && pnpm run build"
   },
   "dependencies": {
     "@dr.pogodin/react-helmet": "^3.0.4",
