@@ -75,6 +75,5 @@
     "env": {
       "VITE_BUILD_TIME": "@now"
     }
-  },
-  "regions": ["cdg1", "fra1"]
+  }
 }
