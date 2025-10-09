@@ -2,8 +2,8 @@ import Layout from '@/components/common/Layout';
 import Hero from '@/sections/Hero';
 import OurStory from '@/sections/OurStory';
 import ServicesMinimal from '@/sections/ServicesMinimal';
+import EngagementEcologique from '@/sections/EngagementEcologique';
 import Offers from '@/sections/Offers';
-import Concept from '@/sections/Concept';
 import Contact from '@/sections/Contact';
 import FloatingCTA from '@/components/common/FloatingCTA';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
@@ -25,8 +25,8 @@ export default function HomePage() {
           <Hero />
           <OurStory />
           <ServicesMinimal />
+          <EngagementEcologique />
           <Offers />
-          <Concept />
           <Contact />
           <FloatingCTA />
         </Layout>
