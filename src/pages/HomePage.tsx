@@ -4,7 +4,8 @@ import OurStory from '@/sections/OurStory';
 import ServicesMinimal from '@/sections/ServicesMinimal';
 import EngagementEcologique from '@/sections/EngagementEcologique';
 import OffersEditorial from '@/sections/OffersEditorial';
-import Contact from '@/sections/Contact';
+import Testimonials from '@/sections/Testimonials';
+import ContactEnhanced from '@/sections/ContactEnhanced';
 import FloatingCTA from '@/components/common/FloatingCTA';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
@@ -27,7 +28,8 @@ export default function HomePage() {
           <ServicesMinimal />
           <EngagementEcologique />
           <OffersEditorial />
-          <Contact />
+          <Testimonials />
+          <ContactEnhanced />
           <FloatingCTA />
         </Layout>
       </div>
