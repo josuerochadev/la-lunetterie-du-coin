@@ -92,9 +92,9 @@ export default function ServicesPage() {
       id: 'lentilles',
       title: 'Lentilles de contact',
       icon: '🔍',
-      description: 'Toutes marques disponibles avec essai et adaptation sur mesure.',
+      description: 'Nous sommes revendeurs de toutes marques avec essai et adaptation sur mesure.',
       details: [
-        'Toutes marques : Alcon, Acuvue, CooperVision',
+        'Revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.)',
         'Lentilles journalières, mensuelles, annuelles',
         'Lentilles souples et rigides',
         'Lentilles toriques (astigmatisme)',
@@ -109,12 +109,12 @@ export default function ServicesPage() {
       icon: '🔧',
       description: 'Service après-vente complet pour garder vos lunettes en parfait état.',
       details: [
-        'Ajustements gratuits à vie',
-        'Changement de plaquettes',
-        'Resserrage des vis',
+        'Ajustements gratuits à vie pour nos clients',
+        'Nettoyage professionnel gratuit',
+        'Remplacement plaquettes gratuit pour nos clients',
+        'Visserie gratuite pour nos clients',
         'Réparation de charnières',
         'Remplacement de branches',
-        'Nettoyage professionnel ultrason',
         'Service rapide (souvent immédiat)',
       ],
     },
@@ -196,6 +196,39 @@ export default function ServicesPage() {
                           💡 Astuce : Plus vous rapportez de paires, plus votre réduction est
                           importante ! N'hésitez pas à faire le tri dans vos tiroirs.
                         </p>
+                      </div>
+                    </SimpleAnimation>
+                  )}
+
+                  {service.id === 'examens' && (
+                    <SimpleAnimation type="slide-up" delay={300}>
+                      <div className="mt-8 rounded-sm border-l-4 border-stone/30 bg-stone/5 p-6">
+                        <h4 className="mb-3 text-body font-medium text-text">
+                          Conditions pour réaliser un examen de vue en magasin :
+                        </h4>
+                        <ul className="space-y-2 text-body-sm text-stone">
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              Ordonnance de moins de 5 ans pour les 16-42 ans, ou moins de 3 ans
+                              pour les 42 ans et plus
+                            </span>
+                          </li>
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              L'ordonnance ne doit pas comporter de mention contre-indiquant
+                              l'examen hors cabinet médical
+                            </span>
+                          </li>
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              Non autorisé pour les personnes diabétiques ou présentant un
+                              kératocône, glaucome ou cataracte
+                            </span>
+                          </li>
+                        </ul>
                       </div>
                     </SimpleAnimation>
                   )}

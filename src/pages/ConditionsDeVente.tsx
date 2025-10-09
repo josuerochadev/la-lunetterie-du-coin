@@ -10,6 +10,7 @@ const sections = [
   { id: 'politique-retour', title: 'Politique de retour' },
   { id: 'changement-puissance', title: 'Changement de puissance' },
   { id: 'reglement', title: 'Règlement et tiers payant' },
+  { id: 'lentilles-essai', title: "Lentilles d'essai" },
   { id: 'offres-commerciales', title: 'Offres commerciales' },
 ];
 
@@ -164,6 +165,25 @@ export default function ConditionsDeVente() {
               <strong className="font-semibold text-primary">Tiers payant :</strong>
               <br />
               Nous nous réservons le droit d'annuler le règlement par tiers payant.
+            </p>
+          </div>
+        </section>
+      </SimpleAnimation>
+
+      <SimpleAnimation type="slide-down" delay={240}>
+        <section className="space-y-md">
+          <h2
+            id="lentilles-essai"
+            className="font-serif text-title-lg font-bold text-primary"
+            tabIndex={-1}
+          >
+            Lentilles d'essai
+          </h2>
+
+          <div className="space-y-sm">
+            <p className="text-body leading-relaxed">
+              Une participation aux frais de transport et logistique de <strong>7€</strong> est
+              demandée pour toute commande de lentilles d'essai.
             </p>
           </div>
         </section>

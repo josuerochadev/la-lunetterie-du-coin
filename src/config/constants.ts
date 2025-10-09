@@ -25,9 +25,9 @@ export const OFFERS = [
     id: 1,
     title: 'Recyclage',
     imageBase: '/illustrations/recycle',
-    summary: 'Jusqu’à 70€ de remise en rapportant vos anciennes montures.',
+    summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
     details:
-      'Cette démarche vise à encourager le recyclage, donner une seconde vie à vos lunettes tout en réduisant les déchets.',
+      "Cette démarche vise à encourager le recyclage, donner une seconde vie à vos lunettes tout en réduisant les déchets.\n\nConditions : Offre limitée à 1 monture par transaction, valable uniquement pour un équipement de classe B, non cumulable avec d'autres promotions exceptionnelles.",
   },
   {
     id: 2,
@@ -35,7 +35,7 @@ export const OFFERS = [
     imageBase: '/illustrations/two-eyeframes',
     summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
     details:
-      '59€ : monture + verres unifocaux\n89€ : verres progressifs\nVerres antireflet durci ou solaires UV cat.3\nOrigine France Garantie — Ophtalmic Vision.\n\nVoir conditions en magasin.',
+      "59€ : monture + verres unifocaux\n89€ : verres progressifs\nVerres antireflet durci ou solaires UV cat.3\nOrigine France Garantie — Ophtalmic Vision.\n\nOffre valable sur la monture la moins chère pour l'achat d'un équipement de classe B, cumulable avec l'offre de recyclage. +40€ pour option polarisée sur les solaires.\n\nVoir conditions en magasin.",
   },
 ];
 
@@ -64,7 +64,7 @@ export const SERVICES = [
   {
     title: 'Lentilles de contact',
     description:
-      'Toutes marques disponibles : Alcon, Acuvue, CooperVision. Essai et adaptation sur mesure.',
+      'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.). Essai et adaptation sur mesure.',
     icon: '🔍',
     link: '/services#lentilles',
   },
