@@ -17,7 +17,7 @@ type LayoutProps = {
  */
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="relative min-h-screen text-primary">
+    <div className="relative min-h-screen bg-background text-primary">
       {/* Contenu simplifié - plus de Background animé */}
       <div className="relative z-base">
         <SkipLink />

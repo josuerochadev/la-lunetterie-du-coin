@@ -39,20 +39,32 @@ export const OFFERS = [
 
 export const SERVICES = [
   {
-    title: 'Lunettes neuves et d’occasion',
-    description: 'Large choix de montures neuves et de seconde main, soigneusement sélectionnées.',
-    imageBase: '/illustrations/eyeframe',
+    title: 'Lunettes neuves',
+    description:
+      'Large sélection de montures contemporaines et intemporelles. Marques indépendantes et créateurs locaux.',
+    icon: '👓',
+    link: '/services#neuves',
   },
   {
-    title: 'Lentilles de contact',
-    description: 'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, Coopervision, etc.).',
-    imageBase: '/illustrations/contact-lenses',
+    title: "Lunettes d'occasion",
+    description:
+      'Montures de seconde main restaurées avec soin. Du vintage rare aux modèles récents à petits prix.',
+    icon: '♻️',
+    link: '/services#occasion',
   },
   {
     title: 'Examens de vue',
     description:
-      "Contrôle visuel complet réalisé par Romain, l'opticien fondateur de La Lunetterie du Coin.",
-    imageBase: '/illustrations/test-vision',
+      "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
+    icon: '👁️',
+    link: '/services#examens',
+  },
+  {
+    title: 'Lentilles de contact',
+    description:
+      'Toutes marques disponibles : Alcon, Acuvue, CooperVision. Essai et adaptation sur mesure.',
+    icon: '🔍',
+    link: '/services#lentilles',
   },
 ];
 
