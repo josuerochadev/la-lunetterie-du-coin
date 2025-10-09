@@ -68,5 +68,9 @@ yarn.lock
 # Testing
 .jest-cache
 
+# Security and quality reports
+security-report.json
+quality-report.md
+
 # Claude Code documentation
 CLAUDE.md
