@@ -1,5 +1,6 @@
 import Layout from '@/components/common/Layout';
 import Hero from '@/sections/Hero';
+import OurStory from '@/sections/OurStory';
 import Offers from '@/sections/Offers';
 import Services from '@/sections/Services';
 import Concept from '@/sections/Concept';
@@ -14,14 +15,15 @@ export default function HomePage() {
   return (
     <>
       <Seo
-        title="La Lunetterie du Coin - Opticien à Strasbourg"
-        description="Montures neuves & d'occasion, conseils personnalisés, ajustage et services atelier à Strasbourg."
+        title="La Lunetterie du Coin - Opticien indépendant à Strasbourg"
+        description="Opticien indépendant depuis 2016. Lunettes neuves et d'occasion, lentilles de contact, examens de vue. Engagement écologique et recyclage."
         canonicalPath="/"
       />
       <LocalBusinessJsonLd />
       <div className="relative z-base">
         <Layout>
           <Hero />
+          <OurStory />
           <Offers />
           <Services />
           <Concept />
