@@ -4,6 +4,8 @@ import { Routes, Route } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
 
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const ServicesPage = lazy(() => import('./pages/ServicesPage'));
 const MentionsLegales = lazy(() => import('./pages/MentionsLegales'));
 const ConditionsDeVente = lazy(() => import('./pages/ConditionsDeVente'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -12,6 +14,22 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route
+        path="/a-propos"
+        element={
+          <Suspense fallback={<div className="p-4 text-body">…</div>}>
+            <AboutPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/services"
+        element={
+          <Suspense fallback={<div className="p-4 text-body">…</div>}>
+            <ServicesPage />
+          </Suspense>
+        }
+      />
       <Route
         path="/mentions-legales"
         element={

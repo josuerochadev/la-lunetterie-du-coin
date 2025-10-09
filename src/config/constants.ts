@@ -5,10 +5,12 @@ export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xanbvzql';
 export const CALENDLY_URL = 'https://calendly.com/lalunetterieducoin';
 
 export const LINKS = [
-  { label: 'Nos offres', href: '#offers' },
-  { label: 'Nos services', href: '#services' },
-  { label: 'Le concept', href: '#concept' },
-  { label: 'Nous contacter', href: '#contact' },
+  { label: 'Accueil', href: '/' },
+  { label: 'À propos', href: '/a-propos' },
+  { label: 'Nos services', href: '/services' },
+  { label: 'Nos offres', href: '/#offers' },
+  { label: 'Témoignages', href: '/#testimonials' },
+  { label: 'Nous contacter', href: '/#contact' },
   { label: 'Prendre rendez‑vous', href: CALENDLY_URL },
 ];
 
