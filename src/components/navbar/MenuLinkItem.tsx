@@ -1,7 +1,7 @@
 import type React from 'react';
 import { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { m, useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from 'framer-motion';
 
 import { MENU_ANIMATION_DURATION } from '@/config/constants';
 import { useActiveSection } from '@/hooks/useActiveSection';
@@ -9,8 +9,8 @@ import { useActiveSection } from '@/hooks/useActiveSection';
 type MenuLinkItemProps = {
   label: string;
   href: string;
-  index: number;
-  onClick: () => void; // <- ferme le menu (FullScreenMenu reçoit onClose)
+  onClick: () => void;
+  featured?: boolean; // Lien mis en avant (ex: "Prendre rendez-vous")
 };
 
 // Helpers
@@ -18,22 +18,51 @@ const isHash = (s: string) => s.startsWith('#');
 const isExternal = (s: string) => /^https?:\/\//i.test(s);
 const isInternalPath = (s: string) => s.startsWith('/') && !s.startsWith('//');
 
-export default function MenuLinkItem({ label, href, index, onClick }: MenuLinkItemProps) {
+/**
+ * Composant MenuLinkItem
+ *
+ * Lien de navigation dans le menu plein écran.
+ * Design éditorial minimaliste sans numérotation, hover subtil avec soulignement.
+ *
+ * @param label - Texte du lien
+ * @param href - URL de destination
+ * @param onClick - Callback pour fermer le menu
+ * @param featured - Si true, affiche le lien comme CTA principal (bouton orange)
+ */
+export default function MenuLinkItem({
+  label,
+  href,
+  onClick,
+  featured = false,
+}: MenuLinkItemProps) {
   const prefersReduced = useReducedMotion();
   const { pathname } = useLocation();
   const activeSection = useActiveSection(['hero', 'offers', 'services', 'concept', 'contact']);
 
-  const [first, ...rest] = label.split(' ');
-  const last = rest.join(' ');
-
   // Vérifie si ce lien correspond à la section active
   const isActive = isHash(href) && href === `#${activeSection}`;
 
-  // Classes communes pour tous les liens (scale géré par Framer Motion)
-  const linkClasses =
-    'flex items-baseline uppercase transition-all duration-200 ease-out hover:text-orange focus-visible:text-orange focus-ring';
+  // Classes pour les liens normaux
+  const linkClasses = featured
+    ? 'button-primary inline-block text-center' // CTA style bouton
+    : 'group relative inline-block text-title-sm font-medium transition-colors duration-200 hover:text-orange focus-visible:text-orange focus-ring';
 
-  // Smooth scroll vers l’ancre si on est déjà sur la Home
+  // Indicateur actif
+  const activeIndicator = isActive && !featured && (
+    <span className="ml-2 text-orange" aria-hidden="true">
+      •
+    </span>
+  );
+
+  // Underline au hover pour les liens normaux
+  const hoverUnderline = !featured && (
+    <span
+      className="absolute bottom-0 left-0 h-[1px] w-0 bg-orange transition-all duration-200 group-hover:w-full"
+      aria-hidden="true"
+    />
+  );
+
+  // Smooth scroll vers l'ancre si on est déjà sur la Home
   const handleHashClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (!isHash(href)) return;
@@ -42,14 +71,10 @@ export default function MenuLinkItem({ label, href, index, onClick }: MenuLinkIt
       if (!target) return;
 
       e.preventDefault();
-      // 1) Ferme le menu
       onClick();
-      // 2) Scroll après l’animation de fermeture pour éviter le jank
       const delay = prefersReduced ? 0 : MENU_ANIMATION_DURATION;
       window.setTimeout(() => {
         target.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
-        // Optionnel: corriger un offset top (ex. navbar) :
-        // window.scrollBy({ top: -24, behavior: 'auto' });
       }, delay);
     },
     [href, onClick, prefersReduced],
@@ -57,92 +82,56 @@ export default function MenuLinkItem({ label, href, index, onClick }: MenuLinkIt
 
   const content = (
     <>
-      <span
-        className={`mr-4 text-body font-thin sm:text-title-sm ${isActive ? 'text-orange' : ''}`}
-      >
-        {index + 1}.
-      </span>
-      <span className="flex flex-wrap gap-x-1 text-title-md sm:text-title-lg">
-        <span className={`font-thin ${isActive ? 'text-orange' : ''}`}>{first}</span>
-        {last && <span className={`font-extrabold ${isActive ? 'text-orange' : ''}`}>{last}</span>}
-      </span>
-      {isActive && (
-        <span className="ml-2 text-mauve-dark" aria-hidden="true">
-          •
-        </span>
-      )}
+      <span className={isActive && !featured ? 'text-orange' : ''}>{label}</span>
+      {activeIndicator}
+      {hoverUnderline}
     </>
   );
 
   // 1) Lien externe (Calendly)
   if (isExternal(href)) {
     return (
-      <m.a
+      <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
         onClick={onClick}
         className={linkClasses}
-        whileHover={{ scale: prefersReduced ? 1 : 1.1 }}
-        whileFocus={{ scale: prefersReduced ? 1 : 1.1 }}
       >
         {content}
-      </m.a>
+      </a>
     );
   }
 
   // 2) Ancre interne
   if (isHash(href)) {
-    // Si déjà sur la Home → smooth scroll
     if (pathname === '/') {
       return (
-        <m.a
-          href={href}
-          onClick={handleHashClick}
-          className={linkClasses}
-          whileHover={{ scale: prefersReduced ? 1 : 1.1 }}
-          whileFocus={{ scale: prefersReduced ? 1 : 1.1 }}
-        >
+        <a href={href} onClick={handleHashClick} className={linkClasses}>
           {content}
-        </m.a>
+        </a>
       );
     }
-    // Sinon, on route vers "/" + hash (le scroll natif s’appliquera)
     return (
-      <m.div
-        whileHover={{ scale: prefersReduced ? 1 : 1.1 }}
-        whileFocus={{ scale: prefersReduced ? 1 : 1.1 }}
-      >
-        <Link to={{ pathname: '/', hash: href }} onClick={onClick} className={linkClasses}>
-          {content}
-        </Link>
-      </m.div>
+      <Link to={{ pathname: '/', hash: href }} onClick={onClick} className={linkClasses}>
+        {content}
+      </Link>
     );
   }
 
-  // 3) Route interne (au cas où tu en ajoutes plus tard)
+  // 3) Route interne
   if (isInternalPath(href)) {
     return (
-      <m.div
-        whileHover={{ scale: prefersReduced ? 1 : 1.1 }}
-        whileFocus={{ scale: prefersReduced ? 1 : 1.1 }}
-      >
-        <Link to={href} onClick={onClick} className={linkClasses}>
-          {content}
-        </Link>
-      </m.div>
+      <Link to={href} onClick={onClick} className={linkClasses}>
+        {content}
+      </Link>
     );
   }
 
-  // Fallback (devrait être inutile)
+  // Fallback
   return (
-    <m.a
-      href={href}
-      onClick={onClick}
-      className={linkClasses}
-      whileHover={{ scale: prefersReduced ? 1 : 1.1 }}
-    >
+    <a href={href} onClick={onClick} className={linkClasses}>
       {content}
-    </m.a>
+    </a>
   );
 }

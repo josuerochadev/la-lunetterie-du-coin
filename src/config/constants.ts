@@ -4,6 +4,7 @@ export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xanbvzql';
 
 export const CALENDLY_URL = 'https://calendly.com/lalunetterieducoin';
 
+// Navigation principale - structure plate pour navbar horizontale
 export const LINKS = [
   { label: 'Accueil', href: '/' },
   { label: 'À propos', href: '/a-propos' },
@@ -13,6 +14,55 @@ export const LINKS = [
   { label: 'Nous contacter', href: '/#contact' },
   { label: 'Prendre rendez‑vous', href: CALENDLY_URL },
 ];
+
+// Navigation structurée par catégories pour le menu full-screen
+export const MENU_CATEGORIES = [
+  {
+    title: 'DÉCOUVRIR',
+    links: [
+      { label: 'Accueil', href: '/' },
+      { label: 'À propos', href: '/a-propos' },
+      { label: 'Nos services', href: '/services' },
+    ],
+  },
+  {
+    title: 'OFFRES',
+    links: [
+      { label: 'Nos offres', href: '/#offers' },
+      { label: 'Lunettes neuves', href: '/services#neuves' },
+      { label: "Lunettes d'occasion", href: '/services#occasion' },
+    ],
+  },
+  {
+    title: 'CONTACT',
+    links: [
+      { label: 'Témoignages', href: '/#testimonials' },
+      { label: 'Nous contacter', href: '/#contact' },
+      { label: 'Prendre rendez-vous', href: CALENDLY_URL, featured: true },
+    ],
+  },
+];
+
+// Informations pratiques pour la navbar et le menu
+export const STORE_INFO = {
+  address: {
+    street: '24 Rue du Faubourg-de-Pierre',
+    city: 'Strasbourg',
+    postalCode: '67000',
+    full: '24 Rue du Faubourg-de-Pierre, 67000 Strasbourg',
+    googleMapsUrl: 'https://goo.gl/maps/YOUR_GOOGLE_MAPS_LINK', // À mettre à jour avec le vrai lien
+  },
+  phone: {
+    display: '03 88 51 24 40',
+    tel: '+33388512440',
+  },
+  hours: {
+    weekdays: 'Lun–Sam : 10h–14h / 15h–19h',
+    weekend: 'Dimanche : Fermé',
+  },
+  tagline: 'Opticien indépendant depuis 2016',
+  usp: "Jusqu'à 70€ de remise avec notre offre recyclage",
+};
 
 export const HERO_PHRASES = [
   'Des lunettes qui ont du style, une démarche qui a du sens',

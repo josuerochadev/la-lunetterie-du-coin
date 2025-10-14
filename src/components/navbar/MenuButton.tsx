@@ -1,7 +1,5 @@
 import { forwardRef } from 'react';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-
 type MenuButtonProps = {
   isOpen: boolean;
   onClick: () => void;
@@ -26,28 +24,24 @@ type MenuButtonProps = {
 const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ isOpen, onClick, id = 'menu-toggle' }, ref) => {
     return (
-      <div className="fixed left-0 right-0 z-overlay flex justify-start px-container-x py-section-gap sm:justify-center">
-        <SimpleAnimation type="fade" immediate={true}>
-          <button
-            ref={ref}
-            type="button"
-            id={id}
-            onClick={onClick}
-            aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            aria-expanded={isOpen}
-            aria-controls="main-menu"
-            className="menu-toggle-button focus-style px-0 hover:font-bold sm:px-4"
-            data-state={isOpen ? 'open' : 'closed'}
-          >
-            <div className="menu-toggle-icon">
-              <span className="menu-toggle-bar menu-toggle-bar--top" />
-              <span className="menu-toggle-bar menu-toggle-bar--middle" />
-              <span className="menu-toggle-bar menu-toggle-bar--bottom" />
-            </div>
-            <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
-          </button>
-        </SimpleAnimation>
-      </div>
+      <button
+        ref={ref}
+        type="button"
+        id={id}
+        onClick={onClick}
+        aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+        aria-expanded={isOpen}
+        aria-controls="main-menu"
+        className="menu-toggle-button focus-style"
+        data-state={isOpen ? 'open' : 'closed'}
+      >
+        <div className="menu-toggle-icon">
+          <span className="menu-toggle-bar menu-toggle-bar--top" />
+          <span className="menu-toggle-bar menu-toggle-bar--middle" />
+          <span className="menu-toggle-bar menu-toggle-bar--bottom" />
+        </div>
+        <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
+      </button>
     );
   },
 );

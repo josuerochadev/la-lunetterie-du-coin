@@ -1,8 +1,8 @@
 /* ====== BOUTONS ====== */
 @layer components {
-  /* Bouton menu toggle */
+  /* Bouton menu toggle - Style minimaliste éditorial */
   .menu-toggle-button {
-    @apply inline-flex h-[44px] w-auto items-center justify-center rounded-btn bg-transparent px-4 text-title-sm font-semibold uppercase text-text transition duration-250 focus:outline-none;
+    @apply inline-flex h-auto w-auto items-center justify-center gap-2 bg-transparent px-3 py-2 text-body-sm font-medium uppercase tracking-wide text-charcoal transition-colors duration-200 hover:text-orange focus:outline-none;
     -webkit-tap-highlight-color: transparent;
   }
   .menu-toggle-button:focus-visible {
@@ -10,10 +10,10 @@
   }
 
   .menu-toggle-icon {
-    @apply relative block h-5 w-6;
+    @apply relative block h-4 w-5;
   }
   .menu-toggle-bar {
-    @apply absolute left-0 right-0 h-[2px] bg-current transition duration-250;
+    @apply absolute left-0 right-0 h-[1.5px] bg-current transition-all duration-200;
   }
   .menu-toggle-bar--top {
     top: 0;
@@ -25,18 +25,21 @@
   .menu-toggle-bar--bottom {
     bottom: 0;
   }
+
+  /* Animation X pour l'état ouvert */
   .menu-toggle-button[data-state='open'] .menu-toggle-bar--top {
-    transform: translateY(10px) rotate(45deg);
+    transform: translateY(8px) rotate(45deg);
   }
   .menu-toggle-button[data-state='open'] .menu-toggle-bar--middle {
     opacity: 0;
   }
   .menu-toggle-button[data-state='open'] .menu-toggle-bar--bottom {
-    transform: translateY(-10px) rotate(-45deg);
+    transform: translateY(-8px) rotate(-45deg);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .menu-toggle-button {
+    .menu-toggle-button,
+    .menu-toggle-bar {
       transition-duration: 0.01ms !important;
     }
     .menu-toggle-button[data-state='open'] .menu-toggle-bar--top,

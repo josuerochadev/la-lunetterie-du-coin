@@ -123,6 +123,7 @@ const config: Config = {
       },
       zIndex: {
         base: '10',
+        navbar: '40',
         menu: '50',
         modal: '100',
         overlay: '200',
