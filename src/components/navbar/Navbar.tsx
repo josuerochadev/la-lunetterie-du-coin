@@ -61,21 +61,24 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Navbar horizontale fixe */}
-      <header className="fixed left-0 right-0 top-0 z-navbar bg-cream/95 backdrop-blur-md">
+      <header className="fixed left-0 right-0 top-0 z-navbar shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
+        <div
+          className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/25 via-50% to-cream/10"
+          aria-hidden="true"
+        ></div>
         <SimpleAnimation type="fade" immediate={true}>
           <nav
-            className="mx-auto flex h-[60px] max-w-container items-start justify-between gap-2 px-4 pt-3 sm:h-[72px] sm:gap-4 sm:px-6 sm:pt-4"
+            className="relative mx-auto flex min-h-[60px] max-w-container items-start justify-between gap-2 px-4 py-3 sm:min-h-[72px] sm:gap-4 sm:px-6 sm:py-4"
             aria-label="Navigation principale"
           >
-            {/* Gauche : Wordmark + Tagline */}
+            {/* Gauche : Wordmark */}
             <div className="flex items-center">
-              <div className="flex flex-col">
-                <h1 className="text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase leading-tight tracking-tight sm:text-title-sm">
+              <Link to="/" aria-label="Retour à l'accueil">
+                <h1 className="cursor-pointer text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase leading-tight tracking-tight transition-all duration-300 hover:scale-105 hover:text-orange sm:text-title-sm">
                   <span className="font-thin">LA</span> LUNETTERIE{' '}
                   <span className="font-thin">DU</span> COIN
                 </h1>
-                <span className="text-body-xs leading-none text-stone">Neuf & Occasion</span>
-              </div>
+              </Link>
             </div>
 
             {/* Droite : CTA + Icônes utilitaires + Menu button */}
