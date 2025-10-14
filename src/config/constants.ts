@@ -18,17 +18,15 @@ export const LINKS = [
 // Navigation structurée par catégories pour le menu full-screen
 export const MENU_CATEGORIES = [
   {
-    title: 'DÉCOUVRIR',
-    href: '/', // Titre cliquable vers l'accueil
+    title: 'NOUS DÉCOUVRIR',
+    href: '/a-propos', // Titre cliquable vers la page À propos
     links: [
-      { label: 'Notre Histoire', href: '/#story' },
       { label: 'À propos', href: '/a-propos' },
-      { label: 'Notre engagement', href: '/#engagement' },
       { label: 'Témoignages', href: '/#testimonials' },
     ],
   },
   {
-    title: 'SERVICES',
+    title: 'NOS SERVICES',
     href: '/services', // Titre cliquable vers la page services
     links: [
       { label: 'Lunettes neuves', href: '/services#neuves' },
@@ -38,7 +36,7 @@ export const MENU_CATEGORIES = [
     ],
   },
   {
-    title: 'OFFRES',
+    title: 'NOS OFFRES',
     href: '/offres', // Titre cliquable vers la page offres
     links: [
       { label: 'Recyclage des lunettes', href: '/offres#recyclage' },
@@ -46,7 +44,7 @@ export const MENU_CATEGORIES = [
     ],
   },
   {
-    title: 'CONTACT',
+    title: 'NOUS CONTACTER',
     href: '/#contact', // Titre cliquable vers la section contact
     links: [], // Pas de sous-liens
   },

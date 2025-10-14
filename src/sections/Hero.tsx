@@ -1,23 +1,17 @@
 import { forwardRef } from 'react';
-import Calendar from 'lucide-react/dist/esm/icons/calendar';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import LogoEye from '@/assets/logo/logo-eye.svg?react';
-import Button from '@/components/common/Button';
-import { CALENDLY_URL } from '@/config/constants';
-import SectionContainer from '@/components/common/SectionContainer';
 
 /**
- * Composant Hero minimaliste redesigné (Phase 2).
+ * Composant Hero.
  *
- * Layout 50/50 texte/image inspiré Kinfolk/La Pima :
- * - Fond crème élégant
- * - Logo minimaliste
- * - Titre principal avec accent orange
- * - Sous-titre informatif
- * - Double CTA (primaire + texte)
- * - Image de la boutique ou portrait
+ * Design éditorial immersif avec :
+ * - Deux images 50/50 en fond pleine hauteur
+ * - Rectangle flottant centré avec phrase d'accroche
+ * - Fond semi-transparent (style navbar)
+ * - Baseline en bas
+ *
+ * Style éditorial Kinfolk avec profondeur et espace.
  *
  * @component
  * @param {React.Ref<HTMLElement>} ref - Référence transmise à la section principale.
@@ -25,96 +19,71 @@ import SectionContainer from '@/components/common/SectionContainer';
  * @example
  * <Hero ref={myRef} />
  *
- * @returns {JSX.Element} La section Hero minimaliste avec layout 50/50.
+ * @returns {JSX.Element} La section Hero éditoriale immersive.
  */
-const Hero = forwardRef<HTMLElement>(() => {
+const Hero = forwardRef<HTMLElement>((props, ref) => {
   return (
-    <SectionContainer
+    <section
+      ref={ref}
       id="hero"
-      className="relative min-h-[100dvh] bg-background"
+      className="relative h-screen w-full overflow-hidden"
       aria-labelledby="hero-title"
+      {...props}
     >
-      <div className="mx-auto grid min-h-[100dvh] max-w-container items-center gap-8 px-4 py-container-y sm:px-6 lg:grid-cols-2 lg:gap-16">
-        {/* Colonne gauche : Contenu */}
-        <div className="space-y-8 lg:space-y-12">
-          {/* Logo minimaliste */}
-          <SimpleAnimation type="slide-down" delay={0} immediate={true}>
-            <div className="w-[clamp(4rem,8vw,6rem)]">
-              <LogoEye aria-hidden="true" focusable="false" className="h-auto w-full text-text" />
-            </div>
-          </SimpleAnimation>
-
-          {/* Titre principal */}
-          <header className="space-y-6">
-            <SimpleAnimation type="slide-up" delay={200} immediate={true}>
-              <h1 id="hero-title" className="text-title-lg font-normal leading-tight text-text">
-                Des lunettes qui ont du style,{' '}
-                <span className="font-medium text-accent">une démarche qui a du sens</span>
-              </h1>
-            </SimpleAnimation>
-
-            <SimpleAnimation type="slide-up" delay={400} immediate={true}>
-              <p className="text-body-lg text-stone">
-                Opticien indépendant à Strasbourg depuis 2016. Neuf, occasion et recyclage.
-              </p>
-            </SimpleAnimation>
-          </header>
-
-          {/* CTAs */}
-          <SimpleAnimation type="slide-up" delay={600} immediate={true}>
-            <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
-              <a
-                href={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Prendre rendez-vous"
-              >
-                <Button id="hero-cta-primary">
-                  <span className="flex items-center gap-2">
-                    <Calendar className="button-icon" aria-hidden="true" />
-                    Prendre rendez-vous
-                  </span>
-                </Button>
-              </a>
-
-              <a
-                href="#story"
-                className="group inline-flex items-center gap-2 text-body font-medium text-text transition-colors hover:text-accent focus-visible:text-accent"
-                aria-label="En savoir plus sur notre histoire"
-              >
-                Notre histoire
-                <ArrowRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </a>
-            </div>
+      {/* Images de fond 50/50 avec ligne de séparation - occupent toute la section */}
+      <div className="absolute inset-0 flex flex-col lg:flex-row">
+        {/* Image gauche / haut - 50% */}
+        <div className="relative h-1/2 w-full lg:h-full lg:w-1/2">
+          <SimpleAnimation type="fade" delay={0} immediate={true} className="h-full w-full">
+            <img
+              src="/images/hero-eyeglasses-left.jpg"
+              alt="Lunettes élégantes - La Lunetterie du Coin"
+              className="h-full w-full object-cover object-center"
+              loading="eager"
+            />
           </SimpleAnimation>
         </div>
 
-        {/* Colonne droite : Image */}
-        <SimpleAnimation type="fade" delay={300} immediate={true}>
-          <div className="relative aspect-[4/5] overflow-hidden rounded-sm shadow-card lg:aspect-[3/4]">
-            {/* Placeholder image - à remplacer par vraie photo */}
-            <div className="flex h-full w-full items-center justify-center bg-stone/10">
-              <p className="text-body-lg text-stone">
-                Photo boutique
-                <br />
-                ou portrait à venir
-              </p>
-            </div>
-            {/* TODO: Remplacer par vraie image
+        {/* Image droite / bas - 50% */}
+        <div className="relative h-1/2 w-full lg:h-full lg:w-1/2">
+          <SimpleAnimation type="fade" delay={200} immediate={true} className="h-full w-full">
             <img
-              src="/images/hero-boutique.jpg"
-              alt="Boutique La Lunetterie du Coin à Strasbourg"
-              className="h-full w-full object-cover"
+              src="/images/hero-eyeglasses-right.jpg"
+              alt="Collection de montures - La Lunetterie du Coin"
+              className="h-full w-full object-cover object-center"
               loading="eager"
             />
-            */}
+          </SimpleAnimation>
+        </div>
+
+        {/* Ligne de séparation - horizontale sur mobile, verticale sur desktop */}
+        <div
+          className="absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 bg-cream/30 lg:left-1/2 lg:top-0 lg:h-full lg:w-[2px] lg:-translate-x-1/2 lg:translate-y-0"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* Contenu par-dessus les images */}
+      <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6">
+        <SimpleAnimation type="fade" delay={400} immediate={true}>
+          {/* Rectangle avec fond foncé */}
+          <div className="rounded-sm bg-charcoal px-6 py-8 shadow-lg sm:px-12 sm:py-10">
+            <div className="space-y-3 sm:space-y-4">
+              <h1
+                id="hero-title"
+                className="max-w-6xl text-title-sm font-thin uppercase leading-tight tracking-wide text-cream sm:text-title-md"
+              >
+                Des lunettes qui ont du style, une démarche qui a du sens
+              </h1>
+
+              <p className="text-body-xs font-black text-cream/80 sm:text-body-xs">
+                Opticien à Strasbourg depuis 2016. Neuf & Occasion.
+              </p>
+            </div>
           </div>
         </SimpleAnimation>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 

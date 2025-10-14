@@ -44,15 +44,9 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
           <Link
             to={titleHref}
             onClick={onLinkClick}
-            className="group inline-block text-body-sm font-semibold uppercase tracking-wide text-stone transition-colors hover:text-orange"
+            className="inline-block text-body-sm font-semibold uppercase tracking-wide text-stone transition-colors hover:text-orange"
           >
             {title}
-            <span
-              className="ml-2 inline-block transition-transform group-hover:translate-x-1"
-              aria-hidden="true"
-            >
-              →
-            </span>
           </Link>
         ) : (
           <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">{title}</h3>
