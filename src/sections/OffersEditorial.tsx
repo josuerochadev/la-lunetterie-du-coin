@@ -85,6 +85,11 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
 
                   <SimpleAnimation type="slide-up" delay={index * 100 + 200}>
                     <div className="space-y-4">
+                      {/* Phrase d'accroche */}
+                      <p className="text-body-lg font-medium italic leading-relaxed text-accent">
+                        {offer.catchphrase}
+                      </p>
+
                       {/* Résumé */}
                       <p className="text-body-lg font-medium leading-relaxed text-text">
                         {offer.summary}
@@ -97,6 +102,21 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                         </p>
                       </div>
                     </div>
+                  </SimpleAnimation>
+
+                  <SimpleAnimation type="slide-up" delay={index * 100 + 300}>
+                    <a
+                      href={offer.link}
+                      className="inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text"
+                    >
+                      Découvrir l'offre
+                      <span
+                        className="transition-transform group-hover:translate-x-1"
+                        aria-hidden="true"
+                      >
+                        →
+                      </span>
+                    </a>
                   </SimpleAnimation>
                 </div>
               </article>

@@ -75,8 +75,8 @@ const Navbar: React.FC = () => {
             <div className="flex items-center">
               <Link to="/" aria-label="Retour à l'accueil">
                 <h1 className="cursor-pointer text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase leading-tight tracking-tight transition-all duration-300 hover:scale-105 hover:text-orange sm:text-title-sm">
-                  <span className="font-thin">LA</span> LUNETTERIE{' '}
-                  <span className="font-thin">DU</span> COIN
+                  <span className="font-thin">LA</span>LUNETTERIE
+                  <span className="font-thin">DU</span>COIN
                 </h1>
               </Link>
             </div>

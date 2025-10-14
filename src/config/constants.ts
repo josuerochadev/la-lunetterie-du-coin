@@ -19,28 +19,50 @@ export const LINKS = [
 export const MENU_CATEGORIES = [
   {
     title: 'DÉCOUVRIR',
+    href: '/', // Titre cliquable vers l'accueil
     links: [
-      { label: 'Accueil', href: '/' },
+      { label: 'Notre Histoire', href: '/#story' },
       { label: 'À propos', href: '/a-propos' },
-      { label: 'Nos services', href: '/services' },
+      { label: 'Notre engagement', href: '/#engagement' },
+      { label: 'Témoignages', href: '/#testimonials' },
+    ],
+  },
+  {
+    title: 'SERVICES',
+    href: '/services', // Titre cliquable vers la page services
+    links: [
+      { label: 'Lunettes neuves', href: '/services#neuves' },
+      { label: "Lunettes d'occasion", href: '/services#occasion' },
+      { label: 'Examens de vue', href: '/services#examens' },
+      { label: 'Lentilles de contact', href: '/services#lentilles' },
     ],
   },
   {
     title: 'OFFRES',
+    href: '/offres', // Titre cliquable vers la page offres
     links: [
-      { label: 'Nos offres', href: '/#offers' },
-      { label: 'Lunettes neuves', href: '/services#neuves' },
-      { label: "Lunettes d'occasion", href: '/services#occasion' },
+      { label: 'Recyclage des lunettes', href: '/offres#recyclage' },
+      { label: 'Deuxième paire', href: '/offres#deuxieme-paire' },
     ],
   },
   {
     title: 'CONTACT',
-    links: [
-      { label: 'Témoignages', href: '/#testimonials' },
-      { label: 'Nous contacter', href: '/#contact' },
-      { label: 'Prendre rendez-vous', href: CALENDLY_URL, featured: true },
-    ],
+    href: '/#contact', // Titre cliquable vers la section contact
+    links: [], // Pas de sous-liens
   },
+];
+
+// CTA principal du menu
+export const MENU_CTA = {
+  label: 'Prendre rendez-vous',
+  href: CALENDLY_URL,
+  featured: true,
+};
+
+// Pages légales (affichées en bas du menu)
+export const MENU_LEGAL_LINKS = [
+  { label: 'Mentions légales', href: '/mentions-legales' },
+  { label: 'Conditions de vente', href: '/conditions-de-vente' },
 ];
 
 // Informations pratiques pour la navbar et le menu
@@ -75,17 +97,21 @@ export const OFFERS = [
     id: 1,
     title: 'Recyclage',
     imageBase: '/illustrations/recycle',
+    catchphrase: "Vos anciennes lunettes valent de l'or",
     summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
     details:
-      "Cette démarche vise à encourager le recyclage, donner une seconde vie à vos lunettes tout en réduisant les déchets.\n\nConditions : Offre limitée à 1 monture par transaction, valable uniquement pour un équipement de classe B, non cumulable avec d'autres promotions exceptionnelles.",
+      "Donnez une seconde vie à vos lunettes tout en économisant sur votre nouvel équipement. Un geste pour votre budget et pour la planète.\n\nRapportez toutes vos anciennes paires, peu importe leur état, et bénéficiez d'une réduction immédiate.",
+    link: '/offres#recyclage',
   },
   {
     id: 2,
     title: 'Deuxième paire',
     imageBase: '/illustrations/two-eyeframes',
+    catchphrase: 'Deux paires, deux styles, un prix imbattable',
     summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
     details:
-      "59€ : monture + verres unifocaux\n89€ : verres progressifs\nVerres antireflet durci ou solaires UV cat.3\nOrigine France Garantie — Ophtalmic Vision.\n\nOffre valable sur la monture la moins chère pour l'achat d'un équipement de classe B, cumulable avec l'offre de recyclage. +40€ pour option polarisée sur les solaires.\n\nVoir conditions en magasin.",
+      "Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.\n\n59€ pour des verres unifocaux, 89€ pour des progressifs. Verres antireflet durci inclus. Cumulable avec l'offre recyclage !",
+    link: '/offres#deuxieme-paire',
   },
 ];
 

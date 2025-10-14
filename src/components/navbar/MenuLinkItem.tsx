@@ -45,7 +45,7 @@ export default function MenuLinkItem({
   // Classes pour les liens normaux
   const linkClasses = featured
     ? 'button-primary inline-block text-center' // CTA style bouton
-    : 'group relative inline-block text-title-sm font-medium transition-colors duration-200 hover:text-orange focus-visible:text-orange focus-ring';
+    : 'group relative inline-block text-title-md font-medium transition-colors duration-200 hover:text-orange focus-visible:text-orange focus-ring';
 
   // Indicateur actif
   const activeIndicator = isActive && !featured && (

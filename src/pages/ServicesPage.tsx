@@ -57,22 +57,6 @@ export default function ServicesPage() {
       ],
     },
     {
-      id: 'recyclage',
-      title: 'Programme de recyclage',
-      icon: '🌱',
-      description:
-        "Rapportez vos anciennes lunettes et économisez jusqu'à 70€ sur votre nouvel achat.",
-      details: [
-        "Jusqu'à 70€ de réduction immédiate",
-        'Toutes marques acceptées',
-        'État indifférent (cassées ou abîmées)',
-        'Geste écologique récompensé',
-        'Les montures sont restaurées et revendues',
-        'Réduction directement déduite en magasin',
-        'Pas de limite de quantité',
-      ],
-    },
-    {
       id: 'examens',
       title: 'Examens de vue',
       icon: '👁️',
@@ -188,17 +172,6 @@ export default function ServicesPage() {
                       </ul>
                     </div>
                   </SimpleAnimation>
-
-                  {service.id === 'recyclage' && (
-                    <SimpleAnimation type="slide-up" delay={300}>
-                      <div className="mt-8 rounded-sm border-l-4 border-accent bg-accent/5 p-6">
-                        <p className="text-body font-medium text-text">
-                          💡 Astuce : Plus vous rapportez de paires, plus votre réduction est
-                          importante ! N'hésitez pas à faire le tri dans vos tiroirs.
-                        </p>
-                      </div>
-                    </SimpleAnimation>
-                  )}
 
                   {service.id === 'examens' && (
                     <SimpleAnimation type="slide-up" delay={300}>

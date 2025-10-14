@@ -9,7 +9,13 @@ import MenuCategory from './MenuCategory';
 
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import { MENU_CATEGORIES, STORE_INFO, FOOTER_SOCIALS } from '@/config/constants';
+import {
+  MENU_CATEGORIES,
+  MENU_CTA,
+  MENU_LEGAL_LINKS,
+  STORE_INFO,
+  FOOTER_SOCIALS,
+} from '@/config/constants';
 
 type FullScreenMenuProps = {
   isOpen: boolean;
@@ -65,52 +71,94 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
       id="main-menu"
       aria-label="Menu de navigation principal"
       tabIndex={-1}
-      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-cream/[0.97] backdrop-blur-3xl"
+      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto backdrop-blur-3xl"
     >
-      <div ref={menuRef} className="flex w-full flex-1 flex-col">
+      <div
+        className="via-cream/92 absolute inset-0 bg-gradient-to-b from-cream/85 via-40% to-cream/95"
+        aria-hidden="true"
+      ></div>
+      <div ref={menuRef} className="relative flex w-full flex-1 flex-col">
         {/* Bouton de fermeture */}
-        <div className="fixed right-0 top-0 z-10 px-container-x pt-6">
+        <div className="fixed right-0 top-0 z-10 px-4 pt-6 sm:px-6">
           <SimpleAnimation type="fade" delay={100} immediate={true}>
             <button
               onClick={onClose}
-              className="focus-style group flex h-12 w-12 items-center justify-center rounded-full bg-charcoal/5 transition-all duration-200 hover:bg-orange hover:text-cream"
+              className="focus-style group flex h-12 w-12 items-center justify-center text-charcoal transition-all duration-300 hover:scale-110 hover:text-orange"
               aria-label="Fermer le menu"
             >
-              <span className="text-title-sm font-light">×</span>
+              <span className="text-[2rem] font-light leading-none">×</span>
             </button>
           </SimpleAnimation>
         </div>
 
         {/* Contenu principal du menu */}
-        <div className="mx-auto w-full max-w-container flex-1 px-4 pb-[80px] pt-[120px] sm:px-6">
-          <div className="grid gap-12 lg:grid-cols-[2fr_1fr] lg:gap-16">
-            {/* Colonne gauche : Catégories de navigation */}
-            <section aria-label="Navigation par catégories" className="space-y-12">
-              {MENU_CATEGORIES.map((category, index) => (
-                <MenuCategory
-                  key={category.title}
-                  title={category.title}
-                  links={category.links}
-                  onLinkClick={onClose}
-                  animationDelay={index * 100}
-                />
-              ))}
-            </section>
+        <div className="mx-auto w-full max-w-container flex-1 px-4 pb-20 pt-28 sm:px-6">
+          <div className="grid gap-12 lg:grid-cols-2 lg:gap-24">
+            {/* Colonne gauche : Catégories de navigation - alignée à droite */}
+            <div className="space-y-16">
+              <section aria-label="Navigation par catégories" className="space-y-16 lg:text-right">
+                {MENU_CATEGORIES.map((category, index) => (
+                  <MenuCategory
+                    key={category.title}
+                    title={category.title}
+                    titleHref={category.href}
+                    links={category.links}
+                    onLinkClick={onClose}
+                    animationDelay={index * 50}
+                  />
+                ))}
+              </section>
 
-            {/* Colonne droite : Informations pratiques */}
+              {/* CTA Prendre RDV */}
+              <SimpleAnimation type="slide-up" delay={250} immediate={true}>
+                <div className="lg:text-right">
+                  <a
+                    href={MENU_CTA.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={onClose}
+                    className="button-primary inline-block text-center"
+                  >
+                    {MENU_CTA.label}
+                  </a>
+                </div>
+              </SimpleAnimation>
+
+              {/* Pages légales */}
+              <SimpleAnimation type="slide-up" delay={300} immediate={true}>
+                <nav aria-label="Pages légales" className="space-y-3 lg:text-right">
+                  {MENU_LEGAL_LINKS.map((link) => (
+                    <div key={link.href}>
+                      <a
+                        href={link.href}
+                        onClick={onClose}
+                        className="inline-block text-body-sm text-stone transition-colors hover:text-orange"
+                      >
+                        {link.label}
+                      </a>
+                    </div>
+                  ))}
+                </nav>
+              </SimpleAnimation>
+            </div>
+
+            {/* Colonne droite : Informations pratiques - alignée à gauche */}
             <aside className="space-y-8 border-t border-charcoal/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              {/* Tagline & USP */}
+              {/* Nom du magasin */}
               <SimpleAnimation type="fade" delay={300} immediate={true}>
-                <div className="space-y-3">
-                  <p className="text-body-sm font-semibold text-charcoal">{STORE_INFO.tagline}</p>
-                  <p className="text-body-sm text-orange">{STORE_INFO.usp}</p>
+                <div className="space-y-2">
+                  <p className="text-body font-bold uppercase leading-tight tracking-tight text-charcoal">
+                    <span className="font-thin">LA</span> LUNETTERIE{' '}
+                    <span className="font-thin">DU</span> COIN
+                  </p>
+                  <p className="text-body-sm font-medium text-orange">Neuf & Occasion</p>
                 </div>
               </SimpleAnimation>
 
               {/* Horaires */}
               <SimpleAnimation type="fade" delay={350} immediate={true}>
                 <div className="space-y-2">
-                  <h3 className="text-body-sm font-bold uppercase tracking-wide text-stone">
+                  <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">
                     Horaires
                   </h3>
                   <p className="text-body-sm text-charcoal">{STORE_INFO.hours.weekdays}</p>
@@ -121,7 +169,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
               {/* Contact */}
               <SimpleAnimation type="fade" delay={400} immediate={true}>
                 <div className="space-y-3">
-                  <h3 className="text-body-sm font-bold uppercase tracking-wide text-stone">
+                  <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">
                     Contact
                   </h3>
 
@@ -160,7 +208,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="focus-style text-charcoal transition-colors hover:text-orange"
+                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-all duration-300 hover:scale-110 hover:bg-orange/10 hover:text-orange"
                         aria-label={social.label}
                       >
                         <IconComponent className="h-5 w-5" aria-hidden="true" />
