@@ -130,7 +130,7 @@ export default function ServicesPage() {
       <Layout>
         {/* Hero */}
         <SectionContainer className="bg-background py-section">
-          <div className="container mx-auto px-container-x">
+          <div className="mx-auto max-w-container px-4 sm:px-6">
             <div className="mx-auto max-w-4xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h1 className="mb-6 text-title-lg font-medium text-text">Nos services</h1>
@@ -152,7 +152,7 @@ export default function ServicesPage() {
             id={service.id}
             className={index % 2 === 0 ? 'bg-surface py-section' : 'bg-background py-section'}
           >
-            <div className="container mx-auto px-container-x">
+            <div className="mx-auto max-w-container px-4 sm:px-6">
               <div
                 className={`grid items-start gap-12 lg:grid-cols-2 lg:gap-16 ${
                   index % 2 === 1 ? 'lg:grid-flow-dense' : ''
@@ -253,7 +253,7 @@ export default function ServicesPage() {
 
         {/* CTA final */}
         <SectionContainer className="bg-accent py-section">
-          <div className="container mx-auto px-container-x">
+          <div className="mx-auto max-w-container px-4 sm:px-6">
             <div className="mx-auto max-w-3xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-6 text-title-md font-medium text-cream">

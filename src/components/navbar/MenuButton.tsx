@@ -40,7 +40,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
           <span className="menu-toggle-bar menu-toggle-bar--middle" />
           <span className="menu-toggle-bar menu-toggle-bar--bottom" />
         </div>
-        <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
+        <span className="ml-2 hidden text-body-sm sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
       </button>
     );
   },

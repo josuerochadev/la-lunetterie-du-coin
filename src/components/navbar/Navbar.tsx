@@ -6,7 +6,6 @@ import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
 import MenuButton from '@/components/navbar/MenuButton';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
-import Logo from '@/components/common/Logo';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { MENU_ANIMATION_DURATION, CALENDLY_URL, STORE_INFO } from '@/config/constants';
 
@@ -65,19 +64,38 @@ const Navbar: React.FC = () => {
       <header className="fixed left-0 right-0 top-0 z-navbar bg-cream/95 backdrop-blur-md">
         <SimpleAnimation type="fade" immediate={true}>
           <nav
-            className="mx-auto flex h-[72px] max-w-screen-2xl items-center justify-between gap-4 px-container-x"
+            className="mx-auto flex h-[60px] max-w-container items-start justify-between gap-2 px-4 pt-3 sm:h-[72px] sm:gap-4 sm:px-6 sm:pt-4"
             aria-label="Navigation principale"
           >
-            {/* Gauche : Logo */}
+            {/* Gauche : Wordmark + Tagline */}
             <div className="flex items-center">
-              <Logo variant="icon" size="sm" showWordmark={false} />
+              <div className="flex flex-col">
+                <h1 className="text-[clamp(1rem,2vw,1.25rem)] font-bold uppercase leading-tight tracking-tight sm:text-title-sm">
+                  <span className="font-thin">LA</span> LUNETTERIE{' '}
+                  <span className="font-thin">DU</span> COIN
+                </h1>
+                <span className="text-body-xs leading-none text-stone">Neuf & Occasion</span>
+              </div>
             </div>
 
-            {/* Centre : Icônes utilitaires (cachés sur mobile) */}
-            <div className="hidden items-center gap-6 md:flex">
+            {/* Droite : CTA + Icônes utilitaires + Menu button */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* CTA Prendre RDV - toujours visible */}
+              <Link
+                to={CALENDLY_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="button-primary inline-flex px-3 py-2 text-body-sm sm:px-4"
+                aria-label="Prendre rendez-vous"
+              >
+                <span className="hidden lg:inline">Prendre RDV</span>
+                <span className="lg:hidden">RDV</span>
+              </Link>
+
+              {/* Icônes utilitaires (cachés sur mobile) */}
               <a
                 href={`tel:${STORE_INFO.phone.tel}`}
-                className="focus-style group flex items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
                 aria-label={`Appeler ${STORE_INFO.phone.display}`}
               >
                 <Phone
@@ -91,7 +109,7 @@ const Navbar: React.FC = () => {
                 href={STORE_INFO.address.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-style group flex items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
                 aria-label="Voir l'itinéraire sur Google Maps"
               >
                 <MapPin
@@ -100,19 +118,6 @@ const Navbar: React.FC = () => {
                 />
                 <span className="hidden font-medium lg:inline">{STORE_INFO.address.city}</span>
               </a>
-            </div>
-
-            {/* Droite : CTA + Menu button */}
-            <div className="flex items-center gap-4">
-              {/* CTA Prendre RDV (caché sur mobile) */}
-              <Link
-                to={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="button-primary hidden sm:inline-flex"
-              >
-                Prendre RDV
-              </Link>
 
               {/* Bouton menu */}
               <MenuButton isOpen={menuActive} onClick={handleToggle} ref={buttonRef} />

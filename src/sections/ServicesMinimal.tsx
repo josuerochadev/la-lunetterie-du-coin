@@ -30,7 +30,7 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
       className="bg-background py-section"
       aria-labelledby="services-title"
     >
-      <div className="container mx-auto px-container-x">
+      <div className="mx-auto max-w-container px-4 sm:px-6">
         {/* En-tête */}
         <div className="mx-auto mb-12 max-w-3xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>

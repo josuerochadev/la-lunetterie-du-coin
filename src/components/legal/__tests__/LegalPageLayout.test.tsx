@@ -206,9 +206,8 @@ describe('LegalPageLayout', () => {
       expect(article).toBeInTheDocument();
       expect(article).toHaveClass(
         'mx-auto',
-        'max-w-4xl',
+        'max-w-content-readable',
         'space-y-16',
-        'px-8',
         'text-body',
         'leading-relaxed',
       );
@@ -309,7 +308,7 @@ describe('LegalPageLayout', () => {
       render(<LegalPageLayout {...defaultProps} />);
 
       const article = document.querySelector('article');
-      expect(article).toHaveClass('mx-auto', 'max-w-4xl', 'px-8');
+      expect(article).toHaveClass('mx-auto', 'max-w-content-readable');
     });
   });
 

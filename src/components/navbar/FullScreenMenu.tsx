@@ -65,11 +65,24 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
       id="main-menu"
       aria-label="Menu de navigation principal"
       tabIndex={-1}
-      className="bg-cream/98 fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto backdrop-blur-md"
+      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-cream/[0.97] backdrop-blur-3xl"
     >
       <div ref={menuRef} className="flex w-full flex-1 flex-col">
+        {/* Bouton de fermeture */}
+        <div className="fixed right-0 top-0 z-10 px-container-x pt-6">
+          <SimpleAnimation type="fade" delay={100} immediate={true}>
+            <button
+              onClick={onClose}
+              className="focus-style group flex h-12 w-12 items-center justify-center rounded-full bg-charcoal/5 transition-all duration-200 hover:bg-orange hover:text-cream"
+              aria-label="Fermer le menu"
+            >
+              <span className="text-title-sm font-light">×</span>
+            </button>
+          </SimpleAnimation>
+        </div>
+
         {/* Contenu principal du menu */}
-        <div className="mx-auto w-full max-w-screen-xl flex-1 px-container-x pb-[80px] pt-[120px]">
+        <div className="mx-auto w-full max-w-container flex-1 px-4 pb-[80px] pt-[120px] sm:px-6">
           <div className="grid gap-12 lg:grid-cols-[2fr_1fr] lg:gap-16">
             {/* Colonne gauche : Catégories de navigation */}
             <section aria-label="Navigation par catégories" className="space-y-12">

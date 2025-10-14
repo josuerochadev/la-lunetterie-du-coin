@@ -2,7 +2,7 @@
 @layer components {
   /* Bouton menu toggle - Style minimaliste éditorial */
   .menu-toggle-button {
-    @apply inline-flex h-auto w-auto items-center justify-center gap-2 bg-transparent px-3 py-2 text-body-sm font-medium uppercase tracking-wide text-charcoal transition-colors duration-200 hover:text-orange focus:outline-none;
+    @apply inline-flex h-auto w-auto items-center justify-center gap-2 bg-transparent px-3 py-2 text-body-sm font-medium text-charcoal transition-colors duration-200 hover:text-orange focus:outline-none;
     -webkit-tap-highlight-color: transparent;
   }
   .menu-toggle-button:focus-visible {

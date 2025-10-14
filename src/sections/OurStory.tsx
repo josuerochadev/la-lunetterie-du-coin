@@ -17,7 +17,7 @@ import SectionContainer from '@/components/common/SectionContainer';
 const OurStory = forwardRef<HTMLElement>(() => {
   return (
     <SectionContainer id="story" className="bg-surface py-section" aria-labelledby="story-title">
-      <div className="container mx-auto px-container-x">
+      <div className="mx-auto max-w-container px-4 sm:px-6">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Colonne gauche : Texte */}
           <div className="space-y-6">

@@ -58,6 +58,7 @@ const config: Config = {
         'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.4'], // CTA, textes importants
         body: ['clamp(1rem, 1.5vw, 3.5rem)', '1.5'], // Corps principal
         'body-sm': ['clamp(0.9rem, 1.1vw, 2.5rem)', '1.4'], // Textes secondaires
+        'body-xs': ['clamp(0.75rem, 1vw, 1.75rem)', '1.3'], // Taglines, légendes
       },
 
       /* ====== LAYOUT ====== */
@@ -69,6 +70,7 @@ const config: Config = {
       maxWidth: {
         content: '100%', // existant (ex: pages full-bleed)
         'content-readable': '72ch', // pour les articles/CGV/mentions
+        container: 'min(98vw, 3600px)', // Layout fluide : 98% de la largeur, max 3600px
       },
       width: {
         'service-img': 'clamp(20rem, 25vw, 42rem)',

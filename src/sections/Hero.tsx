@@ -34,7 +34,7 @@ const Hero = forwardRef<HTMLElement>(() => {
       className="relative min-h-[100dvh] bg-background"
       aria-labelledby="hero-title"
     >
-      <div className="container mx-auto grid min-h-[100dvh] items-center gap-8 px-container-x py-container-y lg:grid-cols-2 lg:gap-16">
+      <div className="mx-auto grid min-h-[100dvh] max-w-container items-center gap-8 px-4 py-container-y sm:px-6 lg:grid-cols-2 lg:gap-16">
         {/* Colonne gauche : Contenu */}
         <div className="space-y-8 lg:space-y-12">
           {/* Logo minimaliste */}

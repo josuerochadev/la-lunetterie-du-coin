@@ -31,7 +31,7 @@ const Testimonials = forwardRef<HTMLElement>(() => {
       className="bg-surface py-section"
       aria-labelledby="testimonials-title"
     >
-      <div className="container mx-auto px-container-x">
+      <div className="mx-auto max-w-container px-4 sm:px-6">
         {/* En-tête */}
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
