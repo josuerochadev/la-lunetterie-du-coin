@@ -2,53 +2,55 @@ import { forwardRef } from 'react';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
 
 /**
- * Section "Notre Histoire" - Nouvelle section Phase 2
+ * Section "Notre Histoire"
  *
- * Raconte l'histoire de La Lunetterie du Coin et de son fondateur Romain.
- * Layout avec texte à gauche et grille de 4 photos à droite.
- * Style minimaliste inspiré Kinfolk/La Pima.
+ * Design éditorial Kinfolk :
+ * - Image de fond pleine hauteur (60-70% de la section)
+ * - Texte en bas sur fond cream (30-40%)
+ * - Transition nette entre image et texte
  *
  * @component
- * @returns {JSX.Element} La section Notre Histoire avec storytelling et photos
+ * @returns {JSX.Element} La section Notre Histoire avec image pleine et texte en bas
  */
 const OurStory = forwardRef<HTMLElement>(() => {
   return (
-    <SectionContainer id="story" className="bg-surface py-section" aria-labelledby="story-title">
-      <div className="mx-auto max-w-container px-4 sm:px-6">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Colonne gauche : Texte */}
-          <div className="space-y-6">
-            <SimpleAnimation type="slide-up" delay={0}>
+    <section id="story" className="relative w-full bg-background" aria-labelledby="story-title">
+      {/* Image pleine largeur à hauteur naturelle */}
+      <div className="relative w-full">
+        <SimpleAnimation type="fade" delay={0} immediate={true}>
+          <img
+            src="/images/our-story-eyeglasses.jpg"
+            alt="Lunettes élégantes sur un fond ensoleillé"
+            className="max-h-[120vh] min-h-screen w-full object-cover"
+            loading="lazy"
+          />
+        </SimpleAnimation>
+
+        {/* Rectangle de texte superposé en bas de l'image */}
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
+          <SimpleAnimation type="slide-up" delay={200}>
+            <div className="w-full max-w-3xl space-y-4 bg-background px-6 py-8 sm:space-y-6 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
               <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
                 Depuis 2016
               </span>
-            </SimpleAnimation>
 
-            <SimpleAnimation type="slide-up" delay={100}>
-              <h2 id="story-title" className="text-title-md font-medium text-text">
+              <h2 id="story-title" className="text-title-md font-medium text-text sm:text-title-lg">
                 Une lunetterie différente
               </h2>
-            </SimpleAnimation>
 
-            <SimpleAnimation type="slide-up" delay={200}>
               <p className="text-body-lg leading-relaxed text-text">
                 Romain Corato a ouvert La Lunetterie du Coin avec une conviction : proposer des
                 lunettes de qualité tout en donnant une seconde vie aux montures.
               </p>
-            </SimpleAnimation>
 
-            <SimpleAnimation type="slide-up" delay={300}>
               <p className="text-body leading-relaxed text-stone">
                 Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie
                 expertise optique, style contemporain et engagement écologique. Chaque paire est
                 sélectionnée avec soin, qu'elle soit neuve ou d'occasion.
               </p>
-            </SimpleAnimation>
 
-            <SimpleAnimation type="slide-up" delay={400}>
               <a
                 href="/a-propos"
                 className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
@@ -60,76 +62,11 @@ const OurStory = forwardRef<HTMLElement>(() => {
                   aria-hidden="true"
                 />
               </a>
-            </SimpleAnimation>
-          </div>
-
-          {/* Colonne droite : Grille de photos 2x2 */}
-          <SimpleAnimation type="fade" delay={200}>
-            <div className="grid grid-cols-2 gap-4">
-              {/* Photo 1 : Portrait Romain */}
-              <div className="aspect-square overflow-hidden rounded-sm shadow-card">
-                <div className="flex h-full w-full items-center justify-center bg-stone/10">
-                  <span className="text-body-sm text-stone">Portrait Romain</span>
-                </div>
-                {/* TODO: Remplacer par vraie photo
-                <img
-                  src="/images/romain-portrait.jpg"
-                  alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                */}
-              </div>
-
-              {/* Photo 2 : Boutique intérieur */}
-              <div className="aspect-square overflow-hidden rounded-sm shadow-card">
-                <div className="flex h-full w-full items-center justify-center bg-stone/10">
-                  <span className="text-body-sm text-stone">Boutique</span>
-                </div>
-                {/* TODO: Remplacer par vraie photo
-                <img
-                  src="/images/boutique-interieur.jpg"
-                  alt="Intérieur de la boutique"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                */}
-              </div>
-
-              {/* Photo 3 : Atelier restauration */}
-              <div className="aspect-square overflow-hidden rounded-sm shadow-card">
-                <div className="flex h-full w-full items-center justify-center bg-stone/10">
-                  <span className="text-body-sm text-stone">Atelier</span>
-                </div>
-                {/* TODO: Remplacer par vraie photo
-                <img
-                  src="/images/atelier-restauration.jpg"
-                  alt="Atelier de restauration de montures"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                */}
-              </div>
-
-              {/* Photo 4 : Détail monture */}
-              <div className="aspect-square overflow-hidden rounded-sm shadow-card">
-                <div className="flex h-full w-full items-center justify-center bg-stone/10">
-                  <span className="text-body-sm text-stone">Détail monture</span>
-                </div>
-                {/* TODO: Remplacer par vraie photo
-                <img
-                  src="/images/detail-monture.jpg"
-                  alt="Détail d'une monture"
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                */}
-              </div>
             </div>
           </SimpleAnimation>
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 
