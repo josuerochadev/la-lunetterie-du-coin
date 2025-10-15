@@ -1,108 +1,102 @@
 import { forwardRef } from 'react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
 
 /**
- * Section Engagement Écologique redesignée (Phase 2)
+ * Section Engagement Écologique - Design éditorial Kinfolk
  *
- * Remplace l'ancienne section "Concept" trop chargée de symboles.
- * Design minimaliste avec :
- * - Titre impactant
- * - 3 statistiques clés en grille
- * - Texte explicatif clair
- * - CTA vers page services/recyclage
- *
- * Style : épuré, focus sur l'impact écologique et social
+ * Image de fond pleine hauteur avec texte superposé en bas.
+ * Style cohérent avec OurStory :
+ * - Image pleine largeur (min-h-screen, max-h-[120vh])
+ * - Boîte crème en bas avec contenu
+ * - Tagline, titre, statistiques et CTA
  *
  * @component
- * @returns {JSX.Element} La section Engagement Écologique minimaliste
+ * @returns {JSX.Element} La section Engagement Écologique avec image de fond
  */
 const EngagementEcologique = forwardRef<HTMLElement>(() => {
   const stats = [
-    {
-      number: '2016',
-      label: 'Année de création',
-      description: 'Pionnier du recyclage de montures à Strasbourg',
-    },
-    {
-      number: '70€',
-      label: 'Réduction max',
-      description: 'En rapportant vos anciennes lunettes',
-    },
-    {
-      number: '100%',
-      label: 'Restaurées main',
-      description: "Chaque monture d'occasion est nettoyée et réparée",
-    },
+    { number: '2016', label: 'Année de création' },
+    { number: '70€', label: 'Réduction max' },
+    { number: '100%', label: 'Restaurées main' },
   ];
 
   return (
-    <SectionContainer
+    <section
       id="engagement"
-      className="bg-surface py-section"
+      className="relative w-full bg-background"
       aria-labelledby="engagement-title"
     >
-      <div className="mx-auto max-w-container px-4 sm:px-6">
-        {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-3xl text-center">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
-              Notre engagement
-            </span>
-          </SimpleAnimation>
+      {/* Image pleine largeur à hauteur contrôlée */}
+      <div className="relative w-full">
+        <SimpleAnimation type="fade" delay={0} immediate={true}>
+          <img
+            src="/images/engagement-eyeglasses.jpg"
+            alt="Engagement écologique - La Lunetterie du Coin"
+            className="max-h-[120vh] min-h-screen w-full object-cover"
+            loading="lazy"
+          />
+        </SimpleAnimation>
 
-          <SimpleAnimation type="slide-up" delay={100}>
-            <h2 id="engagement-title" className="mb-6 text-title-md font-medium text-text">
-              La mode change. La planète, non.
-            </h2>
-          </SimpleAnimation>
-        </div>
+        {/* Boîte de texte superposée en bas */}
+        <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
+          <SimpleAnimation type="slide-up" delay={200}>
+            <div className="w-full max-w-3xl space-y-6 bg-background px-6 py-8 sm:space-y-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12">
+              {/* Tagline */}
+              <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+                Notre engagement
+              </span>
 
-        {/* Statistiques en grille */}
-        <div className="mx-auto mb-12 grid max-w-5xl gap-8 sm:grid-cols-3">
-          {stats.map((stat, index) => (
-            <SimpleAnimation key={stat.label} type="slide-up" delay={index * 100}>
-              <div className="text-center">
-                <div className="mb-3 text-title-lg font-bold text-accent">{stat.number}</div>
-                <div className="mb-2 text-body-lg font-medium text-text">{stat.label}</div>
-                <p className="text-body text-stone">{stat.description}</p>
+              {/* Titre */}
+              <h2
+                id="engagement-title"
+                className="text-title-md font-medium text-text sm:text-title-lg"
+              >
+                La mode change. La planète, non.
+              </h2>
+
+              {/* Statistiques en ligne */}
+              <div className="grid grid-cols-3 gap-4 border-y border-stone/20 py-6">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="text-center">
+                    <div className="mb-1 text-title-sm font-bold text-accent sm:text-title-md">
+                      {stat.number}
+                    </div>
+                    <div className="text-body-xs text-stone sm:text-body-sm">{stat.label}</div>
+                  </div>
+                ))}
               </div>
-            </SimpleAnimation>
-          ))}
-        </div>
 
-        {/* Texte explicatif */}
-        <div className="mx-auto max-w-3xl space-y-6">
-          <SimpleAnimation type="slide-up" delay={300}>
-            <p className="text-body-lg leading-relaxed text-text">
-              Depuis 2016, nous proposons une alternative durable au marché traditionnel de
-              l'optique. Nos montures d'occasion sont soigneusement restaurées, donnant une seconde
-              vie à des pièces qui auraient fini à la décharge.
-            </p>
-          </SimpleAnimation>
+              {/* Texte descriptif */}
+              <p className="text-body leading-relaxed text-text">
+                Depuis 2016, nous proposons une alternative durable au marché traditionnel de
+                l'optique. Nos montures d'occasion sont soigneusement restaurées, donnant une
+                seconde vie à des pièces qui auraient fini à la décharge.
+              </p>
 
-          <SimpleAnimation type="slide-up" delay={400}>
-            <p className="text-body leading-relaxed text-stone">
-              En rapportant vos anciennes lunettes, vous bénéficiez d'une réduction allant jusqu'à
-              70€ sur votre nouvel achat. Un geste pour votre portefeuille et pour la planète.
-            </p>
-          </SimpleAnimation>
+              <p className="text-body-sm leading-relaxed text-stone">
+                En rapportant vos anciennes lunettes, vous bénéficiez d'une réduction allant jusqu'à
+                70€ sur votre nouvel achat. Un geste pour votre portefeuille et pour la planète.
+              </p>
 
-          <SimpleAnimation type="slide-up" delay={500}>
-            <div className="pt-4 text-center">
+              {/* CTA */}
               <a
-                href="/services#recyclage"
-                className="inline-flex items-center gap-2 rounded-sm border border-accent bg-transparent px-8 py-4 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                href="/offres#recyclage"
+                className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
                 aria-label="En savoir plus sur notre programme de recyclage"
               >
-                Comment ça marche →
+                Comment ça marche
+                <ArrowRight
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </a>
             </div>
           </SimpleAnimation>
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 

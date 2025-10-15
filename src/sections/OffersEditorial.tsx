@@ -1,35 +1,56 @@
 import { forwardRef } from 'react';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
-import { OFFERS } from '@/config/constants';
-import Picture from '@/components/common/Picture';
 
 /**
- * Section Offres redesignée en style éditorial (Phase 2)
+ * Section Offres - Design éditorial Kinfolk
  *
- * Layout 50/50 alternant pour chaque offre :
- * - Image d'un côté
- * - Contenu texte de l'autre
- * - Alternance gauche/droite pour rythme visuel
+ * Layout alterné 50/50 pour chaque offre :
+ * - Image portrait (2:3) à gauche/droite alternant - grande taille
+ * - Contenu texte centré verticalement à côté
+ * - Design minimaliste sans bordures ni ombres
  *
- * Style inspiré La Pima/Kinfolk :
- * - Espaces généreux
- * - Typographie claire
- * - Pas d'expansion/collapse (tout visible)
- * - Focus sur la lisibilité
+ * Style éditorial :
+ * - Images flat lay en ratio naturel 2:3, grandes et impactantes
+ * - Texte centré verticalement avec espace en haut et en bas
+ * - Espacement généreux
+ * - Alternance visuelle pour rythme
  *
  * @component
- * @returns {JSX.Element} La section Offres en layout éditorial
+ * @returns {JSX.Element} La section Offres en layout éditorial minimaliste
  */
 const OffersEditorial = forwardRef<HTMLElement>(() => {
+  const offers = [
+    {
+      id: 1,
+      title: 'Recyclage',
+      image: '/images/offer-recyclage.jpg',
+      catchphrase: "Vos anciennes lunettes valent de l'or",
+      summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
+      details:
+        "Donnez une seconde vie à vos lunettes tout en économisant sur votre nouvel équipement. Un geste pour votre budget et pour la planète.\n\nRapportez toutes vos anciennes paires, peu importe leur état, et bénéficiez d'une réduction immédiate.",
+      link: '/offres#recyclage',
+    },
+    {
+      id: 2,
+      title: 'Deuxième paire',
+      image: '/images/offer-second-pair.jpg',
+      catchphrase: 'Deux paires, deux styles, un prix imbattable',
+      summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
+      details:
+        "Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.\n\n59€ pour des verres unifocaux, 89€ pour des progressifs. Verres antireflet durci inclus. Cumulable avec l'offre recyclage !",
+      link: '/offres#deuxieme-paire',
+    },
+  ];
+
   return (
-    <SectionContainer
+    <section
       id="offers"
-      className="bg-background py-section"
+      className="relative w-full bg-background py-section"
       aria-labelledby="offers-title"
     >
-      <div className="mx-auto max-w-container px-4 sm:px-6">
+      <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
@@ -46,85 +67,135 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
         </div>
 
         {/* Offres en layout 50/50 alternant */}
-        <div className="space-y-24">
-          {OFFERS.map((offer, index) => {
+        <div className="space-y-24 lg:space-y-32">
+          {offers.map((offer, index) => {
             const isEven = index % 2 === 0;
 
             return (
-              <article
-                key={offer.id}
-                className={`grid items-center gap-12 lg:grid-cols-2 lg:gap-16 ${
-                  isEven ? '' : 'lg:grid-flow-dense'
-                }`}
-              >
-                {/* Image */}
-                <SimpleAnimation type="slide-up" delay={index * 100}>
-                  <div
-                    className={`relative aspect-[4/3] overflow-hidden rounded-sm shadow-card ${
-                      isEven ? '' : 'lg:col-start-2'
-                    }`}
-                  >
-                    <Picture
-                      srcBase={offer.imageBase}
-                      alt={offer.title}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                </SimpleAnimation>
-
-                {/* Contenu */}
-                <div className={`space-y-6 ${isEven ? '' : 'lg:col-start-1'}`}>
-                  <SimpleAnimation type="slide-up" delay={index * 100 + 100}>
-                    <div>
-                      <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
-                        Offre {index + 1}
-                      </span>
-                      <h3 className="mb-4 text-title-sm font-medium text-text">{offer.title}</h3>
-                    </div>
-                  </SimpleAnimation>
-
-                  <SimpleAnimation type="slide-up" delay={index * 100 + 200}>
-                    <div className="space-y-4">
-                      {/* Phrase d'accroche */}
-                      <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                        {offer.catchphrase}
-                      </p>
-
-                      {/* Résumé */}
-                      <p className="text-body-lg font-medium leading-relaxed text-text">
-                        {offer.summary}
-                      </p>
-
-                      {/* Détails */}
-                      <div className="border-l-2 border-accent pl-6">
-                        <p className="whitespace-pre-line text-body leading-relaxed text-stone">
-                          {offer.details}
-                        </p>
+              <SimpleAnimation key={offer.id} type="fade" delay={index * 100}>
+                <article className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+                  {isEven ? (
+                    // Layout pair : Image gauche (50%) - Texte droite (50%)
+                    <>
+                      <div className="relative w-full">
+                        <div className="relative aspect-[2/3] w-full overflow-hidden">
+                          <img
+                            src={offer.image}
+                            alt={offer.title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </SimpleAnimation>
+                      <div className="flex min-h-full items-center">
+                        <div className="space-y-6">
+                          {/* Tagline + Titre */}
+                          <div>
+                            <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
+                              Offre {index + 1}
+                            </span>
+                            <h3 className="text-title-sm font-medium text-text sm:text-title-md">
+                              {offer.title}
+                            </h3>
+                          </div>
 
-                  <SimpleAnimation type="slide-up" delay={index * 100 + 300}>
-                    <a
-                      href={offer.link}
-                      className="inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text"
-                    >
-                      Découvrir l'offre
-                      <span
-                        className="transition-transform group-hover:translate-x-1"
-                        aria-hidden="true"
-                      >
-                        →
-                      </span>
-                    </a>
-                  </SimpleAnimation>
-                </div>
-              </article>
+                          {/* Phrase d'accroche */}
+                          <p className="text-body-lg font-medium italic leading-relaxed text-accent">
+                            {offer.catchphrase}
+                          </p>
+
+                          {/* Résumé */}
+                          <p className="text-body-lg font-medium leading-relaxed text-text">
+                            {offer.summary}
+                          </p>
+
+                          {/* Détails */}
+                          <div className="space-y-3 pt-2">
+                            <p className="whitespace-pre-line text-body leading-relaxed text-stone">
+                              {offer.details}
+                            </p>
+                          </div>
+
+                          {/* CTA */}
+                          <a
+                            href={offer.link}
+                            className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
+                            aria-label={`En savoir plus sur l'offre ${offer.title}`}
+                          >
+                            Découvrir l'offre
+                            <ArrowRight
+                              className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                              aria-hidden="true"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    // Layout impair : Texte gauche (50%) aligné à droite - Image droite (50%)
+                    <>
+                      <div className="flex min-h-full items-center justify-end">
+                        <div className="space-y-6 text-right">
+                          {/* Tagline + Titre */}
+                          <div>
+                            <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
+                              Offre {index + 1}
+                            </span>
+                            <h3 className="text-title-sm font-medium text-text sm:text-title-md">
+                              {offer.title}
+                            </h3>
+                          </div>
+
+                          {/* Phrase d'accroche */}
+                          <p className="text-body-lg font-medium italic leading-relaxed text-accent">
+                            {offer.catchphrase}
+                          </p>
+
+                          {/* Résumé */}
+                          <p className="text-body-lg font-medium leading-relaxed text-text">
+                            {offer.summary}
+                          </p>
+
+                          {/* Détails */}
+                          <div className="space-y-3 pt-2">
+                            <p className="whitespace-pre-line text-body leading-relaxed text-stone">
+                              {offer.details}
+                            </p>
+                          </div>
+
+                          {/* CTA */}
+                          <a
+                            href={offer.link}
+                            className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
+                            aria-label={`En savoir plus sur l'offre ${offer.title}`}
+                          >
+                            Découvrir l'offre
+                            <ArrowRight
+                              className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                              aria-hidden="true"
+                            />
+                          </a>
+                        </div>
+                      </div>
+                      <div className="relative w-full">
+                        <div className="relative aspect-[2/3] w-full overflow-hidden">
+                          <img
+                            src={offer.image}
+                            alt={offer.title}
+                            className="h-full w-full object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </article>
+              </SimpleAnimation>
             );
           })}
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 
