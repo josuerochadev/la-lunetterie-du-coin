@@ -26,14 +26,14 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
     <section
       ref={ref}
       id="hero"
-      className="relative h-screen w-full overflow-hidden"
+      className="relative h-screen w-full overflow-hidden bg-background"
       aria-labelledby="hero-title"
       {...props}
     >
-      {/* Images de fond 50/50 avec ligne de séparation - occupent toute la section */}
-      <div className="absolute inset-0 flex flex-col lg:flex-row">
-        {/* Image gauche / haut - 50% */}
-        <div className="relative h-1/2 w-full lg:h-full lg:w-1/2">
+      {/* 60% inférieur : images 50/50 avec gaps */}
+      <div className="absolute bottom-0 left-0 right-0 flex h-[60%] w-full gap-4 px-4 pb-4 sm:gap-6 sm:px-6 sm:pb-6">
+        {/* Image gauche */}
+        <div className="relative h-full w-1/2">
           <SimpleAnimation type="fade" delay={0} immediate={true} className="h-full w-full">
             <img
               src="/images/hero-eyeglasses-left.jpg"
@@ -44,8 +44,8 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
           </SimpleAnimation>
         </div>
 
-        {/* Image droite / bas - 50% */}
-        <div className="relative h-1/2 w-full lg:h-full lg:w-1/2">
+        {/* Image droite */}
+        <div className="relative h-full w-1/2">
           <SimpleAnimation type="fade" delay={200} immediate={true} className="h-full w-full">
             <img
               src="/images/hero-eyeglasses-right.jpg"
@@ -55,31 +55,26 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
             />
           </SimpleAnimation>
         </div>
-
-        {/* Ligne de séparation - horizontale sur mobile, verticale sur desktop */}
-        <div
-          className="absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 bg-cream/30 lg:left-1/2 lg:top-0 lg:h-full lg:w-[2px] lg:-translate-x-1/2 lg:translate-y-0"
-          aria-hidden="true"
-        />
       </div>
 
-      {/* Contenu par-dessus les images */}
-      <div className="relative z-10 flex h-full items-center justify-center px-4 sm:px-6">
+      {/* Contenu texte - centré dans les 40% supérieurs (sous la navbar) */}
+      <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(40%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(40%-72px)] sm:px-12 lg:px-16">
         <SimpleAnimation type="fade" delay={400} immediate={true}>
-          {/* Rectangle avec fond foncé */}
-          <div className="rounded-sm bg-charcoal px-6 py-8 shadow-lg sm:px-12 sm:py-10">
-            <div className="space-y-3 sm:space-y-4">
-              <h1
-                id="hero-title"
-                className="max-w-6xl text-title-sm font-thin uppercase leading-tight tracking-wide text-cream sm:text-title-md"
-              >
-                Des lunettes qui ont du style, une démarche qui a du sens
-              </h1>
+          <div className="w-full space-y-4 sm:space-y-6">
+            <h1
+              id="hero-title"
+              className="font-light uppercase leading-tight tracking-wide text-text"
+              style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
+            >
+              Des lunettes qui ont du style, une démarche qui a du sens
+            </h1>
 
-              <p className="text-body-xs font-black text-cream/80 sm:text-body-xs">
-                Opticien à Strasbourg depuis 2016. Neuf & Occasion.
-              </p>
-            </div>
+            <p
+              className="text-center text-stone"
+              style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.25rem)' }}
+            >
+              Opticien à Strasbourg depuis 2016. Neuf & Occasion.
+            </p>
           </div>
         </SimpleAnimation>
       </div>
