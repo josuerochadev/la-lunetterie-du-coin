@@ -2,37 +2,66 @@ import { forwardRef } from 'react';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
-import { SERVICES } from '@/config/constants';
 
 /**
- * Section Services redesignée en style minimaliste (Phase 2)
+ * Section Services - Design éditorial Kinfolk
  *
- * 4 services en grille épurée :
+ * 4 services en cards verticales avec images :
  * - Lunettes neuves
  * - Lunettes d'occasion
  * - Examens de vue
  * - Lentilles de contact
  *
- * Style inspiré Kinfolk/La Pima :
- * - Cartes minimalistes avec fond crème/sable
- * - Icônes émojis simples
- * - Bordure subtile
- * - Hover : élévation + lien orange
+ * Style éditorial minimaliste :
+ * - Images pleine largeur en haut (ratio portrait)
+ * - Texte sur fond crème en dessous
+ * - Grille 2 colonnes responsive
+ * - Pas de bordures, design épuré
  *
  * @component
- * @returns {JSX.Element} La section Services minimaliste avec grille 2x2
+ * @returns {JSX.Element} La section Services avec cards verticales
  */
 const ServicesMinimal = forwardRef<HTMLElement>(() => {
+  const services = [
+    {
+      title: 'Lunettes neuves',
+      description:
+        'Large sélection de montures contemporaines et intemporelles. Marques indépendantes et créateurs locaux.',
+      image: '/images/services-new-glasses.jpg',
+      link: '/services#neuves',
+    },
+    {
+      title: "Lunettes d'occasion",
+      description:
+        'Montures de seconde main restaurées avec soin. Du vintage rare aux modèles récents à petits prix.',
+      image: '/images/services-second-hand.jpg',
+      link: '/services#occasion',
+    },
+    {
+      title: 'Examens de vue',
+      description:
+        "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
+      image: '/images/services-exam.jpg',
+      link: '/services#examens',
+    },
+    {
+      title: 'Lentilles de contact',
+      description:
+        'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.). Essai et adaptation sur mesure.',
+      image: '/images/services-contact-lenses.jpg',
+      link: '/services#lentilles',
+    },
+  ];
+
   return (
-    <SectionContainer
+    <section
       id="services"
-      className="bg-background py-section"
+      className="relative w-full bg-background py-section"
       aria-labelledby="services-title"
     >
-      <div className="mx-auto max-w-container px-4 sm:px-6">
+      <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
-        <div className="mx-auto mb-12 max-w-3xl text-center">
+        <div className="mx-auto mb-16 max-w-3xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="mb-4 text-title-md font-medium text-text">
               Nos services
@@ -46,43 +75,49 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
         </div>
 
-        {/* Grille de services */}
+        {/* Grille de services - 2 colonnes sur desktop, 1 sur mobile */}
         <div className="grid gap-8 sm:grid-cols-2 lg:gap-12">
-          {SERVICES.map((service, index) => (
-            <SimpleAnimation key={service.title} type="slide-up" delay={index * 100}>
-              <article className="group rounded-sm border border-stone/20 bg-surface p-8 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-card">
-                {/* Icône */}
-                <div
-                  className="mb-6 text-4xl transition-transform duration-300 group-hover:scale-110"
-                  aria-hidden="true"
-                >
-                  {service.icon}
-                </div>
-
-                {/* Titre */}
-                <h3 className="mb-3 text-title-sm font-medium text-text">{service.title}</h3>
-
-                {/* Description */}
-                <p className="mb-6 text-body leading-relaxed text-stone">{service.description}</p>
-
-                {/* Lien */}
-                <a
-                  href={service.link}
-                  className="inline-flex items-center gap-2 text-body font-medium text-text transition-colors hover:text-accent focus-visible:text-accent"
-                  aria-label={`En savoir plus sur ${service.title}`}
-                >
-                  Découvrir
-                  <ArrowRight
-                    className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                    aria-hidden="true"
+          {services.map((service, index) => (
+            <SimpleAnimation key={service.title} type="fade" delay={index * 100}>
+              <article className="group relative">
+                {/* Image pleine hauteur avec texte superposé */}
+                <div className="relative aspect-[3/4] w-full overflow-hidden">
+                  <img
+                    src={service.image}
+                    alt={service.title}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
                   />
-                </a>
+
+                  {/* Boîte de texte superposée en bas */}
+                  <div className="absolute bottom-0 left-0 right-0 flex justify-center p-4 sm:p-6">
+                    <div className="w-full space-y-3 bg-background px-4 py-6 sm:space-y-4 sm:px-6 sm:py-8">
+                      <h3 className="text-title-sm font-medium text-text">{service.title}</h3>
+
+                      <p className="text-body-sm leading-relaxed text-stone sm:text-body">
+                        {service.description}
+                      </p>
+
+                      <a
+                        href={service.link}
+                        className="inline-flex items-center gap-2 text-body-sm font-medium text-accent transition-colors hover:text-text focus-visible:text-text sm:text-body"
+                        aria-label={`En savoir plus sur ${service.title}`}
+                      >
+                        En savoir plus
+                        <ArrowRight
+                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
+                          aria-hidden="true"
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </article>
             </SimpleAnimation>
           ))}
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 
