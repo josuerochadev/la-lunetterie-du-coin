@@ -3,7 +3,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
-import FloatingCTA from '@/components/common/FloatingCTA';
 import { CALENDLY_URL } from '@/config/constants';
 
 /**
@@ -108,11 +107,7 @@ export default function OffersPage() {
 
         {/* Offres détaillées */}
         {offers.map((offer, index) => (
-          <SectionContainer
-            key={offer.id}
-            id={offer.id}
-            className={index % 2 === 0 ? 'bg-surface py-section' : 'bg-background py-section'}
-          >
+          <SectionContainer key={offer.id} id={offer.id} className="bg-background py-section">
             <div className="mx-auto max-w-container px-4 sm:px-6">
               <div
                 className={`grid items-start gap-12 lg:grid-cols-2 lg:gap-16 ${
@@ -156,7 +151,7 @@ export default function OffersPage() {
 
                   {/* Tips box */}
                   <SimpleAnimation type="slide-up" delay={250}>
-                    <div className="mt-8 space-y-3 rounded-sm border-l-4 border-accent bg-accent/5 p-6">
+                    <div className="mt-8 space-y-3 border-l-4 border-accent bg-accent/5 p-6">
                       {offer.tips.map((tip, i) => (
                         <p key={i} className="text-body text-text">
                           {tip}
@@ -167,7 +162,7 @@ export default function OffersPage() {
 
                   {/* Conditions */}
                   <SimpleAnimation type="slide-up" delay={300}>
-                    <div className="mt-8 rounded-sm border-l-4 border-stone/30 bg-stone/5 p-6">
+                    <div className="mt-8 border-l-4 border-stone/30 bg-stone/5 p-6">
                       <h4 className="mb-3 text-body font-medium text-text">Conditions :</h4>
                       <ul className="space-y-2 text-body-sm text-stone">
                         {offer.conditions.map((condition, i) => (
@@ -181,16 +176,19 @@ export default function OffersPage() {
                   </SimpleAnimation>
                 </div>
 
-                {/* Image placeholder */}
+                {/* Image */}
                 <SimpleAnimation
                   type="slide-up"
                   delay={100}
                   className={index % 2 === 1 ? 'lg:col-start-2' : ''}
                 >
-                  <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-card">
-                    <div className="flex h-full items-center justify-center bg-stone/10">
-                      <p className="text-body text-stone">Photo : {offer.title}</p>
-                    </div>
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <img
+                      src={`/images/offers-${offer.id}.jpg`}
+                      alt={offer.title}
+                      className="h-full w-full object-cover object-center"
+                      loading="lazy"
+                    />
                   </div>
                 </SimpleAnimation>
               </div>
@@ -220,13 +218,13 @@ export default function OffersPage() {
                     href={CALENDLY_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-sm border border-cream bg-cream px-8 py-4 text-body font-medium text-accent transition-all hover:bg-cream/90"
+                    className="button-primary bg-cream text-accent hover:bg-cream/90 hover:text-accent"
                   >
                     Prendre rendez-vous
                   </a>
                   <a
-                    href="/#contact"
-                    className="inline-flex items-center gap-2 rounded-sm border border-cream bg-transparent px-8 py-4 text-body font-medium text-cream transition-all hover:bg-cream hover:text-accent"
+                    href="/contact"
+                    className="button-primary border-cream text-cream hover:bg-cream hover:text-accent"
                   >
                     Nous contacter
                   </a>
@@ -235,8 +233,6 @@ export default function OffersPage() {
             </div>
           </div>
         </SectionContainer>
-
-        <FloatingCTA />
       </Layout>
     </>
   );

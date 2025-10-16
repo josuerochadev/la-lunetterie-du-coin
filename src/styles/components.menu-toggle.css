@@ -1,0 +1,89 @@
+/* ====== MENU TOGGLE BUTTON ====== */
+/* Styles hors @layer pour priorité maximale */
+
+.menu-toggle-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+  background: transparent !important;
+  border: none !important;
+  height: auto !important;
+  width: auto !important;
+  padding: 0 !important;
+  color: rgb(var(--color-charcoal-rgb)) !important;
+  transition: color 200ms ease !important;
+  cursor: pointer !important;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.menu-toggle-button:hover {
+  color: rgb(var(--color-orange-rgb)) !important;
+}
+
+.menu-toggle-button:focus {
+  outline: none !important;
+}
+
+.menu-toggle-button:focus-visible {
+  outline: 2px solid rgb(var(--color-accent-rgb)) !important;
+  outline-offset: 2px !important;
+}
+
+.menu-toggle-icon {
+  position: relative !important;
+  display: block !important;
+  height: 1rem !important;
+  width: 1.25rem !important;
+  flex-shrink: 0 !important;
+}
+
+.menu-toggle-bar {
+  position: absolute !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 2px !important;
+  background-color: currentColor !important;
+  transition: all 200ms ease !important;
+  display: block !important;
+}
+
+.menu-toggle-bar--top {
+  top: 0 !important;
+}
+
+.menu-toggle-bar--middle {
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+}
+
+.menu-toggle-bar--bottom {
+  bottom: 0 !important;
+}
+
+/* Animation X pour l'état ouvert */
+.menu-toggle-button[data-state='open'] .menu-toggle-bar--top {
+  transform: translateY(8px) rotate(45deg) !important;
+}
+
+.menu-toggle-button[data-state='open'] .menu-toggle-bar--middle {
+  opacity: 0 !important;
+}
+
+.menu-toggle-button[data-state='open'] .menu-toggle-bar--bottom {
+  transform: translateY(-8px) rotate(-45deg) !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-toggle-button,
+  .menu-toggle-bar {
+    transition-duration: 0.01ms !important;
+  }
+  .menu-toggle-button[data-state='open'] .menu-toggle-bar--top,
+  .menu-toggle-button[data-state='open'] .menu-toggle-bar--bottom {
+    transform: none !important;
+  }
+  .menu-toggle-button[data-state='open'] .menu-toggle-bar--middle {
+    opacity: 1 !important;
+  }
+}

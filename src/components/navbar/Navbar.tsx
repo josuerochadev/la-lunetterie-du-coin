@@ -68,7 +68,7 @@ const Navbar: React.FC = () => {
         ></div>
         <SimpleAnimation type="fade" immediate={true}>
           <nav
-            className="relative mx-auto flex min-h-[60px] max-w-container items-start justify-between gap-2 px-4 py-3 sm:min-h-[72px] sm:gap-4 sm:px-6 sm:py-4"
+            className="relative mx-auto flex min-h-[60px] max-w-container items-center justify-between gap-2 px-4 py-3 sm:min-h-[72px] sm:gap-4 sm:px-6 sm:py-4"
             aria-label="Navigation principale"
           >
             {/* Gauche : Wordmark */}
@@ -82,13 +82,13 @@ const Navbar: React.FC = () => {
             </div>
 
             {/* Droite : CTA + Icônes utilitaires + Menu button */}
-            <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-4 sm:gap-6">
               {/* CTA Prendre RDV - toujours visible */}
               <Link
                 to={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="button-primary inline-flex px-3 py-2 text-body-sm sm:px-4"
+                className="inline-flex items-center gap-2 border border-accent bg-transparent px-4 py-2 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream sm:px-6 sm:py-3"
                 aria-label="Prendre rendez-vous"
               >
                 <span className="hidden lg:inline">Prendre RDV</span>

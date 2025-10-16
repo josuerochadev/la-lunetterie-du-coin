@@ -1,3 +1,4 @@
+/* Tous les @import doivent être au début du fichier */
 @import './fonts.css';
 @import './base.css';
 @import './components.a11y.css';
@@ -7,6 +8,7 @@
 @import './components.forms.css';
 @import './simple-animations.css';
 @import './responsive-improvements.css';
+@import './components.menu-toggle.css';
 
 @tailwind base;
 @tailwind components;

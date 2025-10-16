@@ -11,7 +11,7 @@ export const LINKS = [
   { label: 'Nos services', href: '/services' },
   { label: 'Nos offres', href: '/#offers' },
   { label: 'Témoignages', href: '/#testimonials' },
-  { label: 'Nous contacter', href: '/#contact' },
+  { label: 'Nous contacter', href: '/contact' },
   { label: 'Prendre rendez‑vous', href: CALENDLY_URL },
 ];
 
@@ -45,7 +45,7 @@ export const MENU_CATEGORIES = [
   },
   {
     title: 'NOUS CONTACTER',
-    href: '/#contact', // Titre cliquable vers la section contact
+    href: '/contact', // Titre cliquable vers la page contact
     links: [], // Pas de sous-liens
   },
 ];

@@ -3,7 +3,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
-import FloatingCTA from '@/components/common/FloatingCTA';
 
 /**
  * Page À propos (Phase 3)
@@ -50,7 +49,7 @@ export default function AboutPage() {
         </SectionContainer>
 
         {/* Notre Histoire */}
-        <SectionContainer className="bg-surface py-section">
+        <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-4 sm:px-6">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Texte */}
@@ -82,12 +81,15 @@ export default function AboutPage() {
                 </SimpleAnimation>
               </div>
 
-              {/* Image placeholder */}
+              {/* Image */}
               <SimpleAnimation type="slide-up" delay={200}>
-                <div className="relative aspect-[4/3] overflow-hidden rounded-sm shadow-card">
-                  <div className="flex h-full items-center justify-center bg-stone/10">
-                    <p className="text-body text-stone">Photo : Intérieur de la boutique</p>
-                  </div>
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <img
+                    src="/images/our-story-eyeglasses.jpg"
+                    alt="Intérieur de La Lunetterie du Coin"
+                    className="h-full w-full object-cover object-center"
+                    loading="lazy"
+                  />
                 </div>
               </SimpleAnimation>
             </div>
@@ -123,7 +125,7 @@ export default function AboutPage() {
                   },
                 ].map((value, index) => (
                   <SimpleAnimation key={value.title} type="slide-up" delay={index * 100}>
-                    <div className="rounded-sm border border-stone/20 bg-surface p-8 shadow-soft">
+                    <div className="border-t border-stone/20 pt-8">
                       <h3 className="mb-4 text-body-lg font-medium text-text">{value.title}</h3>
                       <p className="text-body leading-relaxed text-stone">{value.description}</p>
                     </div>
@@ -135,7 +137,7 @@ export default function AboutPage() {
         </SectionContainer>
 
         {/* L'équipe */}
-        <SectionContainer className="bg-surface py-section">
+        <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-4 sm:px-6">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
@@ -146,10 +148,13 @@ export default function AboutPage() {
                 {/* Romain */}
                 <SimpleAnimation type="slide-up" delay={100}>
                   <div className="grid items-center gap-8 md:grid-cols-2">
-                    <div className="aspect-square overflow-hidden rounded-sm shadow-card">
-                      <div className="flex h-full items-center justify-center bg-stone/10">
-                        <p className="text-body text-stone">Photo : Romain</p>
-                      </div>
+                    <div className="aspect-square overflow-hidden">
+                      <img
+                        src="/images/team-romain.jpg"
+                        alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                        className="h-full w-full object-cover object-center"
+                        loading="lazy"
+                      />
                     </div>
                     <div className="space-y-4">
                       <h3 className="text-title-sm font-medium text-text">Romain Corato</h3>
@@ -168,7 +173,7 @@ export default function AboutPage() {
 
                 {/* Équipe */}
                 <SimpleAnimation type="slide-up" delay={200}>
-                  <div className="rounded-sm border border-stone/20 bg-background p-8">
+                  <div className="border-t border-stone/20 pt-8">
                     <h3 className="mb-4 text-body-lg font-medium text-text">
                       Une équipe passionnée
                     </h3>
@@ -215,10 +220,7 @@ export default function AboutPage() {
 
               <SimpleAnimation type="slide-up" delay={200}>
                 <div className="mt-12 text-center">
-                  <a
-                    href="/services#recyclage"
-                    className="inline-flex items-center gap-2 rounded-sm border border-accent bg-transparent px-8 py-4 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-                  >
+                  <a href="/services#recyclage" className="button-primary">
                     Découvrir notre programme de recyclage →
                   </a>
                 </div>
@@ -226,8 +228,6 @@ export default function AboutPage() {
             </div>
           </div>
         </SectionContainer>
-
-        <FloatingCTA />
       </Layout>
     </>
   );

@@ -37,10 +37,24 @@ export function initPerformanceMonitoring() {
 
   const observer = new PerformanceObserver((list) => {
     for (const entry of list.getEntries()) {
+      // Déterminer le nom de la métrique selon le type d'entrée
+      let metricName: keyof typeof thresholds | null = null;
+
+      if (entry.entryType === 'largest-contentful-paint') {
+        metricName = 'LCP';
+      } else if (entry.entryType === 'first-input') {
+        metricName = 'FID';
+      } else if (entry.entryType === 'layout-shift') {
+        metricName = 'CLS';
+      }
+
+      // Ignorer les entrées qui ne correspondent pas à nos métriques
+      if (!metricName) continue;
+
       const metric: PerformanceMetric = {
-        name: entry.name,
+        name: metricName,
         value: Math.round(entry.value),
-        rating: getRating(entry.name as keyof typeof thresholds, entry.value),
+        rating: getRating(metricName, entry.value),
         timestamp: Date.now(),
       };
 

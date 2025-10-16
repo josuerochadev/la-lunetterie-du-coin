@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 const AboutPage = lazy(() => import('./pages/AboutPage'));
 const ServicesPage = lazy(() => import('./pages/ServicesPage'));
 const OffersPage = lazy(() => import('./pages/OffersPage'));
+const ContactPage = lazy(() => import('./pages/ContactPage'));
 const MentionsLegales = lazy(() => import('./pages/MentionsLegales'));
 const ConditionsDeVente = lazy(() => import('./pages/ConditionsDeVente'));
 const NotFound = lazy(() => import('./pages/NotFound'));
@@ -36,6 +37,14 @@ export default function App() {
         element={
           <Suspense fallback={<div className="p-4 text-body">…</div>}>
             <OffersPage />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/contact"
+        element={
+          <Suspense fallback={<div className="p-4 text-body">…</div>}>
+            <ContactPage />
           </Suspense>
         }
       />

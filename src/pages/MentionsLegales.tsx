@@ -1,7 +1,4 @@
 import LegalPageLayout from '@/components/legal/LegalPageLayout';
-import TableOfContents from '@/components/legal/TableOfContents';
-import HighlightBox from '@/components/legal/HighlightBox';
-import PrintButton from '@/components/legal/PrintButton';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import {
   COMPANY_NAME,
@@ -21,15 +18,6 @@ import {
   MEDIATOR_ADDRESS,
 } from '@/config/constants';
 
-const sections = [
-  { id: 'editeur', title: 'Éditeur du site' },
-  { id: 'contact', title: 'Contact' },
-  { id: 'hebergeur', title: 'Hébergeur' },
-  { id: 'propriete-intellectuelle', title: 'Propriété intellectuelle' },
-  { id: 'donnees-personnelles', title: 'Données personnelles & cookies' },
-  { id: 'mediation', title: 'Médiation de la consommation' },
-];
-
 export default function MentionsLegales() {
   return (
     <LegalPageLayout
@@ -38,130 +26,99 @@ export default function MentionsLegales() {
       canonicalPath="/mentions-legales"
       lastUpdated="Décembre 2024"
     >
-      <TableOfContents sections={sections} />
+      <SimpleAnimation type="slide-up" delay={0}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Éditeur du site</h2>
 
-      <SimpleAnimation type="slide-down" delay={0}>
-        <section className="space-y-md">
-          <h2
-            id="editeur"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Éditeur du site
-          </h2>
+          <div className="space-y-4 text-body leading-relaxed text-stone">
+            <p>
+              <strong className="font-medium text-text">Nom :</strong>
+              <br />
+              {COMPANY_NAME}
+            </p>
 
-          <div className="space-y-sm">
-            <div className="grid grid-cols-1 gap-md md:grid-cols-2">
-              <div>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">Nom :</strong>
-                  <br />
-                  {COMPANY_NAME}
-                </p>
-              </div>
-              <div>
-                <p className="text-body leading-relaxed">
-                  <strong className="font-semibold text-primary">Forme juridique :</strong>
-                  <br />
-                  {COMPANY_LEGAL_FORM}{' '}
-                  {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
-                </p>
-              </div>
-            </div>
+            <p>
+              <strong className="font-medium text-text">Forme juridique :</strong>
+              <br />
+              {COMPANY_LEGAL_FORM}{' '}
+              {COMPANY_SHARE_CAPITAL ? `(capital social : ${COMPANY_SHARE_CAPITAL})` : ''}
+            </p>
 
-            <div className="space-y-3 pt-4">
-              <p className="text-body leading-relaxed">
-                <strong className="font-semibold text-primary">Siège social :</strong>
-                <br />
-                {COMPANY_ADDRESS}
-              </p>
-              <p className="text-body leading-relaxed">
-                <strong className="font-semibold text-primary">SIRET :</strong> {COMPANY_SIRET}
-                <span className="mx-4">•</span>
-                <strong className="font-semibold text-primary">RCS :</strong> {COMPANY_RCS}
-              </p>
-              <p className="text-body leading-relaxed">
-                <strong className="font-semibold text-primary">TVA intracommunautaire :</strong>{' '}
-                {COMPANY_VAT || 'N/A'}
-              </p>
-              <p className="text-body leading-relaxed">
-                <strong className="font-semibold text-primary">
-                  Directeur de la publication :
-                </strong>{' '}
-                {PUBLICATION_DIRECTOR}
-              </p>
-            </div>
+            <p>
+              <strong className="font-medium text-text">Siège social :</strong>
+              <br />
+              {COMPANY_ADDRESS}
+            </p>
+
+            <p>
+              <strong className="font-medium text-text">SIRET :</strong> {COMPANY_SIRET}
+              <span className="mx-4">•</span>
+              <strong className="font-medium text-text">RCS :</strong> {COMPANY_RCS}
+            </p>
+
+            <p>
+              <strong className="font-medium text-text">TVA intracommunautaire :</strong>{' '}
+              {COMPANY_VAT || 'N/A'}
+            </p>
+
+            <p>
+              <strong className="font-medium text-text">Directeur de la publication :</strong>{' '}
+              {PUBLICATION_DIRECTOR}
+            </p>
           </div>
         </section>
       </SimpleAnimation>
 
-      <SimpleAnimation type="slide-down" delay={80}>
-        <section className="space-y-md">
-          <h2
-            id="contact"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Contact
-          </h2>
+      <SimpleAnimation type="slide-up" delay={100}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Contact</h2>
 
-          <HighlightBox title="Nous contacter" variant="info">
-            <div className="grid grid-cols-1 gap-sm md:grid-cols-2">
-              <p className="text-primary">
-                <strong>Email :</strong>
+          <div className="border-t border-stone/20 pt-8">
+            <div className="space-y-4 text-body leading-relaxed text-stone">
+              <p>
+                <strong className="font-medium text-text">Email :</strong>
                 <br />
                 <a
                   href={`mailto:${COMPANY_EMAIL}`}
-                  className="font-normal text-primary underline underline-offset-2 transition-all hover:font-semibold"
+                  className="text-accent transition-colors hover:text-text"
                 >
                   {COMPANY_EMAIL}
                 </a>
               </p>
-              <p className="text-primary">
-                <strong>Téléphone :</strong>
+
+              <p>
+                <strong className="font-medium text-text">Téléphone :</strong>
                 <br />
                 <a
                   href={`tel:${COMPANY_PHONE}`}
-                  className="font-normal text-primary underline underline-offset-2 transition-all hover:font-semibold"
+                  className="text-accent transition-colors hover:text-text"
                 >
                   {COMPANY_PHONE}
                 </a>
               </p>
             </div>
-          </HighlightBox>
-        </section>
-      </SimpleAnimation>
-
-      <SimpleAnimation type="slide-down" delay={160}>
-        <section className="space-y-md">
-          <h2
-            id="hebergeur"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Hébergeur
-          </h2>
-
-          <div className="space-y-3">
-            <p className="text-body leading-relaxed">
-              <strong className="font-semibold text-primary">{HOST_NAME}</strong>
-            </p>
-            <p className="text-body leading-relaxed text-primary/80">{HOST_ADDRESS}</p>
           </div>
         </section>
       </SimpleAnimation>
 
-      <SimpleAnimation type="slide-down" delay={240}>
-        <section className="space-y-md">
-          <h2
-            id="propriete-intellectuelle"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Propriété intellectuelle
-          </h2>
+      <SimpleAnimation type="slide-up" delay={200}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Hébergeur</h2>
 
-          <p className="text-body leading-relaxed">
+          <div className="space-y-4 text-body leading-relaxed text-stone">
+            <p>
+              <strong className="font-medium text-text">{HOST_NAME}</strong>
+            </p>
+            <p>{HOST_ADDRESS}</p>
+          </div>
+        </section>
+      </SimpleAnimation>
+
+      <SimpleAnimation type="slide-up" delay={300}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Propriété intellectuelle</h2>
+
+          <p className="text-body leading-relaxed text-stone">
             Le site et l'ensemble de ses contenus (textes, images, logos, éléments graphiques) sont
             protégés par le droit d'auteur. Toute reproduction ou représentation, totale ou
             partielle, sans autorisation préalable, est interdite.
@@ -169,17 +126,11 @@ export default function MentionsLegales() {
         </section>
       </SimpleAnimation>
 
-      <SimpleAnimation type="slide-down" delay={320}>
-        <section className="space-y-md">
-          <h2
-            id="donnees-personnelles"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Données personnelles & cookies
-          </h2>
+      <SimpleAnimation type="slide-up" delay={400}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Données personnelles & cookies</h2>
 
-          <p className="text-body leading-relaxed">
+          <p className="text-body leading-relaxed text-stone">
             Pour toute demande relative à la protection des données, contactez l'éditeur aux
             coordonnées ci-dessus. Si des traceurs/cookies tiers sont utilisés, une politique de
             confidentialité et une bannière cookies doivent être mises en place.
@@ -187,43 +138,36 @@ export default function MentionsLegales() {
         </section>
       </SimpleAnimation>
 
-      <SimpleAnimation type="slide-down" delay={400}>
-        <section className="space-y-md">
-          <h2
-            id="mediation"
-            className="font-serif text-title-lg font-bold text-primary"
-            tabIndex={-1}
-          >
-            Médiation de la consommation
-          </h2>
+      <SimpleAnimation type="slide-up" delay={500}>
+        <section className="space-y-6">
+          <h2 className="text-title-md font-medium text-text">Médiation de la consommation</h2>
 
-          <p className="mb-md text-body leading-relaxed">
+          <p className="mb-6 text-body leading-relaxed text-stone">
             Conformément à l'article L.612-1 du Code de la consommation, le client peut recourir à
             un médiateur de la consommation gratuitement.
           </p>
 
-          <HighlightBox title="Médiateur compétent" variant="important">
-            <div className="space-y-3">
-              <p className="font-medium text-primary">
-                <strong>{MEDIATOR_NAME}</strong>
+          <div className="border-t border-stone/20 pt-8">
+            <h3 className="mb-4 text-body-lg font-medium text-text">Médiateur compétent</h3>
+            <div className="space-y-4 text-body leading-relaxed text-stone">
+              <p>
+                <strong className="font-medium text-text">{MEDIATOR_NAME}</strong>
               </p>
-              <p className="leading-relaxed text-primary/80">{MEDIATOR_ADDRESS}</p>
+              <p>{MEDIATOR_ADDRESS}</p>
               <p>
                 <a
                   href={MEDIATOR_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="font-medium text-primary underline underline-offset-2 transition-all hover:font-semibold"
+                  className="text-accent transition-colors hover:text-text"
                 >
                   Plus d'informations sur la médiation →
                 </a>
               </p>
             </div>
-          </HighlightBox>
+          </div>
         </section>
       </SimpleAnimation>
-
-      <PrintButton />
     </LegalPageLayout>
   );
 }

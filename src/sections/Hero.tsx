@@ -30,8 +30,8 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
       aria-labelledby="hero-title"
       {...props}
     >
-      {/* 60% inférieur : images 50/50 avec gaps */}
-      <div className="absolute bottom-0 left-0 right-0 flex h-[60%] w-full gap-4 px-4 pb-4 sm:gap-6 sm:px-6 sm:pb-6">
+      {/* 50% inférieur : images 50/50 avec gaps */}
+      <div className="absolute bottom-0 left-0 right-0 flex h-[50%] w-full gap-4 px-4 pb-4 sm:gap-6 sm:px-6 sm:pb-6">
         {/* Image gauche */}
         <div className="relative h-full w-1/2">
           <SimpleAnimation type="fade" delay={0} immediate={true} className="h-full w-full">
@@ -57,8 +57,8 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
         </div>
       </div>
 
-      {/* Contenu texte - centré dans les 40% supérieurs (sous la navbar) */}
-      <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(40%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(40%-72px)] sm:px-12 lg:px-16">
+      {/* Contenu texte - centré dans les 50% supérieurs (sous la navbar) */}
+      <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(50%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(50%-72px)] sm:px-12 lg:px-16">
         <SimpleAnimation type="fade" delay={400} immediate={true}>
           <div className="w-full space-y-4 sm:space-y-6">
             <h1

@@ -180,7 +180,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="button-primary mt-4 inline-block px-4 py-2 text-body-sm"
+                    className="mt-4 inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
                   >
                     {MENU_CTA.label}
                   </a>

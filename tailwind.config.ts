@@ -125,10 +125,19 @@ const config: Config = {
       },
       zIndex: {
         base: '10',
+        'section-1': '11',
+        'section-2': '12',
+        'section-3': '13',
+        'section-4': '14',
+        'section-5': '15',
+        'section-6': '16',
+        'section-7': '17',
+        'section-8': '18',
         navbar: '40',
         menu: '50',
         modal: '100',
         overlay: '200',
+        cursor: '300',
       },
 
       /* ====== MOTION ====== */

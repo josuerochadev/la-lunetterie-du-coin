@@ -1,50 +1,31 @@
 import { forwardRef } from 'react';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import Phone from 'lucide-react/dist/esm/icons/phone';
-import Mail from 'lucide-react/dist/esm/icons/mail';
-import Clock from 'lucide-react/dist/esm/icons/clock';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
-import SectionContainer from '@/components/common/SectionContainer';
-import ContactForm from '@/components/contact/ContactForm';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/constants';
 
 /**
- * Section Contact améliorée (Phase 2)
+ * Section Contact - Homepage CTA
  *
- * Layout 50/50 avec :
- * - Gauche : Informations pratiques (adresse, téléphone, email, horaires)
- * - Droite : Formulaire de contact
+ * Section simplifiée sur la homepage avec :
+ * - Titre "Nous contacter"
+ * - Phrase d'accroche
+ * - Bouton CTA bordered (Option A) pointant vers /contact
  *
- * Style minimaliste cohérent avec le redesign :
- * - Typographie Jost
- * - Palette crème/charcoal/stone/orange
- * - Espaces généreux
- * - Icônes subtiles
+ * Style éditorial minimal cohérent avec les autres sections
  *
  * @component
- * @returns {JSX.Element} La section Contact améliorée
+ * @returns {JSX.Element} La section Contact CTA
  */
 const ContactEnhanced = forwardRef<HTMLElement>(() => {
-  const openingHours = [
-    { day: 'Lundi', hours: 'Fermé' },
-    { day: 'Mardi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Mercredi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Jeudi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Vendredi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Samedi', hours: '10h00 - 13h00 • 14h00 - 18h00' },
-    { day: 'Dimanche', hours: 'Fermé' },
-  ];
-
   return (
-    <SectionContainer
+    <section
       id="contact"
-      className="bg-background py-section"
+      className="relative w-full bg-background py-section"
       aria-labelledby="contact-title"
     >
-      <div className="mx-auto max-w-container px-4 sm:px-6">
-        {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-3xl text-center">
+      <div className="mx-auto max-w-container px-container-x">
+        <div className="mx-auto max-w-3xl text-center">
+          {/* En-tête */}
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="contact-title" className="mb-4 text-title-md font-medium text-text">
               Nous contacter
@@ -52,108 +33,27 @@ const ContactEnhanced = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">
-              Une question ? N'hésitez pas à nous contacter, nous vous répondrons avec plaisir
+            <p className="mb-8 text-body-lg text-stone">
+              Une question ? Besoin d'un conseil ? Nous sommes là pour vous accompagner
             </p>
           </SimpleAnimation>
-        </div>
 
-        {/* Layout 50/50 */}
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* Colonne gauche : Informations */}
-          <div className="space-y-8">
-            {/* Adresse */}
-            <SimpleAnimation type="slide-up" delay={0}>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <MapPin className="h-6 w-6 text-accent" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="mb-2 text-body-lg font-medium text-text">Adresse</h3>
-                  <address className="text-body not-italic leading-relaxed text-stone">
-                    {COMPANY_ADDRESS}
-                  </address>
-                  <a
-                    href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-2 inline-block text-body-sm font-medium text-accent transition-colors hover:text-text"
-                  >
-                    Voir sur Google Maps →
-                  </a>
-                </div>
-              </div>
-            </SimpleAnimation>
-
-            {/* Téléphone */}
-            <SimpleAnimation type="slide-up" delay={100}>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <Phone className="h-6 w-6 text-accent" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="mb-2 text-body-lg font-medium text-text">Téléphone</h3>
-                  <a
-                    href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-stone transition-colors hover:text-accent"
-                  >
-                    {COMPANY_PHONE}
-                  </a>
-                </div>
-              </div>
-            </SimpleAnimation>
-
-            {/* Email */}
-            <SimpleAnimation type="slide-up" delay={200}>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <Mail className="h-6 w-6 text-accent" aria-hidden="true" />
-                </div>
-                <div>
-                  <h3 className="mb-2 text-body-lg font-medium text-text">Email</h3>
-                  <a
-                    href={`mailto:${COMPANY_EMAIL}`}
-                    className="text-body text-stone transition-colors hover:text-accent"
-                  >
-                    {COMPANY_EMAIL}
-                  </a>
-                </div>
-              </div>
-            </SimpleAnimation>
-
-            {/* Horaires */}
-            <SimpleAnimation type="slide-up" delay={300}>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <Clock className="h-6 w-6 text-accent" aria-hidden="true" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="mb-4 text-body-lg font-medium text-text">Horaires d'ouverture</h3>
-                  <dl className="space-y-2">
-                    {openingHours.map((schedule) => (
-                      <div key={schedule.day} className="flex justify-between text-body">
-                        <dt className="font-medium text-text">{schedule.day}</dt>
-                        <dd className={schedule.hours === 'Fermé' ? 'text-stone/60' : 'text-stone'}>
-                          {schedule.hours}
-                        </dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
-              </div>
-            </SimpleAnimation>
-          </div>
-
-          {/* Colonne droite : Formulaire */}
-          <SimpleAnimation type="slide-up" delay={200}>
-            <div className="rounded-sm border border-stone/20 bg-surface p-8 shadow-soft">
-              <h3 className="mb-6 text-body-lg font-medium text-text">Envoyez-nous un message</h3>
-              <ContactForm />
-            </div>
+          {/* CTA Button - Option A: bordered minimal */}
+          <SimpleAnimation type="fade" delay={200}>
+            <a
+              href="/contact"
+              className="group inline-flex items-center gap-2 border border-accent bg-transparent px-8 py-4 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+            >
+              Nous contacter
+              <ArrowRight
+                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                aria-hidden="true"
+              />
+            </a>
           </SimpleAnimation>
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 });
 

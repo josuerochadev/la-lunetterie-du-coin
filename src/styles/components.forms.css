@@ -1,87 +1,72 @@
 /* ====== FORMULAIRES ====== */
 @layer components {
-  /* Formulaire de contact - Glassmorphism sur image de fond */
+  /* Formulaire de contact - Style éditorial underline minimal */
   .form-input {
-    @apply w-full p-sm font-sans tracking-normal transition-all duration-300 sm:p-md;
+    @apply w-full px-0 py-3 font-sans text-body tracking-normal transition-all duration-300;
 
-    /* Glassmorphism élégant qui laisse voir l'image */
-    background: rgba(var(--color-violet-light-rgb), 0.15);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    /* Fond transparent - design flat */
+    background: transparent;
 
-    /* Bordure subtile mais visible */
-    border: 1px solid rgba(var(--color-violet-light-rgb), 0.3);
-    border-radius: 12px;
+    /* Bordure bottom uniquement - style underline */
+    border: none;
+    border-bottom: 1px solid rgb(var(--color-stone-rgb) / 0.3);
 
-    /* Texte mauve foncé lisible sur fond glassmorphism */
-    color: rgba(var(--color-mauve-dark-rgb), 0.95);
-    font-weight: 500;
-
-    /* Ombre douce pour détacher du fond */
-    box-shadow: 0 4px 16px rgba(var(--color-mauve-dark-rgb), 0.1);
+    /* Texte charcoal */
+    color: rgb(var(--color-text-rgb));
+    font-weight: 400;
   }
 
   .form-input::placeholder {
-    color: rgba(var(--color-mauve-dark-rgb), 0.5);
-    font-style: italic;
+    color: rgb(var(--color-stone-rgb) / 0.6);
+    font-style: normal;
   }
 
   .form-input:focus {
     outline: none;
-    /* Glassmorphism renforcé au focus */
-    background: rgba(var(--color-violet-light-rgb), 0.25);
-    border-color: rgba(var(--color-violet-light-rgb), 0.6);
-
-    /* Ring de focus avec glassmorphism */
-    box-shadow:
-      0 0 0 3px rgba(var(--color-violet-light-rgb), 0.3),
-      0 8px 24px rgba(var(--color-mauve-dark-rgb), 0.15);
-
-    /* Texte contrasté */
-    color: rgba(var(--color-mauve-dark-rgb), 1);
+    /* Bordure accent au focus */
+    border-bottom-color: rgb(var(--color-accent-rgb));
+    border-bottom-width: 2px;
+    /* Pas de shadow ni de ring */
   }
 
   .form-input:focus::placeholder {
-    color: rgba(var(--color-mauve-dark-rgb), 0.3);
+    color: rgb(var(--color-stone-rgb) / 0.4);
   }
 
   /* État d'erreur */
   .form-input--error {
-    border-color: rgb(239 68 68); /* red-500 */
-    background: rgba(239, 68, 68, 0.1);
+    border-bottom-color: rgb(239 68 68); /* red-500 */
+    border-bottom-width: 2px;
   }
 
   .form-input--error:focus {
-    box-shadow:
-      0 0 0 3px rgba(239, 68, 68, 0.3),
-      0 4px 16px rgba(239, 68, 68, 0.1);
+    border-bottom-color: rgb(239 68 68);
   }
 
-  /* Labels avec police plus grande pour visibilité */
+  /* Labels - style éditorial */
   .form-label {
-    @apply mb-xs font-serif text-body-lg font-bold;
-    color: rgba(var(--color-violet-light-rgb), 1);
+    @apply mb-2 font-sans text-body font-medium text-text;
   }
 
   /* Messages d'aide et d'erreur */
   .form-hint {
-    @apply mt-xs text-body-sm text-accent/70;
+    @apply mt-2 text-body-sm text-stone;
   }
 
   .form-error {
-    @apply mt-xs text-body-sm font-medium text-red-600;
+    @apply mt-2 text-body-sm font-medium text-red-600;
   }
 
   /* Messages de statut */
   .form-message--success {
-    @apply font-semibold text-accent;
+    @apply font-medium text-accent;
   }
 
   .form-message--error {
-    @apply font-semibold text-red-700;
+    @apply font-medium text-red-700;
   }
 
   .form-message--info {
-    @apply font-semibold text-blue-700;
+    @apply font-medium text-stone;
   }
 }
