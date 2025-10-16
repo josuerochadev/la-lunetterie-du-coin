@@ -42,7 +42,7 @@ const EngagementEcologique = forwardRef<HTMLElement>(() => {
         {/* Boîte de texte superposée en bas */}
         <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
           <SimpleAnimation type="slide-up" delay={200}>
-            <div className="w-full max-w-3xl space-y-6 bg-background px-container-x py-container-y sm:space-y-8">
+            <div className="w-full max-w-4xl space-y-6 bg-background px-container-x py-container-y sm:space-y-8">
               {/* Tagline */}
               <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
                 Notre engagement

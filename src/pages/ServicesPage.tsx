@@ -114,7 +114,7 @@ export default function ServicesPage() {
         {/* Hero */}
         <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h1 className="mb-6 text-title-lg font-medium text-text">Nos services</h1>
               </SimpleAnimation>
@@ -225,7 +225,7 @@ export default function ServicesPage() {
         {/* CTA final */}
         <SectionContainer className="bg-accent py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-6 text-title-md font-medium text-cream">
                   Prêt à trouver la paire parfaite ?

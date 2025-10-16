@@ -32,7 +32,7 @@ export default function AboutPage() {
         {/* Hero Section */}
         <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h1 className="mb-6 text-title-lg font-medium text-text">
                   À propos de La Lunetterie du Coin

@@ -61,7 +61,7 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
     >
       <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-3xl text-center">
+        <div className="mx-auto mb-16 max-w-4xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="mb-4 text-title-md font-medium text-text">
               Nos services

@@ -91,7 +91,7 @@ export default function OffersPage() {
         {/* Hero */}
         <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h1 className="mb-6 text-title-lg font-medium text-text">Nos offres</h1>
               </SimpleAnimation>
@@ -199,7 +199,7 @@ export default function OffersPage() {
         {/* CTA final */}
         <SectionContainer className="bg-accent py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl text-center">
+            <div className="mx-auto max-w-5xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-6 text-title-md font-medium text-cream">
                   Prêt à profiter de nos offres ?
