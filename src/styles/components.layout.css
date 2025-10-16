@@ -1,10 +1,5 @@
 /* ====== LAYOUT ====== */
 @layer components {
-  /* Conteneur standardisé pour sections */
-  .section-shell {
-    @apply px-container-x py-container-y;
-  }
-
   /* Firefox performance optimizations */
   @supports (-moz-appearance: none) {
     /* Optimize animations for Firefox */
@@ -19,21 +14,5 @@
     [style*='opacity'] {
       will-change: opacity;
     }
-  }
-
-  /* Background optimisé pour la section Services */
-  .bg-forest {
-    background-image: url('/backgrounds/forest-background-1600.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  }
-
-  /* Background pour la section Contact (formulaire) */
-  .bg-boat {
-    background-image: url('/backgrounds/boat-background-1600.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
   }
 }

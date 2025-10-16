@@ -29,9 +29,7 @@ const config: Config = {
         stone: withOpacity('--color-stone-rgb') as unknown as string, // Texte secondaire gris pierre
 
         /* Aliases sémantiques */
-        brand: withOpacity('--color-orange-rgb') as unknown as string, // Orange = marque principale (obligatoire)
         text: withOpacity('--color-charcoal-rgb') as unknown as string, // Charcoal = texte principal
-        'text-muted': withOpacity('--color-stone-rgb') as unknown as string, // Stone = texte secondaire
         surface: withOpacity('--color-cream-rgb') as unknown as string, // Cream = surfaces/cartes
 
         /* Aliases fonctionnels */
@@ -72,9 +70,6 @@ const config: Config = {
         'content-readable': '72ch', // pour les articles/CGV/mentions
         container: 'min(98vw, 3600px)', // Layout fluide : 98% de la largeur, max 3600px
       },
-      width: {
-        'service-img': 'clamp(20rem, 25vw, 42rem)',
-      },
       height: {
         card: 'clamp(32rem, 70vh, 90rem)',
       },
@@ -99,11 +94,6 @@ const config: Config = {
         'title-gap': 'clamp(2rem, 2.5vw, 4rem)', // ≈ md-lg responsive
         flow: 'clamp(0.75rem, 2vw, 1.5rem)', // ≈ xs-sm responsive
 
-        // Composants
-        'btn-x': 'clamp(0.75rem, 2vw, 3rem)', // Padding horizontal boutons - optimisé mobile S
-        'btn-y': 'clamp(0.5rem, 1vw, 2.5rem)', // Padding vertical boutons - optimisé mobile S
-        'word-gap': 'clamp(1rem, 1.5vw, 2rem)', // Gap entre mots
-
         // Containers
         'container-x': 'clamp(1rem, 5vw, 3rem)', // Padding horizontal
         'container-y': 'clamp(2rem, 5vw, 4rem)', // Padding vertical
@@ -111,33 +101,17 @@ const config: Config = {
 
       /* ====== RADII / SHADOWS / Z ====== */
       borderRadius: {
-        btn: '0.8rem',
         card: '1.5rem',
-        // alias
         sm: '0.5rem',
         lg: '1rem',
       },
       boxShadow: {
         card: '0 4px 8px rgba(0, 0, 0, 0.05)',
-        soft: '0 2px 4px rgba(0, 0, 0, 0.03)',
-        // alias
-        focus: '0 0 0 3px rgba(204, 252, 211, 0.6)',
       },
       zIndex: {
         base: '10',
-        'section-1': '11',
-        'section-2': '12',
-        'section-3': '13',
-        'section-4': '14',
-        'section-5': '15',
-        'section-6': '16',
-        'section-7': '17',
-        'section-8': '18',
         navbar: '40',
         menu: '50',
-        modal: '100',
-        overlay: '200',
-        cursor: '300',
       },
 
       /* ====== MOTION ====== */

@@ -70,64 +70,11 @@
     }
   }
 
-  /* Bouton secondaire - Style lien avec flèche (inline CTA) */
-  .button-secondary {
-    @apply inline-flex items-center gap-2 font-sans font-medium;
-
-    position: relative;
-    cursor: pointer;
-    user-select: none;
-    text-rendering: optimizeLegibility;
-    -webkit-font-smoothing: antialiased;
-    -webkit-tap-highlight-color: transparent;
-
-    /* Pas de bordure ni background */
-    border: none !important;
-    background: transparent !important;
-    padding: 0;
-
-    /* Texte accent */
-    color: rgb(var(--color-accent-rgb)) !important;
-
-    /* Transition simple */
-    transition: color 200ms ease;
-  }
-
-  @media (hover: hover) {
-    .button-secondary:hover {
-      /* Texte text (charcoal) au hover */
-      color: rgb(var(--color-text-rgb)) !important;
-    }
-
-    .button-secondary:active {
-      /* Retour à accent */
-      color: rgb(var(--color-accent-rgb)) !important;
-    }
-  }
-
-  .button-secondary:focus-visible {
-    outline: 2px solid rgb(var(--color-accent-rgb));
-    outline-offset: 4px;
-    color: rgb(var(--color-text-rgb)) !important;
-  }
-
-  .button-secondary:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .button-secondary {
-      transition-duration: 0.01ms !important;
-    }
-  }
-
   /* Variantes supprimées - design unifié */
 }
 
 /* Icônes dans les boutons */
-.button-primary .button-icon,
-.button-secondary .button-icon {
+.button-primary .button-icon {
   /* Taille basée sur la hauteur de ligne du texte */
   height: 1em;
   width: 1em;
@@ -135,11 +82,6 @@
   flex-shrink: 0;
   /* Transition pour les animations d'icône */
   transition: transform 250ms ease-out;
-}
-
-/* Animation flèche au hover pour button-secondary */
-.button-secondary:hover .button-icon {
-  transform: translateX(4px);
 }
 
 /* Animations utilisées */
