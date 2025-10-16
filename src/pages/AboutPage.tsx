@@ -31,7 +31,7 @@ export default function AboutPage() {
       <Layout>
         {/* Hero Section */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
+          <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h1 className="mb-6 text-title-lg font-medium text-text">
@@ -50,7 +50,7 @@ export default function AboutPage() {
 
         {/* Notre Histoire */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
+          <div className="mx-auto max-w-container px-container-x">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
               {/* Texte */}
               <div className="space-y-6">
@@ -98,7 +98,7 @@ export default function AboutPage() {
 
         {/* Nos Valeurs */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
+          <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-12 text-center text-title-md font-medium text-text">
@@ -138,7 +138,7 @@ export default function AboutPage() {
 
         {/* L'équipe */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
+          <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-12 text-center text-title-md font-medium text-text">L'équipe</h2>
@@ -191,7 +191,7 @@ export default function AboutPage() {
 
         {/* L'engagement écologique */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
+          <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="mb-8 text-center text-title-md font-medium text-text">

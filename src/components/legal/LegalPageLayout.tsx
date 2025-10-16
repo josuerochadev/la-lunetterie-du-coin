@@ -56,8 +56,8 @@ export default function LegalPageLayout({
 
         {/* Content */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
-            <article className="mx-auto max-w-4xl space-y-16">{children}</article>
+          <div className="mx-auto max-w-container px-container-x">
+            <article className="mx-auto max-w-content-readable space-y-16">{children}</article>
           </div>
         </SectionContainer>
       </Layout>
