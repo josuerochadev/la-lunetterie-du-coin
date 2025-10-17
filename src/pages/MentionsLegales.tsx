@@ -28,7 +28,7 @@ export default function MentionsLegales() {
     >
       <SimpleAnimation type="slide-up" delay={0}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Éditeur du site</h2>
+          <h2 className="heading-section">Éditeur du site</h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -71,7 +71,7 @@ export default function MentionsLegales() {
 
       <SimpleAnimation type="slide-up" delay={100}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Contact</h2>
+          <h2 className="heading-section">Contact</h2>
 
           <div className="border-t border-stone/20 pt-8">
             <div className="space-y-4 text-body leading-relaxed text-stone">
@@ -103,7 +103,7 @@ export default function MentionsLegales() {
 
       <SimpleAnimation type="slide-up" delay={200}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Hébergeur</h2>
+          <h2 className="heading-section">Hébergeur</h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -116,7 +116,7 @@ export default function MentionsLegales() {
 
       <SimpleAnimation type="slide-up" delay={300}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Propriété intellectuelle</h2>
+          <h2 className="heading-section">Propriété intellectuelle</h2>
 
           <p className="text-body leading-relaxed text-stone">
             Le site et l'ensemble de ses contenus (textes, images, logos, éléments graphiques) sont
@@ -128,7 +128,7 @@ export default function MentionsLegales() {
 
       <SimpleAnimation type="slide-up" delay={400}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Données personnelles & cookies</h2>
+          <h2 className="heading-section">Données personnelles & cookies</h2>
 
           <p className="text-body leading-relaxed text-stone">
             Pour toute demande relative à la protection des données, contactez l'éditeur aux
@@ -140,7 +140,7 @@ export default function MentionsLegales() {
 
       <SimpleAnimation type="slide-up" delay={500}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Médiation de la consommation</h2>
+          <h2 className="heading-section">Médiation de la consommation</h2>
 
           <p className="mb-6 text-body leading-relaxed text-stone">
             Conformément à l'article L.612-1 du Code de la consommation, le client peut recourir à
@@ -148,7 +148,7 @@ export default function MentionsLegales() {
           </p>
 
           <div className="border-t border-stone/20 pt-8">
-            <h3 className="mb-4 text-body-lg font-medium text-text">Médiateur compétent</h3>
+            <h3 className="heading-subsection mb-4">Médiateur compétent</h3>
             <div className="space-y-4 text-body leading-relaxed text-stone">
               <p>
                 <strong className="font-medium text-text">{MEDIATOR_NAME}</strong>

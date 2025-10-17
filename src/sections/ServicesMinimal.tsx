@@ -61,9 +61,9 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
     >
       <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-4xl text-center">
+        <div className="mx-auto mb-16 max-w-6xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="mb-4 text-title-md font-medium text-text">
+            <h2 id="services-title" className="heading-section mb-4">
               Nos services
             </h2>
           </SimpleAnimation>
@@ -92,7 +92,7 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
                   {/* Boîte de texte superposée en bas */}
                   <div className="absolute bottom-0 left-0 right-0 flex justify-center p-4 sm:p-6">
                     <div className="w-full space-y-3 bg-background px-4 py-6 sm:space-y-4 sm:px-6 sm:py-8">
-                      <h3 className="text-title-sm font-medium text-text">{service.title}</h3>
+                      <h3 className="heading-subsection">{service.title}</h3>
 
                       <p className="text-body-sm leading-relaxed text-stone sm:text-body">
                         {service.description}

@@ -52,9 +52,9 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
     >
       <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-4xl text-center">
+        <div className="mx-auto mb-16 max-w-6xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="offers-title" className="mb-4 text-title-md font-medium text-text">
+            <h2 id="offers-title" className="heading-section mb-4">
               Nos offres
             </h2>
           </SimpleAnimation>
@@ -94,9 +94,7 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                             <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
                               Offre {index + 1}
                             </span>
-                            <h3 className="text-title-sm font-medium text-text sm:text-title-md">
-                              {offer.title}
-                            </h3>
+                            <h3 className="heading-subsection-lg">{offer.title}</h3>
                           </div>
 
                           {/* Phrase d'accroche */}
@@ -141,9 +139,7 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                             <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
                               Offre {index + 1}
                             </span>
-                            <h3 className="text-title-sm font-medium text-text sm:text-title-md">
-                              {offer.title}
-                            </h3>
+                            <h3 className="heading-subsection-lg">{offer.title}</h3>
                           </div>
 
                           {/* Phrase d'accroche */}

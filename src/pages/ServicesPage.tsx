@@ -117,15 +117,7 @@ export default function ServicesPage() {
             <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <div className="space-y-6">
-                  <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
-                    Notre expertise
-                  </span>
-                  <h1
-                    className="font-light uppercase leading-tight tracking-wide text-text"
-                    style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
-                  >
-                    Nos services
-                  </h1>
+                  <h1 className="heading-page">Nos services</h1>
                   <p
                     className="leading-relaxed text-stone"
                     style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
@@ -153,7 +145,7 @@ export default function ServicesPage() {
                     <div className="mb-6 text-4xl" aria-hidden="true">
                       {service.icon}
                     </div>
-                    <h2 className="text-title-md font-medium text-text">{service.title}</h2>
+                    <h2 className="heading-section">{service.title}</h2>
                   </SimpleAnimation>
 
                   <SimpleAnimation type="slide-up" delay={100}>
@@ -162,9 +154,7 @@ export default function ServicesPage() {
 
                   <SimpleAnimation type="slide-up" delay={200}>
                     <div className="space-y-3">
-                      <h3 className="text-body-lg font-medium text-text">
-                        Ce que nous proposons :
-                      </h3>
+                      <h3 className="heading-subsection">Ce que nous proposons :</h3>
                       <ul className="space-y-2">
                         {service.details.map((detail, i) => (
                           <li key={i} className="flex gap-3 text-body text-stone">

@@ -54,15 +54,7 @@ export default function ContactPage() {
             <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <div className="space-y-6">
-                  <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
-                    Restons en contact
-                  </span>
-                  <h1
-                    className="font-light uppercase leading-tight tracking-wide text-text"
-                    style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
-                  >
-                    Nous contacter
-                  </h1>
+                  <h1 className="heading-page">Nous contacter</h1>
                   <p
                     className="leading-relaxed text-stone"
                     style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
@@ -80,9 +72,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-2xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="mb-8 text-center text-title-md font-medium text-text">
-                  Envoyez-nous un message
-                </h2>
+                <h2 className="heading-section mb-8 text-center">Envoyez-nous un message</h2>
               </SimpleAnimation>
 
               <SimpleAnimation type="fade" delay={100}>
@@ -97,9 +87,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="mb-12 text-center text-title-md font-medium text-text">
-                  Informations pratiques
-                </h2>
+                <h2 className="heading-section mb-12 text-center">Informations pratiques</h2>
               </SimpleAnimation>
 
               <div className="grid gap-8 md:grid-cols-2 md:gap-12">
@@ -108,7 +96,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-3 flex items-center gap-2">
                       <MapPin className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">Adresse</h3>
+                      <h3 className="heading-subsection">Adresse</h3>
                     </div>
                     <address className="mb-3 text-body not-italic leading-relaxed text-stone">
                       {COMPANY_ADDRESS}
@@ -129,7 +117,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-3 flex items-center gap-2">
                       <Phone className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">Téléphone</h3>
+                      <h3 className="heading-subsection">Téléphone</h3>
                     </div>
                     <a
                       href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
@@ -145,7 +133,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-3 flex items-center gap-2">
                       <Mail className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">Email</h3>
+                      <h3 className="heading-subsection">Email</h3>
                     </div>
                     <a
                       href={`mailto:${COMPANY_EMAIL}`}
@@ -161,7 +149,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-4 flex items-center gap-2">
                       <Clock className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">Horaires d'ouverture</h3>
+                      <h3 className="heading-subsection">Horaires d'ouverture</h3>
                     </div>
                     <dl className="space-y-2">
                       {openingHours.map((schedule) => (
@@ -187,9 +175,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="mb-6 text-center text-title-md font-medium text-text">
-                  Prendre rendez-vous
-                </h2>
+                <h2 className="heading-section mb-6 text-center">Prendre rendez-vous</h2>
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={100}>
@@ -220,9 +206,7 @@ export default function ContactPage() {
           <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="mb-12 text-center text-title-md font-medium text-text">
-                  Comment nous rejoindre
-                </h2>
+                <h2 className="heading-section mb-12 text-center">Comment nous rejoindre</h2>
               </SimpleAnimation>
 
               {/* Google Maps */}
@@ -248,7 +232,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-4 flex items-center gap-2">
                       <Car className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">En voiture</h3>
+                      <h3 className="heading-subsection">En voiture</h3>
                     </div>
                     <div className="space-y-3 text-body text-stone">
                       <p>
@@ -269,7 +253,7 @@ export default function ContactPage() {
                   <div className="border-t border-stone/20 pt-6">
                     <div className="mb-4 flex items-center gap-2">
                       <Train className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="text-body-lg font-medium text-text">En transports</h3>
+                      <h3 className="heading-subsection">En transports</h3>
                     </div>
                     <div className="space-y-3 text-body text-stone">
                       <p>

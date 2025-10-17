@@ -42,7 +42,7 @@ export default function LegalPageLayout({
           <div className="mx-auto max-w-container px-4 sm:px-6">
             <div className="mx-auto max-w-4xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h1 className="mb-6 text-title-lg font-medium text-text">{title}</h1>
+                <h1 className="heading-page mb-6">{title}</h1>
               </SimpleAnimation>
 
               {lastUpdated && (

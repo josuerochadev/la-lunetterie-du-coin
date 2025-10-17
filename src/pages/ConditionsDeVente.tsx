@@ -11,7 +11,7 @@ export default function ConditionsDeVente() {
     >
       <SimpleAnimation type="slide-up" delay={0}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Fabrication et qualité</h2>
+          <h2 className="heading-section">Fabrication et qualité</h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -20,7 +20,7 @@ export default function ConditionsDeVente() {
             </p>
 
             <div className="border-t border-stone/20 pt-8">
-              <h3 className="mb-4 text-body-lg font-medium text-text">Services gratuits inclus</h3>
+              <h3 className="heading-subsection mb-4">Services gratuits inclus</h3>
               <ul className="space-y-2">
                 <li>• Ajustages personnalisés</li>
                 <li>• Nettoyages professionnels</li>
@@ -33,10 +33,10 @@ export default function ConditionsDeVente() {
 
       <SimpleAnimation type="slide-up" delay={100}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Politique de retour</h2>
+          <h2 className="heading-section">Politique de retour</h2>
 
           <div className="border-t border-accent bg-accent/5 p-8">
-            <h3 className="mb-6 text-body-lg font-medium text-text">Points essentiels à retenir</h3>
+            <h3 className="heading-subsection mb-6">Points essentiels à retenir</h3>
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
                 <p className="mb-2 text-title-sm font-medium text-text">0</p>
@@ -75,9 +75,7 @@ export default function ConditionsDeVente() {
 
       <SimpleAnimation type="slide-up" delay={200}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">
-            Changement de puissance des verres
-          </h2>
+          <h2 className="heading-section">Changement de puissance des verres</h2>
 
           <div className="space-y-6 text-body leading-relaxed text-stone">
             <p>
@@ -86,9 +84,7 @@ export default function ConditionsDeVente() {
             </p>
 
             <div className="border-t border-stone/20 pt-8">
-              <h3 className="mb-6 text-body-lg font-medium text-text">
-                Tarifs des frais de montage
-              </h3>
+              <h3 className="heading-subsection mb-6">Tarifs des frais de montage</h3>
               <div className="grid gap-8 md:grid-cols-2">
                 <div className="text-center">
                   <p className="mb-2 text-title-md font-medium text-accent">90€</p>
@@ -111,9 +107,7 @@ export default function ConditionsDeVente() {
 
       <SimpleAnimation type="slide-up" delay={300}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">
-            Règlement par chèque et tiers payant
-          </h2>
+          <h2 className="heading-section">Règlement par chèque et tiers payant</h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -132,7 +126,7 @@ export default function ConditionsDeVente() {
 
       <SimpleAnimation type="slide-up" delay={400}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Lentilles d'essai</h2>
+          <h2 className="heading-section">Lentilles d'essai</h2>
 
           <p className="text-body leading-relaxed text-stone">
             Une participation aux frais de transport et logistique de <strong>7€</strong> est
@@ -143,7 +137,7 @@ export default function ConditionsDeVente() {
 
       <SimpleAnimation type="slide-up" delay={500}>
         <section className="space-y-6">
-          <h2 className="text-title-md font-medium text-text">Offres commerciales</h2>
+          <h2 className="heading-section">Offres commerciales</h2>
 
           <div className="border-t border-accent bg-accent/5 p-8">
             <p className="text-body text-text">
@@ -154,7 +148,7 @@ export default function ConditionsDeVente() {
 
           <div className="space-y-12">
             <div>
-              <h3 className="mb-4 text-title-sm font-medium text-text">01. Remise à la reprise</h3>
+              <h3 className="heading-subsection mb-4">01. Remise à la reprise</h3>
               <div className="space-y-3 border-l-4 border-stone/30 pl-6 text-body leading-relaxed text-stone">
                 <p>
                   <strong className="text-text">Limitation :</strong> une monture par transaction
@@ -171,7 +165,7 @@ export default function ConditionsDeVente() {
             </div>
 
             <div>
-              <h3 className="mb-4 text-title-sm font-medium text-text">02. Seconde paire</h3>
+              <h3 className="heading-subsection mb-4">02. Seconde paire</h3>
               <div className="space-y-3 border-l-4 border-stone/30 pl-6 text-body leading-relaxed text-stone">
                 <p>
                   <strong className="text-text">Tarification :</strong> valable sur la monture la

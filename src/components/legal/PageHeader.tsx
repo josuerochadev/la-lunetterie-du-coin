@@ -1,14 +1,16 @@
 // src/components/common/PageHeader.tsx
 import { Link } from 'react-router-dom';
 
-import SectionTitle from '@/components/common/SectionTitle';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 type Props = { title: string; backTo?: string };
 
 export default function PageHeader({ title, backTo = '/' }: Props) {
   return (
     <header className="mb-title-gap text-center">
-      <SectionTitle title={title} />
+      <SimpleAnimation type="slide-down">
+        <h1 className="heading-page mb-title-gap pt-lg">{title}</h1>
+      </SimpleAnimation>
       <nav aria-label="Fil d'Ariane" className="mt-8">
         <Link
           to={backTo}

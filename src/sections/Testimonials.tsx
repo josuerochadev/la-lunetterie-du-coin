@@ -32,9 +32,9 @@ const Testimonials = forwardRef<HTMLElement>(() => {
     >
       <div className="mx-auto max-w-container px-container-x">
         {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-4xl text-center">
+        <div className="mx-auto mb-16 max-w-6xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="testimonials-title" className="mb-4 text-title-md font-medium text-text">
+            <h2 id="testimonials-title" className="heading-section mb-4">
               Ils nous font confiance
             </h2>
           </SimpleAnimation>

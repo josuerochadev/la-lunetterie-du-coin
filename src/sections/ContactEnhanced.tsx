@@ -24,10 +24,10 @@ const ContactEnhanced = forwardRef<HTMLElement>(() => {
       aria-labelledby="contact-title"
     >
       <div className="mx-auto max-w-container px-container-x">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-6xl text-center">
           {/* En-tête */}
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="contact-title" className="mb-4 text-title-md font-medium text-text">
+            <h2 id="contact-title" className="heading-section mb-4">
               Nous contacter
             </h2>
           </SimpleAnimation>

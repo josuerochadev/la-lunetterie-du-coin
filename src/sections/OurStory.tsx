@@ -31,12 +31,12 @@ const OurStory = forwardRef<HTMLElement>(() => {
         {/* Rectangle de texte superposé en bas de l'image */}
         <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
           <SimpleAnimation type="slide-up" delay={200}>
-            <div className="w-full max-w-4xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
+            <div className="w-full max-w-6xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
               <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
                 Depuis 2016
               </span>
 
-              <h2 id="story-title" className="text-title-md font-medium text-text sm:text-title-lg">
+              <h2 id="story-title" className="heading-section">
                 Une lunetterie différente
               </h2>
 

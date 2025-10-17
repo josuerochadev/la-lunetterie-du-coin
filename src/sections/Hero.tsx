@@ -60,7 +60,7 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
       {/* Contenu texte - centré horizontalement avec max-width, texte aligné à gauche */}
       <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(50%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(50%-72px)] sm:px-12 lg:px-16">
         <SimpleAnimation type="fade" delay={400} immediate={true}>
-          <div className="mx-auto w-full max-w-5xl space-y-6">
+          <div className="mx-auto w-full max-w-7xl space-y-6">
             <h1
               id="hero-title"
               className="font-light uppercase leading-tight tracking-wide text-text"

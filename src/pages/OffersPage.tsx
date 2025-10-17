@@ -94,15 +94,7 @@ export default function OffersPage() {
             <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
                 <div className="space-y-6">
-                  <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
-                    Nos promotions
-                  </span>
-                  <h1
-                    className="font-light uppercase leading-tight tracking-wide text-text"
-                    style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
-                  >
-                    Nos offres
-                  </h1>
+                  <h1 className="heading-page">Nos offres</h1>
                   <p
                     className="leading-relaxed text-stone"
                     style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
@@ -130,7 +122,7 @@ export default function OffersPage() {
                     <div className="mb-6 text-4xl" aria-hidden="true">
                       {offer.icon}
                     </div>
-                    <h2 className="text-title-md font-medium text-text">{offer.title}</h2>
+                    <h2 className="heading-section">{offer.title}</h2>
                   </SimpleAnimation>
 
                   <SimpleAnimation type="slide-up" delay={100}>
@@ -145,7 +137,7 @@ export default function OffersPage() {
 
                   <SimpleAnimation type="slide-up" delay={200}>
                     <div className="space-y-3">
-                      <h3 className="text-body-lg font-medium text-text">Ce que vous obtenez :</h3>
+                      <h3 className="heading-subsection">Ce que vous obtenez :</h3>
                       <ul className="space-y-2">
                         {offer.details.map((detail, i) => (
                           <li key={i} className="flex gap-3 text-body text-stone">
