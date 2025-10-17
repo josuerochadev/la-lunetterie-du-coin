@@ -32,12 +32,12 @@ export default function ContactPage() {
   useNativeScroll();
 
   const openingHours = [
-    { day: 'Lundi', hours: 'Fermé' },
-    { day: 'Mardi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Mercredi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Jeudi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Vendredi', hours: '10h00 - 13h00 • 14h00 - 19h00' },
-    { day: 'Samedi', hours: '10h00 - 13h00 • 14h00 - 18h00' },
+    { day: 'Lundi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
+    { day: 'Mardi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
+    { day: 'Mercredi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
+    { day: 'Jeudi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
+    { day: 'Vendredi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
+    { day: 'Samedi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
     { day: 'Dimanche', hours: 'Fermé' },
   ];
 
@@ -225,13 +225,15 @@ export default function ContactPage() {
               <SimpleAnimation type="fade" delay={100}>
                 <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
                   {/* Photo de la boutique */}
-                  <div className="relative aspect-[2/3] w-full overflow-hidden">
-                    <img
-                      src="/images/contact-informations-boutique-outside.jpg"
-                      alt="Façade de La Lunetterie du Coin"
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                    />
+                  <div className="relative w-full">
+                    <div className="relative aspect-[2/3] w-full overflow-hidden">
+                      <img
+                        src="/images/contact-informations-boutique-outside.jpg"
+                        alt="Façade de La Lunetterie du Coin"
+                        className="h-full w-full object-cover"
+                        loading="lazy"
+                      />
+                    </div>
                   </div>
 
                   {/* Informations d'accès */}
@@ -242,16 +244,11 @@ export default function ContactPage() {
                         <Car className="h-5 w-5 text-accent" aria-hidden="true" />
                         <h3 className="heading-subsection">En voiture</h3>
                       </div>
-                      <div className="space-y-3 text-body text-stone">
-                        <p>
-                          <span className="font-medium text-text">Parking gratuit</span> disponible
-                          dans les rues adjacentes
-                        </p>
+                      <div className="space-y-2 text-body text-stone">
                         <p>
                           <span className="font-medium text-text">Parking payant</span> : Parking
-                          Étoile (5 min à pied)
+                          Halles et Opéra Broglie (environ 10 min à pied)
                         </p>
-                        <p>Accès facile depuis le centre-ville et les boulevards périphériques</p>
                       </div>
                     </div>
 
@@ -261,17 +258,35 @@ export default function ContactPage() {
                         <Train className="h-5 w-5 text-accent" aria-hidden="true" />
                         <h3 className="heading-subsection">En transports</h3>
                       </div>
-                      <div className="space-y-3 text-body text-stone">
+                      <div className="space-y-2 text-body text-stone">
                         <p>
-                          <span className="font-medium text-text">Tram C</span> : arrêt Pierre de
-                          Coubertin (2 min à pied)
+                          <span className="font-medium text-text">Tram B, C, F</span> : arrêt
+                          Broglie (7 min à pied)
                         </p>
                         <p>
-                          <span className="font-medium text-text">Bus 2, 15</span> : arrêt Faubourg
-                          de Pierre (1 min à pied)
+                          <span className="font-medium text-text">Tram A, D</span> : arrêt Ancienne
+                          Synagogue / Les Halles (7 min à pied)
                         </p>
-                        <p>À 15 minutes à pied de la gare centrale de Strasbourg</p>
+                        <p>
+                          <span className="font-medium text-text">Bus C3</span> : arrêt Faubourg de
+                          Pierre (2 min à pied)
+                        </p>
+                        <p>
+                          <span className="font-medium text-text">Bus C6</span> : arrêt Tribunal (5
+                          min à pied)
+                        </p>
+                        <p className="pt-2">
+                          À 15 minutes à pied de la gare centrale de Strasbourg
+                        </p>
                       </div>
+                    </div>
+
+                    {/* Accessibilité PMR */}
+                    <div className="border-t border-stone/20 pt-6">
+                      <p className="text-body text-stone">
+                        <span className="font-medium text-text">Accessibilité :</span> Le magasin
+                        est accessible aux personnes à mobilité réduite
+                      </p>
                     </div>
 
                     {/* Bouton Google Maps */}

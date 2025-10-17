@@ -3,7 +3,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
-import { CALENDLY_URL } from '@/config/constants';
 
 /**
  * Page Offres détaillée
@@ -247,27 +246,17 @@ export default function OffersPage() {
 
               <SimpleAnimation type="slide-up" delay={100}>
                 <p className="mb-8 text-body-lg text-stone">
-                  Prenez rendez-vous dès maintenant ou passez nous voir en boutique
+                  Passez nous voir en boutique pour en profiter
                 </p>
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={200}>
-                <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <a
-                    href={CALENDLY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-                  >
-                    Prendre rendez-vous
-                  </a>
-                  <a
-                    href="/contact"
-                    className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
-                  >
-                    Nous contacter
-                  </a>
-                </div>
+                <a
+                  href="/contact"
+                  className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
+                >
+                  Nous contacter
+                </a>
               </SimpleAnimation>
             </div>
           </div>

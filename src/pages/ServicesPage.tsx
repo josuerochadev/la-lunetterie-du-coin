@@ -33,7 +33,7 @@ export default function ServicesPage() {
         'Large choix de montures contemporaines et intemporelles',
         'Marques indépendantes et créateurs locaux',
         'Montures vintage et modèles rares',
-        'Verres de qualité : Essilor, Zeiss, Hoya',
+        'Verres de qualité et origine française',
         'Verres progressifs dernière génération',
         'Verres anti-lumière bleue',
         'Traitement antireflet durci',
