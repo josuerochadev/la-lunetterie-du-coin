@@ -24,7 +24,7 @@ export default function OffersPage() {
     {
       id: 'recyclage',
       title: 'Programme de recyclage',
-      icon: '♻️',
+      image: '/images/offers-recyclage-sunglasses.jpg',
       catchphrase: "Vos anciennes lunettes valent de l'or",
       description:
         "Rapportez vos anciennes lunettes et économisez jusqu'à 70€ sur votre nouvel achat. Un geste pour votre budget et pour la planète.",
@@ -43,16 +43,11 @@ export default function OffersPage() {
         "Non cumulable avec d'autres promotions exceptionnelles",
         'Les montures doivent être propres et complètes (branches et façade)',
       ],
-      tips: [
-        '💡 Astuce : Faites le tri dans vos tiroirs ! Plus vous rapportez de paires, plus votre réduction est importante.',
-        "🌍 Impact : Chaque monture recyclée, c'est moins de déchets et plus de style accessible.",
-        "⏱️ Bon à savoir : La réduction est appliquée immédiatement, pas besoin d'attendre.",
-      ],
     },
     {
       id: 'deuxieme-paire',
       title: 'Deuxième paire',
-      icon: '👓',
+      image: '/images/offers-second-sunglasses-clip.jpg',
       catchphrase: 'Deux paires, deux styles, un prix imbattable',
       description:
         'Obtenez une deuxième paire à partir de 59€ selon vos besoins. Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.',
@@ -71,11 +66,6 @@ export default function OffersPage() {
         "Cumulable avec l'offre de recyclage",
         '+40€ pour option polarisée sur les solaires',
         'Voir conditions détaillées en magasin',
-      ],
-      tips: [
-        '☀️ Idée : Profitez-en pour avoir des lunettes de soleil à votre vue !',
-        '📚 Pratique : Une paire de secours au bureau, une à la maison.',
-        '🎨 Style : Changez de look selon votre humeur ou votre tenue.',
       ],
     },
   ];
@@ -107,109 +97,156 @@ export default function OffersPage() {
           </div>
         </SectionContainer>
 
-        {/* Offres détaillées */}
-        {offers.map((offer, index) => (
-          <SectionContainer key={offer.id} id={offer.id} className="bg-background py-section">
-            <div className="mx-auto max-w-container px-container-x">
-              <div
-                className={`grid items-start gap-12 lg:grid-cols-2 lg:gap-16 ${
-                  index % 2 === 1 ? 'lg:grid-flow-dense' : ''
-                }`}
-              >
-                {/* Contenu */}
-                <div className={`space-y-6 ${index % 2 === 1 ? 'lg:col-start-1' : ''}`}>
-                  <SimpleAnimation type="slide-up" delay={0}>
-                    <div className="mb-6 text-4xl" aria-hidden="true">
-                      {offer.icon}
-                    </div>
-                    <h2 className="heading-section">{offer.title}</h2>
-                  </SimpleAnimation>
+        {/* Offres détaillées - Layout éditorial 50/50 alterné */}
+        <SectionContainer className="bg-background py-section">
+          <div className="mx-auto max-w-container px-container-x">
+            <div className="space-y-24 lg:space-y-32">
+              {offers.map((offer, index) => {
+                const isEven = index % 2 === 0;
 
-                  <SimpleAnimation type="slide-up" delay={100}>
-                    <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                      {offer.catchphrase}
-                    </p>
-                  </SimpleAnimation>
+                return (
+                  <SimpleAnimation key={offer.id} type="fade" delay={index * 100}>
+                    <article
+                      id={offer.id}
+                      className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16"
+                    >
+                      {isEven ? (
+                        // Layout pair : Image gauche (50%) - Texte droite (50%)
+                        <>
+                          <div className="relative w-full">
+                            <div className="relative aspect-[2/3] w-full overflow-hidden">
+                              <img
+                                src={offer.image}
+                                alt={offer.title}
+                                className="h-full w-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex min-h-full items-center">
+                            <div className="space-y-6">
+                              {/* Titre */}
+                              <h2 className="heading-section">{offer.title}</h2>
 
-                  <SimpleAnimation type="slide-up" delay={150}>
-                    <p className="text-body-lg leading-relaxed text-text">{offer.description}</p>
-                  </SimpleAnimation>
+                              {/* Phrase d'accroche */}
+                              <p className="text-body-lg font-medium italic leading-relaxed text-accent">
+                                {offer.catchphrase}
+                              </p>
 
-                  <SimpleAnimation type="slide-up" delay={200}>
-                    <div className="space-y-3">
-                      <h3 className="heading-subsection">Ce que vous obtenez :</h3>
-                      <ul className="space-y-2">
-                        {offer.details.map((detail, i) => (
-                          <li key={i} className="flex gap-3 text-body text-stone">
-                            <span className="text-accent" aria-hidden="true">
-                              •
-                            </span>
-                            <span>{detail}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </SimpleAnimation>
+                              {/* Description */}
+                              <p className="text-body-lg leading-relaxed text-text">
+                                {offer.description}
+                              </p>
 
-                  {/* Tips box */}
-                  <SimpleAnimation type="slide-up" delay={250}>
-                    <div className="mt-8 space-y-3 border-l-4 border-accent bg-accent/5 p-6">
-                      {offer.tips.map((tip, i) => (
-                        <p key={i} className="text-body text-text">
-                          {tip}
-                        </p>
-                      ))}
-                    </div>
-                  </SimpleAnimation>
+                              {/* Détails - Boîte avec bordure */}
+                              <div className="border border-charcoal p-6">
+                                <ul className="space-y-2">
+                                  {offer.details.map((detail, i) => (
+                                    <li key={i} className="flex gap-3 text-body text-stone">
+                                      <span className="text-accent" aria-hidden="true">
+                                        •
+                                      </span>
+                                      <span>{detail}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
 
-                  {/* Conditions */}
-                  <SimpleAnimation type="slide-up" delay={300}>
-                    <div className="mt-8 border-l-4 border-stone/30 bg-stone/5 p-6">
-                      <h4 className="mb-3 text-body font-medium text-text">Conditions :</h4>
-                      <ul className="space-y-2 text-body-sm text-stone">
-                        {offer.conditions.map((condition, i) => (
-                          <li key={i} className="flex gap-2">
-                            <span>•</span>
-                            <span>{condition}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </SimpleAnimation>
-                </div>
+                              {/* Conditions */}
+                              <div className="border-l-4 border-accent/30 bg-accent/5 p-6">
+                                <h4 className="mb-3 text-body font-medium text-text">
+                                  Conditions :
+                                </h4>
+                                <ul className="space-y-2 text-body-sm text-stone">
+                                  {offer.conditions.map((condition, i) => (
+                                    <li key={i} className="flex gap-2">
+                                      <span>•</span>
+                                      <span>{condition}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      ) : (
+                        // Layout impair : Texte gauche (50%) - Image droite (50%)
+                        <>
+                          <div className="flex min-h-full items-center justify-end">
+                            <div className="space-y-6 text-right">
+                              {/* Titre */}
+                              <h2 className="heading-section">{offer.title}</h2>
 
-                {/* Image */}
-                <SimpleAnimation
-                  type="slide-up"
-                  delay={100}
-                  className={index % 2 === 1 ? 'lg:col-start-2' : ''}
-                >
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <img
-                      src={`/images/offers-${offer.id}.jpg`}
-                      alt={offer.title}
-                      className="h-full w-full object-cover object-center"
-                      loading="lazy"
-                    />
-                  </div>
-                </SimpleAnimation>
-              </div>
+                              {/* Phrase d'accroche */}
+                              <p className="text-body-lg font-medium italic leading-relaxed text-accent">
+                                {offer.catchphrase}
+                              </p>
+
+                              {/* Description */}
+                              <p className="text-body-lg leading-relaxed text-text">
+                                {offer.description}
+                              </p>
+
+                              {/* Détails - Boîte avec bordure */}
+                              <div className="border border-charcoal p-6 text-left">
+                                <ul className="space-y-2">
+                                  {offer.details.map((detail, i) => (
+                                    <li key={i} className="flex gap-3 text-body text-stone">
+                                      <span className="text-accent" aria-hidden="true">
+                                        •
+                                      </span>
+                                      <span>{detail}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+
+                              {/* Conditions */}
+                              <div className="border-r-4 border-accent/30 bg-accent/5 p-6 text-left">
+                                <h4 className="mb-3 text-body font-medium text-text">
+                                  Conditions :
+                                </h4>
+                                <ul className="space-y-2 text-body-sm text-stone">
+                                  {offer.conditions.map((condition, i) => (
+                                    <li key={i} className="flex gap-2">
+                                      <span>•</span>
+                                      <span>{condition}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="relative w-full">
+                            <div className="relative aspect-[2/3] w-full overflow-hidden">
+                              <img
+                                src={offer.image}
+                                alt={offer.title}
+                                className="h-full w-full object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+                          </div>
+                        </>
+                      )}
+                    </article>
+                  </SimpleAnimation>
+                );
+              })}
             </div>
-          </SectionContainer>
-        ))}
+          </div>
+        </SectionContainer>
 
         {/* CTA final */}
-        <SectionContainer className="bg-accent py-section">
+        <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-5xl text-center">
+            <div className="mx-auto max-w-4xl text-center">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="mb-6 text-title-md font-medium text-cream">
-                  Prêt à profiter de nos offres ?
-                </h2>
+                <h2 className="heading-section mb-6">Prêt à profiter de nos offres ?</h2>
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={100}>
-                <p className="mb-8 text-body-lg text-cream/90">
+                <p className="mb-8 text-body-lg text-stone">
                   Prenez rendez-vous dès maintenant ou passez nous voir en boutique
                 </p>
               </SimpleAnimation>
@@ -220,13 +257,13 @@ export default function OffersPage() {
                     href={CALENDLY_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="button-primary bg-cream text-accent hover:bg-cream/90 hover:text-accent"
+                    className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
                   >
                     Prendre rendez-vous
                   </a>
                   <a
                     href="/contact"
-                    className="button-primary border-cream text-cream hover:bg-cream hover:text-accent"
+                    className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
                   >
                     Nous contacter
                   </a>

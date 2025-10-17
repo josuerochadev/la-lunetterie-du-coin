@@ -10,8 +10,10 @@ export default function ConditionsDeVente() {
       lastUpdated="Décembre 2024"
     >
       <SimpleAnimation type="slide-up" delay={0}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Fabrication et qualité</h2>
+        <section className="space-y-6" aria-labelledby="fabrication-qualite">
+          <h2 id="fabrication-qualite" className="heading-section">
+            Fabrication et qualité
+          </h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -32,10 +34,12 @@ export default function ConditionsDeVente() {
       </SimpleAnimation>
 
       <SimpleAnimation type="slide-up" delay={100}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Politique de retour</h2>
+        <section className="space-y-6" aria-labelledby="politique-retour">
+          <h2 id="politique-retour" className="heading-section">
+            Politique de retour
+          </h2>
 
-          <div className="border-t border-accent bg-accent/5 p-8">
+          <div className="border-l-4 border-accent/30 bg-accent/5 p-8">
             <h3 className="heading-subsection mb-6">Points essentiels à retenir</h3>
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
@@ -74,8 +78,10 @@ export default function ConditionsDeVente() {
       </SimpleAnimation>
 
       <SimpleAnimation type="slide-up" delay={200}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Changement de puissance des verres</h2>
+        <section className="space-y-6" aria-labelledby="changement-verres">
+          <h2 id="changement-verres" className="heading-section">
+            Changement de puissance des verres
+          </h2>
 
           <div className="space-y-6 text-body leading-relaxed text-stone">
             <p>
@@ -106,8 +112,10 @@ export default function ConditionsDeVente() {
       </SimpleAnimation>
 
       <SimpleAnimation type="slide-up" delay={300}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Règlement par chèque et tiers payant</h2>
+        <section className="space-y-6" aria-labelledby="reglement">
+          <h2 id="reglement" className="heading-section">
+            Règlement par chèque et tiers payant
+          </h2>
 
           <div className="space-y-4 text-body leading-relaxed text-stone">
             <p>
@@ -125,8 +133,10 @@ export default function ConditionsDeVente() {
       </SimpleAnimation>
 
       <SimpleAnimation type="slide-up" delay={400}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Lentilles d'essai</h2>
+        <section className="space-y-6" aria-labelledby="lentilles-essai">
+          <h2 id="lentilles-essai" className="heading-section">
+            Lentilles d'essai
+          </h2>
 
           <p className="text-body leading-relaxed text-stone">
             Une participation aux frais de transport et logistique de <strong>7€</strong> est
@@ -136,10 +146,12 @@ export default function ConditionsDeVente() {
       </SimpleAnimation>
 
       <SimpleAnimation type="slide-up" delay={500}>
-        <section className="space-y-6">
-          <h2 className="heading-section">Offres commerciales</h2>
+        <section className="space-y-6" aria-labelledby="offres-commerciales">
+          <h2 id="offres-commerciales" className="heading-section">
+            Offres commerciales
+          </h2>
 
-          <div className="border-t border-accent bg-accent/5 p-8">
+          <div className="border-l-4 border-accent/30 bg-accent/5 p-8">
             <p className="text-body text-text">
               Ces offres ne sont pas cumulables avec d'autres promotions exceptionnelles et sont
               soumises aux conditions détaillées ci-dessous.

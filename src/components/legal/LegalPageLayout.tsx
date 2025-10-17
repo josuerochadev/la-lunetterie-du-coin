@@ -39,17 +39,16 @@ export default function LegalPageLayout({
       <Layout>
         {/* Hero */}
         <SectionContainer className="bg-background py-section">
-          <div className="mx-auto max-w-container px-4 sm:px-6">
-            <div className="mx-auto max-w-4xl text-center">
+          <div className="mx-auto max-w-container px-container-x">
+            <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h1 className="heading-page mb-6">{title}</h1>
+                <div className="space-y-6">
+                  <h1 className="heading-page">{title}</h1>
+                  {lastUpdated && (
+                    <p className="text-body-sm text-stone">Dernière mise à jour : {lastUpdated}</p>
+                  )}
+                </div>
               </SimpleAnimation>
-
-              {lastUpdated && (
-                <SimpleAnimation type="slide-up" delay={100}>
-                  <p className="text-body-sm text-stone">Dernière mise à jour : {lastUpdated}</p>
-                </SimpleAnimation>
-              )}
             </div>
           </div>
         </SectionContainer>

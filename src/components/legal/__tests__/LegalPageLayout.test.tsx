@@ -167,13 +167,13 @@ describe('LegalPageLayout', () => {
       render(<LegalPageLayout {...defaultProps} lastUpdated="Test Date" />);
 
       const animations = screen.getAllByTestId('simple-animation');
-      const lastUpdatedAnimation = animations.find((anim) =>
+      const heroAnimation = animations.find((anim) =>
         anim.textContent?.includes('Dernière mise à jour'),
       );
 
-      expect(lastUpdatedAnimation).toBeInTheDocument();
-      expect(lastUpdatedAnimation).toHaveAttribute('data-type', 'slide-up');
-      expect(lastUpdatedAnimation).toHaveAttribute('data-delay', '100');
+      expect(heroAnimation).toBeInTheDocument();
+      expect(heroAnimation).toHaveAttribute('data-type', 'slide-up');
+      expect(heroAnimation).toHaveAttribute('data-delay', '0');
     });
   });
 
@@ -214,7 +214,7 @@ describe('LegalPageLayout', () => {
       render(<LegalPageLayout {...defaultProps} lastUpdated="Test Date" />);
 
       const animations = screen.getAllByTestId('simple-animation');
-      expect(animations.length).toBe(2); // Title + lastUpdated animations
+      expect(animations.length).toBe(1); // Single hero animation containing both title and lastUpdated
     });
 
     it('should handle animations when no lastUpdated provided', () => {

@@ -27,28 +27,28 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
       title: 'Lunettes neuves',
       description:
         'Large sélection de montures contemporaines et intemporelles. Marques indépendantes et créateurs locaux.',
-      image: '/images/services-new-glasses.jpg',
+      image: '/images/homepage-services-new-glasses.jpg',
       link: '/services#neuves',
     },
     {
       title: "Lunettes d'occasion",
       description:
         'Montures de seconde main restaurées avec soin. Du vintage rare aux modèles récents à petits prix.',
-      image: '/images/services-second-hand.jpg',
+      image: '/images/homepage-services-second-hand.jpg',
       link: '/services#occasion',
     },
     {
       title: 'Examens de vue',
       description:
         "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
-      image: '/images/services-exam.jpg',
+      image: '/images/homepage-services-exam.jpg',
       link: '/services#examens',
     },
     {
       title: 'Lentilles de contact',
       description:
         'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.). Essai et adaptation sur mesure.',
-      image: '/images/services-contact-lenses.jpg',
+      image: '/images/homepage-services-contact-lenses.jpg',
       link: '/services#lentilles',
     },
   ];

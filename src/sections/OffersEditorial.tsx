@@ -25,7 +25,7 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
     {
       id: 1,
       title: 'Recyclage',
-      image: '/images/offer-recyclage.jpg',
+      image: '/images/homepage-offer-recyclage.jpg',
       catchphrase: "Vos anciennes lunettes valent de l'or",
       summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
       details:
@@ -35,7 +35,7 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
     {
       id: 2,
       title: 'Deuxième paire',
-      image: '/images/offer-second-pair.jpg',
+      image: '/images/homepage-offer-second-pair.jpg',
       catchphrase: 'Deux paires, deux styles, un prix imbattable',
       summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
       details:

@@ -7,7 +7,6 @@ import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { Seo } from '@/seo/Seo';
-import { CALENDLY_URL } from '@/config/constants';
 
 /**
  * Page À propos - Style éditorial cohérent avec Homepage
@@ -65,7 +64,7 @@ export default function AboutPage() {
         <StickySection zIndex={11} enableSticky={true}>
           <section id="hero" className="relative w-full bg-background py-section">
             <div className="mx-auto max-w-container px-container-x">
-              <div className="mx-auto max-w-5xl">
+              <div className="mx-auto max-w-6xl">
                 <SimpleAnimation type="slide-up" delay={0}>
                   <div className="space-y-6">
                     <h1 className="heading-page">À propos de La Lunetterie du Coin</h1>
@@ -93,7 +92,7 @@ export default function AboutPage() {
             <div className="relative w-full">
               <SimpleAnimation type="fade" delay={0} immediate={true}>
                 <img
-                  src="/images/boutique-inside.png"
+                  src="/images/about-history-shop-indoors.png"
                   alt="Intérieur de La Lunetterie du Coin"
                   className="max-h-[120vh] min-h-screen w-full object-cover"
                   loading="lazy"
@@ -174,7 +173,7 @@ export default function AboutPage() {
         <StickySection zIndex={14}>
           <section id="equipe" className="relative w-full bg-background py-section">
             <div className="mx-auto max-w-container px-container-x">
-              <div className="mx-auto max-w-4xl">
+              <div className="mx-auto max-w-6xl">
                 <SimpleAnimation type="slide-up" delay={0}>
                   <div className="mb-12 text-center">
                     <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
@@ -189,7 +188,7 @@ export default function AboutPage() {
                   <div className="grid items-center gap-8 md:grid-cols-2">
                     <div className="relative aspect-[3/4] overflow-hidden">
                       <img
-                        src="/images/romain.jpg"
+                        src="/images/about-team-romain.jpg"
                         alt="Romain Corato, fondateur de La Lunetterie du Coin"
                         className="h-full w-full object-cover object-center"
                         loading="lazy"
@@ -197,7 +196,7 @@ export default function AboutPage() {
                     </div>
                     <div className="space-y-6">
                       <p className="text-body leading-relaxed text-stone">
-                        Passionné par l'optique depuis plus de 10 ans, Romain a fondé La Lunetterie
+                        Passionné par l'optique depuis plus de 15 ans, Romain a fondé La Lunetterie
                         du Coin en 2016 avec l'envie de proposer une alternative plus humaine et
                         écologique. Expert en verres progressifs et grands myopes, il prend le temps
                         d'expliquer et de conseiller chaque client.
@@ -214,7 +213,7 @@ export default function AboutPage() {
         <StickySection zIndex={15}>
           <section id="engagement" className="relative w-full bg-background py-section">
             <div className="mx-auto max-w-container px-container-x">
-              <div className="mx-auto max-w-4xl">
+              <div className="mx-auto max-w-6xl">
                 <SimpleAnimation type="slide-up" delay={0}>
                   <div className="mb-8 text-center">
                     <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
@@ -285,12 +284,10 @@ export default function AboutPage() {
                       Découvrir nos services
                     </a>
                     <a
-                      href={CALENDLY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="/contact"
                       className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
                     >
-                      Prendre rendez-vous
+                      Nous contacter
                     </a>
                   </div>
                 </SimpleAnimation>

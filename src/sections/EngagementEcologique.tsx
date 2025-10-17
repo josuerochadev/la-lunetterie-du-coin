@@ -32,7 +32,7 @@ const EngagementEcologique = forwardRef<HTMLElement>(() => {
       <div className="relative w-full">
         <SimpleAnimation type="fade" delay={0} immediate={true}>
           <img
-            src="/images/engagement-eyeglasses.jpg"
+            src="/images/homepage-engagement-eyeglasses.jpg"
             alt="Engagement écologique - La Lunetterie du Coin"
             className="max-h-[120vh] min-h-screen w-full object-cover"
             loading="lazy"
