@@ -211,6 +211,13 @@ Des lunettes neuves, oui — mais aussi des montures recyclées ✷ restaurées 
 Ramenez vos anciennes paires. → Jusqu'à 70€ de réduction. ✧ Donnez-leur une seconde vie. 
 On voit clair, ○ sans fermer les yeux sur l'impact écologique. ▲ La mode change. ◆ La planète, non.`;
 
+export const FOOTER_NAV_LINKS = [
+  { label: 'À propos', href: '/a-propos' },
+  { label: 'Services', href: '/services' },
+  { label: 'Offres', href: '/offres' },
+  { label: 'Contact', href: '/contact' },
+];
+
 export const FOOTER_LINKS = [
   { label: 'Mentions légales', href: '/mentions-legales', type: 'page' },
   { label: 'Conditions de vente', href: '/conditions-de-vente', type: 'page' },

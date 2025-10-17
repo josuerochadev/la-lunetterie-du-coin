@@ -116,6 +116,19 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
             </SimpleAnimation>
           ))}
         </div>
+
+        {/* Bouton CTA vers la page Services complète */}
+        <div className="mt-16 text-center">
+          <SimpleAnimation type="slide-up" delay={400}>
+            <a
+              href="/services"
+              className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+              aria-label="Découvrir tous nos services"
+            >
+              Découvrir tous nos services
+            </a>
+          </SimpleAnimation>
+        </div>
       </div>
     </section>
   );

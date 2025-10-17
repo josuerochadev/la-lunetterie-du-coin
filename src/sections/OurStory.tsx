@@ -1,5 +1,4 @@
 import { forwardRef } from 'react';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
@@ -53,14 +52,10 @@ const OurStory = forwardRef<HTMLElement>(() => {
 
               <a
                 href="/a-propos"
-                className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
-                aria-label="En savoir plus sur notre histoire"
+                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                aria-label="Découvrir notre histoire"
               >
-                En savoir plus
-                <ArrowRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
+                Nous découvrir
               </a>
             </div>
           </SimpleAnimation>

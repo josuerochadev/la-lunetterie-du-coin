@@ -89,13 +89,8 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                       </div>
                       <div className="flex min-h-full items-center">
                         <div className="space-y-6">
-                          {/* Tagline + Titre */}
-                          <div>
-                            <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
-                              Offre {index + 1}
-                            </span>
-                            <h3 className="heading-subsection-lg">{offer.title}</h3>
-                          </div>
+                          {/* Titre */}
+                          <h3 className="heading-subsection-lg">{offer.title}</h3>
 
                           {/* Phrase d'accroche */}
                           <p className="text-body-lg font-medium italic leading-relaxed text-accent">
@@ -134,13 +129,8 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                     <>
                       <div className="flex min-h-full items-center justify-end">
                         <div className="space-y-6 text-right">
-                          {/* Tagline + Titre */}
-                          <div>
-                            <span className="mb-3 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
-                              Offre {index + 1}
-                            </span>
-                            <h3 className="heading-subsection-lg">{offer.title}</h3>
-                          </div>
+                          {/* Titre */}
+                          <h3 className="heading-subsection-lg">{offer.title}</h3>
 
                           {/* Phrase d'accroche */}
                           <p className="text-body-lg font-medium italic leading-relaxed text-accent">
@@ -189,6 +179,19 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
               </SimpleAnimation>
             );
           })}
+        </div>
+
+        {/* Bouton CTA vers la page Offres complète */}
+        <div className="mt-16 text-center">
+          <SimpleAnimation type="slide-up" delay={200}>
+            <a
+              href="/offres"
+              className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+              aria-label="Voir plus sur nos offres"
+            >
+              Voir plus sur nos offres
+            </a>
+          </SimpleAnimation>
         </div>
       </div>
     </section>
