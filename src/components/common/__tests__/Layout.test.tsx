@@ -188,7 +188,7 @@ describe('Layout', () => {
 
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(screen.getByText('Page description')).toBeInTheDocument();
-      expect(screen.getByRole('button')).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Action Button' })).toBeInTheDocument();
       expect(screen.getByText('String content')).toBeInTheDocument();
     });
 

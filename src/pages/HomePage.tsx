@@ -37,10 +37,10 @@ export default function HomePage() {
             <ServicesMinimal />
           </StickySection>
           <StickySection zIndex={14}>
-            <EngagementEcologique />
+            <OffersEditorial />
           </StickySection>
           <StickySection zIndex={15}>
-            <OffersEditorial />
+            <EngagementEcologique />
           </StickySection>
           <StickySection zIndex={16}>
             <Testimonials />

@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
@@ -8,6 +8,7 @@ import MenuButton from '@/components/navbar/MenuButton';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { MENU_ANIMATION_DURATION, CALENDLY_URL, STORE_INFO } from '@/config/constants';
+import { useMotionPreference } from '@/a11y/useMotionPreference';
 
 /**
  * Composant Navbar
@@ -32,6 +33,8 @@ const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
+  const location = useLocation();
+  const prm = useMotionPreference();
 
   // Contrôle le rendu du menu (pour éviter toggle duplo)
   useEffect(() => {
@@ -58,6 +61,18 @@ const Navbar: React.FC = () => {
     buttonRef.current?.focus();
   };
 
+  // Gère le clic sur le logo : scroll to top si déjà sur la page d'accueil
+  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: prm ? 'auto' : 'smooth',
+      });
+    }
+  };
+
   return (
     <>
       {/* Navbar horizontale fixe */}
@@ -73,7 +88,7 @@ const Navbar: React.FC = () => {
           >
             {/* Gauche : Wordmark */}
             <div className="flex items-center">
-              <Link to="/" aria-label="Retour à l'accueil">
+              <Link to="/" aria-label="Retour à l'accueil" onClick={handleLogoClick}>
                 <span className="cursor-pointer text-body-sm font-bold uppercase leading-tight tracking-tight transition-all duration-300 hover:scale-105 hover:text-orange sm:text-title-sm">
                   <span className="font-thin">LA</span>LUNETTERIE
                   <span className="font-thin">DU</span>COIN

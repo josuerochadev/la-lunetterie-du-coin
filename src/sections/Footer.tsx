@@ -160,7 +160,7 @@ export default function Footer({
               <p className="pt-3 text-center text-body-sm">
                 Développé&nbsp;par{' '}
                 <a
-                  href="https://josuerochadev.github.io/portfolio/"
+                  href="https://josuerocha.dev"
                   target="_blank"
                   rel="noopener noreferrer"
                   className={footerLinkBase}

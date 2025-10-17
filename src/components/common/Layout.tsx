@@ -4,6 +4,7 @@ import Navbar from '../navbar/Navbar';
 import Footer from '../../sections/Footer';
 
 import SkipLink from '@/components/common/SkipLink';
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -26,6 +27,7 @@ export default function Layout({ children }: LayoutProps) {
           {children}
         </main>
         <Footer />
+        <ScrollToTopButton />
       </div>
     </div>
   );
