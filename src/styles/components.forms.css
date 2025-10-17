@@ -1,15 +1,14 @@
 /* ====== FORMULAIRES ====== */
 @layer components {
-  /* Formulaire de contact - Style éditorial underline minimal */
+  /* Formulaire de contact - Style éditorial avec bordure fine */
   .form-input {
-    @apply w-full px-0 py-3 font-sans text-body tracking-normal transition-all duration-300;
+    @apply w-full px-4 py-3 font-sans text-body tracking-normal transition-all duration-300;
 
-    /* Fond transparent - design flat */
+    /* Fond transparent */
     background: transparent;
 
-    /* Bordure bottom uniquement - style underline */
-    border: none;
-    border-bottom: 1px solid rgb(var(--color-stone-rgb) / 0.3);
+    /* Bordure fine charcoal tout autour */
+    border: 1px solid rgb(var(--color-charcoal-rgb));
 
     /* Texte charcoal */
     color: rgb(var(--color-text-rgb));
@@ -24,8 +23,7 @@
   .form-input:focus {
     outline: none;
     /* Bordure accent au focus */
-    border-bottom-color: rgb(var(--color-accent-rgb));
-    border-bottom-width: 2px;
+    border-color: rgb(var(--color-accent-rgb));
     /* Pas de shadow ni de ring */
   }
 
@@ -35,12 +33,13 @@
 
   /* État d'erreur */
   .form-input--error {
-    border-bottom-color: rgb(239 68 68); /* red-500 */
-    border-bottom-width: 2px;
+    border-color: rgb(239 68 68); /* red-500 */
+    background: rgb(254 242 242); /* red-50 */
   }
 
   .form-input--error:focus {
-    border-bottom-color: rgb(239 68 68);
+    border-color: rgb(239 68 68);
+    background: rgb(254 242 242);
   }
 
   /* Labels - style éditorial */

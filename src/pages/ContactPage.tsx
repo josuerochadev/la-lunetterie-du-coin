@@ -7,6 +7,7 @@ import Train from 'lucide-react/dist/esm/icons/train';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import Layout from '@/components/common/Layout';
+import SectionContainer from '@/components/common/SectionContainer';
 import ContactForm from '@/components/contact/ContactForm';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
@@ -49,7 +50,7 @@ export default function ContactPage() {
       />
       <Layout>
         {/* Hero - Style homepage avec hiérarchie forte */}
-        <section id="hero" className="relative w-full bg-background py-section">
+        <SectionContainer id="hero" className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
             <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
@@ -65,14 +66,16 @@ export default function ContactPage() {
               </SimpleAnimation>
             </div>
           </div>
-        </section>
+        </SectionContainer>
 
         {/* Formulaire de contact */}
-        <section className="relative w-full bg-background py-section">
+        <SectionContainer className="bg-background py-section" aria-labelledby="formulaire">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-2xl">
+            <div className="mx-auto max-w-3xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="heading-section mb-8 text-center">Envoyez-nous un message</h2>
+                <h2 id="formulaire" className="heading-section mb-8 text-center">
+                  Envoyez-nous un message
+                </h2>
               </SimpleAnimation>
 
               <SimpleAnimation type="fade" delay={100}>
@@ -80,14 +83,19 @@ export default function ContactPage() {
               </SimpleAnimation>
             </div>
           </div>
-        </section>
+        </SectionContainer>
 
         {/* Informations pratiques */}
-        <section className="relative w-full bg-background py-section">
+        <SectionContainer
+          className="bg-background py-section"
+          aria-labelledby="informations-pratiques"
+        >
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="heading-section mb-12 text-center">Informations pratiques</h2>
+                <h2 id="informations-pratiques" className="heading-section mb-12 text-center">
+                  Informations pratiques
+                </h2>
               </SimpleAnimation>
 
               <div className="grid gap-8 md:grid-cols-2 md:gap-12">
@@ -168,14 +176,16 @@ export default function ContactPage() {
               </div>
             </div>
           </div>
-        </section>
+        </SectionContainer>
 
         {/* Prise de rendez-vous Calendly */}
-        <section className="relative w-full bg-background py-section">
+        <SectionContainer className="bg-background py-section" aria-labelledby="rendez-vous">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="heading-section mb-6 text-center">Prendre rendez-vous</h2>
+                <h2 id="rendez-vous" className="heading-section mb-6 text-center">
+                  Prendre rendez-vous
+                </h2>
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={100}>
@@ -199,79 +209,89 @@ export default function ContactPage() {
               </SimpleAnimation>
             </div>
           </div>
-        </section>
+        </SectionContainer>
 
-        {/* Plan d'accès + Comment nous rejoindre */}
-        <section className="relative w-full bg-background py-section">
+        {/* Plan d'accès + Comment nous rejoindre - Layout 50/50 avec photo */}
+        <SectionContainer className="bg-background py-section" aria-labelledby="comment-rejoindre">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-4xl">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="heading-section mb-12 text-center">Comment nous rejoindre</h2>
-              </SimpleAnimation>
+            <SimpleAnimation type="slide-up" delay={0}>
+              <h2 id="comment-rejoindre" className="heading-section mb-12 text-center">
+                Comment nous rejoindre
+              </h2>
+            </SimpleAnimation>
 
-              {/* Google Maps */}
+            <div className="mx-auto max-w-6xl">
+              {/* Layout 50/50 : Photo gauche - Informations droite */}
               <SimpleAnimation type="fade" delay={100}>
-                <div className="mb-12 overflow-hidden border-t border-stone/20 pt-8">
-                  <iframe
-                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2639.1234567890!2d7.7453277!3d48.5823394!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4796c84f95e5e877%3A0x88d0f0f0f0f0f0f0!2s24%20Rue%20du%20Faubourg%20de%20Pierre%2C%2067000%20Strasbourg!5e0!3m2!1sfr!2sfr!4v1234567890"
-                    width="100%"
-                    height="450"
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    title="Plan d'accès à La Lunetterie du Coin"
-                  />
+                <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
+                  {/* Photo de la boutique */}
+                  <div className="relative aspect-[2/3] w-full overflow-hidden">
+                    <img
+                      src="/images/contact-informations-boutique-outside.jpg"
+                      alt="Façade de La Lunetterie du Coin"
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  </div>
+
+                  {/* Informations d'accès */}
+                  <div className="space-y-8">
+                    {/* En voiture */}
+                    <div className="border-t border-stone/20 pt-6">
+                      <div className="mb-4 flex items-center gap-2">
+                        <Car className="h-5 w-5 text-accent" aria-hidden="true" />
+                        <h3 className="heading-subsection">En voiture</h3>
+                      </div>
+                      <div className="space-y-3 text-body text-stone">
+                        <p>
+                          <span className="font-medium text-text">Parking gratuit</span> disponible
+                          dans les rues adjacentes
+                        </p>
+                        <p>
+                          <span className="font-medium text-text">Parking payant</span> : Parking
+                          Étoile (5 min à pied)
+                        </p>
+                        <p>Accès facile depuis le centre-ville et les boulevards périphériques</p>
+                      </div>
+                    </div>
+
+                    {/* En transports en commun */}
+                    <div className="border-t border-stone/20 pt-6">
+                      <div className="mb-4 flex items-center gap-2">
+                        <Train className="h-5 w-5 text-accent" aria-hidden="true" />
+                        <h3 className="heading-subsection">En transports</h3>
+                      </div>
+                      <div className="space-y-3 text-body text-stone">
+                        <p>
+                          <span className="font-medium text-text">Tram C</span> : arrêt Pierre de
+                          Coubertin (2 min à pied)
+                        </p>
+                        <p>
+                          <span className="font-medium text-text">Bus 2, 15</span> : arrêt Faubourg
+                          de Pierre (1 min à pied)
+                        </p>
+                        <p>À 15 minutes à pied de la gare centrale de Strasbourg</p>
+                      </div>
+                    </div>
+
+                    {/* Bouton Google Maps */}
+                    <div className="pt-4">
+                      <a
+                        href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                      >
+                        <MapPin className="h-5 w-5" aria-hidden="true" />
+                        Voir sur Google Maps
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </SimpleAnimation>
-
-              {/* Accès en voiture / transports */}
-              <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-                {/* En voiture */}
-                <SimpleAnimation type="fade" delay={200}>
-                  <div className="border-t border-stone/20 pt-6">
-                    <div className="mb-4 flex items-center gap-2">
-                      <Car className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="heading-subsection">En voiture</h3>
-                    </div>
-                    <div className="space-y-3 text-body text-stone">
-                      <p>
-                        <span className="font-medium text-text">Parking gratuit</span> disponible
-                        dans les rues adjacentes
-                      </p>
-                      <p>
-                        <span className="font-medium text-text">Parking payant</span> : Parking
-                        Étoile (5 min à pied)
-                      </p>
-                      <p>Accès facile depuis le centre-ville et les boulevards périphériques</p>
-                    </div>
-                  </div>
-                </SimpleAnimation>
-
-                {/* En transports en commun */}
-                <SimpleAnimation type="fade" delay={250}>
-                  <div className="border-t border-stone/20 pt-6">
-                    <div className="mb-4 flex items-center gap-2">
-                      <Train className="h-5 w-5 text-accent" aria-hidden="true" />
-                      <h3 className="heading-subsection">En transports</h3>
-                    </div>
-                    <div className="space-y-3 text-body text-stone">
-                      <p>
-                        <span className="font-medium text-text">Tram C</span> : arrêt Pierre de
-                        Coubertin (2 min à pied)
-                      </p>
-                      <p>
-                        <span className="font-medium text-text">Bus 2, 15</span> : arrêt Faubourg de
-                        Pierre (1 min à pied)
-                      </p>
-                      <p>À 15 minutes à pied de la gare centrale de Strasbourg</p>
-                    </div>
-                  </div>
-                </SimpleAnimation>
-              </div>
             </div>
           </div>
-        </section>
+        </SectionContainer>
       </Layout>
     </>
   );
