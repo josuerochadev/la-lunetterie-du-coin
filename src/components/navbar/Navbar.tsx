@@ -76,7 +76,7 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Navbar horizontale fixe */}
-      <header className="fixed left-0 right-0 top-0 z-navbar shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
+      <header className="fixed left-0 right-0 top-0 z-navbar border-b border-charcoal shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
         <div
           className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/25 via-50% to-cream/10"
           aria-hidden="true"

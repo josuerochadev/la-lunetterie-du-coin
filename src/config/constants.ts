@@ -213,9 +213,9 @@ On voit clair, ○ sans fermer les yeux sur l'impact écologique. ▲ La mode ch
 
 export const FOOTER_NAV_LINKS = [
   { label: 'À propos', href: '/a-propos' },
-  { label: 'Services', href: '/services' },
-  { label: 'Offres', href: '/offres' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'Nos services', href: '/services' },
+  { label: 'Nos offres', href: '/offres' },
+  { label: 'Nous contacter', href: '/contact' },
 ];
 
 export const FOOTER_LINKS = [

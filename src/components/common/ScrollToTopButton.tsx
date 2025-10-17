@@ -46,13 +46,14 @@ export default function ScrollToTopButton() {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center border border-accent bg-cream text-accent shadow-lg transition-all duration-300 hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream ${
+      className={`fixed bottom-6 right-6 z-50 flex items-center gap-2 border border-charcoal bg-gradient-to-b from-cream/40 via-cream/25 via-50% to-cream/10 px-4 py-3 text-body-sm font-medium text-charcoal shadow-lg backdrop-blur-2xl transition-all duration-300 hover:text-orange focus-visible:text-orange ${
         isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-16 opacity-0'
       }`}
       aria-label="Remonter en haut de la page"
       type="button"
     >
-      <ArrowUp className="h-5 w-5" aria-hidden="true" />
+      <ArrowUp className="h-4 w-4" aria-hidden="true" />
+      <span className="hidden sm:inline">Retour en haut</span>
     </button>
   );
 }

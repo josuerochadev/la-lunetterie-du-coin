@@ -6,16 +6,14 @@ import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Facebook from 'lucide-react/dist/esm/icons/facebook';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
-import MenuCategory from './MenuCategory';
-
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import {
-  MENU_CATEGORIES,
   MENU_CTA,
   MENU_LEGAL_LINKS,
   STORE_INFO,
   FOOTER_SOCIALS,
+  FOOTER_NAV_LINKS,
 } from '@/config/constants';
 
 type FullScreenMenuProps = {
@@ -89,25 +87,28 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Contenu principal du menu */}
-        <div className="mx-auto w-full max-w-container flex-1 px-4 pb-20 pt-28 sm:px-6">
-          <div className="grid gap-12 lg:grid-cols-[3fr_2fr] lg:gap-10">
-            {/* Colonne gauche : Catégories de navigation - alignée à droite */}
-            <div className="space-y-16">
-              <section aria-label="Navigation par catégories" className="space-y-16 lg:text-right">
-                {MENU_CATEGORIES.map((category, index) => (
-                  <MenuCategory
-                    key={category.title}
-                    title={category.title}
-                    titleHref={category.href}
-                    links={category.links}
-                    onLinkClick={onClose}
-                    animationDelay={index * 50}
-                  />
-                ))}
-              </section>
+        <div className="flex min-h-screen w-full items-center justify-center px-4 sm:px-6">
+          <div className="grid w-full max-w-5xl grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
+            {/* Colonne gauche : Navigation principale - alignée à droite */}
+            <div className="space-y-16 lg:text-right">
+              <SimpleAnimation type="slide-up" delay={0} immediate={true}>
+                <nav aria-label="Navigation principale" className="space-y-6 lg:text-right">
+                  {FOOTER_NAV_LINKS.map((link) => (
+                    <div key={link.href}>
+                      <Link
+                        to={link.href}
+                        onClick={onClose}
+                        className="inline-block text-title-lg font-light text-charcoal transition-colors hover:text-orange"
+                      >
+                        {link.label}
+                      </Link>
+                    </div>
+                  ))}
+                </nav>
+              </SimpleAnimation>
 
               {/* Pages légales */}
-              <SimpleAnimation type="slide-up" delay={300} immediate={true}>
+              <SimpleAnimation type="slide-up" delay={200} immediate={true}>
                 <nav aria-label="Pages légales" className="space-y-3 lg:text-right">
                   {MENU_LEGAL_LINKS.map((link) => (
                     <div key={link.href}>
@@ -125,7 +126,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Colonne droite : Informations pratiques - alignée à gauche */}
-            <aside className="space-y-8 border-t border-charcoal/10 pt-8 lg:sticky lg:bottom-8 lg:self-end lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+            <aside className="space-y-8 border-t border-charcoal/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
               {/* Nom du magasin */}
               <SimpleAnimation type="fade" delay={300} immediate={true}>
                 <div className="space-y-0">
