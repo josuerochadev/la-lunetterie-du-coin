@@ -111,18 +111,28 @@ export default function ServicesPage() {
         canonicalPath="/services"
       />
       <Layout>
-        {/* Hero */}
-        <SectionContainer className="bg-background py-section">
+        {/* Hero - Style homepage avec hiérarchie forte */}
+        <SectionContainer id="hero" className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-5xl text-center">
+            <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h1 className="mb-6 text-title-lg font-medium text-text">Nos services</h1>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="slide-up" delay={100}>
-                <p className="text-body-lg leading-relaxed text-stone">
-                  Une expertise complète pour prendre soin de votre vue, avec style et conscience
-                </p>
+                <div className="space-y-6">
+                  <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+                    Notre expertise
+                  </span>
+                  <h1
+                    className="font-light uppercase leading-tight tracking-wide text-text"
+                    style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
+                  >
+                    Nos services
+                  </h1>
+                  <p
+                    className="leading-relaxed text-stone"
+                    style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
+                  >
+                    Une expertise complète pour prendre soin de votre vue, avec style et conscience
+                  </p>
+                </div>
               </SimpleAnimation>
             </div>
           </div>

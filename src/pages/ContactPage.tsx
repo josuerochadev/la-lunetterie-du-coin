@@ -48,19 +48,28 @@ export default function ContactPage() {
         canonicalPath="/contact"
       />
       <Layout>
-        {/* Hero */}
-        <section className="relative w-full bg-background py-section">
+        {/* Hero - Style homepage avec hiérarchie forte */}
+        <section id="hero" className="relative w-full bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-5xl text-center">
+            <div className="mx-auto max-w-5xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <h1 className="mb-6 text-title-lg font-medium text-text">Nous contacter</h1>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="slide-up" delay={100}>
-                <p className="text-body-lg leading-relaxed text-stone">
-                  Une question ? Besoin d'un conseil ? N'hésitez pas à nous contacter, nous vous
-                  répondrons avec plaisir
-                </p>
+                <div className="space-y-6">
+                  <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+                    Restons en contact
+                  </span>
+                  <h1
+                    className="font-light uppercase leading-tight tracking-wide text-text"
+                    style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
+                  >
+                    Nous contacter
+                  </h1>
+                  <p
+                    className="leading-relaxed text-stone"
+                    style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
+                  >
+                    Une question ? Besoin d'un conseil ? Nous sommes là pour vous accompagner
+                  </p>
+                </div>
               </SimpleAnimation>
             </div>
           </div>
