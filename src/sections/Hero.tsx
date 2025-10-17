@@ -57,10 +57,10 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
         </div>
       </div>
 
-      {/* Contenu texte - centré dans les 50% supérieurs (sous la navbar) */}
+      {/* Contenu texte - centré horizontalement avec max-width, texte aligné à gauche */}
       <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(50%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(50%-72px)] sm:px-12 lg:px-16">
         <SimpleAnimation type="fade" delay={400} immediate={true}>
-          <div className="w-full space-y-4 sm:space-y-6">
+          <div className="mx-auto w-full max-w-5xl space-y-6">
             <h1
               id="hero-title"
               className="font-light uppercase leading-tight tracking-wide text-text"
@@ -70,8 +70,8 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
             </h1>
 
             <p
-              className="text-center text-stone"
-              style={{ fontSize: 'clamp(0.875rem, 1.5vw, 1.25rem)' }}
+              className="leading-relaxed text-stone"
+              style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
             >
               Opticien à Strasbourg depuis 2016. Neuf & Occasion.
             </p>
