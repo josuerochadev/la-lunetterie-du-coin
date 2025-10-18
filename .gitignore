@@ -67,6 +67,9 @@ yarn.lock
 
 # Testing
 .jest-cache
+test-results/
+e2e-results/
+playwright-report/
 
 # Security and quality reports
 security-report.json
