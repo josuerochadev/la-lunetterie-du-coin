@@ -52,7 +52,11 @@ const Testimonials = forwardRef<HTMLElement>(() => {
             <SimpleAnimation key={testimonial.id} type="fade" delay={index * 100}>
               <article className="border-t border-stone/20 pt-8">
                 {/* Étoiles en haut */}
-                <div className="mb-6 flex gap-1" aria-label={`Note: ${testimonial.rating} sur 5`}>
+                <div
+                  className="mb-6 flex gap-1"
+                  role="img"
+                  aria-label={`Note: ${testimonial.rating} sur 5`}
+                >
                   {[...Array(testimonial.rating)].map((_, i) => (
                     <Star key={i} className="h-5 w-5 fill-accent text-accent" aria-hidden="true" />
                   ))}
