@@ -183,48 +183,8 @@ test.describe('Contact Form - E2E Tests', () => {
   });
 
   test('should be accessible via keyboard', async ({ page }) => {
-    // Navigation au clavier
-    const nameInput = page.locator('input[name="name"], input[id="name"]');
-
-    await nameInput.focus();
-    await expect(nameInput).toBeFocused();
-
-    // Tab vers les champs suivants
-    await page.keyboard.press('Tab');
-    const emailInput = page.locator('input[name="email"], input[id="email"]');
-    await expect(emailInput).toBeFocused();
-
-    await page.keyboard.press('Tab');
-    const messageTextarea = page.locator('textarea[name="message"], textarea[id="message"]');
-    await expect(messageTextarea).toBeFocused();
-
-    // Tab vers la checkbox RGPD
-    await page.keyboard.press('Tab');
-    const consentCheckbox = page.locator('input[name="consent"]');
-    await expect(consentCheckbox).toBeFocused();
-
-    // Cocher avec Space
-    await page.keyboard.press('Space');
-
-    // Tab vers le bouton submit (maintenant enabled car checkbox cochée)
-    await page.keyboard.press('Tab');
-    const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
-
-    // Attendre que le bouton soit enabled avant de vérifier le focus
-    await expect(submitButton).toBeEnabled();
-    await expect(submitButton).toBeFocused();
-
-    // Vérifier que Enter soumet le formulaire
-    // D'abord remplir les champs requis
-    await nameInput.focus();
-    await nameInput.fill('Test');
-    await emailInput.fill('test@example.com');
-    await messageTextarea.fill('Test message');
-
-    // La checkbox est déjà cochée de la navigation précédente
-
-    // Intercepter la requête pour éviter une vraie soumission
-    page.route('https://formspree.io/**', async (route) => {
+    // Intercepter la requête avant de commencer pour éviter une vraie soumission
+    await page.route('https://formspree.io/**', async (route) => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
@@ -232,12 +192,59 @@ test.describe('Contact Form - E2E Tests', () => {
       });
     });
 
+    // Navigation au clavier
+    const nameInput = page.locator('input[name="name"], input[id="name"]');
+    const emailInput = page.locator('input[name="email"], input[id="email"]');
+    const messageTextarea = page.locator('textarea[name="message"], textarea[id="message"]');
+    const consentCheckbox = page.locator('input[name="consent"]');
+    const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
+
+    // Commencer au premier champ
+    await nameInput.focus();
+    await expect(nameInput).toBeFocused();
+
+    // Tab vers email
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100); // Petit délai pour Firefox
+    await expect(emailInput).toBeFocused();
+
+    // Tab vers message
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100);
+    await expect(messageTextarea).toBeFocused();
+
+    // Tab vers la checkbox RGPD
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100);
+    await expect(consentCheckbox).toBeFocused();
+
+    // Cocher avec Space
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(200); // Attendre que le bouton soit enabled
+
+    // Tab vers le bouton submit (maintenant enabled car checkbox cochée)
+    await page.keyboard.press('Tab');
+    await page.waitForTimeout(100);
+
+    // Attendre que le bouton soit enabled avant de vérifier le focus
+    await expect(submitButton).toBeEnabled({ timeout: 1000 });
+    await expect(submitButton).toBeFocused();
+
+    // Vérifier que Enter soumet le formulaire
+    // D'abord remplir les champs requis
+    await nameInput.fill('Test User');
+    await emailInput.fill('test@example.com');
+    await messageTextarea.fill('Test message');
+
+    // La checkbox est déjà cochée de la navigation précédente
+
     await submitButton.focus();
     await page.keyboard.press('Enter');
 
     // Le formulaire devrait tenter la soumission
-    await expect(page.getByRole('button', { name: /envoi en cours/i })).toBeVisible({
-      timeout: 2000,
+    // Vérifier que le bouton change d'état pendant l'envoi
+    await expect(page.getByRole('button', { name: /envoi du message en cours/i })).toBeVisible({
+      timeout: 3000,
     });
   });
 });

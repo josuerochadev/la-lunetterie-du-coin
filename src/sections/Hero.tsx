@@ -70,7 +70,7 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
             </h1>
 
             <p
-              className="leading-relaxed text-stone"
+              className="leading-relaxed text-text"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
             >
               Opticien à Strasbourg depuis 2016. Neuf & Occasion.
