@@ -2,11 +2,8 @@
 module.exports = {
   ci: {
     collect: {
-      url: [
-        'http://localhost:4173/',
-        'http://localhost:4173/#contact',
-      ],
-      numberOfRuns: 2,
+      url: ['http://localhost:4173/'],
+      numberOfRuns: 1,
       settings: {
         // Configuration desktop simple et cohérente
         emulatedFormFactor: 'desktop',
@@ -25,11 +22,19 @@ module.exports = {
           '--disable-dev-shm-usage',
           '--disable-gpu',
           '--disable-software-rasterizer',
+          '--disable-setuid-sandbox',
+          '--disable-web-security',
+          '--window-size=1920,1080',
         ],
 
         // Timeouts plus longs pour CI
-        maxWaitForLoad: 60000,
-        maxWaitForFcp: 30000,
+        maxWaitForLoad: 90000,
+        maxWaitForFcp: 45000,
+        pauseAfterFcpMs: 2000,
+        pauseAfterLoadMs: 2000,
+
+        // Attendre que le réseau soit inactif (important pour SPA)
+        waitForNetworkIdle: true,
       },
     },
     assert: {

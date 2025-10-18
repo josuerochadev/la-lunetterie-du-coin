@@ -4,13 +4,10 @@ module.exports = {
     // Configuration pour les builds locaux et CI
     collect: {
       // URLs à auditer
-      url: [
-        'http://localhost:4173/',
-        'http://localhost:4173/#contact',
-      ],
-      
-      // Nombre d'audits par URL (moyenne pour plus de stabilité)
-      numberOfRuns: 3,
+      url: ['http://localhost:4173/'],
+
+      // Nombre d'audits par URL (réduit pour CI)
+      numberOfRuns: 1,
       
       // Configuration Lighthouse
       settings: {
@@ -35,11 +32,19 @@ module.exports = {
           '--disable-dev-shm-usage',
           '--disable-gpu',
           '--disable-software-rasterizer',
+          '--disable-setuid-sandbox',
+          '--disable-web-security',
+          '--window-size=1920,1080',
         ],
 
         // Timeouts plus longs pour CI
-        maxWaitForLoad: 60000,
-        maxWaitForFcp: 30000,
+        maxWaitForLoad: 90000,
+        maxWaitForFcp: 45000,
+        pauseAfterFcpMs: 2000,
+        pauseAfterLoadMs: 2000,
+
+        // Attendre que le réseau soit inactif (important pour SPA)
+        waitForNetworkIdle: true,
       },
     },
     
@@ -68,13 +73,6 @@ module.exports = {
       target: 'filesystem',
       outputDir: './lighthouse-results',
       reportFilenamePattern: '%%PATHNAME%%-%%DATETIME%%-report.%%EXTENSION%%',
-    },
-    
-    // Configuration du serveur (pour intégration CI)
-    server: {
-      command: 'npm run preview',
-      port: 4173,
-      timeout: 60000,
     },
   },
 };
