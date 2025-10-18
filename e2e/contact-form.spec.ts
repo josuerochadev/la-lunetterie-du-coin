@@ -241,10 +241,11 @@ test.describe('Contact Form - E2E Tests', () => {
     await submitButton.focus();
     await page.keyboard.press('Enter');
 
-    // Le formulaire devrait tenter la soumission
-    // Vérifier que le bouton change d'état pendant l'envoi
-    await expect(page.getByRole('button', { name: /envoi du message en cours/i })).toBeVisible({
-      timeout: 3000,
-    });
+    // Vérifier que le formulaire a été soumis avec succès
+    // Au lieu de vérifier l'état transitoire du bouton, vérifions le message de succès
+    const successMessage = page.locator(
+      ':has-text("succès"), :has-text("envoyé"), .form-message--success, .success',
+    );
+    await expect(successMessage.first()).toBeVisible({ timeout: 5000 });
   });
 });
