@@ -205,5 +205,5 @@
                     - paragraph [ref=e229]:
                         - text: Développé par
                         - link "Josué Rocha" [ref=e230]:
-                            - /url: https://josuerochadev.github.io/portfolio/
+                            - /url: https://josuerocha.dev
 ```
