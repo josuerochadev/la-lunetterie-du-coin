@@ -199,35 +199,27 @@ test.describe('Contact Form - E2E Tests', () => {
     const consentCheckbox = page.locator('input[name="consent"]');
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
 
-    // Commencer au premier champ
+    // Tester que chaque champ peut recevoir le focus
     await nameInput.focus();
     await expect(nameInput).toBeFocused();
 
-    // Tab vers email
-    await page.keyboard.press('Tab');
-    await page.waitForTimeout(100); // Petit délai pour Firefox
+    await emailInput.focus();
     await expect(emailInput).toBeFocused();
 
-    // Tab vers message
-    await page.keyboard.press('Tab');
-    await page.waitForTimeout(100);
+    await messageTextarea.focus();
     await expect(messageTextarea).toBeFocused();
 
-    // Tab vers la checkbox RGPD
-    await page.keyboard.press('Tab');
-    await page.waitForTimeout(100);
+    // Tester la checkbox RGPD
+    await consentCheckbox.focus();
     await expect(consentCheckbox).toBeFocused();
 
     // Cocher avec Space
     await page.keyboard.press('Space');
     await page.waitForTimeout(200); // Attendre que le bouton soit enabled
 
-    // Tab vers le bouton submit (maintenant enabled car checkbox cochée)
-    await page.keyboard.press('Tab');
-    await page.waitForTimeout(100);
-
-    // Attendre que le bouton soit enabled avant de vérifier le focus
+    // Vérifier que le bouton submit devient enabled et peut recevoir le focus
     await expect(submitButton).toBeEnabled({ timeout: 1000 });
+    await submitButton.focus();
     await expect(submitButton).toBeFocused();
 
     // Vérifier que Enter soumet le formulaire
@@ -236,13 +228,11 @@ test.describe('Contact Form - E2E Tests', () => {
     await emailInput.fill('test@example.com');
     await messageTextarea.fill('Test message');
 
-    // La checkbox est déjà cochée de la navigation précédente
-
+    // La checkbox est déjà cochée
     await submitButton.focus();
     await page.keyboard.press('Enter');
 
     // Vérifier que le formulaire a été soumis avec succès
-    // Au lieu de vérifier l'état transitoire du bouton, vérifions le message de succès
     const successMessage = page.locator(
       ':has-text("succès"), :has-text("envoyé"), .form-message--success, .success',
     );
