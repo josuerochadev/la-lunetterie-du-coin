@@ -39,13 +39,16 @@ test.describe('Contact Form - E2E Tests', () => {
   });
 
   test('should validate required fields', async ({ page }) => {
-    // Cocher la checkbox RGPD (obligatoire)
+    const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
+
+    // Le bouton devrait être désactivé sans consentement
+    await expect(submitButton).toBeDisabled();
+
+    // Cocher la checkbox RGPD pour activer le bouton
     const consentCheckbox = page.locator('input[name="consent"]');
     await consentCheckbox.check();
 
-    const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
-
-    // Essayer de soumettre le formulaire vide
+    // Maintenant le bouton est activé, on peut cliquer
     await submitButton.click();
 
     // Vérifier que la validation HTML5 empêche la soumission
@@ -203,18 +206,31 @@ test.describe('Contact Form - E2E Tests', () => {
     // Cocher avec Space
     await page.keyboard.press('Space');
 
-    // Tab vers le bouton submit (maintenant enabled)
+    // Tab vers le bouton submit (maintenant enabled car checkbox cochée)
     await page.keyboard.press('Tab');
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
+
+    // Attendre que le bouton soit enabled avant de vérifier le focus
+    await expect(submitButton).toBeEnabled();
     await expect(submitButton).toBeFocused();
 
     // Vérifier que Enter soumet le formulaire
+    // D'abord remplir les champs requis
     await nameInput.focus();
     await nameInput.fill('Test');
     await emailInput.fill('test@example.com');
     await messageTextarea.fill('Test message');
 
     // La checkbox est déjà cochée de la navigation précédente
+
+    // Intercepter la requête pour éviter une vraie soumission
+    page.route('https://formspree.io/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
 
     await submitButton.focus();
     await page.keyboard.press('Enter');
