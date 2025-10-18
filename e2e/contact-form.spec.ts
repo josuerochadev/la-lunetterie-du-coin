@@ -4,14 +4,17 @@ import { test, expect } from '@playwright/test';
 test.describe('Contact Form - E2E Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/');
-    
+
     // Naviguer vers la section contact
     const contactLink = page.locator('a[href*="contact"], a:has-text("Contact")').first();
     if (await contactLink.isVisible()) {
       await contactLink.click();
     } else {
       // Scroll vers le formulaire si pas de navigation
-      await page.locator('#contact, form, [data-testid="contact-form"]').first().scrollIntoViewIfNeeded();
+      await page
+        .locator('#contact, form, [data-testid="contact-form"]')
+        .first()
+        .scrollIntoViewIfNeeded();
     }
   });
 
@@ -36,15 +39,21 @@ test.describe('Contact Form - E2E Tests', () => {
   });
 
   test('should validate required fields', async ({ page }) => {
+    // Cocher la checkbox RGPD (obligatoire)
+    const consentCheckbox = page.locator('input[name="consent"]');
+    await consentCheckbox.check();
+
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
-    
+
     // Essayer de soumettre le formulaire vide
     await submitButton.click();
 
     // Vérifier que la validation HTML5 empêche la soumission
     const nameInput = page.locator('input[name="name"], input[id="name"]');
-    const isNameInvalid = await nameInput.evaluate(el => !(el as HTMLInputElement).validity.valid);
-    
+    const isNameInvalid = await nameInput.evaluate(
+      (el) => !(el as HTMLInputElement).validity.valid,
+    );
+
     if (isNameInvalid) {
       // Le navigateur empêche la soumission
       expect(isNameInvalid).toBe(true);
@@ -57,13 +66,13 @@ test.describe('Contact Form - E2E Tests', () => {
 
   test('should show field-specific validation', async ({ page }) => {
     const emailInput = page.locator('input[name="email"], input[id="email"]');
-    
+
     // Saisir un email invalide
     await emailInput.fill('invalid-email');
     await emailInput.blur();
 
     // Vérifier la validation d'email
-    const isEmailValid = await emailInput.evaluate(el => (el as HTMLInputElement).validity.valid);
+    const isEmailValid = await emailInput.evaluate((el) => (el as HTMLInputElement).validity.valid);
     expect(isEmailValid).toBe(false);
   });
 
@@ -71,15 +80,23 @@ test.describe('Contact Form - E2E Tests', () => {
     // Remplir le formulaire avec des données valides
     await page.locator('input[name="name"], input[id="name"]').fill('Test User');
     await page.locator('input[name="email"], input[id="email"]').fill('test@example.com');
-    await page.locator('textarea[name="message"], textarea[id="message"]').fill('Ceci est un message de test pour vérifier le fonctionnement du formulaire de contact.');
+    await page
+      .locator('textarea[name="message"], textarea[id="message"]')
+      .fill(
+        'Ceci est un message de test pour vérifier le fonctionnement du formulaire de contact.',
+      );
+
+    // Cocher la checkbox RGPD (obligatoire)
+    const consentCheckbox = page.locator('input[name="consent"]');
+    await consentCheckbox.check();
 
     // Intercepter la requête Formspree
-    page.route('https://formspree.io/**', async route => {
+    page.route('https://formspree.io/**', async (route) => {
       // Mock une réponse positive
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: JSON.stringify({ ok: true })
+        body: JSON.stringify({ ok: true }),
       });
     });
 
@@ -89,15 +106,15 @@ test.describe('Contact Form - E2E Tests', () => {
 
     // Vérifier le message de succès
     const successMessage = page.locator(
-      ':has-text("succès"), :has-text("envoyé"), .form-message--success, .success'
+      ':has-text("succès"), :has-text("envoyé"), .form-message--success, .success',
     );
-    
+
     await expect(successMessage.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should handle network errors gracefully', async ({ page }) => {
     // Simuler une erreur réseau
-    page.route('https://formspree.io/**', async route => {
+    page.route('https://formspree.io/**', async (route) => {
       await route.abort('failed');
     });
 
@@ -106,24 +123,28 @@ test.describe('Contact Form - E2E Tests', () => {
     await page.locator('input[name="email"], input[id="email"]').fill('test@example.com');
     await page.locator('textarea[name="message"], textarea[id="message"]').fill('Test message');
 
+    // Cocher la checkbox RGPD (obligatoire)
+    const consentCheckbox = page.locator('input[name="consent"]');
+    await consentCheckbox.check();
+
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
     await submitButton.click();
 
     // Vérifier le message d'erreur
     const errorMessage = page.locator(
-      ':has-text("erreur"), :has-text("problème"), .form-message--error, .error'
+      ':has-text("erreur"), :has-text("problème"), .form-message--error, .error',
     );
-    
+
     await expect(errorMessage.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should handle network failures with retry and eventually succeed', async ({ page }) => {
     let requestCount = 0;
-    
+
     // Simuler des échecs puis succès pour tester le système de retry
-    page.route('https://formspree.io/**', async route => {
+    page.route('https://formspree.io/**', async (route) => {
       requestCount++;
-      
+
       if (requestCount < 3) {
         // Les 2 premières tentatives échouent (network failure)
         await route.abort('failed');
@@ -132,7 +153,7 @@ test.describe('Contact Form - E2E Tests', () => {
         await route.fulfill({
           status: 200,
           contentType: 'application/json',
-          body: JSON.stringify({ ok: true })
+          body: JSON.stringify({ ok: true }),
         });
       }
     });
@@ -141,6 +162,10 @@ test.describe('Contact Form - E2E Tests', () => {
     await page.locator('input[name="name"], input[id="name"]').fill('Test User');
     await page.locator('input[name="email"], input[id="email"]').fill('test@example.com');
     await page.locator('textarea[name="message"], textarea[id="message"]').fill('Test message');
+
+    // Cocher la checkbox RGPD (obligatoire)
+    const consentCheckbox = page.locator('input[name="consent"]');
+    await consentCheckbox.check();
 
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
     await submitButton.click();
@@ -157,7 +182,7 @@ test.describe('Contact Form - E2E Tests', () => {
   test('should be accessible via keyboard', async ({ page }) => {
     // Navigation au clavier
     const nameInput = page.locator('input[name="name"], input[id="name"]');
-    
+
     await nameInput.focus();
     await expect(nameInput).toBeFocused();
 
@@ -170,6 +195,15 @@ test.describe('Contact Form - E2E Tests', () => {
     const messageTextarea = page.locator('textarea[name="message"], textarea[id="message"]');
     await expect(messageTextarea).toBeFocused();
 
+    // Tab vers la checkbox RGPD
+    await page.keyboard.press('Tab');
+    const consentCheckbox = page.locator('input[name="consent"]');
+    await expect(consentCheckbox).toBeFocused();
+
+    // Cocher avec Space
+    await page.keyboard.press('Space');
+
+    // Tab vers le bouton submit (maintenant enabled)
     await page.keyboard.press('Tab');
     const submitButton = page.locator('button[type="submit"], input[type="submit"]').first();
     await expect(submitButton).toBeFocused();
@@ -179,11 +213,15 @@ test.describe('Contact Form - E2E Tests', () => {
     await nameInput.fill('Test');
     await emailInput.fill('test@example.com');
     await messageTextarea.fill('Test message');
-    
+
+    // La checkbox est déjà cochée de la navigation précédente
+
     await submitButton.focus();
     await page.keyboard.press('Enter');
 
     // Le formulaire devrait tenter la soumission
-    await expect(page.getByRole('button', { name: /envoi en cours/i })).toBeVisible({ timeout: 2000 });
+    await expect(page.getByRole('button', { name: /envoi en cours/i })).toBeVisible({
+      timeout: 2000,
+    });
   });
 });
