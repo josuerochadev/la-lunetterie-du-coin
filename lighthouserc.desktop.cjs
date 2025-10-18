@@ -17,6 +17,19 @@ module.exports = {
         },
         onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
         skipAudits: ['installable-manifest', 'splash-screen', 'themed-omnibox'],
+
+        // Configuration Chrome pour CI/CD headless
+        chromeFlags: [
+          '--headless=new',
+          '--no-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--disable-software-rasterizer',
+        ],
+
+        // Timeouts plus longs pour CI
+        maxWaitForLoad: 60000,
+        maxWaitForFcp: 30000,
       },
     },
     assert: {

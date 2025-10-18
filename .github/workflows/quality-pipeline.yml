@@ -328,12 +328,12 @@ jobs:
         with:
           name: dist-files
           path: dist/
-          
+
       - name: 🚨 Run Lighthouse CI (Mobile)
-        run: pnpm lighthouse:mobile
-        
-      - name: 🚨 Run Lighthouse CI (Desktop)  
-        run: pnpm lighthouse:desktop
+        run: start-server-and-test preview http://localhost:4173 'lhci autorun'
+
+      - name: 🚨 Run Lighthouse CI (Desktop)
+        run: start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
         
       - name: 📊 Upload Lighthouse reports
         if: always()
