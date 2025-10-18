@@ -18,7 +18,7 @@ test.describe('Homepage - La Lunetterie du Coin', () => {
     // Vérifier la présence du titre principal
     const heroTitle = page.locator('h1').first();
     await expect(heroTitle).toBeVisible();
-    await expect(heroTitle).toContainText(/lunetterie/i);
+    await expect(heroTitle).toContainText(/lunettes|style|démarche|sens/i);
   });
 
   test('should navigate through main sections', async ({ page }) => {

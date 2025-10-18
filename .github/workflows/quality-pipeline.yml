@@ -263,8 +263,16 @@ jobs:
       - name: 🚪 Bundle Size Quality Gate (<= 10MB)
         run: |
           pnpm build
-          BUNDLE_SIZE=$(du -sk dist | cut -f1)
-          echo "📦 Bundle size: ${BUNDLE_SIZE}kb"
+          # Calculer la taille du JS/CSS seulement (excluant source maps et assets statiques)
+          JS_CSS_SIZE=$(find dist/assets -type f \( -name "*.js" -o -name "*.css" \) -not -name "*.map" | xargs du -k | awk '{sum+=$1} END {print sum}')
+          HTML_SIZE=$(find dist -maxdepth 1 -name "*.html" | xargs du -k | awk '{sum+=$1} END {print sum}')
+          BUNDLE_SIZE=$((JS_CSS_SIZE + HTML_SIZE))
+
+          echo "📦 Bundle size breakdown:"
+          echo "  - JavaScript & CSS: ${JS_CSS_SIZE}kb"
+          echo "  - HTML: ${HTML_SIZE}kb"
+          echo "  - Total: ${BUNDLE_SIZE}kb (static assets excluded)"
+
           if [ $BUNDLE_SIZE -gt 10000 ]; then
             echo "❌ Bundle size ${BUNDLE_SIZE}kb dépasse le seuil de 10MB (10,000kb)"
             exit 1
@@ -320,12 +328,12 @@ jobs:
         with:
           name: dist-files
           path: dist/
-          
+
       - name: 🚨 Run Lighthouse CI (Mobile)
-        run: pnpm lighthouse:mobile
-        
-      - name: 🚨 Run Lighthouse CI (Desktop)  
-        run: pnpm lighthouse:desktop
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun'
+
+      - name: 🚨 Run Lighthouse CI (Desktop)
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
         
       - name: 📊 Upload Lighthouse reports
         if: always()

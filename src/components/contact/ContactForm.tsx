@@ -1,4 +1,5 @@
 import type React from 'react';
+import { useState } from 'react';
 
 import FormField from './FormField';
 import FormStatusMessage from './FormStatusMessage';
@@ -39,6 +40,7 @@ export default function ContactForm() {
     clearFieldError,
   } = useFormStatus();
   const { handleInvalidInput, handleInputChange } = useFormValidation();
+  const [consentChecked, setConsentChecked] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     handleSubmissionStart();
@@ -123,7 +125,37 @@ export default function ContactForm() {
           />
         </div>
 
-        <FormSubmitButton status={status} animationIndex={3} />
+        {/* Avertissement de confidentialité */}
+        <div className="lg:col-span-2">
+          <div className="border-l-4 border-accent/30 bg-accent/5 p-4">
+            <p className="text-body-sm leading-relaxed text-stone">
+              <span className="font-medium text-text">Important :</span> Ne transmettez pas
+              d'informations confidentielles ou sensibles via ce formulaire. Pour une communication
+              sécurisée, contactez-nous directement par téléphone ou prenez rendez-vous.
+            </p>
+          </div>
+        </div>
+
+        {/* Case à cocher RGPD */}
+        <div className="lg:col-span-2">
+          <label className="flex items-start gap-3 text-body-sm text-stone">
+            <input
+              type="checkbox"
+              name="consent"
+              required
+              checked={consentChecked}
+              onChange={(e) => setConsentChecked(e.target.checked)}
+              className="mt-1 h-4 w-4 flex-shrink-0 border-charcoal text-accent focus:ring-2 focus:ring-accent focus:ring-offset-2"
+            />
+            <span>
+              J'accepte que mes données personnelles soient traitées dans le cadre de ma demande de
+              contact. Ces données ne seront utilisées que pour répondre à votre demande et ne
+              seront pas transmises à des tiers. <span className="font-medium text-text">*</span>
+            </span>
+          </label>
+        </div>
+
+        <FormSubmitButton status={status} animationIndex={3} disabled={!consentChecked} />
       </form>
     </>
   );

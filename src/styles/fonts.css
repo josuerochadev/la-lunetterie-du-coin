@@ -1,61 +1,10 @@
-/* ========= League Spartan ========= */
+/* ========= Jost (Alternative moderne à Futura) ========= */
+/* Import depuis Google Fonts pour performance optimale */
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap');
 
-@font-face {
-  font-display: swap;
-  font-family: 'League Spartan';
-  font-style: normal;
-  font-weight: 200;
-  src: url('/fonts/league-spartan/league-spartan-v14-latin-200.woff2') format('woff2');
-}
-@font-face {
-  font-display: fallback; /* Faster fallback for critical font */
-  font-family: 'League Spartan';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/league-spartan/league-spartan-v14-latin-400.woff2') format('woff2');
-}
-@font-face {
-  font-display: swap;
-  font-family: 'League Spartan';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/league-spartan/league-spartan-v14-latin-900.woff2') format('woff2');
-}
-@font-face {
-  font-display: swap;
-  font-family: 'League Spartan';
-  font-style: normal;
-  font-weight: 900;
-  src: url('/fonts/league-spartan/league-spartan-v14-latin-900.woff2') format('woff2');
-}
-
-/* ========= Imbue ========= */
-
-@font-face {
-  font-display: swap;
-  font-family: 'Imbue';
-  font-style: normal;
-  font-weight: 200;
-  src: url('/fonts/imbue/imbue-v28-latin-200.woff2') format('woff2');
-}
-@font-face {
-  font-display: swap;
-  font-family: 'Imbue';
-  font-style: normal;
-  font-weight: 400;
-  src: url('/fonts/imbue/imbue-v28-latin-400.woff2') format('woff2');
-}
-@font-face {
-  font-display: swap;
-  font-family: 'Imbue';
-  font-style: normal;
-  font-weight: 700;
-  src: url('/fonts/imbue/imbue-v28-latin-900.woff2') format('woff2');
-}
-@font-face {
-  font-display: swap;
-  font-family: 'Imbue';
-  font-style: normal;
-  font-weight: 900;
-  src: url('/fonts/imbue/imbue-v28-latin-900.woff2') format('woff2');
-}
+/* Note: Jost est une alternative open-source géométrique à Futura
+ * - 9 poids disponibles + italiques
+ * - Variable font pour performance
+ * - Caractères géométriques similaires à Futura
+ * - Points aigus et largeurs étroites typiques
+ */

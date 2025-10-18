@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 
 import Layout from '@/components/common/Layout';
 import SectionContainer from '@/components/common/SectionContainer';
-import PageHeader from '@/components/legal/PageHeader';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { Seo } from '@/seo/Seo';
 
@@ -37,27 +36,30 @@ export default function LegalPageLayout({
   return (
     <>
       <Seo title={title} description={seoDescription} canonicalPath={canonicalPath} />
-      <div className="relative z-base">
-        <Layout>
-          <SectionContainer className="pb-section pt-36">
-            <SimpleAnimation type="slide-down" immediate={true}>
-              <PageHeader title={title} />
-            </SimpleAnimation>
-            <article className="mx-auto max-w-4xl space-y-16 px-8 text-body leading-relaxed">
-              {lastUpdated && (
-                <SimpleAnimation type="slide-up" delay={80}>
-                  <div className="border-dark-green mb-2 border-l-4 py-2 pl-6">
-                    <p className="text-body-sm text-primary">
-                      <span className="font-semibold">Dernière mise à jour :</span> {lastUpdated}
-                    </p>
-                  </div>
-                </SimpleAnimation>
-              )}
-              {children}
-            </article>
-          </SectionContainer>
-        </Layout>
-      </div>
+      <Layout>
+        {/* Hero */}
+        <SectionContainer className="bg-background py-section">
+          <div className="mx-auto max-w-container px-container-x">
+            <div className="mx-auto max-w-5xl">
+              <SimpleAnimation type="slide-up" delay={0}>
+                <div className="space-y-6">
+                  <h1 className="heading-page">{title}</h1>
+                  {lastUpdated && (
+                    <p className="text-body-sm text-stone">Dernière mise à jour : {lastUpdated}</p>
+                  )}
+                </div>
+              </SimpleAnimation>
+            </div>
+          </div>
+        </SectionContainer>
+
+        {/* Content */}
+        <SectionContainer className="bg-background py-section">
+          <div className="mx-auto max-w-container px-container-x">
+            <article className="mx-auto max-w-content-readable space-y-16">{children}</article>
+          </div>
+        </SectionContainer>
+      </Layout>
     </>
   );
 }

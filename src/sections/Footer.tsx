@@ -2,49 +2,35 @@ import type { ComponentPropsWithoutRef } from 'react';
 import { clsx } from 'clsx';
 import Facebook from 'lucide-react/dist/esm/icons/facebook';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import { Link } from 'react-router-dom';
 
 import SectionContainer from '../components/common/SectionContainer';
 
-import { FOOTER_LINKS, FOOTER_SOCIALS } from '@/config/constants';
+import {
+  FOOTER_NAV_LINKS,
+  FOOTER_LINKS,
+  FOOTER_SOCIALS,
+  STORE_INFO,
+  COMPANY_EMAIL,
+} from '@/config/constants';
 
 type FooterProps = ComponentPropsWithoutRef<'footer'> & {
   variant?: 'default' | 'menu';
-  onLinkClick?: () => void; // Callback pour fermer le menu
+  onLinkClick?: () => void;
 };
 
 /**
- * Composant Footer pour l'affichage du pied de page du site.
+ * Composant Footer redesigné
  *
- * Affiche l'adresse, les horaires, les liens sociaux, les liens légaux et une signature de développement.
- * Optimisé pour l'accessibilité avec structure sémantique et support screen readers.
+ * Structure moderne en 3 colonnes :
+ * - Navigation : Liens principaux du site
+ * - Contact : Coordonnées complètes
+ * - Suivez-nous : Réseaux sociaux
  *
- * @param variant - Type d'affichage du footer
- * @param className - Classes CSS additionnelles
- * @param rest - Props HTML standard transmises au footer
- *
- * Variantes disponibles :
- * - `variant="default"` : Version complète pour page principale
- *   • Titre, adresse, horaires, téléphone (mis en valeur en orange/gras)
- *   • Réseaux sociaux avec icônes et labels
- *   • Liens légaux (mentions légales, CGV)
- *   • Signature développeur
- *
- * - `variant="menu"` : Version compacte pour navbar full-screen
- *   • Titre et coordonnées centrés
- *   • Icônes réseaux sociaux (taille optimisée 20px)
- *   • Liens légaux en layout horizontal
- *   • Couleurs adaptées (violet sur transparent)
- *
- *
- * @example
- * ```tsx
- * // Footer principal
- * <Footer />
- *
- * // Footer dans menu
- * <Footer variant="menu" className="text-primary" />
- * ```
+ * Barre inférieure avec liens légaux et signature développeur
  */
 export default function Footer({
   className = '',
@@ -54,122 +40,231 @@ export default function Footer({
 }: FooterProps) {
   const isMenu = variant === 'menu';
 
-  const footerLinkBase =
-    'font-semibold transition-colors duration-300 hover:text-orange focus-style';
+  // Si c'est le menu, on garde l'ancien design compact
+  if (isMenu) {
+    return (
+      <footer
+        id="footer"
+        {...rest}
+        className={clsx(
+          'relative z-10 w-full bg-transparent py-2 text-center text-primary',
+          className,
+        )}
+      >
+        <SectionContainer noSpacing>
+          <h2 className="mx-auto mb-3 text-center text-title-md font-extrabold">
+            <span className="font-thin">LA</span>
+            LUNETTERIE
+            <span className="font-thin">DU</span>
+            COIN
+          </h2>
 
+          <div className="mx-auto flex w-fit flex-col items-center space-y-xs">
+            <address
+              aria-label="Adresse et horaires de la boutique"
+              className="space-y-1 text-center text-body-sm not-italic leading-relaxed"
+            >
+              <p>
+                {STORE_INFO.address.street} {STORE_INFO.address.postalCode}{' '}
+                {STORE_INFO.address.city}
+              </p>
+              <p>
+                <a
+                  href={`tel:${STORE_INFO.phone.tel}`}
+                  className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+                >
+                  {STORE_INFO.phone.display}
+                </a>
+              </p>
+              <p>{STORE_INFO.hours.weekdays}</p>
+              <p>{STORE_INFO.hours.weekend}</p>
+            </address>
+
+            <nav
+              aria-label="Navigation de bas de page"
+              className="flex flex-col items-center space-y-3 pt-2 text-body-sm"
+            >
+              <div className="flex space-x-4" aria-label="Réseaux sociaux">
+                {FOOTER_SOCIALS.map((social) => {
+                  const IconComponent = social.icon === 'facebook' ? Facebook : Instagram;
+                  return (
+                    <a
+                      key={social.href}
+                      href={social.href}
+                      className="focus-style text-primary transition-colors duration-300 hover:text-orange"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                    >
+                      <IconComponent width={20} height={20} aria-hidden="true" />
+                      <span className="sr-only">{social.label}</span>
+                    </a>
+                  );
+                })}
+              </div>
+
+              <div className="flex space-x-6 text-body-sm">
+                {FOOTER_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    className="focus-style text-body-sm font-semibold text-primary transition-colors duration-300 hover:text-orange"
+                    to={link.href}
+                    onClick={onLinkClick}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </nav>
+          </div>
+        </SectionContainer>
+      </footer>
+    );
+  }
+
+  // Nouveau design pour le footer principal
   return (
     <footer
       id="footer"
       {...rest}
-      className={clsx(
-        'relative z-10 w-full',
-        isMenu ? 'bg-transparent py-2 text-center text-primary' : 'bg-primary text-accent',
-        className,
-      )}
+      className={clsx('relative z-10 w-full bg-primary text-accent', className)}
     >
-      <SectionContainer noSpacing={isMenu} className={isMenu ? '' : 'pt-8'}>
-        <h2 className="mx-auto mb-3 text-center text-title-md font-extrabold">
-          <span className="font-thin">LA</span>
-          LUNETTERIE
-          <span className="font-thin">DU</span>
-          COIN
-        </h2>
+      <SectionContainer className="py-10">
+        {/* En-tête */}
+        <div className="mx-auto mb-8 text-center">
+          <h2 className="mb-2 text-title-md font-extrabold text-cream">
+            <span className="font-thin">LA</span>
+            LUNETTERIE
+            <span className="font-thin">DU</span>
+            COIN
+          </h2>
+          <p className="text-body-sm text-cream">Neuf & Occasion. Depuis 2016.</p>
+        </div>
 
-        <div
-          className={clsx(
-            'mx-auto w-fit',
-            isMenu
-              ? 'flex flex-col items-center space-y-xs'
-              : 'grid items-baseline gap-x-section-gap sm:grid-cols-2',
-          )}
-        >
-          {/* Adresse et horaires */}
-          <address
-            aria-label="Adresse et horaires de la boutique"
-            className="space-y-1 text-center text-body-sm not-italic leading-relaxed sm:text-left"
-          >
-            <p>24&nbsp;Rue&nbsp;du&nbsp;Faubourg-de-Pierre&nbsp;67000&nbsp;STRASBOURG</p>
-            <p>
-              <a
-                href="tel:+33388512440"
-                className={clsx(footerLinkBase, !isMenu && 'text-body-lg')}
-              >
-                03&nbsp;88&nbsp;51&nbsp;24&nbsp;40
-              </a>
-            </p>
-            <p>Du lundi au samedi&nbsp;: 10&nbsp;h–14&nbsp;h / 15&nbsp;h–19&nbsp;h</p>
-            <p>Dimanche&nbsp;: fermé</p>
+        {/* Grille 3 colonnes avec largeurs adaptées au contenu */}
+        <div className="mx-auto flex max-w-7xl flex-col gap-10 lg:flex-row lg:justify-between lg:gap-16">
+          {/* Colonne 1 : Navigation (plus étroite) */}
+          <nav aria-label="Navigation du footer" className="lg:w-auto">
+            <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">
+              Navigation
+            </h3>
+            <ul className="space-y-2">
+              {FOOTER_NAV_LINKS.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    to={link.href}
+                    className="focus-style text-body-sm text-cream transition-colors duration-300 hover:text-orange"
+                    onClick={onLinkClick}
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          {/* Colonne 2 : Contact (plus large car plus de contenu) */}
+          <address className="not-italic lg:max-w-md lg:flex-1" aria-label="Coordonnées">
+            <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">
+              Contact
+            </h3>
+            <div className="space-y-3 text-body-sm text-cream">
+              {/* Adresse */}
+              <div className="flex items-start gap-3">
+                <MapPin className="mt-1 h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                <div>
+                  <p>{STORE_INFO.address.street}</p>
+                  <p>
+                    {STORE_INFO.address.postalCode} {STORE_INFO.address.city}
+                  </p>
+                </div>
+              </div>
+
+              {/* Téléphone */}
+              <div className="flex items-center gap-3">
+                <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                <a
+                  href={`tel:${STORE_INFO.phone.tel}`}
+                  className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+                >
+                  {STORE_INFO.phone.display}
+                </a>
+              </div>
+
+              {/* Email */}
+              <div className="flex items-center gap-3">
+                <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                <a
+                  href={`mailto:${COMPANY_EMAIL}`}
+                  className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+                >
+                  {COMPANY_EMAIL}
+                </a>
+              </div>
+
+              {/* Horaires */}
+              <div className="pt-2 text-body-sm">
+                <p className="font-semibold">{STORE_INFO.hours.weekdays}</p>
+                <p>{STORE_INFO.hours.weekend}</p>
+              </div>
+            </div>
           </address>
 
-          <nav
-            aria-label="Navigation de bas de page"
-            className={clsx(
-              'flex flex-col items-center text-body-sm',
-              isMenu ? 'space-y-3 pt-2' : 'space-y-sm sm:items-start',
-            )}
-          >
-            {/* Réseaux sociaux */}
-            <div className={clsx('flex space-x-4', !isMenu && 'pt-2')} aria-label="Réseaux sociaux">
+          {/* Colonne 3 : Réseaux sociaux (plus étroite) */}
+          <div className="lg:w-auto">
+            <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">
+              Suivez-nous
+            </h3>
+            <div className="flex gap-4">
               {FOOTER_SOCIALS.map((social) => {
-                const iconSize = isMenu ? 20 : 18;
-                const iconClassName = isMenu ? '' : 'mr-1 inline';
                 const IconComponent = social.icon === 'facebook' ? Facebook : Instagram;
-
                 return (
                   <a
                     key={social.href}
                     href={social.href}
-                    className={clsx(footerLinkBase, isMenu && 'text-primary hover:text-orange')}
+                    className="focus-style flex h-10 w-10 items-center justify-center border border-cream text-cream transition-all duration-300 hover:border-orange hover:bg-orange"
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
                   >
-                    <IconComponent
-                      width={iconSize}
-                      height={iconSize}
-                      className={iconClassName}
-                      aria-hidden="true"
-                    />
-                    <span className="sr-only">{social.label}</span>
+                    <IconComponent className="h-5 w-5" aria-hidden="true" />
                   </a>
                 );
               })}
             </div>
+          </div>
+        </div>
 
+        {/* Barre inférieure : Liens légaux + Signature */}
+        <div className="mx-auto mt-16 max-w-7xl border-t border-cream/20 pt-8">
+          <div className="flex flex-col items-center justify-between gap-4 text-body-sm text-cream sm:flex-row">
             {/* Liens légaux */}
-            <div
-              className={clsx('flex', isMenu ? 'space-x-6 text-body-sm' : 'flex-col space-y-sm')}
-            >
+            <div className="flex gap-6">
               {FOOTER_LINKS.map((link) => (
                 <Link
                   key={link.href}
-                  className={clsx(
-                    footerLinkBase,
-                    isMenu && 'text-body-sm text-primary hover:text-orange',
-                  )}
                   to={link.href}
-                  onClick={onLinkClick} // Ferme le menu si callback fourni
+                  className="focus-style transition-colors duration-300 hover:text-orange"
+                  onClick={onLinkClick}
                 >
                   {link.label}
                 </Link>
               ))}
             </div>
 
-            {!isMenu && (
-              /* Signature */
-              <p className="pt-3 text-center text-body-sm">
-                Développé&nbsp;par{' '}
-                <a
-                  href="https://josuerochadev.github.io/portfolio/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={footerLinkBase}
-                >
-                  Josué&nbsp;Rocha
-                </a>
-              </p>
-            )}
-          </nav>
+            {/* Signature */}
+            <p>
+              Développé par{' '}
+              <a
+                href="https://josuerocha.dev"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+              >
+                Josué Rocha
+              </a>
+            </p>
+          </div>
         </div>
       </SectionContainer>
     </footer>

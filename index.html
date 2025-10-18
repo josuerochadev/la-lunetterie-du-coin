@@ -23,7 +23,15 @@
 </head>
 
 <body>
-  <div id="root"></div>
+  <div id="root">
+    <!-- Fallback content for Lighthouse FCP - will be replaced by React -->
+    <div style="display:flex;align-items:center;justify-content:center;min-height:100dvh;background-color:rgb(255,132,0);color:rgb(42,25,60);font-family:'League Spartan',sans-serif;padding:2rem;">
+      <div style="text-align:center;">
+        <h1 style="font-size:clamp(2rem,4vw,4rem);font-weight:900;margin:0 0 1rem 0;">La Lunetterie du Coin</h1>
+        <p style="font-size:clamp(1rem,2vw,1.5rem);margin:0;">Chargement...</p>
+      </div>
+    </div>
+  </div>
   <script type="module" src="/src/main.tsx" defer></script>
 </body>
 

@@ -1,31 +1,58 @@
-/* ====== TYPOGRAPHIE (pages statiques, textes) ====== */
-@layer components {
-  /* Gabarit pour pages statiques (CGV/mentions/blog) — DRY */
-  .prose-static {
-    @apply mx-auto max-w-content-readable space-y-section-gap text-body;
+/* ====== TYPOGRAPHIE - CLASSES RÉUTILISABLES ====== */
+
+/**
+ * Classes standardisées pour h1, h2, h3
+ * Utilisées pour maintenir une cohérence typographique sur tout le site
+ */
+
+/* ===== H1 - TITRES DE PAGES ===== */
+/**
+ * .heading-page
+ * Utilisé pour tous les h1 de pages (About, Services, Offers, Contact, etc.)
+ * Style : uppercase, font-light, responsive
+ */
+.heading-page {
+  @apply font-light uppercase leading-tight tracking-wide text-text;
+  font-size: clamp(2.5rem, 4vw, 5rem);
+}
+
+/* ===== H2 - TITRES DE SECTIONS ===== */
+/**
+ * .heading-section
+ * Utilisé pour tous les h2 de sections (homepage, pages internes)
+ * Style : font-medium, responsive (md -> lg)
+ */
+.heading-section {
+  @apply text-title-md font-medium text-text;
+}
+
+@screen sm {
+  .heading-section {
+    @apply text-title-lg;
   }
-  .prose-static h1 {
-    @apply text-title-xl font-extrabold;
+}
+
+/* ===== H3 - SOUS-TITRES ===== */
+/**
+ * .heading-subsection-lg
+ * Utilisé pour les h3 importants (titres d'offres, de services dans cards)
+ * Style : font-medium, responsive (sm -> md)
+ */
+.heading-subsection-lg {
+  @apply text-title-sm font-medium text-text;
+}
+
+@screen sm {
+  .heading-subsection-lg {
+    @apply text-title-md;
   }
-  .prose-static h2 {
-    @apply text-title-lg font-extrabold;
-  }
-  .prose-static h3 {
-    @apply text-title-md font-semibold;
-  }
-  .prose-static p {
-    @apply leading-relaxed;
-  }
-  .prose-static a {
-    @apply underline underline-offset-2;
-  }
-  .prose-static ul {
-    @apply list-disc space-y-2 pl-6;
-  }
-  .prose-static ol {
-    @apply list-decimal space-y-2 pl-6;
-  }
-  .prose-static blockquote {
-    @apply border-l-4 pl-4 italic;
-  }
+}
+
+/**
+ * .heading-subsection
+ * Utilisé pour les h3 standards (labels, infos pratiques)
+ * Style : font-medium, taille fixe
+ */
+.heading-subsection {
+  @apply text-title-sm font-medium text-text;
 }

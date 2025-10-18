@@ -4,6 +4,7 @@ import Navbar from '../navbar/Navbar';
 import Footer from '../../sections/Footer';
 
 import SkipLink from '@/components/common/SkipLink';
+import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -17,7 +18,7 @@ type LayoutProps = {
  */
 export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="relative min-h-screen text-primary">
+    <div className="relative min-h-screen bg-background text-primary">
       {/* Contenu simplifié - plus de Background animé */}
       <div className="relative z-base">
         <SkipLink />
@@ -26,6 +27,7 @@ export default function Layout({ children }: LayoutProps) {
           {children}
         </main>
         <Footer />
+        <ScrollToTopButton />
       </div>
     </div>
   );

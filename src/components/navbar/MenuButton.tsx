@@ -1,7 +1,5 @@
 import { forwardRef } from 'react';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-
 type MenuButtonProps = {
   isOpen: boolean;
   onClick: () => void;
@@ -26,28 +24,35 @@ type MenuButtonProps = {
 const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
   ({ isOpen, onClick, id = 'menu-toggle' }, ref) => {
     return (
-      <div className="fixed left-0 right-0 z-overlay flex justify-start px-container-x py-section-gap sm:justify-center">
-        <SimpleAnimation type="fade" immediate={true}>
-          <button
-            ref={ref}
-            type="button"
-            id={id}
-            onClick={onClick}
-            aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
-            aria-expanded={isOpen}
-            aria-controls="main-menu"
-            className="menu-toggle-button focus-style px-0 hover:font-bold sm:px-4"
-            data-state={isOpen ? 'open' : 'closed'}
-          >
-            <div className="menu-toggle-icon">
-              <span className="menu-toggle-bar menu-toggle-bar--top" />
-              <span className="menu-toggle-bar menu-toggle-bar--middle" />
-              <span className="menu-toggle-bar menu-toggle-bar--bottom" />
-            </div>
-            <span className="ml-2 hidden sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
-          </button>
-        </SimpleAnimation>
-      </div>
+      <button
+        ref={ref}
+        type="button"
+        id={id}
+        onClick={onClick}
+        aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+        aria-expanded={isOpen}
+        aria-controls="main-menu"
+        className="inline-flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-body-sm text-charcoal transition-colors hover:text-orange focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+      >
+        <div className="relative block h-4 w-5 flex-shrink-0">
+          <span
+            className={`absolute left-0 right-0 h-[2px] bg-current transition-all duration-200 ${
+              isOpen ? 'top-[7px] rotate-45' : 'top-0'
+            }`}
+          />
+          <span
+            className={`absolute left-0 right-0 top-1/2 h-[2px] -translate-y-1/2 bg-current transition-all duration-200 ${
+              isOpen ? 'opacity-0' : 'opacity-100'
+            }`}
+          />
+          <span
+            className={`absolute left-0 right-0 h-[2px] bg-current transition-all duration-200 ${
+              isOpen ? 'bottom-[7px] -rotate-45' : 'bottom-0'
+            }`}
+          />
+        </div>
+        <span className="hidden font-medium sm:inline">{isOpen ? 'Fermer' : 'Menu'}</span>
+      </button>
     );
   },
 );

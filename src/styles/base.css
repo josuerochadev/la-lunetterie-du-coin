@@ -1,13 +1,12 @@
-/* ====== CSS VARIABLES (THEME) - PALETTE BICOLORE ====== */
+/* ====== CSS VARIABLES (THEME) - PALETTE MINIMALISTE CHIC ====== */
 :root {
-  /* Couleur Brand - Orange (inchangé) */
-  --color-orange-rgb: 255, 132, 0;
+  /* Couleur Brand - Orange (obligatoire) */
+  --color-orange-rgb: 255, 132, 0; /* #FF8400 - Brand principal */
 
-  /* Couleur Texte - Mauve foncé élégant (nouveau) */
-  --color-mauve-dark-rgb: 42, 25, 60; /* Plus foncé et raffiné */
-
-  /* Couleur Surface - Violet très clair (nouveau) */
-  --color-violet-light-rgb: 251, 248, 255; /* Très subtil, presque blanc */
+  /* Neutres élégants - Inspirés Kinfolk/La Pima */
+  --color-cream-rgb: 253, 252, 248; /* #FDFCF8 - Fond principal crème doux */
+  --color-charcoal-rgb: 43, 45, 47; /* #2B2D2F - Texte principal anthracite */
+  --color-stone-rgb: 139, 134, 128; /* #8B8680 - Texte secondaire gris pierre */
 }
 
 /* ====== BASE ====== */
@@ -24,9 +23,7 @@
     position: relative;
     height: 100%;
     min-height: 100dvh;
-    background-color: rgb(
-      var(--color-orange-rgb)
-    ); /* TODO: migrer vers bg-background en Tailwind */
+    background-color: rgb(var(--color-cream-rgb)); /* Fond crème minimaliste */
   }
 
   body {
