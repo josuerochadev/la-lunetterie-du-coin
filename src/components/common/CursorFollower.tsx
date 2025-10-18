@@ -60,7 +60,7 @@ export default function CursorFollower() {
 
   return (
     <m.div
-      className="pointer-events-none fixed left-0 top-0 z-cursor mix-blend-difference"
+      className="z-cursor pointer-events-none fixed left-0 top-0 mix-blend-difference"
       style={{
         x,
         y,
