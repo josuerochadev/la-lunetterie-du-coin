@@ -330,10 +330,10 @@ jobs:
           path: dist/
 
       - name: 🚨 Run Lighthouse CI (Mobile)
-        run: start-server-and-test preview http://localhost:4173 'lhci autorun'
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun'
 
       - name: 🚨 Run Lighthouse CI (Desktop)
-        run: start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
         
       - name: 📊 Upload Lighthouse reports
         if: always()
