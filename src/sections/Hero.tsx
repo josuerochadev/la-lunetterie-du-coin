@@ -63,14 +63,14 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
           <div className="mx-auto w-full max-w-7xl space-y-6">
             <h1
               id="hero-title"
-              className="font-light uppercase leading-tight tracking-wide text-text"
+              className="font-light uppercase leading-tight tracking-wide text-charcoal"
               style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
             >
               Des lunettes qui ont du style, une démarche qui a du sens
             </h1>
 
             <p
-              className="leading-relaxed text-text"
+              className="leading-relaxed text-charcoal"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
             >
               Opticien à Strasbourg depuis 2016. Neuf & Occasion.
