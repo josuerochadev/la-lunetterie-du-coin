@@ -162,38 +162,57 @@ function analyzeLighthouse() {
       };
     }
 
-    // Prendre le fichier le plus récent (par nom de fichier qui contient timestamp)
-    const latestFile = jsonFiles.sort().pop();
-    console.log(`📊 Using Lighthouse report: ${latestFile}`);
-    const lighthouseData = JSON.parse(fs.readFileSync(latestFile, 'utf8'));
-    
-    // Validation robuste des données Lighthouse
-    if (!lighthouseData.categories) {
-      console.log('⚠️ Lighthouse data missing categories field');
+    // Essayer tous les fichiers JSON pour trouver celui avec des scores valides
+    let lighthouseData = null;
+    let validFile = null;
+
+    for (const jsonFile of jsonFiles.sort().reverse()) {
+      try {
+        const data = JSON.parse(fs.readFileSync(jsonFile, 'utf8'));
+
+        if (!data.categories) {
+          console.log(`⚠️ ${jsonFile}: missing categories field`);
+          continue;
+        }
+
+        const categories = data.categories;
+        const requiredCategories = ['performance', 'accessibility', 'best-practices', 'seo'];
+
+        // Vérifier si ce fichier a des scores valides (non null)
+        let hasValidScores = true;
+        for (const category of requiredCategories) {
+          if (!categories[category]) {
+            console.log(`⚠️ ${jsonFile}: missing category ${category}`);
+            hasValidScores = false;
+            break;
+          }
+          if (categories[category].score === null || categories[category].score === undefined) {
+            console.log(`⚠️ ${jsonFile}: category ${category} has null score`);
+            hasValidScores = false;
+            break;
+          }
+        }
+
+        if (hasValidScores) {
+          lighthouseData = data;
+          validFile = jsonFile;
+          console.log(`✅ Using Lighthouse report with valid scores: ${validFile}`);
+          break;
+        }
+      } catch (error) {
+        console.log(`⚠️ Error reading ${jsonFile}: ${error.message}`);
+      }
+    }
+
+    if (!lighthouseData) {
+      console.log('⚠️ No Lighthouse report with valid scores found');
       return {
         status: 'error',
-        message: 'Données Lighthouse incomplètes (pas de catégories)'
+        message: 'Aucun rapport Lighthouse avec scores valides trouvé'
       };
     }
-    
+
     const categories = lighthouseData.categories;
-    
-    // Vérifier que toutes les catégories nécessaires existent
-    const requiredCategories = ['performance', 'accessibility', 'best-practices', 'seo'];
-    for (const category of requiredCategories) {
-      if (!categories[category]) {
-        console.log(`⚠️ Missing Lighthouse category: ${category}`);
-        return {
-          status: 'error',
-          message: `Données Lighthouse incomplètes (catégorie ${category} manquante)`
-        };
-      }
-      // Gérer les scores null (problème connu de Lighthouse)
-      if (categories[category].score === null || categories[category].score === undefined) {
-        console.log(`⚠️ Lighthouse category ${category} has null score - using fallback`);
-        categories[category].score = 0; // Score de secours pour éviter NaN
-      }
-    }
     const scores = [
       {
         metric: 'Performance',
@@ -259,26 +278,29 @@ function analyzeE2ETests() {
   
   // Construire les chemins possibles dynamiquement
   let possiblePaths = [];
-  
+
   // En CI: chercher dans les artifacts téléchargés
   if (fs.existsSync(qualityResultsDir)) {
     const contents = fs.readdirSync(qualityResultsDir, { withFileTypes: true });
     const e2eArtifacts = contents.filter(d => d.isDirectory() && d.name.startsWith('e2e-results'));
-    
+
     // Ajouter tous les artifacts E2E trouvés
     for (const artifact of e2eArtifacts) {
-      const resultsPath = path.join(qualityResultsDir, artifact.name, 'results.json');
-      possiblePaths.push(resultsPath);
+      // Chercher results.json dans e2e-results/ à l'intérieur de l'artifact
+      const nestedPath = path.join(qualityResultsDir, artifact.name, 'e2e-results', 'results.json');
+      const directPath = path.join(qualityResultsDir, artifact.name, 'results.json');
+      possiblePaths.push(nestedPath);
+      possiblePaths.push(directPath);
     }
   }
-  
+
   // Fallback vers résultats locaux si pas en CI
   if (!process.env.CI) {
     possiblePaths.push(path.join(ROOT_DIR, 'e2e-results', 'results.json'));
   }
-  
+
   console.log('🔍 Searching E2E results in paths:', possiblePaths);
-  
+
   let e2eResultsPath = null;
   for (const possiblePath of possiblePaths) {
     if (fs.existsSync(possiblePath)) {

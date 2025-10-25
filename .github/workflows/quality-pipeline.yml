@@ -350,19 +350,50 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            
+
             // Lire les résultats Lighthouse
             const resultsDir = './lighthouse-results';
             if (fs.existsSync(resultsDir)) {
               const files = fs.readdirSync(resultsDir);
-              const jsonFiles = files.filter(f => f.endsWith('.json'));
-              
-              if (jsonFiles.length > 0) {
-                const results = JSON.parse(fs.readFileSync(path.join(resultsDir, jsonFiles[0])));
-                const scores = results.categories;
-                
+              const jsonFiles = files.filter(f => f.endsWith('.json')).sort();
+
+              // Chercher un rapport avec des scores valides (non null)
+              let validReport = null;
+              for (const jsonFile of jsonFiles) {
+                try {
+                  const results = JSON.parse(fs.readFileSync(path.join(resultsDir, jsonFile)));
+                  const scores = results.categories;
+
+                  // Vérifier que tous les scores sont valides
+                  if (scores.performance?.score !== null &&
+                      scores.accessibility?.score !== null &&
+                      scores['best-practices']?.score !== null &&
+                      scores.seo?.score !== null) {
+                    validReport = results;
+                    console.log('✅ Found valid Lighthouse report:', jsonFile);
+                    break;
+                  } else {
+                    console.log('⚠️ Skipping report with null scores:', jsonFile);
+                  }
+                } catch (error) {
+                  console.log('⚠️ Error reading', jsonFile, ':', error.message);
+                }
+              }
+
+              if (validReport) {
+                const scores = validReport.categories;
                 const comment = "## 🚨 Lighthouse Results\n\n| Category | Score |\n|----------|-------|\n| Performance | " + Math.round(scores.performance.score * 100) + " |\n| Accessibility | " + Math.round(scores.accessibility.score * 100) + " |\n| Best Practices | " + Math.round(scores['best-practices'].score * 100) + " |\n| SEO | " + Math.round(scores.seo.score * 100) + " |\n\nView full report in the artifacts.";
-                
+
+                github.rest.issues.createComment({
+                  issue_number: context.issue.number,
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  body: comment
+                });
+              } else {
+                console.log('⚠️ No valid Lighthouse report found - all reports have null scores');
+                const comment = "## 🚨 Lighthouse Results\n\n⚠️ Lighthouse reports are available but performance scores are currently null. This can happen when certain metrics cannot be measured. Check the detailed reports in artifacts for more information.";
+
                 github.rest.issues.createComment({
                   issue_number: context.issue.number,
                   owner: context.repo.owner,
