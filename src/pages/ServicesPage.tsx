@@ -1,6 +1,7 @@
 import Layout from '@/components/common/Layout';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
+import { ServiceCard } from '@/components/common/ServiceCard';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 import { CALENDLY_URL } from '@/config/constants';
@@ -137,185 +138,63 @@ export default function ServicesPage() {
               {services.map((service, index) => {
                 const isEven = index % 2 === 0;
 
+                // Contenu additionnel pour les examens (conditions + CTA)
+                const examensAdditionalContent =
+                  service.id === 'examens' ? (
+                    <>
+                      <div
+                        className={`${isEven ? 'border-l-4' : 'border-r-4'} border-accent/30 bg-accent/5 p-6`}
+                      >
+                        <h4 className="mb-3 text-body font-medium text-text">
+                          Conditions pour réaliser un examen de vue en magasin :
+                        </h4>
+                        <ul className="space-y-2 text-body-sm text-stone">
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              Ordonnance de moins de 5 ans pour les 16-42 ans, ou moins de 3 ans
+                              pour les 42 ans et plus
+                            </span>
+                          </li>
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              L'ordonnance ne doit pas comporter de mention contre-indiquant
+                              l'examen hors cabinet médical
+                            </span>
+                          </li>
+                          <li className="flex gap-2">
+                            <span>•</span>
+                            <span>
+                              Non autorisé pour les personnes diabétiques ou présentant un
+                              kératocône, glaucome ou cataracte
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className={isEven ? '' : 'flex justify-end'}>
+                        <a
+                          href={CALENDLY_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                          aria-label="Prendre rendez-vous"
+                        >
+                          Prendre rendez-vous
+                        </a>
+                      </div>
+                    </>
+                  ) : undefined;
+
                 return (
-                  <SimpleAnimation key={service.id} type="fade" delay={index * 100}>
-                    <article
-                      id={service.id}
-                      className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16"
-                    >
-                      {isEven ? (
-                        // Layout pair : Image gauche (50%) - Texte droite (50%)
-                        <>
-                          <div className="relative w-full">
-                            <div className="relative aspect-[2/3] w-full overflow-hidden">
-                              <img
-                                src={service.image}
-                                alt={service.title}
-                                className="h-full w-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex min-h-full items-center">
-                            <div className="space-y-6">
-                              {/* Titre */}
-                              <h2 className="heading-section">{service.title}</h2>
-
-                              {/* Description */}
-                              <p className="text-body-lg leading-relaxed text-text">
-                                {service.description}
-                              </p>
-
-                              {/* Détails - Boîte centralisée avec bordure */}
-                              <div className="border border-charcoal p-6">
-                                <ul className="space-y-2">
-                                  {service.details.map((detail, i) => (
-                                    <li key={i} className="flex gap-3 text-body text-stone">
-                                      <span className="text-accent" aria-hidden="true">
-                                        •
-                                      </span>
-                                      <span>{detail}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Conditions spéciales pour examens */}
-                              {service.id === 'examens' && (
-                                <div className="border-l-4 border-accent/30 bg-accent/5 p-6">
-                                  <h4 className="mb-3 text-body font-medium text-text">
-                                    Conditions pour réaliser un examen de vue en magasin :
-                                  </h4>
-                                  <ul className="space-y-2 text-body-sm text-stone">
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        Ordonnance de moins de 5 ans pour les 16-42 ans, ou moins de
-                                        3 ans pour les 42 ans et plus
-                                      </span>
-                                    </li>
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        L'ordonnance ne doit pas comporter de mention
-                                        contre-indiquant l'examen hors cabinet médical
-                                      </span>
-                                    </li>
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        Non autorisé pour les personnes diabétiques ou présentant un
-                                        kératocône, glaucome ou cataracte
-                                      </span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-
-                              {/* Bouton CTA pour examens */}
-                              {service.id === 'examens' && (
-                                <a
-                                  href={CALENDLY_URL}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-                                  aria-label="Prendre rendez-vous"
-                                >
-                                  Prendre rendez-vous
-                                </a>
-                              )}
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        // Layout impair : Texte gauche (50%) - Image droite (50%)
-                        <>
-                          <div className="flex min-h-full items-center justify-end">
-                            <div className="space-y-6 text-right">
-                              {/* Titre */}
-                              <h2 className="heading-section">{service.title}</h2>
-
-                              {/* Description */}
-                              <p className="text-body-lg leading-relaxed text-text">
-                                {service.description}
-                              </p>
-
-                              {/* Détails - Boîte centralisée avec bordure */}
-                              <div className="border border-charcoal p-6 text-left">
-                                <ul className="space-y-2">
-                                  {service.details.map((detail, i) => (
-                                    <li key={i} className="flex gap-3 text-body text-stone">
-                                      <span className="text-accent" aria-hidden="true">
-                                        •
-                                      </span>
-                                      <span>{detail}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Conditions spéciales pour examens */}
-                              {service.id === 'examens' && (
-                                <div className="border-r-4 border-accent/30 bg-accent/5 p-6 text-left">
-                                  <h4 className="mb-3 text-body font-medium text-text">
-                                    Conditions pour réaliser un examen de vue en magasin :
-                                  </h4>
-                                  <ul className="space-y-2 text-body-sm text-stone">
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        Ordonnance de moins de 5 ans pour les 16-42 ans, ou moins de
-                                        3 ans pour les 42 ans et plus
-                                      </span>
-                                    </li>
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        L'ordonnance ne doit pas comporter de mention
-                                        contre-indiquant l'examen hors cabinet médical
-                                      </span>
-                                    </li>
-                                    <li className="flex gap-2">
-                                      <span>•</span>
-                                      <span>
-                                        Non autorisé pour les personnes diabétiques ou présentant un
-                                        kératocône, glaucome ou cataracte
-                                      </span>
-                                    </li>
-                                  </ul>
-                                </div>
-                              )}
-
-                              {/* Bouton CTA pour examens */}
-                              {service.id === 'examens' && (
-                                <div className="flex justify-end">
-                                  <a
-                                    href={CALENDLY_URL}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-                                    aria-label="Prendre rendez-vous"
-                                  >
-                                    Prendre rendez-vous
-                                  </a>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                          <div className="relative w-full">
-                            <div className="relative aspect-[2/3] w-full overflow-hidden">
-                              <img
-                                src={service.image}
-                                alt={service.title}
-                                className="h-full w-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </article>
-                  </SimpleAnimation>
+                  <ServiceCard
+                    key={service.id}
+                    service={service}
+                    imagePosition={isEven ? 'left' : 'right'}
+                    index={index}
+                    additionalContent={examensAdditionalContent}
+                  />
                 );
               })}
             </div>
