@@ -1,9 +1,9 @@
 # 📋 TODO - Améliorations à Implémenter
 
 **Date de création**: 26 octobre 2025
-**Dernière mise à jour**: 26 octobre 2025 - Phase 1 TERMINÉE
-**Statut**: 4 recommandations non implémentées sur 35 analysées
-**Score d'implémentation**: 89%
+**Dernière mise à jour**: 26 octobre 2025 - Phase 2 en cours (P3 terminé)
+**Statut**: 3 recommandations non implémentées sur 35 analysées
+**Score d'implémentation**: 91%
 
 ---
 
@@ -16,7 +16,7 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 - ✅ **Phase Immédiate**: 3 items TERMINÉS (Sécurité CVEs)
 - ✅ **Phase 1**: 5 items TERMINÉS (Bundle + Monitoring + Automation)
 - ✅ **Architecture**: 1 item TERMINÉ (A1 Footer/ContactPage)
-- 🟡 **Phase 2 restante**: 3 items (T1, P3, P6)
+- 🟡 **Phase 2**: 1 item TERMINÉ (P3), 2 items restants (T1, P6)
 - **Optionnelles**: 2 items (KISS/SOLID raffinements)
 
 ---
@@ -199,23 +199,27 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 - **Résultat**: ContactPage.tsx 313 → 69 lignes (-78%) ✅
 - **Statut**: ✅ FAIT (commit 935c6c7)
 
-### P3 - Optimiser Imports Lucide
+### P3 - Optimiser Imports Lucide ✅
 
 - **Priorité**: 🟢 BASSE
-- **Effort**: 1 heure
+- **Effort**: 1 heure (réalisé en <30min - déjà optimisé)
 - **Source**: `audit-technique-complet.md` ligne 296
-- **Impact estimé**: -10 kB
-- **Solution**: Vérifier tous imports utilisent chemins spécifiques
+- **Impact obtenu**: Icons chunk = 7.44 kB (2.29 kB gzip)
+- **Solution appliquée**:
+  - Vérification complète: tous les imports utilisent déjà les chemins spécifiques
+  - ESLint rule `no-restricted-imports` appliquée (eslint.config.js:47-58)
+  - 35 imports vérifiés dans src/ - tous conformes
+  - Bundle icons optimisé et séparé
 
   ```typescript
-  // ❌ Éviter
+  // ❌ Éviter (bloqué par ESLint)
   import { Icon } from 'lucide-react';
 
-  // ✅ Préférer
+  // ✅ Pattern utilisé partout
   import Icon from 'lucide-react/dist/esm/icons/icon-name';
   ```
 
-- **Statut**: ⚠️ À FAIRE
+- **Statut**: ✅ FAIT (déjà optimisé, confirmé le 26 octobre 2025)
 
 ### P6 - Atteindre Lighthouse Targets
 
@@ -233,9 +237,9 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 **Critères de succès Phase 2**:
 
 - [ ] Coverage ≥ 55%
-- [ ] Tous fichiers < 250 lignes
+- [x] Tous fichiers < 250 lignes ✅
 - [ ] Lighthouse scores atteints (FCP, TTI, CLS)
-- [ ] Tous imports Lucide optimisés
+- [x] Tous imports Lucide optimisés ✅
 
 ---
 
@@ -287,23 +291,23 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 
 ## 📊 Tableau Récapitulatif
 
-| ID  | Recommandation                | Priorité | Effort | Impact      | Phase     | Statut  |
-| --- | ----------------------------- | -------- | ------ | ----------- | --------- | ------- |
-| S1  | Update Vite                   | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT |
-| S2  | Update Playwright             | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT |
-| S3  | Fix tar-fs (BONUS)            | 🔴       | 15min  | Sécurité    | Immédiate | ✅ FAIT |
-| P1  | Split react-vendor            | 🔴       | 3h     | -20kB       | Phase 1   | ✅ FAIT |
-| P5  | Réactiver Lighthouse CI       | 🔴       | 2h     | Monitoring  | Phase 1   | ✅ FAIT |
-| S4  | Dependabot/Renovate           | 🔴       | 1.5h   | Sécurité    | Phase 1   | ✅ FAIT |
-| P2  | Lazy load Sentry              | 🟡       | <1h    | Optimisé    | Phase 1   | ✅ FAIT |
-| P4  | Bundle Visualizer             | 🟡       | 30min  | Analyse     | Phase 1   | ✅ FAIT |
-| A1  | Simplifier Footer/ContactPage | 🟢       | 3h     | Maintenable | Phase 2   | ✅ FAIT |
-| T1  | Tests coverage 55%            | 🟡       | 6-8h   | Robustesse  | Phase 2   | ⚠️ TODO |
-| P3  | Optimiser Lucide imports      | 🟢       | 1h     | -10kB       | Phase 2   | ⚠️ TODO |
-| P6  | Lighthouse targets            | 🟡       | Var    | UX          | Phase 2   | ⚠️ TODO |
-| D1  | Documentation ADR             | 🟢       | Ongo   | Onboarding  | Optionnel | ⚠️ TODO |
-| OPT | KISS Phase 4                  | 🟢       | 2h     | +0.3 KISS   | Optionnel | ⚠️ TODO |
-| OPT | SOLID Raffinements            | 🟢       | 3-4h   | +0.5 SOLID  | Optionnel | ⚠️ TODO |
+| ID  | Recommandation                | Priorité | Effort | Impact       | Phase     | Statut  |
+| --- | ----------------------------- | -------- | ------ | ------------ | --------- | ------- |
+| S1  | Update Vite                   | 🔴       | 30min  | Sécurité     | Immédiate | ✅ FAIT |
+| S2  | Update Playwright             | 🔴       | 30min  | Sécurité     | Immédiate | ✅ FAIT |
+| S3  | Fix tar-fs (BONUS)            | 🔴       | 15min  | Sécurité     | Immédiate | ✅ FAIT |
+| P1  | Split react-vendor            | 🔴       | 3h     | -20kB        | Phase 1   | ✅ FAIT |
+| P5  | Réactiver Lighthouse CI       | 🔴       | 2h     | Monitoring   | Phase 1   | ✅ FAIT |
+| S4  | Dependabot/Renovate           | 🔴       | 1.5h   | Sécurité     | Phase 1   | ✅ FAIT |
+| P2  | Lazy load Sentry              | 🟡       | <1h    | Optimisé     | Phase 1   | ✅ FAIT |
+| P4  | Bundle Visualizer             | 🟡       | 30min  | Analyse      | Phase 1   | ✅ FAIT |
+| A1  | Simplifier Footer/ContactPage | 🟢       | 3h     | Maintenable  | Phase 2   | ✅ FAIT |
+| T1  | Tests coverage 55%            | 🟡       | 6-8h   | Robustesse   | Phase 2   | ⚠️ TODO |
+| P3  | Optimiser Lucide imports      | 🟢       | <30min | Icons 2.29kB | Phase 2   | ✅ FAIT |
+| P6  | Lighthouse targets            | 🟡       | Var    | UX           | Phase 2   | ⚠️ TODO |
+| D1  | Documentation ADR             | 🟢       | Ongo   | Onboarding   | Optionnel | ⚠️ TODO |
+| OPT | KISS Phase 4                  | 🟢       | 2h     | +0.3 KISS    | Optionnel | ⚠️ TODO |
+| OPT | SOLID Raffinements            | 🟢       | 3-4h   | +0.5 SOLID   | Optionnel | ⚠️ TODO |
 
 **Légende**:
 
