@@ -69,7 +69,11 @@ describe('useFormSubmission', () => {
       };
 
       // Mock FormData constructor
-      globalThis.FormData = vi.fn(() => mockFormData) as any;
+      globalThis.FormData = class MockFormData {
+        constructor() {
+          return mockFormData;
+        }
+      } as any;
       mockFormData.append = vi.fn();
       mockFormData.get = vi.fn();
     });
@@ -483,16 +487,14 @@ describe('useFormSubmission', () => {
     });
 
     describe('development logging', () => {
-      const originalEnv = import.meta.env;
-
       beforeEach(() => {
-        import.meta.env = { ...originalEnv, DEV: true };
+        vi.stubEnv('DEV', 'true');
         vi.spyOn(console, 'log').mockImplementation(() => {});
         vi.spyOn(console, 'warn').mockImplementation(() => {});
       });
 
       afterEach(() => {
-        import.meta.env = originalEnv;
+        vi.unstubAllEnvs();
         vi.restoreAllMocks();
       });
 
