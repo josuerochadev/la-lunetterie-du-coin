@@ -1,8 +1,8 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import type { Status } from '@/hooks/useFormStatus';
+import type { FormSubmissionStatus } from '@/hooks/useFormStatus';
 
 interface FormSubmitButtonProps {
-  status: Status;
+  status: FormSubmissionStatus;
   animationIndex: number;
   disabled?: boolean;
 }

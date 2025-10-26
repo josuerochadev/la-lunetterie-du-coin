@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useRef, useEffect } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
@@ -7,6 +7,7 @@ import Facebook from 'lucide-react/dist/esm/icons/facebook';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
 import { useClickOutside } from '@/hooks/useClickOutside';
+import { useMenuAnimation } from '@/hooks/useMenuAnimation';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import {
   MENU_CTA,
@@ -46,22 +47,8 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   // Gère la fermeture au clic hors du menu
   useClickOutside(menuRef, () => onClose(), isOpen);
 
-  useEffect(() => {
-    if (!isOpen) return;
-
-    function handleEscape(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
-    }
-
-    menuRef.current?.focus();
-    document.body.style.overflow = 'hidden';
-
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = '';
-    };
-  }, [isOpen, onClose]);
+  // Gère les animations et comportements du menu (Escape, scroll, focus)
+  useMenuAnimation(isOpen, onClose, menuRef);
 
   if (!isOpen) return null;
 

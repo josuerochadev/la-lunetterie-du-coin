@@ -1,12 +1,9 @@
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import Leaf from 'lucide-react/dist/esm/icons/leaf';
-import Award from 'lucide-react/dist/esm/icons/award';
-
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { Seo } from '@/seo/Seo';
+import { VALUES_DATA, STATS_DATA } from '@/data/about';
 
 /**
  * Page À propos - Style éditorial cohérent avec Homepage
@@ -24,33 +21,6 @@ import { Seo } from '@/seo/Seo';
  */
 export default function AboutPage() {
   useNativeScroll();
-
-  const values = [
-    {
-      title: 'Authenticité',
-      description:
-        'Des conseils sincères, sans pression commerciale. Nous prenons le temps de vous connaître pour trouver LA paire qui vous correspond.',
-      icon: Heart,
-    },
-    {
-      title: 'Engagement écologique',
-      description:
-        "Le recyclage au cœur de notre modèle. Chaque monture d'occasion sauvée, c'est un déchet en moins et une nouvelle vie pour un objet de qualité.",
-      icon: Leaf,
-    },
-    {
-      title: 'Expertise',
-      description:
-        "10 ans d'expérience en optique. Romain maîtrise tous les aspects du métier, des examens de vue aux ajustements les plus délicats.",
-      icon: Award,
-    },
-  ];
-
-  const stats = [
-    { number: '2016', label: 'Année de création' },
-    { number: '2000+', label: 'Paires recyclées' },
-    { number: '70€', label: 'Réduction maximum' },
-  ];
 
   return (
     <>
@@ -148,7 +118,7 @@ export default function AboutPage() {
               </SimpleAnimation>
 
               <div className="grid gap-12 md:grid-cols-3 lg:gap-16">
-                {values.map((value) => {
+                {VALUES_DATA.map((value) => {
                   const Icon = value.icon;
                   return (
                     <SimpleAnimation key={value.title} type="slide-up" delay={0}>
@@ -226,7 +196,7 @@ export default function AboutPage() {
                 {/* Statistiques visuelles */}
                 <SimpleAnimation type="slide-up" delay={100}>
                   <div className="mb-8 grid grid-cols-3 gap-4 border-y border-stone/20 py-6">
-                    {stats.map((stat) => (
+                    {STATS_DATA.map((stat) => (
                       <div key={stat.label} className="text-center">
                         <div className="mb-1 text-title-sm font-bold text-accent sm:text-title-md">
                           {stat.number}

@@ -22,7 +22,33 @@ export interface NetworkError {
 }
 
 /**
- * Analyse une erreur de fetch et retourne des informations détaillées
+ * Analyse une erreur réseau et détermine son type, sa capacité de retry et le message à afficher.
+ *
+ * Cette fonction examine l'erreur et la réponse HTTP pour déterminer :
+ * - Le type d'erreur (offline, timeout, server_error, etc.)
+ * - Si une nouvelle tentative est recommandée
+ * - Le message technique pour les logs
+ * - Le message utilisateur convivial à afficher
+ *
+ * @param error - L'erreur capturée (Error, TypeError, AbortError, ou autre)
+ * @param response - La réponse HTTP optionnelle pour analyser le status code
+ * @returns Un objet NetworkError contenant le type, les messages et la capacité de retry
+ *
+ * @example
+ * ```typescript
+ * try {
+ *   const response = await fetch(url);
+ *   if (!response.ok) {
+ *     const error = analyzeNetworkError(new Error('HTTP error'), response);
+ *     console.log(error.userMessage); // Message à afficher à l'utilisateur
+ *   }
+ * } catch (err) {
+ *   const error = analyzeNetworkError(err);
+ *   if (error.canRetry) {
+ *     // Retry logic
+ *   }
+ * }
+ * ```
  */
 export function analyzeNetworkError(error: unknown, response?: Response): NetworkError {
   // Vérification si offline
@@ -112,7 +138,24 @@ export function analyzeNetworkError(error: unknown, response?: Response): Networ
 }
 
 /**
- * Détermine si une erreur justifie un retry automatique
+ * Détermine si une erreur réseau justifie une nouvelle tentative automatique.
+ *
+ * Analyse le type d'erreur pour décider si un retry est pertinent. Les erreurs
+ * temporaires (timeout, server_error, network_error, rate_limited) sont candidates
+ * au retry, tandis que les erreurs permanentes (validation, client error) ne le sont pas.
+ *
+ * @param errorInfo - L'objet NetworkError retourné par analyzeNetworkError
+ * @returns `true` si l'erreur justifie un retry, `false` sinon
+ *
+ * @example
+ * ```typescript
+ * const error = analyzeNetworkError(err, response);
+ * if (shouldRetryError(error)) {
+ *   const delay = getRetryDelay(attemptNumber);
+ *   await new Promise(resolve => setTimeout(resolve, delay));
+ *   // Retry request
+ * }
+ * ```
  */
 export function shouldRetryError(errorInfo: NetworkError): boolean {
   return (
@@ -122,7 +165,30 @@ export function shouldRetryError(errorInfo: NetworkError): boolean {
 }
 
 /**
- * Calcule le délai avant retry avec backoff exponentiel
+ * Calcule le délai d'attente avant une nouvelle tentative avec backoff exponentiel.
+ *
+ * Implémente une stratégie de backoff exponentiel pour éviter de surcharger le serveur :
+ * - Tentative 1 : 1 seconde
+ * - Tentative 2 : 2 secondes
+ * - Tentative 3 : 4 secondes
+ * - Maximum : 8 secondes
+ *
+ * @param attemptNumber - Le numéro de la tentative actuelle (1, 2, 3, etc.)
+ * @returns Le délai en millisecondes à attendre avant le prochain retry
+ *
+ * @example
+ * ```typescript
+ * for (let attempt = 1; attempt <= 3; attempt++) {
+ *   try {
+ *     return await sendRequest();
+ *   } catch (err) {
+ *     if (attempt < 3) {
+ *       const delay = getRetryDelay(attempt);
+ *       await new Promise(resolve => setTimeout(resolve, delay));
+ *     }
+ *   }
+ * }
+ * ```
  */
 export function getRetryDelay(attemptNumber: number): number {
   const baseDelay = 1000; // 1 seconde

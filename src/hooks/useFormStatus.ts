@@ -5,10 +5,10 @@ import type { FormErrors, SubmissionResult } from './useFormSubmission';
 
 import type { NetworkError } from '@/lib/networkErrors';
 
-type Status = 'idle' | 'sending' | 'success' | 'error';
+type FormSubmissionStatus = 'idle' | 'sending' | 'success' | 'error';
 
 interface UseFormStatusReturn {
-  status: Status;
+  status: FormSubmissionStatus;
   error: string;
   fieldErrors: FormErrors;
   networkError: NetworkError | null;
@@ -22,7 +22,7 @@ interface UseFormStatusReturn {
 }
 
 export function useFormStatus(): UseFormStatusReturn {
-  const [status, setStatus] = useState<Status>('idle');
+  const [status, setStatus] = useState<FormSubmissionStatus>('idle');
   const [error, setError] = useState('');
   const [fieldErrors, setFieldErrors] = useState<FormErrors>({});
   const [networkError, setNetworkError] = useState<NetworkError | null>(null);
@@ -81,4 +81,4 @@ export function useFormStatus(): UseFormStatusReturn {
   };
 }
 
-export type { Status };
+export type { FormSubmissionStatus };

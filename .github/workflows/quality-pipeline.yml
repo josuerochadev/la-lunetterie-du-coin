@@ -329,11 +329,24 @@ jobs:
           name: dist-files
           path: dist/
 
+      - name: 🔍 Verify build artifacts
+        run: |
+          echo "📁 Checking dist/ contents:"
+          ls -lah dist/
+          echo "📄 Checking for index.html:"
+          test -f dist/index.html && echo "✅ index.html found" || echo "❌ index.html missing"
+          echo "📦 Checking for assets:"
+          ls -lah dist/assets/ | head -10
+
       - name: 🚨 Run Lighthouse CI (Mobile)
-        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun'
+        run: |
+          echo "🚀 Starting preview server on port 4173..."
+          pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun'
 
       - name: 🚨 Run Lighthouse CI (Desktop)
-        run: pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
+        run: |
+          echo "🚀 Starting preview server on port 4173 for desktop audit..."
+          pnpm exec start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'
         
       - name: 📊 Upload Lighthouse reports
         if: always()
@@ -382,7 +395,18 @@ jobs:
 
               if (validReport) {
                 const scores = validReport.categories;
-                const comment = "## 🚨 Lighthouse Results\n\n| Category | Score |\n|----------|-------|\n| Performance | " + Math.round(scores.performance.score * 100) + " |\n| Accessibility | " + Math.round(scores.accessibility.score * 100) + " |\n| Best Practices | " + Math.round(scores['best-practices'].score * 100) + " |\n| SEO | " + Math.round(scores.seo.score * 100) + " |\n\nView full report in the artifacts.";
+                const perf = Math.round(scores.performance.score * 100);
+                const a11y = Math.round(scores.accessibility.score * 100);
+                const bp = Math.round(scores['best-practices'].score * 100);
+                const seo = Math.round(scores.seo.score * 100);
+
+                // Emojis based on scores
+                const perfEmoji = perf >= 90 ? '🟢' : perf >= 50 ? '🟡' : '🔴';
+                const a11yEmoji = a11y >= 90 ? '🟢' : a11y >= 50 ? '🟡' : '🔴';
+                const bpEmoji = bp >= 90 ? '🟢' : bp >= 50 ? '🟡' : '🔴';
+                const seoEmoji = seo >= 90 ? '🟢' : seo >= 50 ? '🟡' : '🔴';
+
+                const comment = `## 🚨 Lighthouse CI Results\n\n| Category | Score |\n|----------|-------|\n| ${perfEmoji} Performance | **${perf}** / 100 |\n| ${a11yEmoji} Accessibility | **${a11y}** / 100 |\n| ${bpEmoji} Best Practices | **${bp}** / 100 |\n| ${seoEmoji} SEO | **${seo}** / 100 |\n\n✅ **Lighthouse audit completed successfully**\n\n📊 View detailed reports in workflow artifacts.`;
 
                 github.rest.issues.createComment({
                   issue_number: context.issue.number,
@@ -392,7 +416,7 @@ jobs:
                 });
               } else {
                 console.log('⚠️ No valid Lighthouse report found - all reports have null scores');
-                const comment = "## 🚨 Lighthouse Results\n\n⚠️ Lighthouse reports are available but performance scores are currently null. This can happen when certain metrics cannot be measured. Check the detailed reports in artifacts for more information.";
+                const comment = `## 🚨 Lighthouse CI Results\n\n⚠️ **Lighthouse audit encountered issues**\n\nPerformance scores are currently null. This typically happens when:\n- The preview server didn't start correctly\n- Network conditions prevented measurements\n- Page failed to load within timeout\n\n🔍 **Troubleshooting steps:**\n1. Check build artifacts are valid\n2. Verify preview server starts successfully\n3. Review Lighthouse timeout settings\n\n📊 Check workflow logs and artifacts for more details.`;
 
                 github.rest.issues.createComment({
                   issue_number: context.issue.number,
@@ -401,6 +425,16 @@ jobs:
                   body: comment
                 });
               }
+            } else {
+              console.log('⚠️ No lighthouse-results directory found');
+              const comment = `## 🚨 Lighthouse CI Results\n\n❌ **Lighthouse reports directory not found**\n\nThe Lighthouse CI job may have failed to generate reports. Please check the workflow logs for errors.\n\n📊 View workflow logs for detailed error information.`;
+
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
             }
 
   # 🎭 Tests E2E avec Playwright 

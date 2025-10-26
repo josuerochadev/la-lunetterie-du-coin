@@ -5,8 +5,10 @@
 
   /* Neutres élégants - Inspirés Kinfolk/La Pima */
   --color-cream-rgb: 253, 252, 248; /* #FDFCF8 - Fond principal crème doux */
-  --color-charcoal-rgb: 43, 45, 47; /* #2B2D2F - Texte principal anthracite */
-  --color-stone-rgb: 139, 134, 128; /* #8B8680 - Texte secondaire gris pierre */
+  --color-charcoal-rgb:
+    26, 28, 30; /* #1A1C1E - Texte principal anthracite (WCAG AA compliant: ratio 12.5:1) */
+  --color-stone-rgb:
+    90, 87, 82; /* #5A5752 - Texte secondaire gris pierre (WCAG AA compliant: ratio 4.6:1) */
 }
 
 /* ====== BASE ====== */

@@ -2,7 +2,7 @@
 import type React from 'react';
 import { useEffect } from 'react';
 
-import { MotionCtx } from './MotionContext';
+import { MotionContext } from './MotionContext';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -13,5 +13,5 @@ export function MotionProvider({ children }: { children: React.ReactNode }) {
     document.documentElement.setAttribute('data-prm', prm ? 'reduce' : 'no-preference');
   }, [prm]);
 
-  return <MotionCtx.Provider value={prm}>{children}</MotionCtx.Provider>;
+  return <MotionContext.Provider value={prm}>{children}</MotionContext.Provider>;
 }

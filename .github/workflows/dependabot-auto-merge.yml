@@ -1,0 +1,86 @@
+# .github/workflows/dependabot-auto-merge.yml
+name: 🤖 Dependabot Auto-Merge
+
+on:
+  pull_request:
+    branches: [dev]
+
+# Permissions nécessaires pour auto-merge
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    name: 🤖 Auto-merge Dependabot PRs
+    runs-on: ubuntu-latest
+    # Ne s'exécute que pour les PRs de Dependabot
+    if: github.actor == 'dependabot[bot]'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📋 Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: 🔍 Check PR details
+        run: |
+          echo "📦 Dependency: ${{ steps.metadata.outputs.dependency-names }}"
+          echo "📊 Update type: ${{ steps.metadata.outputs.update-type }}"
+          echo "🏷️ Package ecosystem: ${{ steps.metadata.outputs.package-ecosystem }}"
+          echo "🔢 Previous version: ${{ steps.metadata.outputs.previous-version }}"
+          echo "🔢 New version: ${{ steps.metadata.outputs.new-version }}"
+
+      - name: ✅ Auto-approve patch and minor updates
+        # Auto-approve les patches et minors si les tests passent
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' ||
+          steps.metadata.outputs.update-type == 'version-update:semver-minor'
+        run: |
+          echo "✅ Auto-approving ${{ steps.metadata.outputs.update-type }} update"
+          gh pr review --approve "${{ github.event.pull_request.html_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🔐 Auto-merge security patches
+        # Auto-merge UNIQUEMENT les patches de sécurité après tests
+        if: |
+          steps.metadata.outputs.update-type == 'version-update:semver-patch' &&
+          contains(steps.metadata.outputs.dependency-names, 'security')
+        run: |
+          echo "🔐 Auto-merging security patch"
+          gh pr merge --auto --squash "${{ github.event.pull_request.html_url }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Comment on major updates
+        # Ajouter un commentaire pour les mises à jour majeures
+        if: steps.metadata.outputs.update-type == 'version-update:semver-major'
+        run: |
+          gh pr comment "${{ github.event.pull_request.html_url }}" --body "
+          ## ⚠️ Major Version Update
+
+          Cette PR contient une mise à jour majeure qui nécessite une revue manuelle.
+
+          **Recommandations avant merge:**
+          - 🧪 Vérifier que tous les tests passent
+          - 📖 Consulter le CHANGELOG de la dépendance
+          - 🔍 Vérifier les breaking changes
+          - 🧪 Tester manuellement les fonctionnalités affectées
+
+          📦 **Dependency:** ${{ steps.metadata.outputs.dependency-names }}
+          🔢 **Version:** ${{ steps.metadata.outputs.previous-version }} → ${{ steps.metadata.outputs.new-version }}
+          "
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: ✅ Success message
+        if: success()
+        run: |
+          echo "🎉 Dependabot automation completed successfully"
+          echo "📊 Update type: ${{ steps.metadata.outputs.update-type }}"
+          echo "✅ PR will be auto-merged if all checks pass"

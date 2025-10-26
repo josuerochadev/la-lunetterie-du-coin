@@ -47,12 +47,12 @@ const Navbar: React.FC = () => {
   }, [menuActive]);
 
   // Empêche le double toggle lors de la fermeture
-  function isToggleBlocked(menuActive: boolean, menuRendered: boolean): boolean {
+  function shouldBlockToggle(menuActive: boolean, menuRendered: boolean): boolean {
     return !menuActive && menuRendered;
   }
 
   const handleToggle = () => {
-    if (isToggleBlocked(menuActive, menuRendered)) return;
+    if (shouldBlockToggle(menuActive, menuRendered)) return;
     setMenuActive(!menuActive);
   };
 

@@ -1,10 +1,10 @@
 import type React from 'react';
 
-import type { Status } from '@/hooks/useFormStatus';
+import type { FormSubmissionStatus } from '@/hooks/useFormStatus';
 import type { NetworkError } from '@/lib/networkErrors';
 
 interface FormStatusMessageProps {
-  status: Status;
+  status: FormSubmissionStatus;
   error: string;
   networkError: NetworkError | null;
   retryCount: number;

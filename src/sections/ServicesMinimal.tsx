@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
  * Section Services - Design éditorial Kinfolk
@@ -22,37 +23,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * @returns {JSX.Element} La section Services avec cards verticales
  */
 const ServicesMinimal = forwardRef<HTMLElement>(() => {
-  const services = [
-    {
-      title: 'Lunettes neuves',
-      description:
-        'Large sélection de montures contemporaines et intemporelles. Marques indépendantes et créateurs locaux.',
-      image: '/images/homepage-services-new-glasses.jpg',
-      link: '/services#neuves',
-    },
-    {
-      title: "Lunettes d'occasion",
-      description:
-        'Montures de seconde main restaurées avec soin. Du vintage rare aux modèles récents à petits prix.',
-      image: '/images/homepage-services-second-hand.jpg',
-      link: '/services#occasion',
-    },
-    {
-      title: 'Examens de vue',
-      description:
-        "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
-      image: '/images/homepage-services-exam.jpg',
-      link: '/services#examens',
-    },
-    {
-      title: 'Lentilles de contact',
-      description:
-        'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.). Essai et adaptation sur mesure.',
-      image: '/images/homepage-services-contact-lenses.jpg',
-      link: '/services#lentilles',
-    },
-  ];
-
   return (
     <section
       id="services"
@@ -64,20 +34,18 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
         <div className="mx-auto mb-16 max-w-6xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="heading-section mb-4">
-              Nos services
+              {HOMEPAGE_SECTIONS.services.title}
             </h2>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">
-              Une expertise complète pour prendre soin de votre vue
-            </p>
+            <p className="text-body-lg text-stone">{HOMEPAGE_SECTIONS.services.subtitle}</p>
           </SimpleAnimation>
         </div>
 
         {/* Grille de services - 2 colonnes sur desktop, 1 sur mobile */}
         <div className="grid gap-8 sm:grid-cols-2 lg:gap-12">
-          {services.map((service, index) => (
+          {HOMEPAGE_SERVICES.map((service, index) => (
             <SimpleAnimation key={service.title} type="fade" delay={index * 100}>
               <article className="group relative">
                 {/* Image pleine hauteur avec texte superposé */}
@@ -121,11 +89,11 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
         <div className="mt-16 text-center">
           <SimpleAnimation type="slide-up" delay={400}>
             <a
-              href="/services"
+              href={HOMEPAGE_SECTIONS.services.cta.link}
               className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              aria-label="Découvrir tous nos services"
+              aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
             >
-              Découvrir tous nos services
+              {HOMEPAGE_SECTIONS.services.cta.text}
             </a>
           </SimpleAnimation>
         </div>

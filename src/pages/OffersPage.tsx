@@ -1,8 +1,10 @@
 import Layout from '@/components/common/Layout';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
+import { ServiceCard } from '@/components/common/ServiceCard';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
+import { OFFERS_DATA } from '@/data/offers';
 
 /**
  * Page Offres détaillée
@@ -18,56 +20,6 @@ import { Seo } from '@/seo/Seo';
  */
 export default function OffersPage() {
   useNativeScroll();
-
-  const offers = [
-    {
-      id: 'recyclage',
-      title: 'Programme de recyclage',
-      image: '/images/offers-recyclage-sunglasses.jpg',
-      catchphrase: "Vos anciennes lunettes valent de l'or",
-      description:
-        "Rapportez vos anciennes lunettes et économisez jusqu'à 70€ sur votre nouvel achat. Un geste pour votre budget et pour la planète.",
-      details: [
-        "Jusqu'à 70€ de réduction immédiate sur votre équipement complet",
-        'Toutes marques acceptées, peu importe leur état',
-        'Montures cassées, rayées ou démodées : tout est bon !',
-        'Geste écologique récompensé : donnez une seconde vie',
-        'Les montures sont restaurées professionnellement puis revendues',
-        'Réduction directement déduite en magasin',
-        'Pas de limite de quantité : plus vous apportez, plus vous économisez',
-      ],
-      conditions: [
-        'Offre limitée à 1 monture par transaction',
-        'Valable uniquement pour un équipement de classe B (monture + verres)',
-        "Non cumulable avec d'autres promotions exceptionnelles",
-        'Les montures doivent être propres et complètes (branches et façade)',
-      ],
-    },
-    {
-      id: 'deuxieme-paire',
-      title: 'Deuxième paire',
-      image: '/images/offers-second-sunglasses-clip.jpg',
-      catchphrase: 'Deux paires, deux styles, un prix imbattable',
-      description:
-        'Obtenez une deuxième paire à partir de 59€ selon vos besoins. Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.',
-      details: [
-        '59€ : monture + verres unifocaux standards',
-        '89€ : verres progressifs pour votre deuxième paire',
-        'Verres antireflet durci inclus',
-        'Option solaires UV cat.3 au même prix',
-        'Origine France Garantie — Ophtalmic Vision',
-        'Large choix de montures disponibles',
-        'Qualité professionnelle garantie',
-      ],
-      conditions: [
-        'Offre valable sur la monture la moins chère',
-        "Applicable lors de l'achat d'un équipement de classe B",
-        "Cumulable avec l'offre de recyclage",
-        '+40€ pour option polarisée sur les solaires',
-        'Voir conditions détaillées en magasin',
-      ],
-    },
-  ];
 
   return (
     <>
@@ -100,136 +52,16 @@ export default function OffersPage() {
         <SectionContainer className="bg-background py-section">
           <div className="mx-auto max-w-container px-container-x">
             <div className="space-y-24 lg:space-y-32">
-              {offers.map((offer, index) => {
+              {OFFERS_DATA.map((offer, index) => {
                 const isEven = index % 2 === 0;
 
                 return (
-                  <SimpleAnimation key={offer.id} type="fade" delay={index * 100}>
-                    <article
-                      id={offer.id}
-                      className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16"
-                    >
-                      {isEven ? (
-                        // Layout pair : Image gauche (50%) - Texte droite (50%)
-                        <>
-                          <div className="relative w-full">
-                            <div className="relative aspect-[2/3] w-full overflow-hidden">
-                              <img
-                                src={offer.image}
-                                alt={offer.title}
-                                className="h-full w-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          </div>
-                          <div className="flex min-h-full items-center">
-                            <div className="space-y-6">
-                              {/* Titre */}
-                              <h2 className="heading-section">{offer.title}</h2>
-
-                              {/* Phrase d'accroche */}
-                              <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                                {offer.catchphrase}
-                              </p>
-
-                              {/* Description */}
-                              <p className="text-body-lg leading-relaxed text-text">
-                                {offer.description}
-                              </p>
-
-                              {/* Détails - Boîte avec bordure */}
-                              <div className="border border-charcoal p-6">
-                                <ul className="space-y-2">
-                                  {offer.details.map((detail, i) => (
-                                    <li key={i} className="flex gap-3 text-body text-stone">
-                                      <span className="text-accent" aria-hidden="true">
-                                        •
-                                      </span>
-                                      <span>{detail}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Conditions */}
-                              <div className="border-l-4 border-accent/30 bg-accent/5 p-6">
-                                <h4 className="mb-3 text-body font-medium text-text">
-                                  Conditions :
-                                </h4>
-                                <ul className="space-y-2 text-body-sm text-stone">
-                                  {offer.conditions.map((condition, i) => (
-                                    <li key={i} className="flex gap-2">
-                                      <span>•</span>
-                                      <span>{condition}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ) : (
-                        // Layout impair : Texte gauche (50%) - Image droite (50%)
-                        <>
-                          <div className="flex min-h-full items-center justify-end">
-                            <div className="space-y-6 text-right">
-                              {/* Titre */}
-                              <h2 className="heading-section">{offer.title}</h2>
-
-                              {/* Phrase d'accroche */}
-                              <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                                {offer.catchphrase}
-                              </p>
-
-                              {/* Description */}
-                              <p className="text-body-lg leading-relaxed text-text">
-                                {offer.description}
-                              </p>
-
-                              {/* Détails - Boîte avec bordure */}
-                              <div className="border border-charcoal p-6 text-left">
-                                <ul className="space-y-2">
-                                  {offer.details.map((detail, i) => (
-                                    <li key={i} className="flex gap-3 text-body text-stone">
-                                      <span className="text-accent" aria-hidden="true">
-                                        •
-                                      </span>
-                                      <span>{detail}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-
-                              {/* Conditions */}
-                              <div className="border-r-4 border-accent/30 bg-accent/5 p-6 text-left">
-                                <h4 className="mb-3 text-body font-medium text-text">
-                                  Conditions :
-                                </h4>
-                                <ul className="space-y-2 text-body-sm text-stone">
-                                  {offer.conditions.map((condition, i) => (
-                                    <li key={i} className="flex gap-2">
-                                      <span>•</span>
-                                      <span>{condition}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="relative w-full">
-                            <div className="relative aspect-[2/3] w-full overflow-hidden">
-                              <img
-                                src={offer.image}
-                                alt={offer.title}
-                                className="h-full w-full object-cover"
-                                loading="lazy"
-                              />
-                            </div>
-                          </div>
-                        </>
-                      )}
-                    </article>
-                  </SimpleAnimation>
+                  <ServiceCard
+                    key={offer.id}
+                    service={offer}
+                    imagePosition={isEven ? 'left' : 'right'}
+                    index={index}
+                  />
                 );
               })}
             </div>
