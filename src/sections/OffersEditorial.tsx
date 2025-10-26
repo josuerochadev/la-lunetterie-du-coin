@@ -2,6 +2,7 @@ import { forwardRef } from 'react';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
  * Section Offres - Design éditorial Kinfolk
@@ -21,29 +22,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * @returns {JSX.Element} La section Offres en layout éditorial minimaliste
  */
 const OffersEditorial = forwardRef<HTMLElement>(() => {
-  const offers = [
-    {
-      id: 1,
-      title: 'Recyclage',
-      image: '/images/homepage-offer-recyclage.jpg',
-      catchphrase: "Vos anciennes lunettes valent de l'or",
-      summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
-      details:
-        "Donnez une seconde vie à vos lunettes tout en économisant sur votre nouvel équipement. Un geste pour votre budget et pour la planète.\n\nRapportez toutes vos anciennes paires, peu importe leur état, et bénéficiez d'une réduction immédiate.",
-      link: '/offres#recyclage',
-    },
-    {
-      id: 2,
-      title: 'Deuxième paire',
-      image: '/images/homepage-offer-second-pair.jpg',
-      catchphrase: 'Deux paires, deux styles, un prix imbattable',
-      summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
-      details:
-        "Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.\n\n59€ pour des verres unifocaux, 89€ pour des progressifs. Verres antireflet durci inclus. Cumulable avec l'offre recyclage !",
-      link: '/offres#deuxieme-paire',
-    },
-  ];
-
   return (
     <section
       id="offers"
@@ -55,20 +33,18 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
         <div className="mx-auto mb-16 max-w-6xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="offers-title" className="heading-section mb-4">
-              Nos offres
+              {HOMEPAGE_SECTIONS.offers.title}
             </h2>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">
-              Des solutions pensées pour votre budget et pour la planète
-            </p>
+            <p className="text-body-lg text-stone">{HOMEPAGE_SECTIONS.offers.subtitle}</p>
           </SimpleAnimation>
         </div>
 
         {/* Offres en layout 50/50 alternant */}
         <div className="space-y-24 lg:space-y-32">
-          {offers.map((offer, index) => {
+          {HOMEPAGE_OFFERS.map((offer, index) => {
             const isEven = index % 2 === 0;
 
             return (
@@ -185,11 +161,11 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
         <div className="mt-16 text-center">
           <SimpleAnimation type="slide-up" delay={200}>
             <a
-              href="/offres"
+              href={HOMEPAGE_SECTIONS.offers.cta.link}
               className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              aria-label="Voir plus sur nos offres"
+              aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
             >
-              Voir plus sur nos offres
+              {HOMEPAGE_SECTIONS.offers.cta.text}
             </a>
           </SimpleAnimation>
         </div>

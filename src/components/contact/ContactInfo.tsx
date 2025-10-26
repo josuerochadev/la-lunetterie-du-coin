@@ -6,16 +6,7 @@ import Clock from 'lucide-react/dist/esm/icons/clock';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/constants';
-
-const openingHours = [
-  { day: 'Lundi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Mardi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Mercredi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Jeudi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Vendredi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Samedi', hours: '10h00 - 14h00 • 15h00 - 19h00' },
-  { day: 'Dimanche', hours: 'Fermé' },
-];
+import { OPENING_HOURS } from '@/data/contact';
 
 /**
  * ContactInfo - Informations pratiques (adresse, téléphone, email, horaires)
@@ -93,7 +84,7 @@ export default function ContactInfo() {
                   <h3 className="heading-subsection">Horaires d'ouverture</h3>
                 </div>
                 <dl className="space-y-2">
-                  {openingHours.map((schedule) => (
+                  {OPENING_HOURS.map((schedule) => (
                     <div key={schedule.day} className="flex justify-between text-body-sm">
                       <dt className="font-medium text-text">{schedule.day}</dt>
                       <dd className={schedule.hours === 'Fermé' ? 'text-stone/60' : 'text-stone'}>

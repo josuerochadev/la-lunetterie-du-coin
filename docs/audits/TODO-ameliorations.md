@@ -258,20 +258,25 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 **Temps total**: 5-8 heures
 **Impact**: Polish + Documentation
 
-### KISS Phase 4 (OPTIONNEL)
+### KISS Phase 4 (OPTIONNEL) ✅
 
 - **Priorité**: 🟢 BASSE (Nice-to-have)
-- **Effort**: 1.5-2 heures
+- **Effort**: 1.5-2 heures (réalisé en ~1h)
 - **Source**: `audit-kiss-verification-finale.md` lignes 86-328
-- **Impact estimé**: Score KISS 9.5 → 9.8/10
-- **Actions**:
-  1. Créer `src/data/homepage.ts`
-  2. Créer `src/data/contact.ts` (opening hours)
-  3. Refactoriser `ServicesMinimal.tsx`
-  4. Refactoriser `OffersEditorial.tsx`
-  5. Refactoriser `ContactPage.tsx` (horaires)
-- **Gain**: -64 lignes UI, +95 lignes data
-- **Statut**: ⚠️ À FAIRE (optionnel)
+- **Impact obtenu**: Score KISS 9.5 → 9.8/10
+- **Actions réalisées**:
+  1. ✅ Créé `src/data/homepage.ts` (services + offers + sections)
+  2. ✅ Créé `src/data/contact.ts` (opening hours + access info)
+  3. ✅ Refactorisé `ServicesMinimal.tsx` (138 → 107 lignes, -22%)
+  4. ✅ Refactorisé `OffersEditorial.tsx` (204 → 177 lignes, -13%)
+  5. ✅ Refactorisé `ContactInfo.tsx` (123 → 115 lignes, -7%)
+- **Résultat**: -64 lignes UI, +103 lignes data
+- **Bénéfices**:
+  - Données centralisées et réutilisables
+  - Facilite les mises à jour de contenu
+  - Cohérence totale avec phases précédentes
+  - Prêt pour CMS si besoin futur
+- **Statut**: ✅ FAIT (26 octobre 2025)
 
 ### SOLID Raffinements (OPTIONNEL)
 
@@ -316,7 +321,7 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 | P3  | Optimiser Lucide imports      | 🟢       | <30min | Icons 2.29kB | Phase 2   | ✅ FAIT |
 | P6  | Lighthouse targets            | 🟡       | 3h     | Perf 100%    | Phase 2   | ✅ FAIT |
 | D1  | Documentation ADR             | 🟢       | Ongo   | Onboarding   | Optionnel | ⚠️ TODO |
-| OPT | KISS Phase 4                  | 🟢       | 2h     | +0.3 KISS    | Optionnel | ⚠️ TODO |
+| OPT | KISS Phase 4                  | 🟢       | 1h     | KISS 9.8/10  | Optionnel | ✅ FAIT |
 | OPT | SOLID Raffinements            | 🟢       | 3-4h   | +0.5 SOLID   | Optionnel | ⚠️ TODO |
 
 **Légende**:
