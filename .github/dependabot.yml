@@ -1,0 +1,90 @@
+# .github/dependabot.yml
+# Configuration pour Dependabot - Mises à jour automatiques des dépendances
+# Documentation: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+
+version: 2
+updates:
+  # Configuration pour npm/pnpm (package.json)
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      # Vérifier les mises à jour hebdomadaires (lundi matin)
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Paris"
+
+    # Ouvrir les PRs vers la branche dev
+    target-branch: "dev"
+
+    # Limiter le nombre de PRs ouvertes simultanément
+    open-pull-requests-limit: 5
+
+    # Grouper les mises à jour par type
+    groups:
+      # Groupe pour les dépendances de développement
+      development-dependencies:
+        dependency-type: "development"
+        update-types:
+          - "minor"
+          - "patch"
+
+      # Groupe pour les dépendances de production (patches uniquement)
+      production-dependencies:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+
+    # Labels pour les PRs
+    labels:
+      - "dependencies"
+      - "automated"
+
+    # Préfixe pour les commits
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+
+    # Ignorer certaines dépendances si nécessaire
+    ignore:
+      # Ignorer les mises à jour majeures de React (nécessite tests approfondis)
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react-dom"
+        update-types: ["version-update:semver-major"]
+
+      # Ignorer les mises à jour majeures de Vite (nécessite migration)
+      - dependency-name: "vite"
+        update-types: ["version-update:semver-major"]
+
+    # Permettre les mises à jour des versions
+    versioning-strategy: "increase"
+
+    # Reviewer automatique (optionnel - à configurer avec votre équipe)
+    # reviewers:
+    #   - "votre-username"
+
+    # Assignees automatiques (optionnel)
+    # assignees:
+    #   - "votre-username"
+
+  # Configuration pour GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "Europe/Paris"
+
+    target-branch: "dev"
+    open-pull-requests-limit: 3
+
+    labels:
+      - "dependencies"
+      - "github-actions"
+      - "automated"
+
+    commit-message:
+      prefix: "ci(deps)"
+      include: "scope"
