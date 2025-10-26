@@ -1,14 +1,15 @@
-import { fileURLToPath, URL } from "node:url";
+import { fileURLToPath, URL } from 'node:url';
 
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import svgr from "vite-plugin-svgr";
-import { sentryVitePlugin } from "@sentry/vite-plugin";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import svgr from 'vite-plugin-svgr';
+import { sentryVitePlugin } from '@sentry/vite-plugin';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => {
-  // Configuration simplifiée : le plugin Sentry se configurera automatiquement 
+  // Configuration simplifiée : le plugin Sentry se configurera automatiquement
   // via les variables d'environnement en production
-  const isProduction = mode === "production";
+  const isProduction = mode === 'production';
 
   return {
     plugins: [
@@ -20,24 +21,33 @@ export default defineConfig(({ mode }) => {
       }),
       // Sentry plugin pour source maps (production seulement et si configuré)
       // eslint-disable-next-line no-undef
-      ...(isProduction && process.env?.SENTRY_AUTH_TOKEN ? [sentryVitePlugin({
-        telemetry: false,
-        sourcemaps: {
-          assets: ["./dist/**"],
-        },
-      })] : []),
+      ...(isProduction && process.env?.SENTRY_AUTH_TOKEN
+        ? [
+            sentryVitePlugin({
+              telemetry: false,
+              sourcemaps: {
+                assets: ['./dist/**'],
+              },
+            }),
+          ]
+        : []),
+      // Bundle visualizer (génère stats.html après build)
+      visualizer({
+        filename: 'dist/stats.html',
+        open: false,
+        gzipSize: true,
+        brotliSize: true,
+        template: 'treemap', // 'treemap', 'sunburst', 'network'
+      }),
     ].filter(Boolean),
     optimizeDeps: {
-      include: [
-        'lucide-react/dist/esm/icons/facebook',
-        'lucide-react/dist/esm/icons/instagram',
-      ],
+      include: ['lucide-react/dist/esm/icons/facebook', 'lucide-react/dist/esm/icons/instagram'],
     },
     resolve: {
       alias: {
-        "@": fileURLToPath(new URL("./src", import.meta.url)),
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
       },
-      extensions: [".js", ".jsx", ".ts", ".tsx", ".json"],
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     },
     build: {
       sourcemap: true, // Important pour Sentry
@@ -51,45 +61,64 @@ export default defineConfig(({ mode }) => {
             if (id.includes('@sentry')) {
               return 'sentry';
             }
-            
-            // Core React (stable, cache long terme)
-            if (id.includes('react') || id.includes('react-dom')) {
-              return 'react-vendor';
+
+            // Séparer React et ReactDOM pour meilleur chunking
+            if (id.includes('node_modules/react-dom')) {
+              return 'react-dom';
             }
-            
-            // Routing système  
+
+            if (
+              id.includes('node_modules/react/') &&
+              !id.includes('react-dom') &&
+              !id.includes('react-router')
+            ) {
+              return 'react';
+            }
+
+            // Routing système
             if (id.includes('react-router')) {
-              return 'router';
+              return 'react-router';
             }
-            
-            // Animation (grosse librairie)
-            if (id.includes('framer-motion') || id.includes('split-type')) {
-              return 'motion';
+
+            // Animation (grosse librairie) - séparer framer-motion
+            if (id.includes('framer-motion')) {
+              return 'framer-motion';
             }
-            
+
+            if (id.includes('split-type')) {
+              return 'split-type';
+            }
+
             // Forms (lazy-loaded sur page contact)
             if (id.includes('react-hook-form')) {
               return 'forms';
             }
-            
+
             // Utilitaires légers (groupés)
-            if (id.includes('clsx') || 
-                id.includes('@dr.pogodin/react-helmet') || 
-                id.includes('tailwind-merge')) {
+            if (
+              id.includes('clsx') ||
+              id.includes('@dr.pogodin/react-helmet') ||
+              id.includes('tailwind-merge')
+            ) {
               return 'utils';
             }
-            
+
             // Icons Lucide (lazy-loaded)
             if (id.includes('lucide-react')) {
               return 'icons';
             }
-            
+
+            // Vercel Analytics séparé
+            if (id.includes('@vercel/analytics')) {
+              return 'analytics';
+            }
+
             // Node modules dans vendor par défaut
             if (id.includes('node_modules')) {
               return 'vendor';
             }
           },
-          
+
           // Noms de fichiers avec hash pour cache busting
           chunkFileNames: 'assets/[name]-[hash].js',
           entryFileNames: 'assets/[name]-[hash].js',
