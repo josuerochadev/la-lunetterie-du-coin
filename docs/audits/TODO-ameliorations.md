@@ -1,9 +1,9 @@
 # 📋 TODO - Améliorations à Implémenter
 
 **Date de création**: 26 octobre 2025
-**Dernière mise à jour**: 26 octobre 2025 - Phase Immédiate TERMINÉE
-**Statut**: 11 recommandations non implémentées sur 35 analysées
-**Score d'implémentation**: 69%
+**Dernière mise à jour**: 26 octobre 2025 - A1 Footer/ContactPage TERMINÉ
+**Statut**: 9 recommandations non implémentées sur 35 analysées
+**Score d'implémentation**: 74%
 
 ---
 
@@ -16,7 +16,8 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 - ✅ **Phase Immédiate**: 2 items TERMINÉS (Sécurité CVEs)
 - 🔴 **Critiques/Hautes**: 3 items (Performance + Monitoring)
 - 🟡 **Moyennes**: 4 items (Tests + Monitoring)
-- 🟢 **Basses**: 4 items (Polish + Documentation)
+- ✅ **Basses**: 1 item TERMINÉ (Architecture A1)
+- 🟢 **Basses restantes**: 2 items (P3, D1)
 - **Optionnelles**: 2 items (KISS/SOLID raffinements)
 
 ---
@@ -188,35 +189,35 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
   5. `lib/monitoring.ts` (309 lignes) - 1-2h
 - **Statut**: ⚠️ À FAIRE
 
-### A1 - Simplification Footer.tsx
+### A1 - Simplification Footer.tsx ✅
 
 - **Priorité**: 🟢 BASSE
-- **Effort**: 2-3 heures
+- **Effort**: 2-3 heures (réalisé en 1.5h)
 - **Source**: `audit-technique-complet.md` lignes 534-558
 - **Problème**: Footer.tsx = 272 lignes (objectif <250)
-- **Solution**: Refactoriser en sous-composants
-  ```tsx
-  <Footer>
-    <FooterLogo />
-    <FooterNavigation />
-    <FooterSocial />
-    <FooterCopyright />
-  </Footer>
-  ```
-- **Statut**: ⚠️ À FAIRE
+- **Solution appliquée**: Refactoriser en sous-composants
+  - FooterLogo (logo et slogan)
+  - FooterNavigation (liens navigation)
+  - FooterContact (coordonnées complètes)
+  - FooterSocial (réseaux sociaux)
+  - FooterBottom (liens légaux + signature)
+  - FooterMenu (variante menu mobile)
+- **Résultat**: Footer.tsx 272 → 74 lignes (-73%) ✅
+- **Statut**: ✅ FAIT (commit 935c6c7)
 
-### A1b - Simplification ContactPage.tsx
+### A1b - Simplification ContactPage.tsx ✅
 
 - **Priorité**: 🟢 BASSE
-- **Effort**: 2-3 heures
+- **Effort**: 2-3 heures (réalisé en 1.5h)
 - **Source**: `audit-technique-complet.md` lignes 534-558
 - **Problème**: ContactPage.tsx = 313 lignes (objectif <250)
-- **Solution**: Extraire sections en composants
-  - ContactHero
-  - ContactForm (déjà extrait ✅)
-  - ContactInfo
-  - ContactMap
-- **Statut**: 🟡 PARTIELLEMENT FAIT (form extrait)
+- **Solution appliquée**: Extraire sections en composants
+  - ContactHero (titre et intro)
+  - ContactInfo (informations pratiques)
+  - ContactAppointment (widget Calendly)
+  - ContactLocation (plan d'accès)
+- **Résultat**: ContactPage.tsx 313 → 69 lignes (-78%) ✅
+- **Statut**: ✅ FAIT (commit 935c6c7)
 
 ### P3 - Optimiser Imports Lucide
 
@@ -306,23 +307,23 @@ Ce document liste toutes les recommandations **NON ENCORE IMPLÉMENTÉES** issue
 
 ## 📊 Tableau Récapitulatif
 
-| ID  | Recommandation                | Priorité | Effort | Impact      | Phase     | Statut     |
-| --- | ----------------------------- | -------- | ------ | ----------- | --------- | ---------- |
-| S1  | Update Vite                   | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT    |
-| S2  | Update Playwright             | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT    |
-| S3  | Fix tar-fs (BONUS)            | 🔴       | 15min  | Sécurité    | Immédiate | ✅ FAIT    |
-| P1  | Split react-vendor            | 🔴       | 4-6h   | -80kB       | Phase 1   | ⚠️ TODO    |
-| P5  | Réactiver Lighthouse CI       | 🔴       | 2-3h   | Monitoring  | Phase 1   | ⚠️ TODO    |
-| S4  | Dependabot/Renovate           | 🔴       | 1-2h   | Sécurité    | Phase 1   | ⚠️ TODO    |
-| P2  | Lazy load Sentry              | 🟡       | 2h     | -50kB       | Phase 1   | ⚠️ TODO    |
-| P4  | Bundle Visualizer             | 🟡       | 1h     | Analyse     | Phase 1   | ⚠️ TODO    |
-| T1  | Tests coverage 55%            | 🟡       | 6-8h   | Robustesse  | Phase 2   | ⚠️ TODO    |
-| A1  | Simplifier Footer/ContactPage | 🟢       | 4-6h   | Maintenable | Phase 2   | 🟡 PARTIEL |
-| P3  | Optimiser Lucide imports      | 🟢       | 1h     | -10kB       | Phase 2   | ⚠️ TODO    |
-| P6  | Lighthouse targets            | 🟡       | Var    | UX          | Phase 2   | ⚠️ TODO    |
-| D1  | Documentation ADR             | 🟢       | Ongo   | Onboarding  | Optionnel | ⚠️ TODO    |
-| OPT | KISS Phase 4                  | 🟢       | 2h     | +0.3 KISS   | Optionnel | ⚠️ TODO    |
-| OPT | SOLID Raffinements            | 🟢       | 3-4h   | +0.5 SOLID  | Optionnel | ⚠️ TODO    |
+| ID  | Recommandation                | Priorité | Effort | Impact      | Phase     | Statut  |
+| --- | ----------------------------- | -------- | ------ | ----------- | --------- | ------- |
+| S1  | Update Vite                   | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT |
+| S2  | Update Playwright             | 🔴       | 30min  | Sécurité    | Immédiate | ✅ FAIT |
+| S3  | Fix tar-fs (BONUS)            | 🔴       | 15min  | Sécurité    | Immédiate | ✅ FAIT |
+| P1  | Split react-vendor            | 🔴       | 4-6h   | -80kB       | Phase 1   | ⚠️ TODO |
+| P5  | Réactiver Lighthouse CI       | 🔴       | 2-3h   | Monitoring  | Phase 1   | ⚠️ TODO |
+| S4  | Dependabot/Renovate           | 🔴       | 1-2h   | Sécurité    | Phase 1   | ⚠️ TODO |
+| P2  | Lazy load Sentry              | 🟡       | 2h     | -50kB       | Phase 1   | ⚠️ TODO |
+| P4  | Bundle Visualizer             | 🟡       | 1h     | Analyse     | Phase 1   | ⚠️ TODO |
+| T1  | Tests coverage 55%            | 🟡       | 6-8h   | Robustesse  | Phase 2   | ⚠️ TODO |
+| A1  | Simplifier Footer/ContactPage | 🟢       | 3h     | Maintenable | Phase 2   | ✅ FAIT |
+| P3  | Optimiser Lucide imports      | 🟢       | 1h     | -10kB       | Phase 2   | ⚠️ TODO |
+| P6  | Lighthouse targets            | 🟡       | Var    | UX          | Phase 2   | ⚠️ TODO |
+| D1  | Documentation ADR             | 🟢       | Ongo   | Onboarding  | Optionnel | ⚠️ TODO |
+| OPT | KISS Phase 4                  | 🟢       | 2h     | +0.3 KISS   | Optionnel | ⚠️ TODO |
+| OPT | SOLID Raffinements            | 🟢       | 3-4h   | +0.5 SOLID  | Optionnel | ⚠️ TODO |
 
 **Légende**:
 
