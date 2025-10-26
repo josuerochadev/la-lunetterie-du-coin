@@ -1,6 +1,7 @@
 import { forwardRef } from 'react';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 
 /**
  * Composant Hero.
@@ -35,11 +36,13 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
         {/* Image gauche */}
         <div className="relative h-full w-1/2">
           <SimpleAnimation type="fade" delay={0} immediate={true} className="h-full w-full">
-            <img
+            <ResponsiveImage
               src="/images/hero-eyeglasses-left.jpg"
               alt="Lunettes élégantes - La Lunetterie du Coin"
               className="h-full w-full object-cover object-center"
               loading="eager"
+              sizes="50vw"
+              widths={[640, 768, 1024, 1280, 1920]}
             />
           </SimpleAnimation>
         </div>
@@ -47,11 +50,13 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
         {/* Image droite */}
         <div className="relative h-full w-1/2">
           <SimpleAnimation type="fade" delay={200} immediate={true} className="h-full w-full">
-            <img
+            <ResponsiveImage
               src="/images/hero-eyeglasses-right.jpg"
               alt="Collection de montures - La Lunetterie du Coin"
               className="h-full w-full object-cover object-center"
               loading="eager"
+              sizes="50vw"
+              widths={[640, 768, 1024, 1280, 1920]}
             />
           </SimpleAnimation>
         </div>
