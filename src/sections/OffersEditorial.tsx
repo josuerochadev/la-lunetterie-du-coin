@@ -1,7 +1,8 @@
 import { forwardRef } from 'react';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { OfferContent } from '@/components/offers/OfferContent';
+import { OfferImage } from '@/components/offers/OfferImage';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
@@ -53,102 +54,28 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
                   {isEven ? (
                     // Layout pair : Image gauche (50%) - Texte droite (50%)
                     <>
-                      <div className="relative w-full">
-                        <div className="relative aspect-[2/3] w-full overflow-hidden">
-                          <img
-                            src={offer.image}
-                            alt={offer.title}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      </div>
-                      <div className="flex min-h-full items-center">
-                        <div className="space-y-6">
-                          {/* Titre */}
-                          <h3 className="heading-subsection-lg">{offer.title}</h3>
-
-                          {/* Phrase d'accroche */}
-                          <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                            {offer.catchphrase}
-                          </p>
-
-                          {/* Résumé */}
-                          <p className="text-body-lg font-medium leading-relaxed text-text">
-                            {offer.summary}
-                          </p>
-
-                          {/* Détails */}
-                          <div className="space-y-3 pt-2">
-                            <p className="whitespace-pre-line text-body leading-relaxed text-stone">
-                              {offer.details}
-                            </p>
-                          </div>
-
-                          {/* CTA */}
-                          <a
-                            href={offer.link}
-                            className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
-                            aria-label={`En savoir plus sur l'offre ${offer.title}`}
-                          >
-                            Découvrir l'offre
-                            <ArrowRight
-                              className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </div>
-                      </div>
+                      <OfferImage image={offer.image} title={offer.title} />
+                      <OfferContent
+                        title={offer.title}
+                        catchphrase={offer.catchphrase}
+                        summary={offer.summary}
+                        details={offer.details}
+                        link={offer.link}
+                        align="left"
+                      />
                     </>
                   ) : (
                     // Layout impair : Texte gauche (50%) aligné à droite - Image droite (50%)
                     <>
-                      <div className="flex min-h-full items-center justify-end">
-                        <div className="space-y-6 text-right">
-                          {/* Titre */}
-                          <h3 className="heading-subsection-lg">{offer.title}</h3>
-
-                          {/* Phrase d'accroche */}
-                          <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-                            {offer.catchphrase}
-                          </p>
-
-                          {/* Résumé */}
-                          <p className="text-body-lg font-medium leading-relaxed text-text">
-                            {offer.summary}
-                          </p>
-
-                          {/* Détails */}
-                          <div className="space-y-3 pt-2">
-                            <p className="whitespace-pre-line text-body leading-relaxed text-stone">
-                              {offer.details}
-                            </p>
-                          </div>
-
-                          {/* CTA */}
-                          <a
-                            href={offer.link}
-                            className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
-                            aria-label={`En savoir plus sur l'offre ${offer.title}`}
-                          >
-                            Découvrir l'offre
-                            <ArrowRight
-                              className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                              aria-hidden="true"
-                            />
-                          </a>
-                        </div>
-                      </div>
-                      <div className="relative w-full">
-                        <div className="relative aspect-[2/3] w-full overflow-hidden">
-                          <img
-                            src={offer.image}
-                            alt={offer.title}
-                            className="h-full w-full object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      </div>
+                      <OfferContent
+                        title={offer.title}
+                        catchphrase={offer.catchphrase}
+                        summary={offer.summary}
+                        details={offer.details}
+                        link={offer.link}
+                        align="right"
+                      />
+                      <OfferImage image={offer.image} title={offer.title} />
                     </>
                   )}
                 </article>
