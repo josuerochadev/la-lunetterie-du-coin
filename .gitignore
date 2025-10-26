@@ -75,5 +75,9 @@ playwright-report/
 security-report.json
 quality-report.md
 
+# Lighthouse CI
+.lighthouseci/
+lighthouse-results/
+
 # Claude Code documentation
 CLAUDE.md
