@@ -4,52 +4,6 @@ export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xanbvzql';
 
 export const CALENDLY_URL = 'https://calendly.com/lalunetterieducoin';
 
-// Navigation principale - structure plate pour navbar horizontale
-export const LINKS = [
-  { label: 'Accueil', href: '/' },
-  { label: 'À propos', href: '/a-propos' },
-  { label: 'Nos services', href: '/services' },
-  { label: 'Nos offres', href: '/#offers' },
-  { label: 'Témoignages', href: '/#testimonials' },
-  { label: 'Nous contacter', href: '/contact' },
-  { label: 'Prendre rendez‑vous', href: CALENDLY_URL },
-];
-
-// Navigation structurée par catégories pour le menu full-screen
-export const MENU_CATEGORIES = [
-  {
-    title: 'NOUS DÉCOUVRIR',
-    href: '/a-propos', // Titre cliquable vers la page À propos
-    links: [
-      { label: 'À propos', href: '/a-propos' },
-      { label: 'Témoignages', href: '/#testimonials' },
-    ],
-  },
-  {
-    title: 'NOS SERVICES',
-    href: '/services', // Titre cliquable vers la page services
-    links: [
-      { label: 'Lunettes neuves', href: '/services#neuves' },
-      { label: "Lunettes d'occasion", href: '/services#occasion' },
-      { label: 'Examens de vue', href: '/services#examens' },
-      { label: 'Lentilles de contact', href: '/services#lentilles' },
-    ],
-  },
-  {
-    title: 'NOS OFFRES',
-    href: '/offres', // Titre cliquable vers la page offres
-    links: [
-      { label: 'Recyclage des lunettes', href: '/offres#recyclage' },
-      { label: 'Deuxième paire', href: '/offres#deuxieme-paire' },
-    ],
-  },
-  {
-    title: 'NOUS CONTACTER',
-    href: '/contact', // Titre cliquable vers la page contact
-    links: [], // Pas de sous-liens
-  },
-];
-
 // CTA principal du menu
 export const MENU_CTA = {
   label: 'Prendre rendez-vous',
@@ -83,66 +37,6 @@ export const STORE_INFO = {
   tagline: 'Opticien indépendant depuis 2016',
   usp: "Jusqu'à 70€ de remise avec notre offre recyclage",
 };
-
-export const HERO_PHRASES = [
-  'Des lunettes qui ont du style, une démarche qui a du sens',
-  'Des lunettes à la mode et pas de déchet en vue !',
-  'Payez vos lunettes moins cher en recyclant vos anciennes paires',
-];
-
-export const OFFERS = [
-  {
-    id: 1,
-    title: 'Recyclage',
-    imageBase: '/illustrations/recycle',
-    catchphrase: "Vos anciennes lunettes valent de l'or",
-    summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
-    details:
-      "Donnez une seconde vie à vos lunettes tout en économisant sur votre nouvel équipement. Un geste pour votre budget et pour la planète.\n\nRapportez toutes vos anciennes paires, peu importe leur état, et bénéficiez d'une réduction immédiate.",
-    link: '/offres#recyclage',
-  },
-  {
-    id: 2,
-    title: 'Deuxième paire',
-    imageBase: '/illustrations/two-eyeframes',
-    catchphrase: 'Deux paires, deux styles, un prix imbattable',
-    summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
-    details:
-      "Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.\n\n59€ pour des verres unifocaux, 89€ pour des progressifs. Verres antireflet durci inclus. Cumulable avec l'offre recyclage !",
-    link: '/offres#deuxieme-paire',
-  },
-];
-
-export const SERVICES = [
-  {
-    title: 'Lunettes neuves',
-    description:
-      'Large sélection de montures contemporaines et intemporelles. Marques indépendantes et créateurs locaux.',
-    icon: '👓',
-    link: '/services#neuves',
-  },
-  {
-    title: "Lunettes d'occasion",
-    description:
-      'Montures de seconde main restaurées avec soin. Du vintage rare aux modèles récents à petits prix.',
-    icon: '♻️',
-    link: '/services#occasion',
-  },
-  {
-    title: 'Examens de vue',
-    description:
-      "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
-    icon: '👁️',
-    link: '/services#examens',
-  },
-  {
-    title: 'Lentilles de contact',
-    description:
-      'Nous sommes revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.). Essai et adaptation sur mesure.',
-    icon: '🔍',
-    link: '/services#lentilles',
-  },
-];
 
 export const TESTIMONIALS = [
   {
@@ -201,16 +95,6 @@ export const TESTIMONIALS = [
   },
 ];
 
-export const CONCEPT = `✷ Depuis 2016, on mixe **style** ☆ et **conscience** ◇ en plein Strasbourg. 
-Des lunettes neuves, oui — mais aussi des montures **recyclées** ✷ restaurées avec soin. 
-Ramenez vos anciennes paires. → Jusqu'à **70€ de réduction**. ✧ Donnez-leur une **seconde vie**. 
-On voit clair, ○ sans fermer les yeux sur l'**impact écologique**. ▲ La mode change. ◆ La planète, non.`;
-
-export const CONCEPT_PLAIN = `✷ Depuis 2016, on mixe style ☆ et conscience ◇ en plein Strasbourg. 
-Des lunettes neuves, oui — mais aussi des montures recyclées ✷ restaurées avec soin. 
-Ramenez vos anciennes paires. → Jusqu'à 70€ de réduction. ✧ Donnez-leur une seconde vie. 
-On voit clair, ○ sans fermer les yeux sur l'impact écologique. ▲ La mode change. ◆ La planète, non.`;
-
 export const FOOTER_NAV_LINKS = [
   { label: 'À propos', href: '/a-propos' },
   { label: 'Nos services', href: '/services' },
@@ -255,7 +139,6 @@ export const COMPANY_PHONE = '03 88 51 24 40';
 // Hébergeur
 export const HOST_NAME = 'Vercel Inc.';
 export const HOST_ADDRESS = '340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis';
-export const HOST_PHONE = '';
 
 // Médiation de la consommation
 export const MEDIATOR_NAME = 'Médiateur de la consommation';

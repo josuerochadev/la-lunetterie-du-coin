@@ -26,29 +26,3 @@ export function useNativeScroll() {
     };
   }, []);
 }
-
-/**
- * Utilitaire pour smooth scroll vers un élément
- */
-export function scrollToElement(elementId: string, offset: number = 0) {
-  const element = document.getElementById(elementId);
-  if (!element) return;
-
-  const elementPosition = element.offsetTop - offset;
-
-  // Utiliser scrollTo avec behavior smooth natif
-  window.scrollTo({
-    top: elementPosition,
-    behavior: 'smooth',
-  });
-}
-
-/**
- * Utilitaire pour smooth scroll vers le top
- */
-export function scrollToTop() {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  });
-}
