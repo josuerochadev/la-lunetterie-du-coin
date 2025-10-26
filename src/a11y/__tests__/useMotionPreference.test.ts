@@ -3,7 +3,7 @@ import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { useContext } from 'react';
 
 import { useMotionPreference } from '../useMotionPreference';
-import { MotionCtx } from '../MotionContext';
+import { MotionContext } from '../MotionContext';
 
 // Mock React context
 vi.mock('react', async () => {
@@ -29,7 +29,7 @@ describe('useMotionPreference', () => {
       const { result } = renderHook(() => useMotionPreference());
 
       expect(result.current).toBe(false);
-      expect(mockUseContext).toHaveBeenCalledWith(MotionCtx);
+      expect(mockUseContext).toHaveBeenCalledWith(MotionContext);
     });
 
     it('should return true when context provides reduced motion preference', () => {
@@ -38,7 +38,7 @@ describe('useMotionPreference', () => {
       const { result } = renderHook(() => useMotionPreference());
 
       expect(result.current).toBe(true);
-      expect(mockUseContext).toHaveBeenCalledWith(MotionCtx);
+      expect(mockUseContext).toHaveBeenCalledWith(MotionContext);
     });
 
     it('should return false when context provides no motion preference', () => {
@@ -47,7 +47,7 @@ describe('useMotionPreference', () => {
       const { result } = renderHook(() => useMotionPreference());
 
       expect(result.current).toBe(false);
-      expect(mockUseContext).toHaveBeenCalledWith(MotionCtx);
+      expect(mockUseContext).toHaveBeenCalledWith(MotionContext);
     });
   });
 
@@ -195,7 +195,7 @@ describe('useMotionPreference', () => {
 
       renderHook(() => useMotionPreference());
 
-      expect(mockUseContext).toHaveBeenCalledWith(MotionCtx);
+      expect(mockUseContext).toHaveBeenCalledWith(MotionContext);
       expect(mockUseContext).toHaveBeenCalledTimes(1);
     });
 
@@ -204,7 +204,7 @@ describe('useMotionPreference', () => {
 
       const { unmount } = renderHook(() => useMotionPreference());
 
-      expect(mockUseContext).toHaveBeenCalledWith(MotionCtx);
+      expect(mockUseContext).toHaveBeenCalledWith(MotionContext);
 
       unmount();
 

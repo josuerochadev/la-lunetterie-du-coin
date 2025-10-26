@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 
-import { MotionCtx } from './MotionContext';
+import { MotionContext } from './MotionContext';
 
-export const useMotionPreference = () => useContext(MotionCtx);
+export const useMotionPreference = () => useContext(MotionContext);

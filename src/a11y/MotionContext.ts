@@ -1,3 +1,3 @@
 import { createContext } from 'react';
 
-export const MotionCtx = createContext(false);
+export const MotionContext = createContext(false);

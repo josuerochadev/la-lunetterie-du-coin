@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import { MotionProvider } from '../MotionProvider';
-import { MotionCtx } from '../MotionContext';
+import { MotionContext } from '../MotionContext';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -111,7 +111,7 @@ describe('MotionProvider', () => {
       mockUsePrefersReducedMotion.mockReturnValue(false);
 
       const TestConsumer = () => {
-        const prm = React.useContext(MotionCtx);
+        const prm = React.useContext(MotionContext);
         return <div data-testid="context-value">{prm ? 'reduced' : 'normal'}</div>;
       };
 
@@ -128,7 +128,7 @@ describe('MotionProvider', () => {
       mockUsePrefersReducedMotion.mockReturnValue(true);
 
       const TestConsumer = () => {
-        const prm = React.useContext(MotionCtx);
+        const prm = React.useContext(MotionContext);
         return <div data-testid="context-value">{prm ? 'reduced' : 'normal'}</div>;
       };
 
