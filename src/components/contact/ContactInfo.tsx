@@ -5,7 +5,7 @@ import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
-import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/constants';
+import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { OPENING_HOURS } from '@/data/contact';
 
 /**

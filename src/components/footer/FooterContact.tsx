@@ -2,7 +2,8 @@ import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 
-import { STORE_INFO, COMPANY_EMAIL } from '@/config/constants';
+import { STORE_INFO } from '@/config/store';
+import { COMPANY_EMAIL } from '@/config/legal';
 
 /**
  * FooterContact - Coordonnées de contact du footer

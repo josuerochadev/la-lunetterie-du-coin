@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useReducedMotion } from 'framer-motion';
 
-import { MENU_ANIMATION_DURATION } from '@/config/constants';
+import { MENU_ANIMATION_DURATION } from '@/config/menu';
 import { useActiveSection } from '@/hooks/useActiveSection';
 
 type MenuLinkItemProps = {

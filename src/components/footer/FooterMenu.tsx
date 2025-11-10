@@ -4,7 +4,8 @@ import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
 import SectionContainer from '../common/SectionContainer';
 
-import { FOOTER_SOCIALS, FOOTER_LINKS, STORE_INFO } from '@/config/constants';
+import { FOOTER_SOCIALS, FOOTER_LINKS } from '@/config/footer';
+import { STORE_INFO } from '@/config/store';
 
 type FooterMenuProps = {
   onLinkClick?: () => void;

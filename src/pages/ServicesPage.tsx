@@ -1,10 +1,10 @@
 import Layout from '@/components/common/Layout';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
-import { ServiceCard } from '@/components/common/ServiceCard';
+import { ServiceEditorialCard } from '@/components/services/ServiceEditorialCard';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
-import { CALENDLY_URL } from '@/config/constants';
+import { CALENDLY_URL } from '@/config/endpoints';
 import { SERVICES_DATA } from '@/data/services';
 
 /**
@@ -109,7 +109,7 @@ export default function ServicesPage() {
                   ) : undefined;
 
                 return (
-                  <ServiceCard
+                  <ServiceEditorialCard
                     key={service.id}
                     service={service}
                     imagePosition={isEven ? 'left' : 'right'}

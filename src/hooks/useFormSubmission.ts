@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import { FORMSPREE_ENDPOINT } from '@/config/constants';
+import { FORMSPREE_ENDPOINT } from '@/config/endpoints';
 import { fetchWithRetry } from '@/lib/retryLogic';
 import {
   validateHoneypot,

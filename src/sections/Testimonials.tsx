@@ -3,7 +3,7 @@ import Star from 'lucide-react/dist/esm/icons/star';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import { TESTIMONIALS } from '@/config/constants';
+import { TESTIMONIALS } from '@/data/testimonials';
 
 /**
  * Section Témoignages - Design éditorial Kinfolk

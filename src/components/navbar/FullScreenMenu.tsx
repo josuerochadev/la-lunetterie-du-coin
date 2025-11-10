@@ -9,13 +9,9 @@ import Instagram from 'lucide-react/dist/esm/icons/instagram';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import {
-  MENU_CTA,
-  MENU_LEGAL_LINKS,
-  STORE_INFO,
-  FOOTER_SOCIALS,
-  FOOTER_NAV_LINKS,
-} from '@/config/constants';
+import { MENU_CTA, MENU_LEGAL_LINKS } from '@/config/menu';
+import { STORE_INFO } from '@/config/store';
+import { FOOTER_SOCIALS, FOOTER_NAV_LINKS } from '@/config/footer';
 
 type FullScreenMenuProps = {
   isOpen: boolean;

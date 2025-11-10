@@ -1,7 +1,7 @@
 import Facebook from 'lucide-react/dist/esm/icons/facebook';
 import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
-import { FOOTER_SOCIALS } from '@/config/constants';
+import { FOOTER_SOCIALS } from '@/config/footer';
 
 /**
  * FooterSocial - Liens réseaux sociaux du footer

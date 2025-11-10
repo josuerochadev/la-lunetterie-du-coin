@@ -7,7 +7,9 @@ import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import MenuButton from '@/components/navbar/MenuButton';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import { MENU_ANIMATION_DURATION, CALENDLY_URL, STORE_INFO } from '@/config/constants';
+import { MENU_ANIMATION_DURATION } from '@/config/menu';
+import { CALENDLY_URL } from '@/config/endpoints';
+import { STORE_INFO } from '@/config/store';
 import { useMotionPreference } from '@/a11y/useMotionPreference';
 
 /**

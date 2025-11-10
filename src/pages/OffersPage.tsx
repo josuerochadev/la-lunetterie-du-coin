@@ -1,7 +1,7 @@
 import Layout from '@/components/common/Layout';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
-import { ServiceCard } from '@/components/common/ServiceCard';
+import { OfferEditorialCard } from '@/components/offers/OfferEditorialCard';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 import { OFFERS_DATA } from '@/data/offers';
@@ -56,9 +56,9 @@ export default function OffersPage() {
                 const isEven = index % 2 === 0;
 
                 return (
-                  <ServiceCard
+                  <OfferEditorialCard
                     key={offer.id}
-                    service={offer}
+                    offer={offer}
                     imagePosition={isEven ? 'left' : 'right'}
                     index={index}
                   />

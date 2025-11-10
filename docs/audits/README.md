@@ -69,15 +69,39 @@ Ce dossier contient tous les audits de qualité du code effectués sur le projet
 
 ---
 
+## 🏗️ Architecture & Organisation
+
+- **[audit-architecture-organisation.md](./audit-architecture-organisation.md)** - Analyse détaillée de l'architecture et de l'organisation du projet
+
+**Score Architecture**: **82/100** ✅
+
+### Points Forts
+
+- ✅ Excellente séparation Data/UI (dossier `data/` distinct)
+- ✅ Architecture en couches claire (Présentation → Logique → Utilitaires → Data)
+- ✅ Organisation par features (composants regroupés par domaine)
+- ✅ Hooks bien abstraits et réutilisables (10 hooks custom)
+- ✅ Pas de sur-ingénierie (utilise React built-ins efficacement)
+
+### Axes d'Amélioration
+
+- ⚠️ Niveaux d'abstraction mixtes dans `components/common/`
+- ⚠️ Inconsistances entre `pages/` et `sections/`
+- ⚠️ Composant `ServiceCard` trop générique (gère services ET offres)
+- ⚠️ Fichier `constants.ts` trop volumineux (147 lignes)
+
+---
+
 ## 📊 Résumé Global des Scores
 
-| Audit          | Score      | Statut              |
-| -------------- | ---------- | ------------------- |
-| **KISS**       | 9.5/10     | ✅ Excellent        |
-| **SRP**        | 9.5/10     | ✅ Excellent        |
-| **SOLID**      | 9.3/10     | ✅ Excellent        |
-| **Lisibilité** | 9.7/10     | 🏆 Exceptionnel     |
-| **Moyenne**    | **9.5/10** | 🏆 **Exceptionnel** |
+| Audit               | Score      | Statut           |
+| ------------------- | ---------- | ---------------- |
+| **KISS**            | 9.5/10     | ✅ Excellent     |
+| **SRP**             | 9.5/10     | ✅ Excellent     |
+| **SOLID**           | 9.3/10     | ✅ Excellent     |
+| **Lisibilité**      | 9.7/10     | 🏆 Exceptionnel  |
+| **Architecture**    | 82/100     | ✅ Bon           |
+| **Moyenne Globale** | **9.0/10** | ✅ **Excellent** |
 
 ---
 
@@ -93,6 +117,7 @@ Consultez chaque fichier d'audit pour voir les recommandations spécifiques non 
 2. `audit-kiss-verification-finale.md` - Petites améliorations KISS optionnelles
 3. `audit-solid-principles.md` - Améliorations mineures SOLID
 4. `audit-code-readability.md` - Section "Prochaines Étapes Recommandées"
+5. `audit-architecture-organisation.md` - Plan d'action en 3 phases (Haute, Moyenne, Basse priorité)
 
 ---
 
@@ -101,7 +126,8 @@ Consultez chaque fichier d'audit pour voir les recommandations spécifiques non 
 - **25 octobre 2025**: Audits KISS (phases 1-3) et vérification finale
 - **26 octobre 2025**: Audits SRP, SOLID et Lisibilité
 - **26 octobre 2025**: Organisation des audits dans `docs/audits/`
+- **10 novembre 2025**: Audit Architecture & Organisation
 
 ---
 
-**Dernière mise à jour**: 26 octobre 2025
+**Dernière mise à jour**: 10 novembre 2025
