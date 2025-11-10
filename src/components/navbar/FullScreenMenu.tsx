@@ -3,9 +3,8 @@ import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
-import Facebook from 'lucide-react/dist/esm/icons/facebook';
-import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
+import { socialIconRegistry } from '@/lib/iconRegistry';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -175,7 +174,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
               <SimpleAnimation type="fade" delay={450} immediate={true}>
                 <div className="flex items-center gap-6">
                   {FOOTER_SOCIALS.map((social) => {
-                    const IconComponent = social.icon === 'facebook' ? Facebook : Instagram;
+                    const Icon = socialIconRegistry[social.iconName];
                     return (
                       <a
                         key={social.href}
@@ -185,7 +184,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                         className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-all duration-300 hover:scale-110 hover:bg-orange/10 hover:text-orange"
                         aria-label={social.label}
                       >
-                        <IconComponent className="h-5 w-5" aria-hidden="true" />
+                        <Icon className="h-5 w-5" aria-hidden="true" />
                       </a>
                     );
                   })}

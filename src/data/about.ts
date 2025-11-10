@@ -4,23 +4,29 @@
  * Contient toutes les données de la page À propos.
  * Extraction depuis AboutPage.tsx pour une meilleure séparation des responsabilités.
  *
+ * Cette couche data est pure : elle ne dépend d'aucun composant UI.
+ * Les icônes sont référencées par leur nom (string) et résolues dans le composant.
+ *
  * @module data/about
  */
 
-import Heart from 'lucide-react/dist/esm/icons/heart';
-import Leaf from 'lucide-react/dist/esm/icons/leaf';
-import Award from 'lucide-react/dist/esm/icons/award';
-import type { ForwardRefExoticComponent, RefAttributes } from 'react';
-import type { LucideProps } from 'lucide-react/dist/esm/shared';
+/**
+ * Type pour les noms d'icônes Lucide supportés
+ */
+export type IconName = 'heart' | 'leaf' | 'award';
 
-export type LucideIcon = ForwardRefExoticComponent<LucideProps & RefAttributes<SVGSVGElement>>;
-
+/**
+ * Interface pour les données d'une valeur
+ */
 export interface ValueData {
   title: string;
   description: string;
-  icon: LucideIcon;
+  iconName: IconName;
 }
 
+/**
+ * Interface pour les données d'une statistique
+ */
 export interface StatData {
   number: string;
   label: string;
@@ -34,19 +40,19 @@ export const VALUES_DATA: ValueData[] = [
     title: 'Authenticité',
     description:
       'Des conseils sincères, sans pression commerciale. Nous prenons le temps de vous connaître pour trouver LA paire qui vous correspond.',
-    icon: Heart,
+    iconName: 'heart',
   },
   {
     title: 'Engagement écologique',
     description:
       "Le recyclage au cœur de notre modèle. Chaque monture d'occasion sauvée, c'est un déchet en moins et une nouvelle vie pour un objet de qualité.",
-    icon: Leaf,
+    iconName: 'leaf',
   },
   {
     title: 'Expertise',
     description:
       "10 ans d'expérience en optique. Romain maîtrise tous les aspects du métier, des examens de vue aux ajustements les plus délicats.",
-    icon: Award,
+    iconName: 'award',
   },
 ];
 

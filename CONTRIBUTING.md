@@ -6,7 +6,7 @@ Merci de votre intérêt pour contribuer à La Lunetterie du Coin ! Ce guide vou
 
 ### Prérequis
 
-- **Node.js** 20+ 
+- **Node.js** 20+
 - **PNPM** (gestionnaire de paquets recommandé)
 - **Git**
 
@@ -66,6 +66,7 @@ git commit -m "docs: update API documentation"
 ```
 
 **Types de commit :**
+
 - `feat`: nouvelle fonctionnalité
 - `fix`: correction de bug
 - `docs`: documentation
@@ -101,6 +102,7 @@ src/
 ### Standards de Code
 
 #### **TypeScript**
+
 - Utiliser des types explicites
 - Préférer `interface` à `type` pour les objets
 - Typer les props des composants
@@ -108,16 +110,19 @@ src/
 ```typescript
 // ✅ Bon
 interface ButtonProps {
-  children: ReactNode
-  variant?: 'primary' | 'secondary'
-  onClick?: () => void
+  children: ReactNode;
+  variant?: 'primary' | 'secondary';
+  onClick?: () => void;
 }
 
 // ❌ Éviter
-const Button = (props: any) => { /* ... */ }
+const Button = (props: any) => {
+  /* ... */
+};
 ```
 
 #### **React**
+
 - Composants fonctionnels avec hooks
 - Props destructurées
 - Noms explicites pour les handlers
@@ -128,12 +133,13 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
   const handleSubmit = (data: FormData) => {
     onSubmit(data)
   }
-  
+
   return <form onSubmit={handleSubmit}>...</form>
 }
 ```
 
 #### **CSS/Tailwind**
+
 - Utiliser les classes sémantiques définies
 - Préférer les CSS custom properties pour les couleurs
 - Respecter le design system
@@ -151,24 +157,68 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 ```
 
 #### **Imports**
+
 - Chemins relatifs pour modules proches
 - Alias `@/` pour src/
 - **IMPORTANT**: Imports Lucide spécifiques
 
 ```typescript
 // ✅ Imports Lucide corrects
-import { Mail } from 'lucide-react/dist/esm/icons/mail'
-import { Phone } from 'lucide-react/dist/esm/icons/phone'
+import Mail from 'lucide-react/dist/esm/icons/mail';
+import Phone from 'lucide-react/dist/esm/icons/phone';
 
 // ❌ Import global (interdit par ESLint)
-import { Mail, Phone } from 'lucide-react'
+import { Mail, Phone } from 'lucide-react';
 ```
+
+#### **Icônes**
+
+Le projet utilise des patterns standardisés pour les icônes. Consultez [docs/standards/icons.md](./docs/standards/icons.md) pour les guidelines complètes.
+
+**Patterns disponibles :**
+
+1. **Icon Registry** - Pour icônes dans data/config réutilisées 3+ fois
+
+   ```typescript
+   // Exemple: Icônes sociales
+   const Icon = socialIconRegistry[social.iconName];
+   ```
+
+2. **Composant Wrapper** - Pour logique d'affichage répétée
+
+   ```typescript
+   // Exemple: Rating avec étoiles
+   <RatingStars rating={5} />
+   ```
+
+3. **Registry Local** - Pour icônes d'un seul composant avec data pure
+
+   ```typescript
+   // Exemple: Icônes valeurs About
+   const iconMap = { heart: Heart, leaf: Leaf };
+   ```
+
+4. **Import Direct** - Pour icônes uniques ou universelles
+   ```typescript
+   // Exemple: Icône Print
+   import Printer from 'lucide-react/dist/esm/icons/printer';
+   ```
+
+**Arbre de décision rapide :**
+
+- Icône dans data layer + réutilisée 3+ fois → **Pattern 1 (Registry)**
+- Icône dans data layer + 1 composant → **Pattern 3 (Registry Local)**
+- Logique répétée avec variations → **Pattern 2 (Composant)**
+- Usage unique ou universelle → **Pattern 4 (Import Direct)**
+
+📚 **Documentation complète :** [docs/standards/icons.md](./docs/standards/icons.md)
 
 ## 🧪 Tests
 
 ### Types de Tests
 
 #### **Tests Unitaires** (Vitest + Testing Library)
+
 ```typescript
 // components/__tests__/Button.test.tsx
 import { render, screen } from '@testing-library/react'
@@ -183,15 +233,16 @@ describe('Button', () => {
 ```
 
 #### **Tests E2E** (Playwright)
+
 ```typescript
 // e2e/contact-form.spec.ts
-import { test, expect } from '@playwright/test'
+import { test, expect } from '@playwright/test';
 
 test('should submit contact form', async ({ page }) => {
-  await page.goto('/')
-  await page.click('text=Contact')
+  await page.goto('/');
+  await page.click('text=Contact');
   // Test du parcours complet
-})
+});
 ```
 
 ### Couverture de Tests
@@ -203,16 +254,15 @@ test('should submit contact form', async ({ page }) => {
 ## 🎨 Design System
 
 ### Couleurs
+
 ```css
 /* Couleurs sémantiques */
---color-brand: /* Couleur principale */
---color-accent: /* Couleur d'accentuation */
---color-success: /* Succès */
---color-warning: /* Avertissement */
---color-error: /* Erreur */
+--color-brand: /* Couleur principale */ --color-accent: /* Couleur d'accentuation */
+  --color-success: /* Succès */ --color-warning: /* Avertissement */ --color-error: /* Erreur */;
 ```
 
 ### Animations
+
 - Respecter `prefers-reduced-motion`
 - Utiliser `ConditionalMotion` pour les animations
 - Durées cohérentes : 200ms, 300ms, 500ms
@@ -235,6 +285,7 @@ pnpm run a11y
 ## 📊 Performance
 
 ### Objectifs
+
 - Lighthouse Performance > 90
 - Bundle JS critique < 100kb
 - Images optimisées (AVIF/WebP)

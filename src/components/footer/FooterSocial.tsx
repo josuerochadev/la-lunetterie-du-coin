@@ -1,10 +1,13 @@
-import Facebook from 'lucide-react/dist/esm/icons/facebook';
-import Instagram from 'lucide-react/dist/esm/icons/instagram';
-
+import { socialIconRegistry } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS } from '@/config/footer';
 
 /**
  * FooterSocial - Liens réseaux sociaux du footer
+ *
+ * Utilise socialIconRegistry pour résoudre les icônes dynamiquement
+ * à partir des noms définis dans FOOTER_SOCIALS.
+ *
+ * @component
  */
 export default function FooterSocial() {
   return (
@@ -12,7 +15,7 @@ export default function FooterSocial() {
       <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">Suivez-nous</h3>
       <div className="flex gap-4">
         {FOOTER_SOCIALS.map((social) => {
-          const IconComponent = social.icon === 'facebook' ? Facebook : Instagram;
+          const Icon = socialIconRegistry[social.iconName];
           return (
             <a
               key={social.href}
@@ -22,7 +25,7 @@ export default function FooterSocial() {
               rel="noopener noreferrer"
               aria-label={social.label}
             >
-              <IconComponent className="h-5 w-5" aria-hidden="true" />
+              <Icon className="h-5 w-5" aria-hidden="true" />
             </a>
           );
         })}
