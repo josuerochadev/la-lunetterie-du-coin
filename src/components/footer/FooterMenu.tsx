@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 import SectionContainer from '../common/SectionContainer';
 
-import { socialIconRegistry } from '@/lib/iconRegistry';
+import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS, FOOTER_LINKS } from '@/config/footer';
 import { STORE_INFO } from '@/config/store';
 
@@ -12,6 +12,8 @@ type FooterMenuProps = {
 
 /**
  * FooterMenu - Variante compacte du footer pour le menu mobile
+ *
+ * Utilise getSocialIcon pour gérer automatiquement les icônes manquantes avec un fallback.
  */
 export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
   return (
@@ -49,7 +51,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
         >
           <div className="flex space-x-4" aria-label="Réseaux sociaux">
             {FOOTER_SOCIALS.map((social) => {
-              const Icon = socialIconRegistry[social.iconName];
+              const Icon = getSocialIcon(social.iconName);
               return (
                 <a
                   key={social.href}

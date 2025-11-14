@@ -1,11 +1,12 @@
-import { socialIconRegistry } from '@/lib/iconRegistry';
+import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS } from '@/config/footer';
 
 /**
  * FooterSocial - Liens réseaux sociaux du footer
  *
- * Utilise socialIconRegistry pour résoudre les icônes dynamiquement
+ * Utilise getSocialIcon pour résoudre les icônes dynamiquement
  * à partir des noms définis dans FOOTER_SOCIALS.
+ * Gère automatiquement les icônes manquantes avec un fallback.
  *
  * @component
  */
@@ -15,7 +16,7 @@ export default function FooterSocial() {
       <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">Suivez-nous</h3>
       <div className="flex gap-4">
         {FOOTER_SOCIALS.map((social) => {
-          const Icon = socialIconRegistry[social.iconName];
+          const Icon = getSocialIcon(social.iconName);
           return (
             <a
               key={social.href}
