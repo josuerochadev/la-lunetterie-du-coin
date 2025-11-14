@@ -73,13 +73,14 @@ Ce dossier contient tous les audits de qualité du code effectués sur le projet
 
 - **[audit-architecture-organisation.md](./audit-architecture-organisation.md)** - Analyse détaillée de l'architecture et de l'organisation du projet
 
-**Score Architecture**: **82/100** ✅
+**Score Architecture**: **82/100 → 87/100** (+5 points) ✅
 
-### Refactorings Appliqués (Phase 1 & 2)
+### Refactorings Appliqués (Phase 1, 2 & 3)
 
 - **[refactoring-constants-phase1.md](./refactoring-constants-phase1.md)** - Split de constants.ts en 6 fichiers focalisés
 - **[refactoring-servicecard-phase1.md](./refactoring-servicecard-phase1.md)** - Séparation ServiceCard en composants spécialisés
 - **[refactoring-architecture-phase2.md](./refactoring-architecture-phase2.md)** - Data layer pure + Sections AboutPage
+- **[refactoring-architecture-phase3.md](./refactoring-architecture-phase3.md)** - Réorganisation du dossier `sections/` par page
 
 ### Points Forts
 
@@ -90,13 +91,16 @@ Ce dossier contient tous les audits de qualité du code effectués sur le projet
 - ✅ Pas de sur-ingénierie (utilise React built-ins efficacement)
 - ✅ **Phase 1 complétée** - constants.ts split + ServiceCard séparé
 - ✅ **Phase 2 complétée** - Data layer pure + AboutPage modulaire
+- ✅ **Phase 3 complétée** - Organisation sections/ cohérente par page
 
-### Améliorations Réalisées (Phase 1 & 2)
+### Améliorations Réalisées (Phase 1, 2 & 3)
 
 - ✅ ~~Composant `ServiceCard` trop générique~~ → 2 composants spécifiques créés
 - ✅ ~~Fichier `constants.ts` trop volumineux~~ → Split en 6 fichiers focalisés
 - ✅ ~~Imports d'icônes dans data/about.ts~~ → Data layer maintenant pure
 - ✅ ~~AboutPage monolithique~~ → 6 sections réutilisables créées
+- ✅ ~~Inconsistances entre pages et sections~~ → Structure cohérente `sections/home/`, `sections/about/`, `sections/shared/`
+- ✅ ~~Ambiguïté du dossier sections/~~ → Convention de nommage établie (`HomeHero`, `AboutHero`, etc.)
 
 ---
 
@@ -172,6 +176,7 @@ Consultez chaque fichier d'audit pour voir les recommandations spécifiques non 
 - **26 octobre 2025**: Audits SRP, SOLID et Lisibilité
 - **26 octobre 2025**: Organisation des audits dans `docs/audits/`
 - **10 novembre 2025**: Audit Architecture & Organisation
+- **10 novembre 2025**: Architecture Phase 3 - Réorganisation du dossier `sections/`
 
 ---
 

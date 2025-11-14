@@ -1,12 +1,12 @@
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
-import Hero from '@/sections/Hero';
-import OurStory from '@/sections/OurStory';
-import ServicesMinimal from '@/sections/ServicesMinimal';
-import EngagementEcologique from '@/sections/EngagementEcologique';
-import OffersEditorial from '@/sections/OffersEditorial';
-import Testimonials from '@/sections/Testimonials';
-import ContactEnhanced from '@/sections/ContactEnhanced';
+import HomeHero from '@/sections/home/HomeHero';
+import HomeStory from '@/sections/home/HomeStory';
+import HomeServices from '@/sections/home/HomeServices';
+import HomeEngagement from '@/sections/home/HomeEngagement';
+import HomeOffers from '@/sections/home/HomeOffers';
+import HomeTestimonials from '@/sections/home/HomeTestimonials';
+import HomeContact from '@/sections/home/HomeContact';
 import CursorFollower from '@/components/common/CursorFollower';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
@@ -27,26 +27,26 @@ export default function HomePage() {
         <Layout>
           {/* Hero avec effet parallax - reste sticky pendant que les autres scrollent par-dessus */}
           <StickySection zIndex={11} enableSticky={true}>
-            <Hero />
+            <HomeHero />
           </StickySection>
           {/* Toutes les autres sections scrollent normalement avec z-index croissant */}
           <StickySection zIndex={12}>
-            <OurStory />
+            <HomeStory />
           </StickySection>
           <StickySection zIndex={13}>
-            <ServicesMinimal />
+            <HomeServices />
           </StickySection>
           <StickySection zIndex={14}>
-            <OffersEditorial />
+            <HomeOffers />
           </StickySection>
           <StickySection zIndex={15}>
-            <EngagementEcologique />
+            <HomeEngagement />
           </StickySection>
           <StickySection zIndex={16}>
-            <Testimonials />
+            <HomeTestimonials />
           </StickySection>
           <StickySection zIndex={17}>
-            <ContactEnhanced />
+            <HomeContact />
           </StickySection>
         </Layout>
       </div>

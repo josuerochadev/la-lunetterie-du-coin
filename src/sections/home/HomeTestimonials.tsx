@@ -6,9 +6,9 @@ import { RatingStars } from '@/components/common/RatingStars';
 import { TESTIMONIALS } from '@/data/testimonials';
 
 /**
- * Section Témoignages - Design éditorial Kinfolk
+ * Section HomeTestimonials - Section Témoignages de la page d'accueil
  *
- * Affiche les vrais avis clients Google Reviews dans un style minimaliste :
+ * Design éditorial Kinfolk affichant les vrais avis clients Google Reviews :
  * - Layout 2 colonnes pour plus d'espace
  * - Pas de bordures ni ombres, design flat
  * - Guillemets typographiques au lieu d'icône
@@ -23,7 +23,7 @@ import { TESTIMONIALS } from '@/data/testimonials';
  * @component
  * @returns {JSX.Element} La section Témoignages en style éditorial
  */
-const Testimonials = forwardRef<HTMLElement>(() => {
+const HomeTestimonials = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="testimonials"
@@ -104,6 +104,6 @@ const Testimonials = forwardRef<HTMLElement>(() => {
   );
 });
 
-Testimonials.displayName = 'Testimonials';
+HomeTestimonials.displayName = 'HomeTestimonials';
 
-export default Testimonials;
+export default HomeTestimonials;

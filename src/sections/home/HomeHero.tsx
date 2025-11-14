@@ -4,7 +4,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 
 /**
- * Composant Hero.
+ * Composant HomeHero - Hero de la page d'accueil.
  *
  * Design éditorial immersif avec :
  * - Deux images 50/50 en fond pleine hauteur
@@ -18,11 +18,11 @@ import ResponsiveImage from '@/components/common/ResponsiveImage';
  * @param {React.Ref<HTMLElement>} ref - Référence transmise à la section principale.
  *
  * @example
- * <Hero ref={myRef} />
+ * <HomeHero ref={myRef} />
  *
  * @returns {JSX.Element} La section Hero éditoriale immersive.
  */
-const Hero = forwardRef<HTMLElement>((props, ref) => {
+const HomeHero = forwardRef<HTMLElement>((props, ref) => {
   return (
     <section
       ref={ref}
@@ -87,4 +87,6 @@ const Hero = forwardRef<HTMLElement>((props, ref) => {
   );
 });
 
-export default Hero;
+HomeHero.displayName = 'HomeHero';
+
+export default HomeHero;

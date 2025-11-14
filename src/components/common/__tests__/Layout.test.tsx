@@ -13,7 +13,7 @@ vi.mock('../../navbar/Navbar', () => ({
   default: () => <nav data-testid="navbar">Navigation</nav>,
 }));
 
-vi.mock('../../../sections/Footer', () => ({
+vi.mock('../../../sections/shared/Footer', () => ({
   default: () => <footer data-testid="footer">Footer content</footer>,
 }));
 

@@ -4,10 +4,10 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
- * Section Engagement Écologique - Design éditorial Kinfolk
+ * Section HomeEngagement - Section Engagement Écologique de la page d'accueil
  *
- * Image de fond pleine hauteur avec texte superposé en bas.
- * Style cohérent avec OurStory :
+ * Design éditorial Kinfolk avec image de fond pleine hauteur et texte superposé.
+ * Style cohérent avec HomeStory :
  * - Image pleine largeur (min-h-screen, max-h-[120vh])
  * - Boîte crème en bas avec contenu
  * - Tagline, titre, statistiques et CTA
@@ -15,7 +15,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * @component
  * @returns {JSX.Element} La section Engagement Écologique avec image de fond
  */
-const EngagementEcologique = forwardRef<HTMLElement>(() => {
+const HomeEngagement = forwardRef<HTMLElement>(() => {
   const stats = [
     { number: '2016', label: 'Année de création' },
     { number: '70€', label: 'Réduction max' },
@@ -97,4 +97,6 @@ const EngagementEcologique = forwardRef<HTMLElement>(() => {
   );
 });
 
-export default EngagementEcologique;
+HomeEngagement.displayName = 'HomeEngagement';
+
+export default HomeEngagement;

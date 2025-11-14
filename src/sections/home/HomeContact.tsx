@@ -4,19 +4,19 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
- * Section Contact - Homepage CTA
+ * Section HomeContact - Section Contact CTA de la page d'accueil
  *
  * Section simplifiée sur la homepage avec :
  * - Titre "Nous contacter"
  * - Phrase d'accroche
- * - Bouton CTA bordered (Option A) pointant vers /contact
+ * - Bouton CTA bordered pointant vers /contact
  *
  * Style éditorial minimal cohérent avec les autres sections
  *
  * @component
  * @returns {JSX.Element} La section Contact CTA
  */
-const ContactEnhanced = forwardRef<HTMLElement>(() => {
+const HomeContact = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="contact"
@@ -57,6 +57,6 @@ const ContactEnhanced = forwardRef<HTMLElement>(() => {
   );
 });
 
-ContactEnhanced.displayName = 'ContactEnhanced';
+HomeContact.displayName = 'HomeContact';
 
-export default ContactEnhanced;
+export default HomeContact;

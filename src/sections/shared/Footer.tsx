@@ -1,13 +1,13 @@
 import type { ComponentPropsWithoutRef } from 'react';
 import { clsx } from 'clsx';
 
-import SectionContainer from '../components/common/SectionContainer';
-import FooterLogo from '../components/footer/FooterLogo';
-import FooterNavigation from '../components/footer/FooterNavigation';
-import FooterContact from '../components/footer/FooterContact';
-import FooterSocial from '../components/footer/FooterSocial';
-import FooterBottom from '../components/footer/FooterBottom';
-import FooterMenu from '../components/footer/FooterMenu';
+import SectionContainer from '@/components/common/SectionContainer';
+import FooterLogo from '@/components/footer/FooterLogo';
+import FooterNavigation from '@/components/footer/FooterNavigation';
+import FooterContact from '@/components/footer/FooterContact';
+import FooterSocial from '@/components/footer/FooterSocial';
+import FooterBottom from '@/components/footer/FooterBottom';
+import FooterMenu from '@/components/footer/FooterMenu';
 
 type FooterProps = ComponentPropsWithoutRef<'footer'> & {
   variant?: 'default' | 'menu';
