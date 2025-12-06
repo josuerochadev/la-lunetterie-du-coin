@@ -32,8 +32,8 @@ importers:
         specifier: ^12.23.24
         version: 12.23.24(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       lucide-react:
-        specifier: ^0.541.0
-        version: 0.541.0(react@19.1.1)
+        specifier: ^0.556.0
+        version: 0.556.0(react@19.1.1)
       react:
         specifier: ^19.1.1
         version: 19.1.1
@@ -2078,8 +2078,8 @@ packages:
     engines: {node: '>=12.13.0'}
     hasBin: true
 
-  chromedriver@142.0.2:
-    resolution: {integrity: sha512-FmItmTE56bg2DVSbAC4SEuSzaOpqM7Mv3Kfha+EC7ecT67r4xHZErp+apESfOXkFeo7ry8Z7SG4KWaETFWxMNQ==}
+  chromedriver@143.0.0:
+    resolution: {integrity: sha512-zsDjk9nLeQsMcnFXP4huqCOqneIdox3ECIR4laBOH7sog1+K2rTgrK60ogSeYaHUnx9OTAMFkwJL29ekVgVQgw==}
     engines: {node: '>=20'}
     hasBin: true
 
@@ -3531,8 +3531,8 @@ packages:
     resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
 
-  lucide-react@0.541.0:
-    resolution: {integrity: sha512-s0Vircsu5WaGv2KoJZ5+SoxiAJ3UXV5KqEM3eIFDHaHkcLIFdIWgXtZ412+Gh02UsdS7Was+jvEpBvPCWQISlg==}
+  lucide-react@0.556.0:
+    resolution: {integrity: sha512-iOb8dRk7kLaYBZhR2VlV1CeJGxChBgUthpSP8wom9jfj79qovgG6qcSdiy6vkoREKPnbUYzJsCn4o4PtG3Iy+A==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
 
@@ -4653,6 +4653,9 @@ packages:
   third-party-web@0.27.0:
     resolution: {integrity: sha512-h0JYX+dO2Zr3abCQpS6/uFjujaOjA1DyDzGQ41+oFn9VW/ARiq9g5ln7qEP9+BTzDpOMyIfsfj4OvfgXAsMUSA==}
 
+  third-party-web@0.29.0:
+    resolution: {integrity: sha512-nBDSJw5B7Sl1YfsATG2XkW5qgUPODbJhXw++BKygi9w6O/NKS98/uY/nR/DxDq2axEjL6halHW1v+jhm/j1DBQ==}
+
   through@2.3.8:
     resolution: {integrity: sha512-w89qg7PI8wAdvX60bMDP+bFoD5Dvhm9oLheFp5O4a2QF0cSBGsBX4qZmadPMvVqlLJBBci+WqGGOAPvcDeNSVg==}
 
@@ -5116,7 +5119,7 @@ snapshots:
     dependencies:
       '@axe-core/webdriverjs': 4.11.0(selenium-webdriver@4.35.0)
       axe-core: 4.11.0
-      chromedriver: 142.0.2
+      chromedriver: 143.0.0
       colors: 1.4.0
       commander: 9.5.0
       dotenv: 17.2.3
@@ -6075,12 +6078,12 @@ snapshots:
   '@paulirish/trace_engine@0.0.53':
     dependencies:
       legacy-javascript: 0.0.1
-      third-party-web: 0.27.0
+      third-party-web: 0.29.0
 
   '@paulirish/trace_engine@0.0.59':
     dependencies:
       legacy-javascript: 0.0.1
-      third-party-web: 0.27.0
+      third-party-web: 0.29.0
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
@@ -7121,7 +7124,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  chromedriver@142.0.2:
+  chromedriver@143.0.0:
     dependencies:
       '@testim/chrome-version': 1.1.4
       axios: 1.13.2(debug@4.4.3)
@@ -8072,7 +8075,7 @@ snapshots:
     dependencies:
       basic-ftp: 5.0.5
       data-uri-to-buffer: 6.0.2
-      debug: 4.4.1
+      debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
 
@@ -8824,7 +8827,7 @@ snapshots:
 
   lru-cache@7.18.3: {}
 
-  lucide-react@0.541.0(react@19.1.1):
+  lucide-react@0.556.0(react@19.1.1):
     dependencies:
       react: 19.1.1
 
@@ -10021,6 +10024,8 @@ snapshots:
   third-party-web@0.26.7: {}
 
   third-party-web@0.27.0: {}
+
+  third-party-web@0.29.0: {}
 
   through@2.3.8: {}
 
