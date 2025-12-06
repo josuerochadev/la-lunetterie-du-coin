@@ -2,10 +2,10 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import Layout from '@/components/common/Layout';
 import SectionContainer from '@/components/common/SectionContainer';
 import ContactForm from '@/components/contact/ContactForm';
-import ContactHero from '@/components/contact/ContactHero';
-import ContactInfo from '@/components/contact/ContactInfo';
-import ContactAppointment from '@/components/contact/ContactAppointment';
-import ContactLocation from '@/components/contact/ContactLocation';
+import ContactHero from '@/sections/contact/ContactHero';
+import ContactInfo from '@/sections/contact/ContactInfo';
+import ContactAppointment from '@/sections/contact/ContactAppointment';
+import ContactLocation from '@/sections/contact/ContactLocation';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-import { FOOTER_LINKS } from '@/config/constants';
+import { FOOTER_LINKS } from '@/config/footer';
 
 type FooterBottomProps = {
   onLinkClick?: () => void;

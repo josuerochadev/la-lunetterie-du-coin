@@ -1,57 +1,43 @@
 import { ReactNode } from 'react';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import type { ServiceData } from '@/data/services';
 
 /**
- * Type pour un service ou une offre
+ * Props du composant ServiceEditorialCard
  */
-export interface ServiceCardData {
-  id: string;
-  title: string;
-  image: string;
-  description: string;
-  details: string[];
-  catchphrase?: string; // Pour les offres
-  conditions?: string[]; // Pour les offres
-}
-
-/**
- * Props du composant ServiceCard
- */
-interface ServiceCardProps {
-  /** Données du service/offre */
-  service: ServiceCardData;
+interface ServiceEditorialCardProps {
+  /** Données du service */
+  service: ServiceData;
   /** Position de l'image : 'left' ou 'right' */
   imagePosition: 'left' | 'right';
   /** Index pour l'animation (delay) */
   index?: number;
-  /** Contenu additionnel à afficher après les détails (conditions, CTA, etc.) */
+  /** Contenu additionnel à afficher après les détails (CTA, etc.) */
   additionalContent?: ReactNode;
 }
 
 /**
- * Composant ServiceCard - Affichage éditorial 50/50 avec image et texte
+ * Composant ServiceEditorialCard - Affichage éditorial 50/50 pour les services
  *
  * Layout alterné automatiquement selon imagePosition:
  * - 'left': Image à gauche, texte à droite
  * - 'right': Texte à gauche, image à droite
  *
- * Principe KISS: Un seul composant pour gérer les deux layouts
- *
  * @component
  * @example
- * <ServiceCard
+ * <ServiceEditorialCard
  *   service={serviceData}
  *   imagePosition="left"
  *   index={0}
  * />
  */
-export function ServiceCard({
+export function ServiceEditorialCard({
   service,
   imagePosition,
   index = 0,
   additionalContent,
-}: ServiceCardProps) {
+}: ServiceEditorialCardProps) {
   const isImageLeft = imagePosition === 'left';
 
   // Composant Image réutilisable
@@ -75,13 +61,6 @@ export function ServiceCard({
         {/* Titre */}
         <h2 className="heading-section">{service.title}</h2>
 
-        {/* Phrase d'accroche (optionnelle - pour les offres) */}
-        {service.catchphrase && (
-          <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-            {service.catchphrase}
-          </p>
-        )}
-
         {/* Description */}
         <p className="text-body-lg leading-relaxed text-text">{service.description}</p>
 
@@ -98,23 +77,6 @@ export function ServiceCard({
             ))}
           </ul>
         </div>
-
-        {/* Conditions (optionnelles - pour les offres) */}
-        {service.conditions && (
-          <div
-            className={`${isImageLeft ? 'border-l-4' : 'border-r-4'} border-accent/30 bg-accent/5 p-6 ${isImageLeft ? '' : 'text-left'}`}
-          >
-            <h4 className="mb-3 text-body font-medium text-text">Conditions :</h4>
-            <ul className="space-y-2 text-body-sm text-stone">
-              {service.conditions.map((condition, i) => (
-                <li key={i} className="flex gap-2">
-                  <span>•</span>
-                  <span>{condition}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
 
         {/* Contenu additionnel (CTA, etc.) */}
         {additionalContent && (

@@ -6,9 +6,9 @@ import { OfferImage } from '@/components/offers/OfferImage';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
- * Section Offres - Design éditorial Kinfolk
+ * Section HomeOffers - Section Offres de la page d'accueil
  *
- * Layout alterné 50/50 pour chaque offre :
+ * Design éditorial Kinfolk avec layout alterné 50/50 pour chaque offre :
  * - Image portrait (2:3) à gauche/droite alternant - grande taille
  * - Contenu texte centré verticalement à côté
  * - Design minimaliste sans bordures ni ombres
@@ -22,7 +22,7 @@ import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
  * @component
  * @returns {JSX.Element} La section Offres en layout éditorial minimaliste
  */
-const OffersEditorial = forwardRef<HTMLElement>(() => {
+const HomeOffers = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="offers"
@@ -101,6 +101,6 @@ const OffersEditorial = forwardRef<HTMLElement>(() => {
   );
 });
 
-OffersEditorial.displayName = 'OffersEditorial';
+HomeOffers.displayName = 'HomeOffers';
 
-export default OffersEditorial;
+export default HomeOffers;

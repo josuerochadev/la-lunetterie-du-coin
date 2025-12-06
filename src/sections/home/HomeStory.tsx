@@ -3,7 +3,7 @@ import { forwardRef } from 'react';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
- * Section "Notre Histoire"
+ * Section HomeStory - Section "Notre Histoire" de la page d'accueil
  *
  * Design éditorial Kinfolk :
  * - Image de fond pleine hauteur (60-70% de la section)
@@ -13,11 +13,15 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * @component
  * @returns {JSX.Element} La section Notre Histoire avec image pleine et texte en bas
  */
-const OurStory = forwardRef<HTMLElement>(() => {
+const HomeStory = forwardRef<HTMLElement>(() => {
   return (
-    <section id="story" className="relative w-full bg-background" aria-labelledby="story-title">
+    <section
+      id="story"
+      className="relative w-full overflow-hidden bg-background"
+      aria-labelledby="story-title"
+    >
       {/* Image pleine largeur à hauteur naturelle */}
-      <div className="relative w-full">
+      <div className="relative min-h-screen w-full bg-background">
         <SimpleAnimation type="fade" delay={0} immediate={true}>
           <img
             src="/images/our-story-eyeglasses.jpg"
@@ -40,8 +44,8 @@ const OurStory = forwardRef<HTMLElement>(() => {
               </h2>
 
               <p className="text-body-lg leading-relaxed text-text">
-                Romain Corato a ouvert La Lunetterie du Coin avec une conviction : proposer des
-                lunettes de qualité tout en donnant une seconde vie aux montures.
+                Romain a ouvert La Lunetterie du Coin avec une conviction : proposer des lunettes de
+                qualité tout en donnant une seconde vie aux montures.
               </p>
 
               <p className="text-body leading-relaxed text-stone">
@@ -65,4 +69,6 @@ const OurStory = forwardRef<HTMLElement>(() => {
   );
 });
 
-export default OurStory;
+HomeStory.displayName = 'HomeStory';
+
+export default HomeStory;

@@ -5,9 +5,9 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
- * Section Services - Design éditorial Kinfolk
+ * Section HomeServices - Section Services de la page d'accueil
  *
- * 4 services en cards verticales avec images :
+ * Design éditorial Kinfolk avec 4 services en cards verticales :
  * - Lunettes neuves
  * - Lunettes d'occasion
  * - Examens de vue
@@ -22,7 +22,7 @@ import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
  * @component
  * @returns {JSX.Element} La section Services avec cards verticales
  */
-const ServicesMinimal = forwardRef<HTMLElement>(() => {
+const HomeServices = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="services"
@@ -102,4 +102,6 @@ const ServicesMinimal = forwardRef<HTMLElement>(() => {
   );
 });
 
-export default ServicesMinimal;
+HomeServices.displayName = 'HomeServices';
+
+export default HomeServices;

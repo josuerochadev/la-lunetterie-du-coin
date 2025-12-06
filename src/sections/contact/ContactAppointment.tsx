@@ -1,6 +1,6 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
-import { CALENDLY_URL } from '@/config/constants';
+import { CALENDLY_URL } from '@/config/endpoints';
 
 /**
  * ContactAppointment - Section prise de rendez-vous Calendly

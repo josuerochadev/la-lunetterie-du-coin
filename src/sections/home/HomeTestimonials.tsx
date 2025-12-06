@@ -1,14 +1,14 @@
 import { forwardRef } from 'react';
-import Star from 'lucide-react/dist/esm/icons/star';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import { TESTIMONIALS } from '@/config/constants';
+import { RatingStars } from '@/components/common/RatingStars';
+import { TESTIMONIALS } from '@/data/testimonials';
 
 /**
- * Section Témoignages - Design éditorial Kinfolk
+ * Section HomeTestimonials - Section Témoignages de la page d'accueil
  *
- * Affiche les vrais avis clients Google Reviews dans un style minimaliste :
+ * Design éditorial Kinfolk affichant les vrais avis clients Google Reviews :
  * - Layout 2 colonnes pour plus d'espace
  * - Pas de bordures ni ombres, design flat
  * - Guillemets typographiques au lieu d'icône
@@ -23,7 +23,7 @@ import { TESTIMONIALS } from '@/config/constants';
  * @component
  * @returns {JSX.Element} La section Témoignages en style éditorial
  */
-const Testimonials = forwardRef<HTMLElement>(() => {
+const HomeTestimonials = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="testimonials"
@@ -52,15 +52,7 @@ const Testimonials = forwardRef<HTMLElement>(() => {
             <SimpleAnimation key={testimonial.id} type="fade" delay={index * 100}>
               <article className="border-t border-stone/20 pt-8">
                 {/* Étoiles en haut */}
-                <div
-                  className="mb-6 flex gap-1"
-                  role="img"
-                  aria-label={`Note: ${testimonial.rating} sur 5`}
-                >
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-accent text-accent" aria-hidden="true" />
-                  ))}
-                </div>
+                <RatingStars rating={testimonial.rating} className="mb-6" />
 
                 {/* Citation avec guillemets typographiques */}
                 <blockquote className="mb-6">
@@ -112,6 +104,6 @@ const Testimonials = forwardRef<HTMLElement>(() => {
   );
 });
 
-Testimonials.displayName = 'Testimonials';
+HomeTestimonials.displayName = 'HomeTestimonials';
 
-export default Testimonials;
+export default HomeTestimonials;

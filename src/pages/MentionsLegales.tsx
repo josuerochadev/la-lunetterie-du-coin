@@ -16,7 +16,7 @@ import {
   MEDIATOR_NAME,
   MEDIATOR_URL,
   MEDIATOR_ADDRESS,
-} from '@/config/constants';
+} from '@/config/legal';
 
 export default function MentionsLegales() {
   return (

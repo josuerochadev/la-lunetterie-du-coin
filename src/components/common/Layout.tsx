@@ -1,8 +1,8 @@
 import type React from 'react';
 
 import Navbar from '../navbar/Navbar';
-import Footer from '../../sections/Footer';
 
+import Footer from '@/sections/shared/Footer';
 import SkipLink from '@/components/common/SkipLink';
 import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import Facebook from 'lucide-react/dist/esm/icons/facebook';
-import Instagram from 'lucide-react/dist/esm/icons/instagram';
 
 import SectionContainer from '../common/SectionContainer';
 
-import { FOOTER_SOCIALS, FOOTER_LINKS, STORE_INFO } from '@/config/constants';
+import { getSocialIcon } from '@/lib/iconRegistry';
+import { FOOTER_SOCIALS, FOOTER_LINKS } from '@/config/footer';
+import { STORE_INFO } from '@/config/store';
 
 type FooterMenuProps = {
   onLinkClick?: () => void;
@@ -12,6 +12,8 @@ type FooterMenuProps = {
 
 /**
  * FooterMenu - Variante compacte du footer pour le menu mobile
+ *
+ * Utilise getSocialIcon pour gérer automatiquement les icônes manquantes avec un fallback.
  */
 export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
   return (
@@ -49,7 +51,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
         >
           <div className="flex space-x-4" aria-label="Réseaux sociaux">
             {FOOTER_SOCIALS.map((social) => {
-              const IconComponent = social.icon === 'facebook' ? Facebook : Instagram;
+              const Icon = getSocialIcon(social.iconName);
               return (
                 <a
                   key={social.href}
@@ -59,7 +61,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
                   rel="noopener noreferrer"
                   aria-label={social.label}
                 >
-                  <IconComponent width={20} height={20} aria-hidden="true" />
+                  <Icon width={20} height={20} aria-hidden="true" />
                   <span className="sr-only">{social.label}</span>
                 </a>
               );
