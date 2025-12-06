@@ -25,11 +25,11 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="engagement"
-      className="relative w-full bg-background"
+      className="relative w-full overflow-hidden bg-background"
       aria-labelledby="engagement-title"
     >
       {/* Image pleine largeur à hauteur contrôlée */}
-      <div className="relative w-full">
+      <div className="relative min-h-screen w-full bg-background">
         <SimpleAnimation type="fade" delay={0} immediate={true}>
           <img
             src="/images/homepage-engagement-eyeglasses.jpg"

@@ -40,8 +40,8 @@ export default function AboutHistory() {
               </h2>
 
               <p className="text-body-lg leading-relaxed text-text">
-                Romain Corato ouvre La Lunetterie du Coin avec une conviction forte : proposer des
-                lunettes de qualité tout en respectant la planète.
+                Romain ouvre La Lunetterie du Coin avec une conviction forte : proposer des lunettes
+                de qualité tout en respectant la planète.
               </p>
 
               <p className="text-body leading-relaxed text-stone">

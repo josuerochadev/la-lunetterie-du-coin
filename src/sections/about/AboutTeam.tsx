@@ -19,7 +19,7 @@ export default function AboutTeam() {
               <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
                 L'opticien fondateur
               </span>
-              <h2 className="heading-section">Romain Corato</h2>
+              <h2 className="heading-section">Romain</h2>
             </div>
           </SimpleAnimation>
 

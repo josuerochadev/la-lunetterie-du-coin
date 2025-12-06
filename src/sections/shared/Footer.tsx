@@ -55,12 +55,12 @@ export default function Footer({
       {...rest}
       className={clsx('relative z-10 w-full bg-primary text-accent', className)}
     >
-      <SectionContainer className="py-10">
+      <SectionContainer className="px-container-x py-12 lg:py-16">
         {/* En-tête */}
         <FooterLogo />
 
         {/* Grille 3 colonnes avec largeurs adaptées au contenu */}
-        <div className="mx-auto flex max-w-7xl flex-col gap-10 lg:flex-row lg:justify-between lg:gap-16">
+        <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">
           <FooterNavigation onLinkClick={onLinkClick} />
           <FooterContact />
           <FooterSocial />

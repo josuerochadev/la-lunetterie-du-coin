@@ -23,16 +23,24 @@ export default function ScrollToTopButton() {
 
   useEffect(() => {
     const toggleVisibility = () => {
-      if (window.scrollY > 400) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+
+      // Masquer si trop haut OU si proche du bas (footer visible)
+      const isNearBottom = scrollY + windowHeight > documentHeight - 150;
+      const isScrolledEnough = scrollY > 400;
+
+      setIsVisible(isScrolledEnough && !isNearBottom);
     };
 
     window.addEventListener('scroll', toggleVisibility);
+    window.addEventListener('resize', toggleVisibility);
 
-    return () => window.removeEventListener('scroll', toggleVisibility);
+    return () => {
+      window.removeEventListener('scroll', toggleVisibility);
+      window.removeEventListener('resize', toggleVisibility);
+    };
   }, []);
 
   const scrollToTop = () => {
