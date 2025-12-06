@@ -54,7 +54,7 @@ jobs:
         
       - name: 📊 Upload lint results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lint-results
           path: eslint-results.xml
@@ -110,7 +110,7 @@ jobs:
           
       - name: 📊 Upload test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: unit-test-results
           path: |
@@ -146,7 +146,7 @@ jobs:
         run: pnpm build
         
       - name: 📦 Upload build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dist-files
           path: dist/
@@ -211,7 +211,7 @@ jobs:
           
       - name: 📊 Upload security scan results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: security-results
           path: |
@@ -350,7 +350,7 @@ jobs:
         
       - name: 📊 Upload Lighthouse reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: lighthouse-reports
           path: lighthouse-results/
@@ -479,7 +479,7 @@ jobs:
         
       - name: 📊 Upload E2E test results
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: e2e-results-${{ matrix.browser }}
           path: |
@@ -526,7 +526,7 @@ jobs:
         
       - name: 📊 Upload accessibility reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: accessibility-results
           path: accessibility-results.json
@@ -587,7 +587,7 @@ jobs:
           fi
           
       - name: 📊 Upload final quality report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: quality-report
           path: quality-report.md
