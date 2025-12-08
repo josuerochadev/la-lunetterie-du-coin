@@ -244,7 +244,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         
       - name: 📥 Download coverage artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: unit-test-results
           path: ./
@@ -324,7 +324,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: dist-files
           path: dist/
@@ -466,7 +466,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: dist-files
           path: dist/
@@ -513,7 +513,7 @@ jobs:
         run: pnpm install --frozen-lockfile
         
       - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: dist-files
           path: dist/
@@ -561,7 +561,7 @@ jobs:
         run: pnpm test:coverage
           
       - name: 📥 Download all artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           path: quality-results/
           
@@ -621,7 +621,7 @@ jobs:
         uses: actions/checkout@v6
         
       - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: dist-files
           path: dist/
