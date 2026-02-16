@@ -43,7 +43,7 @@
     "deploy:check": "pnpm run typecheck && pnpm run lint && pnpm run test:run && pnpm run security:scan && pnpm run build"
   },
   "dependencies": {
-    "@dr.pogodin/react-helmet": "^3.0.4",
+    "@dr.pogodin/react-helmet": "^3.0.6",
     "@sentry/react": "^10.11.0",
     "@sentry/vite-plugin": "^4.3.0",
     "@vercel/analytics": "^1.5.0",
