@@ -25,12 +25,12 @@ export default function ContactInfo() {
           <div className="grid gap-8 md:grid-cols-2 md:gap-12">
             {/* Adresse */}
             <SimpleAnimation type="fade" delay={0}>
-              <div className="border-t border-stone/20 pt-6">
+              <div className="border-t border-black/10 pt-6">
                 <div className="mb-3 flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-accent" aria-hidden="true" />
                   <h3 className="heading-subsection">Adresse</h3>
                 </div>
-                <address className="mb-3 text-body not-italic leading-relaxed text-stone">
+                <address className="mb-3 text-body not-italic leading-relaxed text-black/50">
                   {COMPANY_ADDRESS}
                 </address>
                 <a
@@ -46,14 +46,14 @@ export default function ContactInfo() {
 
             {/* Téléphone */}
             <SimpleAnimation type="fade" delay={50}>
-              <div className="border-t border-stone/20 pt-6">
+              <div className="border-t border-black/10 pt-6">
                 <div className="mb-3 flex items-center gap-2">
                   <Phone className="h-5 w-5 text-accent" aria-hidden="true" />
                   <h3 className="heading-subsection">Téléphone</h3>
                 </div>
                 <a
                   href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                  className="text-body text-stone transition-colors hover:text-accent"
+                  className="text-body text-black/50 transition-colors hover:text-accent"
                 >
                   {COMPANY_PHONE}
                 </a>
@@ -62,14 +62,14 @@ export default function ContactInfo() {
 
             {/* Email */}
             <SimpleAnimation type="fade" delay={100}>
-              <div className="border-t border-stone/20 pt-6">
+              <div className="border-t border-black/10 pt-6">
                 <div className="mb-3 flex items-center gap-2">
                   <Mail className="h-5 w-5 text-accent" aria-hidden="true" />
                   <h3 className="heading-subsection">Email</h3>
                 </div>
                 <a
                   href={`mailto:${COMPANY_EMAIL}`}
-                  className="text-body text-stone transition-colors hover:text-accent"
+                  className="text-body text-black/50 transition-colors hover:text-accent"
                 >
                   {COMPANY_EMAIL}
                 </a>
@@ -78,7 +78,7 @@ export default function ContactInfo() {
 
             {/* Horaires */}
             <SimpleAnimation type="fade" delay={150}>
-              <div className="border-t border-stone/20 pt-6">
+              <div className="border-t border-black/10 pt-6">
                 <div className="mb-4 flex items-center gap-2">
                   <Clock className="h-5 w-5 text-accent" aria-hidden="true" />
                   <h3 className="heading-subsection">Horaires d'ouverture</h3>
@@ -87,7 +87,11 @@ export default function ContactInfo() {
                   {OPENING_HOURS.map((schedule) => (
                     <div key={schedule.day} className="flex justify-between text-body-sm">
                       <dt className="font-medium text-text">{schedule.day}</dt>
-                      <dd className={schedule.hours === 'Fermé' ? 'text-stone/60' : 'text-stone'}>
+                      <dd
+                        className={
+                          schedule.hours === 'Fermé' ? 'text-black/50/60' : 'text-black/50'
+                        }
+                      >
                         {schedule.hours}
                       </dd>
                     </div>

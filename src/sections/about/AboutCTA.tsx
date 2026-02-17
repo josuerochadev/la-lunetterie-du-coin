@@ -4,9 +4,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * Section CTA Finale de la page À propos
  *
  * Call-to-action avec liens vers Services et Contact.
- *
- * @component
- * @returns {JSX.Element} CTA section
  */
 export default function AboutCTA() {
   return (
@@ -18,23 +15,17 @@ export default function AboutCTA() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-body-lg text-stone">
+            <p className="mb-8 text-body-lg text-black/50">
               Découvrez nos services ou venez nous rencontrer en boutique
             </p>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={200}>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href="/services"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              >
+              <a href="/services" className="button-secondary px-6 py-3 text-body">
                 Découvrir nos services
               </a>
-              <a
-                href="/contact"
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
-              >
+              <a href="/contact" className="button-primary px-6 py-3 text-body">
                 Nous contacter
               </a>
             </div>

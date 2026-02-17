@@ -37,12 +37,12 @@ export default function ContactLocation() {
               {/* Informations d'accès */}
               <div className="space-y-8">
                 {/* En voiture */}
-                <div className="border-t border-stone/20 pt-6">
+                <div className="border-t border-black/10 pt-6">
                   <div className="mb-4 flex items-center gap-2">
                     <Car className="h-5 w-5 text-accent" aria-hidden="true" />
                     <h3 className="heading-subsection">En voiture</h3>
                   </div>
-                  <div className="space-y-2 text-body text-stone">
+                  <div className="space-y-2 text-body text-black/50">
                     <p>
                       <span className="font-medium text-text">Parking payant</span> : Parking Halles
                       et Opéra Broglie (environ 10 min à pied)
@@ -51,12 +51,12 @@ export default function ContactLocation() {
                 </div>
 
                 {/* En transports en commun */}
-                <div className="border-t border-stone/20 pt-6">
+                <div className="border-t border-black/10 pt-6">
                   <div className="mb-4 flex items-center gap-2">
                     <Train className="h-5 w-5 text-accent" aria-hidden="true" />
                     <h3 className="heading-subsection">En transports</h3>
                   </div>
-                  <div className="space-y-2 text-body text-stone">
+                  <div className="space-y-2 text-body text-black/50">
                     <p>
                       <span className="font-medium text-text">Tram B, C, F</span> : arrêt Broglie (7
                       min à pied)
@@ -78,8 +78,8 @@ export default function ContactLocation() {
                 </div>
 
                 {/* Accessibilité PMR */}
-                <div className="border-t border-stone/20 pt-6">
-                  <p className="text-body text-stone">
+                <div className="border-t border-black/10 pt-6">
+                  <p className="text-body text-black/50">
                     <span className="font-medium text-text">Accessibilité :</span> Le magasin est
                     accessible aux personnes à mobilité réduite
                   </p>
@@ -91,7 +91,7 @@ export default function ContactLocation() {
                     href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                    className="button-secondary px-6 py-3 text-body"
                   >
                     <MapPin className="h-5 w-5" aria-hidden="true" />
                     Voir sur Google Maps

@@ -40,7 +40,7 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">
+            <p className="text-body-lg text-black/50">
               Découvrez les avis authentiques de nos clients
             </p>
           </SimpleAnimation>
@@ -50,7 +50,7 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
         <div className="grid gap-12 md:grid-cols-2 lg:gap-16">
           {TESTIMONIALS.map((testimonial, index) => (
             <SimpleAnimation key={testimonial.id} type="fade" delay={index * 100}>
-              <article className="border-t border-stone/20 pt-8">
+              <article className="border-t border-black/10 pt-8">
                 {/* Étoiles en haut */}
                 <RatingStars rating={testimonial.rating} className="mb-6" />
 
@@ -63,7 +63,7 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
                 <footer>
                   <cite className="not-italic">
                     <div className="mb-1 text-body font-medium text-text">{testimonial.name}</div>
-                    <div className="flex items-center gap-2 text-body-sm text-stone">
+                    <div className="flex items-center gap-2 text-body-sm text-black/50">
                       <span>{testimonial.role}</span>
                       {testimonial.date && (
                         <>
@@ -82,7 +82,7 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
         {/* CTA avec lien Google Reviews */}
         <SimpleAnimation type="slide-up" delay={300}>
           <div className="mt-16 text-center">
-            <p className="mb-6 text-body text-stone">
+            <p className="mb-6 text-body text-black/50">
               Plus de 100 avis clients avec une note moyenne de 4.9/5
             </p>
             <a

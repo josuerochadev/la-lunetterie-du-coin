@@ -17,7 +17,7 @@ export default function ContactAppointment() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-center text-body-lg text-stone">
+            <p className="mb-8 text-center text-body-lg text-black/50">
               Réservez directement votre créneau pour un examen de vue, un essayage ou un simple
               conseil
             </p>

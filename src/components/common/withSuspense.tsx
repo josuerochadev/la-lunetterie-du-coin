@@ -40,7 +40,7 @@ type WithSuspenseOptions = {
  */
 const DEFAULT_FALLBACK = (
   <div className="flex min-h-screen items-center justify-center p-4">
-    <span className="text-body text-charcoal" aria-live="polite">
+    <span className="text-body text-black" aria-live="polite">
       Chargement…
     </span>
   </div>

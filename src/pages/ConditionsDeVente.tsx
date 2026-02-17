@@ -15,13 +15,13 @@ export default function ConditionsDeVente() {
             Fabrication et qualité
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-stone">
+          <div className="space-y-4 text-body leading-relaxed text-black/50">
             <p>
               Les lunettes sont manufacturées par nos spécialistes expérimentés et conçues à partir
               de matériaux nobles. Il est important de traiter vos lunettes avec délicatesse.
             </p>
 
-            <div className="border-t border-stone/20 pt-8">
+            <div className="border-t border-black/10 pt-8">
               <h3 className="heading-subsection mb-4">Services gratuits inclus</h3>
               <ul className="space-y-2">
                 <li>• Ajustages personnalisés</li>
@@ -44,22 +44,24 @@ export default function ConditionsDeVente() {
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
                 <p className="mb-2 text-title-sm font-medium text-text">0</p>
-                <p className="text-body-sm text-stone">
+                <p className="text-body-sm text-black/50">
                   droit de rétractation pour produits personnalisés
                 </p>
               </div>
               <div className="text-center">
                 <p className="mb-2 text-title-sm font-medium text-text">30</p>
-                <p className="text-body-sm text-stone">jours pour retours produits neufs</p>
+                <p className="text-body-sm text-black/50">jours pour retours produits neufs</p>
               </div>
               <div className="text-center">
                 <p className="mb-2 text-title-sm font-medium text-text">✗</p>
-                <p className="text-body-sm text-stone">montures personnalisées non retournables</p>
+                <p className="text-body-sm text-black/50">
+                  montures personnalisées non retournables
+                </p>
               </div>
             </div>
           </div>
 
-          <div className="space-y-4 text-body leading-relaxed text-stone">
+          <div className="space-y-4 text-body leading-relaxed text-black/50">
             <p>
               Il n'existe aucun droit de rétractation pour l'achat de produits personnalisés en
               boutique.
@@ -83,27 +85,27 @@ export default function ConditionsDeVente() {
             Changement de puissance des verres
           </h2>
 
-          <div className="space-y-6 text-body leading-relaxed text-stone">
+          <div className="space-y-6 text-body leading-relaxed text-black/50">
             <p>
               En cas de changement de puissance des verres dans les trente (30) jours suivant la
               livraison, des frais de montage s'appliquent pour l'ensemble de la commande.
             </p>
 
-            <div className="border-t border-stone/20 pt-8">
+            <div className="border-t border-black/10 pt-8">
               <h3 className="heading-subsection mb-6">Tarifs des frais de montage</h3>
               <div className="grid gap-8 md:grid-cols-2">
                 <div className="text-center">
                   <p className="mb-2 text-title-md font-medium text-accent">90€</p>
                   <p className="mb-1 font-medium text-text">Verres progressifs</p>
-                  <p className="text-body-sm text-stone">Frais de montage</p>
+                  <p className="text-body-sm text-black/50">Frais de montage</p>
                 </div>
                 <div className="text-center">
                   <p className="mb-2 text-title-md font-medium text-accent">45€</p>
                   <p className="mb-1 font-medium text-text">Verres unifocaux</p>
-                  <p className="text-body-sm text-stone">Frais de montage</p>
+                  <p className="text-body-sm text-black/50">Frais de montage</p>
                 </div>
               </div>
-              <p className="mt-6 text-center text-body-sm text-stone">
+              <p className="mt-6 text-center text-body-sm text-black/50">
                 Délai : 30 jours après livraison
               </p>
             </div>
@@ -117,7 +119,7 @@ export default function ConditionsDeVente() {
             Règlement par chèque et tiers payant
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-stone">
+          <div className="space-y-4 text-body leading-relaxed text-black/50">
             <p>
               <strong className="font-medium text-text">Règlement par chèque :</strong>
               <br />
@@ -138,7 +140,7 @@ export default function ConditionsDeVente() {
             Lentilles d'essai
           </h2>
 
-          <p className="text-body leading-relaxed text-stone">
+          <p className="text-body leading-relaxed text-black/50">
             Une participation aux frais de transport et logistique de <strong>7€</strong> est
             demandée pour toute commande de lentilles d'essai.
           </p>
@@ -161,7 +163,7 @@ export default function ConditionsDeVente() {
           <div className="space-y-12">
             <div>
               <h3 className="heading-subsection mb-4">01. Remise à la reprise</h3>
-              <div className="space-y-3 border-l-4 border-stone/30 pl-6 text-body leading-relaxed text-stone">
+              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body leading-relaxed text-black/50">
                 <p>
                   <strong className="text-text">Limitation :</strong> une monture par transaction
                 </p>
@@ -178,7 +180,7 @@ export default function ConditionsDeVente() {
 
             <div>
               <h3 className="heading-subsection mb-4">02. Seconde paire</h3>
-              <div className="space-y-3 border-l-4 border-stone/30 pl-6 text-body leading-relaxed text-stone">
+              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body leading-relaxed text-black/50">
                 <p>
                   <strong className="text-text">Tarification :</strong> valable sur la monture la
                   moins coûteuse

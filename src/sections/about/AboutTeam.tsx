@@ -16,7 +16,7 @@ export default function AboutTeam() {
         <div className="mx-auto max-w-6xl">
           <SimpleAnimation type="slide-up" delay={0}>
             <div className="mb-12 text-center">
-              <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
+              <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-black/50">
                 L'opticien fondateur
               </span>
               <h2 className="heading-section">Romain</h2>
@@ -35,7 +35,7 @@ export default function AboutTeam() {
                 />
               </div>
               <div className="space-y-6">
-                <p className="text-body leading-relaxed text-stone">
+                <p className="text-body leading-relaxed text-black/50">
                   Passionné par l'optique depuis plus de 15 ans, Romain a fondé La Lunetterie du
                   Coin en 2016 avec l'envie de proposer une alternative plus humaine et écologique.
                   Expert en verres progressifs et grands myopes, il prend le temps d'expliquer et de

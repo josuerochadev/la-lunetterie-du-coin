@@ -17,7 +17,7 @@ export default function AboutEngagement() {
         <div className="mx-auto max-w-6xl">
           <SimpleAnimation type="slide-up" delay={0}>
             <div className="mb-8 text-center">
-              <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
+              <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-black/50">
                 Notre engagement
               </span>
               <h2 className="heading-section">La mode change. La planète, non.</h2>
@@ -26,20 +26,20 @@ export default function AboutEngagement() {
 
           {/* Statistiques visuelles */}
           <SimpleAnimation type="slide-up" delay={100}>
-            <div className="mb-8 grid grid-cols-3 gap-4 border-y border-stone/20 py-6">
+            <div className="mb-8 grid grid-cols-3 gap-4 border-y border-black/10 py-6">
               {STATS_DATA.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="mb-1 text-title-sm font-bold text-accent sm:text-title-md">
                     {stat.number}
                   </div>
-                  <div className="text-body-xs text-stone sm:text-body-sm">{stat.label}</div>
+                  <div className="text-body-xs text-black/50 sm:text-body-sm">{stat.label}</div>
                 </div>
               ))}
             </div>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={150}>
-            <div className="space-y-6 text-body leading-relaxed text-stone">
+            <div className="space-y-6 text-body leading-relaxed text-black/50">
               <p className="text-text">
                 Depuis 2016, nous proposons une alternative durable au marché traditionnel de
                 l'optique. Nos montures d'occasion sont soigneusement restaurées, donnant une

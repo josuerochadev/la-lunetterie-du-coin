@@ -30,7 +30,7 @@ export default function ServicesContent() {
                     <h4 className="mb-3 text-body font-medium text-text">
                       Conditions pour réaliser un examen de vue en magasin :
                     </h4>
-                    <ul className="space-y-2 text-body-sm text-stone">
+                    <ul className="space-y-2 text-body-sm text-black/50">
                       <li className="flex gap-2">
                         <span>•</span>
                         <span>
@@ -60,7 +60,7 @@ export default function ServicesContent() {
                       href={CALENDLY_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                      className="button-primary px-6 py-3 text-body"
                       aria-label="Prendre rendez-vous"
                     >
                       Prendre rendez-vous

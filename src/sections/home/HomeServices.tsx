@@ -39,7 +39,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">{HOMEPAGE_SECTIONS.services.subtitle}</p>
+            <p className="text-body-lg text-black/50">{HOMEPAGE_SECTIONS.services.subtitle}</p>
           </SimpleAnimation>
         </div>
 
@@ -62,7 +62,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                     <div className="w-full space-y-3 bg-background px-4 py-6 sm:space-y-4 sm:px-6 sm:py-8">
                       <h3 className="heading-subsection">{service.title}</h3>
 
-                      <p className="text-body-sm leading-relaxed text-stone sm:text-body">
+                      <p className="text-body-sm leading-relaxed text-black/50 sm:text-body">
                         {service.description}
                       </p>
 
@@ -90,7 +90,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
           <SimpleAnimation type="slide-up" delay={400}>
             <a
               href={HOMEPAGE_SECTIONS.services.cta.link}
-              className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+              className="button-secondary px-6 py-3 text-body"
               aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
             >
               {HOMEPAGE_SECTIONS.services.cta.text}

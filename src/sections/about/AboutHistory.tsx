@@ -31,7 +31,7 @@ export default function AboutHistory() {
         <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
           <SimpleAnimation type="slide-up" delay={200}>
             <div className="w-full max-w-6xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
-              <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+              <span className="text-body-sm font-medium uppercase tracking-wider text-black/50">
                 Depuis 2016
               </span>
 
@@ -44,13 +44,13 @@ export default function AboutHistory() {
                 de qualité tout en respectant la planète.
               </p>
 
-              <p className="text-body leading-relaxed text-stone">
+              <p className="text-body leading-relaxed text-black/50">
                 Le concept ? Donner une seconde vie aux montures en les restaurant avec soin, tout
                 en proposant une sélection pointue de créateurs indépendants. Un modèle qui allie
                 style, accessibilité et conscience écologique.
               </p>
 
-              <p className="text-body leading-relaxed text-stone">
+              <p className="text-body leading-relaxed text-black/50">
                 Aujourd'hui, la boutique est devenue une référence à Strasbourg pour celles et ceux
                 qui cherchent des lunettes uniques, un service personnalisé et une démarche qui a du
                 sens.

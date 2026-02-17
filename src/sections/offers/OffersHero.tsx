@@ -18,7 +18,7 @@ export default function OffersHero() {
             <div className="space-y-6">
               <h1 className="heading-page">Nos offres</h1>
               <p
-                className="leading-relaxed text-stone"
+                className="leading-relaxed text-black/50"
                 style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
               >
                 Des solutions pensées pour votre budget et pour la planète

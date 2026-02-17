@@ -45,7 +45,9 @@ export default function LegalPageLayout({
                 <div className="space-y-6">
                   <h1 className="heading-page">{title}</h1>
                   {lastUpdated && (
-                    <p className="text-body-sm text-stone">Dernière mise à jour : {lastUpdated}</p>
+                    <p className="text-body-sm text-black/50">
+                      Dernière mise à jour : {lastUpdated}
+                    </p>
                   )}
                 </div>
               </SimpleAnimation>

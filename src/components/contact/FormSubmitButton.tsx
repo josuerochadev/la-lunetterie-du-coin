@@ -32,7 +32,7 @@ export default function FormSubmitButton({
         <button
           type="submit"
           disabled={isDisabled}
-          className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+          className="button-primary px-6 py-3 text-body disabled:cursor-not-allowed disabled:opacity-60"
           aria-label={getAriaLabel()}
         >
           {getButtonText()}

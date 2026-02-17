@@ -2,12 +2,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
  * Section ServicesCTA - Call-to-Action final de la page Services
- *
- * Section finale invitant à découvrir les offres ou contacter la boutique.
- * Style cohérent avec les autres pages.
- *
- * @component
- * @returns {JSX.Element} Section CTA de la page Services
  */
 export default function ServicesCTA() {
   return (
@@ -19,23 +13,17 @@ export default function ServicesCTA() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-body-lg text-stone">
+            <p className="mb-8 text-body-lg text-black/50">
               Découvrez nos offres ou venez nous rencontrer en boutique
             </p>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={200}>
             <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href="/offres"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              >
+              <a href="/offres" className="button-secondary px-6 py-3 text-body">
                 Connaître nos offres
               </a>
-              <a
-                href="/contact"
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
-              >
+              <a href="/contact" className="button-primary px-6 py-3 text-body">
                 Nous contacter
               </a>
             </div>

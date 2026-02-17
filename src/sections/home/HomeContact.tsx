@@ -33,17 +33,14 @@ const HomeContact = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-body-lg text-stone">
+            <p className="mb-8 text-body-lg text-black/50">
               Une question ? Besoin d'un conseil ? Nous sommes là pour vous accompagner
             </p>
           </SimpleAnimation>
 
           {/* CTA Button - Option A: bordered minimal */}
           <SimpleAnimation type="fade" delay={200}>
-            <a
-              href="/contact"
-              className="group inline-flex items-center gap-2 border border-accent bg-transparent px-8 py-4 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-            >
+            <a href="/contact" className="button-primary group px-8 py-4 text-body">
               Nous contacter
               <ArrowRight
                 className="h-5 w-5 transition-transform group-hover:translate-x-1"

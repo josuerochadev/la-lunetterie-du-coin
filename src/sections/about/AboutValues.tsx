@@ -29,7 +29,7 @@ export default function AboutValues() {
       <div className="mx-auto max-w-container px-container-x">
         <SimpleAnimation type="slide-up" delay={0}>
           <div className="mb-12 text-center">
-            <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-stone">
+            <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-black/50">
               Nos engagements
             </span>
             <h2 className="heading-section">Une lunetterie au coin qu'apporte du cœur</h2>
@@ -41,10 +41,10 @@ export default function AboutValues() {
             const Icon = iconMap[value.iconName];
             return (
               <SimpleAnimation key={value.title} type="slide-up" delay={0}>
-                <div className="space-y-4 border-t border-stone/20 pt-6">
+                <div className="space-y-4 border-t border-black/10 pt-6">
                   <Icon className="h-8 w-8 text-accent" strokeWidth={1.5} aria-hidden="true" />
                   <h3 className="heading-subsection">{value.title}</h3>
-                  <p className="text-body leading-relaxed text-stone">{value.description}</p>
+                  <p className="text-body leading-relaxed text-black/50">{value.description}</p>
                 </div>
               </SimpleAnimation>
             );

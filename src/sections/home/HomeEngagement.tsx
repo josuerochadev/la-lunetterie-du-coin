@@ -44,7 +44,7 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
           <SimpleAnimation type="slide-up" delay={200}>
             <div className="w-full max-w-6xl space-y-6 bg-background px-container-x py-container-y sm:space-y-8">
               {/* Tagline */}
-              <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+              <span className="text-body-sm font-medium uppercase tracking-wider text-black/50">
                 Notre engagement
               </span>
 
@@ -54,13 +54,13 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
               </h2>
 
               {/* Statistiques en ligne */}
-              <div className="grid grid-cols-3 gap-4 border-y border-stone/20 py-6">
+              <div className="grid grid-cols-3 gap-4 border-y border-black/10 py-6">
                 {stats.map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="mb-1 text-title-sm font-bold text-accent sm:text-title-md">
                       {stat.number}
                     </div>
-                    <div className="text-body-xs text-stone sm:text-body-sm">{stat.label}</div>
+                    <div className="text-body-xs text-black/50 sm:text-body-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -72,7 +72,7 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
                 seconde vie à des pièces qui auraient fini à la décharge.
               </p>
 
-              <p className="text-body-sm leading-relaxed text-stone">
+              <p className="text-body-sm leading-relaxed text-black/50">
                 En rapportant vos anciennes lunettes, vous bénéficiez d'une réduction allant jusqu'à
                 70€ sur votre nouvel achat. Un geste pour votre portefeuille et pour la planète.
               </p>

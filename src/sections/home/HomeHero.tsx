@@ -2,35 +2,27 @@ import { forwardRef } from 'react';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
+import EyePattern from '@/components/common/EyePattern';
 
 /**
- * Composant HomeHero - Hero de la page d'accueil.
+ * Composant HomeHero - Hero de la page d'accueil (Rebranding 2026)
  *
- * Design éditorial immersif avec :
- * - Deux images 50/50 en fond pleine hauteur
- * - Rectangle flottant centré avec phrase d'accroche
- * - Fond semi-transparent (style navbar)
- * - Baseline en bas
- *
- * Style éditorial Kinfolk avec profondeur et espace.
+ * Design immersif : fond noir, typo Please Heavy caps, motif eyes en overlay.
  *
  * @component
- * @param {React.Ref<HTMLElement>} ref - Référence transmise à la section principale.
- *
- * @example
- * <HomeHero ref={myRef} />
- *
- * @returns {JSX.Element} La section Hero éditoriale immersive.
  */
 const HomeHero = forwardRef<HTMLElement>((props, ref) => {
   return (
     <section
       ref={ref}
       id="hero"
-      className="relative h-screen w-full overflow-hidden bg-background"
+      className="relative h-screen w-full overflow-hidden bg-black"
       aria-labelledby="hero-title"
       {...props}
     >
+      {/* Motif eyes en overlay subtil */}
+      <EyePattern variant="blanc" opacity={0.03} />
+
       {/* 50% inférieur : images 50/50 avec gaps */}
       <div className="absolute bottom-0 left-0 right-0 flex h-[50%] w-full gap-4 px-4 pb-4 sm:gap-6 sm:px-6 sm:pb-6">
         {/* Image gauche */}
@@ -62,20 +54,20 @@ const HomeHero = forwardRef<HTMLElement>((props, ref) => {
         </div>
       </div>
 
-      {/* Contenu texte - centré horizontalement avec max-width, texte aligné à gauche */}
+      {/* Contenu texte */}
       <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(50%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(50%-72px)] sm:px-12 lg:px-16">
         <SimpleAnimation type="fade" delay={400} immediate={true}>
           <div className="mx-auto w-full max-w-7xl space-y-6">
             <h1
               id="hero-title"
-              className="font-light uppercase leading-tight tracking-wide text-charcoal"
+              className="text-heading tracking-wide text-white"
               style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
             >
               Des lunettes qui ont du style, une démarche qui a du sens
             </h1>
 
             <p
-              className="leading-relaxed text-charcoal"
+              className="leading-relaxed text-white/80"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
             >
               Opticien à Strasbourg depuis 2016. Neuf & Occasion.

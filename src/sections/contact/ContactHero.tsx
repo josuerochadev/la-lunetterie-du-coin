@@ -13,7 +13,7 @@ export default function ContactHero() {
             <div className="space-y-6">
               <h1 className="heading-page">Nous contacter</h1>
               <p
-                className="leading-relaxed text-stone"
+                className="leading-relaxed text-black/50"
                 style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
               >
                 Une question ? Besoin d'un conseil ? Nous sommes là pour vous accompagner

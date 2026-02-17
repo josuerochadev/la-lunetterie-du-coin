@@ -18,7 +18,7 @@ export default function ServicesHero() {
             <div className="space-y-6">
               <h1 className="heading-page">Nos services</h1>
               <p
-                className="leading-relaxed text-stone"
+                className="leading-relaxed text-black/50"
                 style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
               >
                 Une expertise complète pour prendre soin de votre vue, avec style et conscience

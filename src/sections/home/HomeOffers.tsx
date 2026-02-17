@@ -39,7 +39,7 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">{HOMEPAGE_SECTIONS.offers.subtitle}</p>
+            <p className="text-body-lg text-black/50">{HOMEPAGE_SECTIONS.offers.subtitle}</p>
           </SimpleAnimation>
         </div>
 
@@ -89,7 +89,7 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
           <SimpleAnimation type="slide-up" delay={200}>
             <a
               href={HOMEPAGE_SECTIONS.offers.cta.link}
-              className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+              className="button-secondary px-6 py-3 text-body"
               aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
             >
               {HOMEPAGE_SECTIONS.offers.cta.text}

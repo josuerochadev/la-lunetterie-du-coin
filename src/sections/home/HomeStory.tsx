@@ -35,7 +35,7 @@ const HomeStory = forwardRef<HTMLElement>(() => {
         <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
           <SimpleAnimation type="slide-up" delay={200}>
             <div className="w-full max-w-6xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
-              <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
+              <span className="text-body-sm font-medium uppercase tracking-wider text-black/50">
                 Depuis 2016
               </span>
 
@@ -48,7 +48,7 @@ const HomeStory = forwardRef<HTMLElement>(() => {
                 qualité tout en donnant une seconde vie aux montures.
               </p>
 
-              <p className="text-body leading-relaxed text-stone">
+              <p className="text-body leading-relaxed text-black/50">
                 Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie
                 expertise optique, style contemporain et engagement écologique. Chaque paire est
                 sélectionnée avec soin, qu'elle soit neuve ou d'occasion.
@@ -56,7 +56,7 @@ const HomeStory = forwardRef<HTMLElement>(() => {
 
               <a
                 href="/a-propos"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                className="button-secondary px-6 py-3 text-body"
                 aria-label="Découvrir notre histoire"
               >
                 Nous découvrir
