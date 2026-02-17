@@ -11,8 +11,8 @@ import { COMPANY_EMAIL } from '@/config/legal';
 export default function FooterContact() {
   return (
     <address className="not-italic lg:max-w-md lg:flex-1" aria-label="Coordonnées">
-      <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-cream">Contact</h3>
-      <div className="space-y-3 text-body-sm text-cream">
+      <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-accent">Contact</h3>
+      <div className="space-y-3 text-body-sm text-white">
         {/* Adresse */}
         <div className="flex items-start gap-3">
           <MapPin className="mt-1 h-4 w-4 flex-shrink-0" aria-hidden="true" />
@@ -29,7 +29,7 @@ export default function FooterContact() {
           <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
           <a
             href={`tel:${STORE_INFO.phone.tel}`}
-            className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+            className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
           >
             {STORE_INFO.phone.display}
           </a>
@@ -40,7 +40,7 @@ export default function FooterContact() {
           <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
           <a
             href={`mailto:${COMPANY_EMAIL}`}
-            className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+            className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
           >
             {COMPANY_EMAIL}
           </a>

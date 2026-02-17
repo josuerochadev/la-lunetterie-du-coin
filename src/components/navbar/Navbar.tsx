@@ -1,9 +1,10 @@
 import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
+import Logo from '@/components/common/Logo';
 import MenuButton from '@/components/navbar/MenuButton';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -13,21 +14,13 @@ import { STORE_INFO } from '@/config/store';
 import { useMotionPreference } from '@/a11y/useMotionPreference';
 
 /**
- * Composant Navbar
+ * Composant Navbar — Rebranding 2026
  *
- * Barre de navigation horizontale moderne inspirée de La Pima et Kinfolk.
+ * Barre de navigation horizontale avec nouveau logo.
  *
  * Structure :
- * - Gauche : Logo + Wordmark
- * - Centre : Icônes utilitaires (téléphone, localisation)
- * - Droite : CTA "Prendre RDV" + Bouton menu hamburger
- *
- * Fonctionnalités :
- * - Menu plein écran avec animation
- * - Gestion d'état menuActive/menuRendered pour éviter les doubles toggles
- * - Restauration du focus après fermeture
- * - Accessibilité complète (ARIA, focus management)
- * - Responsive avec breakpoints optimisés
+ * - Gauche : Logo (symbol mobile, full desktop)
+ * - Droite : CTA "Prendre RDV" + Icônes utilitaires + Menu hamburger
  *
  * @component
  */
@@ -38,7 +31,6 @@ const Navbar: React.FC = () => {
   const location = useLocation();
   const prm = useMotionPreference();
 
-  // Contrôle le rendu du menu (pour éviter toggle duplo)
   useEffect(() => {
     if (menuActive) {
       setMenuRendered(true);
@@ -48,7 +40,6 @@ const Navbar: React.FC = () => {
     }
   }, [menuActive]);
 
-  // Empêche le double toggle lors de la fermeture
   function shouldBlockToggle(menuActive: boolean, menuRendered: boolean): boolean {
     return !menuActive && menuRendered;
   }
@@ -63,7 +54,6 @@ const Navbar: React.FC = () => {
     buttonRef.current?.focus();
   };
 
-  // Gère le clic sur le logo : scroll to top si déjà sur la page d'accueil
   const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (location.pathname === '/') {
       e.preventDefault();
@@ -78,9 +68,9 @@ const Navbar: React.FC = () => {
   return (
     <>
       {/* Navbar horizontale fixe */}
-      <header className="fixed left-0 right-0 top-0 z-navbar border-b border-charcoal shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
+      <header className="fixed left-0 right-0 top-0 z-navbar border-b border-black/10 shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
         <div
-          className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/25 via-50% to-cream/10"
+          className="absolute inset-0 bg-gradient-to-b from-white/90 via-white/70 via-50% to-white/50"
           aria-hidden="true"
         ></div>
         <SimpleAnimation type="fade" immediate={true}>
@@ -88,34 +78,35 @@ const Navbar: React.FC = () => {
             className="relative mx-auto flex min-h-[60px] max-w-container items-center justify-between gap-2 px-4 py-3 sm:min-h-[72px] sm:gap-4 sm:px-6 sm:py-4"
             aria-label="Navigation principale"
           >
-            {/* Gauche : Wordmark */}
+            {/* Gauche : Logo */}
             <div className="flex items-center">
-              <Link to="/" aria-label="Retour à l'accueil" onClick={handleLogoClick}>
-                <span className="cursor-pointer text-body-sm font-bold uppercase leading-tight tracking-tight transition-all duration-300 hover:scale-105 hover:text-orange sm:text-title-sm">
-                  <span className="font-thin">LA</span>LUNETTERIE
-                  <span className="font-thin">DU</span>COIN
-                </span>
-              </Link>
+              {/* Symbol sur mobile, full sur desktop */}
+              <span className="sm:hidden">
+                <Logo variant="symbol" color="noir" size="sm" onClick={handleLogoClick} />
+              </span>
+              <span className="hidden sm:inline-flex">
+                <Logo variant="full" color="noir" size="sm" onClick={handleLogoClick} />
+              </span>
             </div>
 
             {/* Droite : CTA + Icônes utilitaires + Menu button */}
             <div className="flex items-center gap-4 sm:gap-6">
-              {/* CTA Prendre RDV - toujours visible */}
-              <Link
-                to={CALENDLY_URL}
+              {/* CTA Prendre RDV */}
+              <a
+                href={CALENDLY_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-4 py-2 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream sm:px-6 sm:py-3"
+                className="button-primary px-4 py-2 text-body-sm sm:px-6 sm:py-3"
                 aria-label="Prendre rendez-vous"
               >
                 <span className="hidden lg:inline">Prendre RDV</span>
                 <span className="lg:hidden">RDV</span>
-              </Link>
+              </a>
 
               {/* Icônes utilitaires (cachés sur mobile) */}
               <a
                 href={`tel:${STORE_INFO.phone.tel}`}
-                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
+                className="focus-style group hidden items-center gap-2 text-body-sm text-black transition-colors hover:text-accent md:flex"
                 aria-label={`Appeler ${STORE_INFO.phone.display}`}
               >
                 <Phone
@@ -129,7 +120,7 @@ const Navbar: React.FC = () => {
                 href={STORE_INFO.address.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
+                className="focus-style group hidden items-center gap-2 text-body-sm text-black transition-colors hover:text-accent md:flex"
                 aria-label="Voir l'itinéraire sur Google Maps"
               >
                 <MapPin

@@ -2,70 +2,74 @@ import type React from 'react';
 import { Link } from 'react-router-dom';
 import { clsx } from 'clsx';
 
-import LogoSvg from '@/assets/logo/logo-eye.svg?react';
+import LogoFullNoir from '@/assets/logo/Logo_LLDC_Noir.svg?react';
+import LogoFullBlanc from '@/assets/logo/Logo_LLDC_Blanc.svg?react';
+import LogoFullJaune from '@/assets/logo/Logo_LLDC_Jaune.svg?react';
+import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
+import LogoSymboleBlanc from '@/assets/logo/Logo_LLDC_Symbole_Blanc.svg?react';
+import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
+
+type LogoVariant = 'full' | 'symbol';
+type LogoColor = 'noir' | 'blanc' | 'jaune';
+type LogoSize = 'sm' | 'md' | 'lg';
 
 type LogoProps = {
-  variant?: 'full' | 'icon';
-  size?: 'sm' | 'md' | 'lg';
+  variant?: LogoVariant;
+  color?: LogoColor;
+  size?: LogoSize;
   className?: string;
-  showWordmark?: boolean;
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+};
+
+const logoMap = {
+  full: {
+    noir: LogoFullNoir,
+    blanc: LogoFullBlanc,
+    jaune: LogoFullJaune,
+  },
+  symbol: {
+    noir: LogoSymboleNoir,
+    blanc: LogoSymboleBlanc,
+    jaune: LogoSymboleJaune,
+  },
+} as const;
+
+const sizeClasses: Record<LogoSize, string> = {
+  sm: 'h-8 w-auto',
+  md: 'h-12 w-auto',
+  lg: 'h-16 w-auto',
 };
 
 /**
- * Composant Logo
+ * Composant Logo — Rebranding 2026
  *
- * Affiche le logo de La Lunetterie Du Coin avec options de taille et variante.
+ * Affiche le logo La Lunetterie du Coin (version complète ou symbole seul).
  *
- * @param variant - Type d'affichage: 'full' (logo + texte) ou 'icon' (logo seul)
- * @param size - Taille: 'sm', 'md', 'lg'
+ * @param variant - 'full' (logo + texte) ou 'symbol' (œil seul)
+ * @param color - 'noir', 'blanc', ou 'jaune'
+ * @param size - 'sm', 'md', 'lg'
  * @param className - Classes CSS additionnelles
- * @param showWordmark - Afficher le wordmark à côté du logo (par défaut true si variant='full')
  */
 const Logo: React.FC<LogoProps> = ({
   variant = 'full',
+  color = 'noir',
   size = 'md',
   className = '',
-  showWordmark = variant === 'full',
+  onClick,
 }) => {
-  const sizeClasses = {
-    sm: 'h-8 w-auto', // 32px pour navbar
-    md: 'h-12 w-auto', // 48px
-    lg: 'h-16 w-auto', // 64px
-  };
-
-  const wordmarkSizes = {
-    sm: 'text-body-sm',
-    md: 'text-body',
-    lg: 'text-title-sm',
-  };
+  const SvgComponent = logoMap[variant][color];
 
   return (
     <Link
       to="/"
       className={clsx(
-        'focus-style inline-flex items-center gap-3 transition-opacity duration-200 hover:opacity-80',
+        'focus-style inline-flex items-center transition-opacity duration-200 hover:opacity-80',
         className,
       )}
       aria-label="Retour à l'accueil - La Lunetterie Du Coin"
+      onClick={onClick}
     >
-      {/* Logo SVG */}
-      <LogoSvg className={clsx(sizeClasses[size], 'flex-shrink-0')} aria-hidden="true" />
-
-      {/* Wordmark */}
-      {showWordmark && (
-        <span
-          className={clsx(
-            'font-extrabold uppercase leading-tight tracking-tight',
-            wordmarkSizes[size],
-          )}
-        >
-          <span className="font-thin">LA</span>
-          <br />
-          LUNETTERIE
-          <br />
-          <span className="font-thin">DU</span> COIN
-        </span>
-      )}
+      <SvgComponent className={clsx(sizeClasses[size], 'flex-shrink-0')} aria-hidden="true" />
     </Link>
   );
 };

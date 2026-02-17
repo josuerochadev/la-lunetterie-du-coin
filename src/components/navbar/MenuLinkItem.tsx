@@ -10,7 +10,7 @@ type MenuLinkItemProps = {
   label: string;
   href: string;
   onClick: () => void;
-  featured?: boolean; // Lien mis en avant (ex: "Prendre rendez-vous")
+  featured?: boolean;
 };
 
 // Helpers
@@ -19,15 +19,14 @@ const isExternal = (s: string) => /^https?:\/\//i.test(s);
 const isInternalPath = (s: string) => s.startsWith('/') && !s.startsWith('//');
 
 /**
- * Composant MenuLinkItem
+ * Composant MenuLinkItem — Rebranding 2026
  *
  * Lien de navigation dans le menu plein écran.
- * Design éditorial minimaliste sans numérotation, hover subtil avec soulignement.
  *
  * @param label - Texte du lien
  * @param href - URL de destination
  * @param onClick - Callback pour fermer le menu
- * @param featured - Si true, affiche le lien comme CTA principal (bouton orange)
+ * @param featured - Si true, affiche le lien comme CTA principal
  */
 export default function MenuLinkItem({
   label,
@@ -39,30 +38,25 @@ export default function MenuLinkItem({
   const { pathname } = useLocation();
   const activeSection = useActiveSection(['hero', 'offers', 'services', 'concept', 'contact']);
 
-  // Vérifie si ce lien correspond à la section active
   const isActive = isHash(href) && href === `#${activeSection}`;
 
-  // Classes pour les liens normaux
   const linkClasses = featured
-    ? 'button-primary inline-block text-center' // CTA style bouton
-    : 'group relative inline-block text-title-md font-medium transition-colors duration-200 hover:text-orange focus-visible:text-orange focus-ring';
+    ? 'button-primary inline-block text-center'
+    : 'group relative inline-block text-title-md font-medium transition-colors duration-200 hover:text-accent focus-visible:text-accent focus-ring';
 
-  // Indicateur actif
   const activeIndicator = isActive && !featured && (
-    <span className="ml-2 text-orange" aria-hidden="true">
-      •
+    <span className="ml-2 text-accent" aria-hidden="true">
+      &bull;
     </span>
   );
 
-  // Underline au hover pour les liens normaux
   const hoverUnderline = !featured && (
     <span
-      className="absolute bottom-0 left-0 h-[1px] w-0 bg-orange transition-all duration-200 group-hover:w-full"
+      className="absolute bottom-0 left-0 h-[1px] w-0 bg-accent transition-all duration-200 group-hover:w-full"
       aria-hidden="true"
     />
   );
 
-  // Smooth scroll vers l'ancre si on est déjà sur la Home
   const handleHashClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
       if (!isHash(href)) return;
@@ -82,13 +76,12 @@ export default function MenuLinkItem({
 
   const content = (
     <>
-      <span className={isActive && !featured ? 'text-orange' : ''}>{label}</span>
+      <span className={isActive && !featured ? 'text-accent' : ''}>{label}</span>
       {activeIndicator}
       {hoverUnderline}
     </>
   );
 
-  // 1) Lien externe (Calendly)
   if (isExternal(href)) {
     return (
       <a
@@ -103,7 +96,6 @@ export default function MenuLinkItem({
     );
   }
 
-  // 2) Ancre interne
   if (isHash(href)) {
     if (pathname === '/') {
       return (
@@ -119,7 +111,6 @@ export default function MenuLinkItem({
     );
   }
 
-  // 3) Route interne
   if (isInternalPath(href)) {
     return (
       <Link to={href} onClick={onClick} className={linkClasses}>
@@ -128,7 +119,6 @@ export default function MenuLinkItem({
     );
   }
 
-  // Fallback
   return (
     <a href={href} onClick={onClick} className={linkClasses}>
       {content}

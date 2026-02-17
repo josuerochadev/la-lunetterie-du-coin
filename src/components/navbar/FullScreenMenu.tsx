@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
+import Logo from '@/components/common/Logo';
 import { getSocialIcon } from '@/lib/iconRegistry';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
@@ -18,20 +19,9 @@ type FullScreenMenuProps = {
 };
 
 /**
- * Composant `FullScreenMenu`
+ * Composant `FullScreenMenu` — Rebranding 2026
  *
- * Menu plein écran moderne et éditorial inspiré de Kinfolk.
- *
- * Structure :
- * - Grid de catégories de navigation (DÉCOUVRIR, OFFRES, CONTACT)
- * - Sidebar avec informations pratiques (horaires, contact, USP)
- * - Footer avec social links
- *
- * Fonctionnalités :
- * - Fermeture au clic extérieur et touche ESC
- * - Blocage du scroll du body
- * - Gestion du focus pour l'accessibilité
- * - Animations stagger sur les catégories
+ * Menu plein écran noir/blanc/jaune.
  *
  * @param isOpen - Indique si le menu est ouvert
  * @param onClose - Fonction appelée pour fermer le menu
@@ -39,10 +29,7 @@ type FullScreenMenuProps = {
 const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   const menuRef = useRef<HTMLDivElement>(null);
 
-  // Gère la fermeture au clic hors du menu
   useClickOutside(menuRef, () => onClose(), isOpen);
-
-  // Gère les animations et comportements du menu (Escape, scroll, focus)
   useMenuAnimation(isOpen, onClose, menuRef);
 
   if (!isOpen) return null;
@@ -52,7 +39,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
       id="main-menu"
       aria-label="Menu de navigation principal"
       tabIndex={-1}
-      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-surface"
+      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-white"
     >
       <div ref={menuRef} className="relative flex w-full flex-1 flex-col">
         {/* Bouton de fermeture */}
@@ -60,10 +47,10 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
           <SimpleAnimation type="fade" delay={100} immediate={true}>
             <button
               onClick={onClose}
-              className="focus-style group flex h-12 w-12 items-center justify-center text-charcoal transition-all duration-300 hover:scale-110 hover:text-orange"
+              className="focus-style group flex h-12 w-12 items-center justify-center text-black transition-all duration-300 hover:scale-110 hover:text-accent"
               aria-label="Fermer le menu"
             >
-              <span className="text-[2rem] font-light leading-none">×</span>
+              <span className="text-[2rem] font-light leading-none">&times;</span>
             </button>
           </SimpleAnimation>
         </div>
@@ -71,7 +58,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         {/* Contenu principal du menu */}
         <div className="flex min-h-screen w-full items-center justify-center px-4 sm:px-6">
           <div className="grid w-full max-w-5xl grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
-            {/* Colonne gauche : Navigation principale - alignée à droite */}
+            {/* Colonne gauche : Navigation principale */}
             <div className="space-y-16 lg:text-right">
               <SimpleAnimation type="slide-up" delay={0} immediate={true}>
                 <nav aria-label="Navigation principale" className="space-y-6 lg:text-right">
@@ -80,7 +67,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                       <Link
                         to={link.href}
                         onClick={onClose}
-                        className="inline-block text-title-lg font-light text-charcoal transition-colors hover:text-orange"
+                        className="text-heading inline-block text-title-lg text-black transition-colors hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -97,7 +84,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                       <Link
                         to={link.href}
                         onClick={onClose}
-                        className="inline-block text-body-sm text-stone transition-colors hover:text-orange"
+                        className="inline-block text-body-sm text-black/50 transition-colors hover:text-accent"
                       >
                         {link.label}
                       </Link>
@@ -107,36 +94,31 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
               </SimpleAnimation>
             </div>
 
-            {/* Colonne droite : Informations pratiques - alignée à gauche */}
-            <aside className="space-y-8 border-t border-charcoal/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              {/* Nom du magasin */}
+            {/* Colonne droite : Informations pratiques */}
+            <aside className="space-y-8 border-t border-black/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+              {/* Logo du magasin */}
               <SimpleAnimation type="fade" delay={300} immediate={true}>
-                <div className="space-y-0">
-                  <p className="text-body font-bold uppercase leading-tight tracking-tight text-charcoal">
-                    <span className="font-thin">LA</span>LUNETTERIE
-                    <span className="font-thin">DU</span>COIN
-                  </p>
-                  <p className="text-body-xs font-medium text-stone">Neuf & Occasion</p>
+                <div className="space-y-1">
+                  <Logo variant="full" color="noir" size="sm" />
+                  <p className="text-body-xs font-medium text-black/50">Neuf & Occasion</p>
                 </div>
               </SimpleAnimation>
 
               {/* Section Nous rendre visite */}
               <SimpleAnimation type="fade" delay={350} immediate={true}>
                 <div className="space-y-4">
-                  <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">
-                    Nous rendre visite
-                  </h3>
+                  <h3 className="text-subtitle text-body-sm text-black/50">Nous rendre visite</h3>
 
                   {/* Horaires */}
                   <div className="space-y-1">
-                    <p className="text-body-sm text-charcoal">{STORE_INFO.hours.weekdays}</p>
-                    <p className="text-body-sm text-charcoal">{STORE_INFO.hours.weekend}</p>
+                    <p className="text-body-sm text-black">{STORE_INFO.hours.weekdays}</p>
+                    <p className="text-body-sm text-black">{STORE_INFO.hours.weekend}</p>
                   </div>
 
                   {/* Téléphone */}
                   <a
                     href={`tel:${STORE_INFO.phone.tel}`}
-                    className="focus-style group flex items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                    className="focus-style group flex items-center gap-2 text-body-sm text-black transition-colors hover:text-accent"
                   >
                     <Phone className="h-4 w-4" aria-hidden="true" />
                     <span className="font-medium">{STORE_INFO.phone.display}</span>
@@ -147,7 +129,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     href={STORE_INFO.address.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-style group flex items-start gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                    className="focus-style group flex items-start gap-2 text-body-sm text-black transition-colors hover:text-accent"
                   >
                     <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
                     <span className="font-medium leading-relaxed">
@@ -163,7 +145,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="mt-4 inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                    className="button-primary mt-4 inline-flex px-6 py-3 text-body-sm"
                   >
                     {MENU_CTA.label}
                   </a>
@@ -181,7 +163,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-all duration-300 hover:scale-110 hover:bg-orange/10 hover:text-orange"
+                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-black transition-all duration-300 hover:scale-110 hover:bg-accent/10 hover:text-accent"
                         aria-label={social.label}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />

@@ -2,29 +2,25 @@ import type React from 'react';
 
 import { cn } from '@/lib/cn';
 
-/**
- * Bouton personnalisable compatible avec le design system du projet.
- *
- * @component
- * @param {object} props
- * @param {React.ButtonHTMLAttributes<HTMLButtonElement>} props - Toutes les props natives du bouton HTML, plus les classes custom du design system.
- * @returns {JSX.Element}
- */
+type ButtonVariant = 'primary' | 'secondary';
 
-type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>;
+type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
+  variant?: ButtonVariant;
+};
 
 /**
  * Composant bouton réutilisable.
  *
- * @param className - Classes CSS supplémentaires à appliquer au bouton.
- * @param props - Autres propriétés du bouton (par exemple, type, onClick, etc.).
- * @returns Un élément bouton stylisé avec les propriétés spécifiées.
+ * @param variant - 'primary' (jaune/noir) ou 'secondary' (outline noir)
+ * @param className - Classes CSS supplémentaires
  */
-export default function Button({ className, ...props }: ButtonProps) {
+export default function Button({ variant = 'primary', className, ...props }: ButtonProps) {
+  const variantClass = variant === 'secondary' ? 'button-secondary' : 'button-primary';
+
   return (
     <button
       type={props.type}
-      className={cn('button-primary font-semibold', className)}
+      className={cn(`${variantClass} font-semibold`, className)}
       {...props}
     />
   );

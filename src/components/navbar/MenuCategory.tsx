@@ -44,12 +44,14 @@ const MenuCategory: React.FC<MenuCategoryProps> = ({
           <Link
             to={titleHref}
             onClick={onLinkClick}
-            className="inline-block text-body-sm font-semibold uppercase tracking-wide text-stone transition-colors hover:text-orange"
+            className="inline-block text-body-sm font-semibold uppercase tracking-wide text-black/50 transition-colors hover:text-accent"
           >
             {title}
           </Link>
         ) : (
-          <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">{title}</h3>
+          <h3 className="text-body-sm font-semibold uppercase tracking-wide text-black/50">
+            {title}
+          </h3>
         )}
 
         {/* Liste des liens */}
