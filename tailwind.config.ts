@@ -19,44 +19,49 @@ const config: Config = {
     extend: {
       /* ====== COLORS ====== */
       colors: {
-        /* ===== PALETTE MINIMALISTE CHIC ===== */
-        // Couleur obligatoire - Brand orange
+        /* ===== PALETTE REBRANDING 2026 ===== */
+        black: withOpacity('--color-black-rgb') as unknown as string,
+        white: withOpacity('--color-white-rgb') as unknown as string,
+        yellow: withOpacity('--color-yellow-rgb') as unknown as string,
+        green: withOpacity('--color-green-rgb') as unknown as string,
+        blue: withOpacity('--color-blue-rgb') as unknown as string,
+        stone: withOpacity('--color-stone-rgb') as unknown as string,
         orange: withOpacity('--color-orange-rgb') as unknown as string,
 
-        // Neutres élégants inspirés Kinfolk/La Pima
-        cream: withOpacity('--color-cream-rgb') as unknown as string, // Fond principal crème doux
-        charcoal: withOpacity('--color-charcoal-rgb') as unknown as string, // Texte principal anthracite
-        stone: withOpacity('--color-stone-rgb') as unknown as string, // Texte secondaire gris pierre
-
         /* Aliases sémantiques */
-        text: withOpacity('--color-charcoal-rgb') as unknown as string, // Charcoal = texte principal
-        surface: withOpacity('--color-cream-rgb') as unknown as string, // Cream = surfaces/cartes
+        brand: withOpacity('--color-black-rgb') as unknown as string,
+        accent: withOpacity('--color-yellow-rgb') as unknown as string,
+        text: withOpacity('--color-black-rgb') as unknown as string,
+        surface: withOpacity('--color-white-rgb') as unknown as string,
+        background: withOpacity('--color-white-rgb') as unknown as string,
+        primary: withOpacity('--color-black-rgb') as unknown as string,
 
-        /* Aliases fonctionnels */
-        primary: withOpacity('--color-charcoal-rgb') as unknown as string, // Actions primaires
-        accent: withOpacity('--color-orange-rgb') as unknown as string, // Accents = orange brand
-        background: withOpacity('--color-cream-rgb') as unknown as string, // Fond principal crème
+        /* Aliases secondaires */
+        'secondary-green': withOpacity('--color-green-rgb') as unknown as string,
+        'secondary-blue': withOpacity('--color-blue-rgb') as unknown as string,
+        'secondary-stone': withOpacity('--color-stone-rgb') as unknown as string,
+        'secondary-orange': withOpacity('--color-orange-rgb') as unknown as string,
       },
 
       /* ====== TYPO ====== */
       fontFamily: {
-        // Jost = Alternative open-source moderne à Futura (géométrique, clean)
-        sans: ['"Jost"', '"Futura"', 'system-ui', '-apple-system', 'sans-serif'],
-        serif: ['"Jost"', '"Futura"', 'system-ui', '-apple-system', 'sans-serif'], // Pas de serif, typographie unifiée
+        display: ['"Please"', 'system-ui', 'sans-serif'], // Titres (Please Heavy)
+        body: ['"Satoshi"', 'system-ui', 'sans-serif'], // Corps de texte
+        sans: ['"Satoshi"', 'system-ui', 'sans-serif'], // Default
       },
       fontSize: {
-        /* ===== HIÉRARCHIE STANDARDISÉE ===== */
-        // Titres - line-height serré pour impact
-        'title-xl': ['clamp(2.5rem, 5vw, 15rem)', '1.0'], // Hero principal - ajusté pour mobile S
-        'title-lg': ['clamp(2rem, 3vw, 10rem)', '1.1'], // Sections principales
-        'title-md': ['clamp(1.5rem, 2.5vw, 5rem)', '1.2'], // Sous-sections
-        'title-sm': ['clamp(1.25rem, 2vw, 3.5rem)', '1.3'], // Petits titres
+        /* ===== HIERARCHIE STANDARDISEE ===== */
+        // Titres - line-height serré pour impact (charte 0.9)
+        'title-xl': ['clamp(2.5rem, 5vw, 15rem)', '0.9'],
+        'title-lg': ['clamp(2rem, 3vw, 10rem)', '0.9'],
+        'title-md': ['clamp(1.5rem, 2.5vw, 5rem)', '0.9'],
+        'title-sm': ['clamp(1.25rem, 2vw, 3.5rem)', '1.1'],
 
-        // Corps de texte - line-height optimisé pour lisibilité
-        'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.4'], // CTA, textes importants
-        body: ['clamp(1rem, 1.5vw, 3.5rem)', '1.5'], // Corps principal
-        'body-sm': ['clamp(0.9rem, 1.1vw, 2.5rem)', '1.4'], // Textes secondaires
-        'body-xs': ['clamp(0.75rem, 1vw, 1.75rem)', '1.3'], // Taglines, légendes
+        // Corps de texte - line-height 1.3
+        'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.3'],
+        body: ['clamp(1rem, 1.5vw, 3.5rem)', '1.3'],
+        'body-sm': ['clamp(0.9rem, 1.1vw, 2.5rem)', '1.3'],
+        'body-xs': ['clamp(0.75rem, 1vw, 1.75rem)', '1.3'],
       },
 
       /* ====== LAYOUT ====== */
@@ -76,7 +81,7 @@ const config: Config = {
 
       /* ====== SPACING ====== */
       spacing: {
-        /* ===== SYSTÈME SÉMANTIQUE ===== */
+        /* ===== SYSTEME SEMANTIQUE ===== */
         // Espacement vertical standardisé
         xs: '0.5rem', // 8px - Éléments très proches
         sm: '1rem', // 16px - Paragraphes, listes
@@ -84,7 +89,7 @@ const config: Config = {
         lg: '4rem', // 64px - Grandes sections
         xl: '6rem', // 96px - Sections majeures
 
-        /* ===== ESPACEMENT SPÉCIALISÉ ===== */
+        /* ===== ESPACEMENT SPECIALISE ===== */
         // Sections principales (responsive)
         section: 'clamp(6rem, 10vw, 10rem)', // Entre sections page
         'section-sm': 'clamp(4rem, 8vw, 8rem)', // Sections réduites

@@ -1,8 +1,6 @@
 /* ====== BOUTONS ====== */
 @layer components {
-  /* Note: Les styles du menu-toggle sont maintenant dans components.menu-toggle.css */
-
-  /* Bouton principal - Style bordered minimal (Option A) */
+  /* Bouton principal - Fond jaune, texte noir */
   .button-primary {
     @apply inline-flex items-center justify-center gap-2 font-sans font-medium focus:outline-none;
 
@@ -19,14 +17,14 @@
     /* Pas de border-radius - design flat */
     border-radius: 0;
 
-    /* Fond transparent */
-    background: transparent !important;
+    /* Fond jaune accent */
+    background: rgb(var(--color-yellow-rgb)) !important;
 
-    /* Bordure accent */
-    border: 1px solid rgb(var(--color-accent-rgb)) !important;
+    /* Bordure noire */
+    border: 1px solid rgb(var(--color-black-rgb)) !important;
 
-    /* Texte accent */
-    color: rgb(var(--color-accent-rgb)) !important;
+    /* Texte noir */
+    color: rgb(var(--color-black-rgb)) !important;
 
     /* Pas de shadow - design flat */
     box-shadow: none;
@@ -39,24 +37,22 @@
 
   @media (hover: hover) {
     .button-primary:hover {
-      /* Fond accent au hover */
-      background: rgb(var(--color-accent-rgb)) !important;
-      /* Texte cream au hover */
-      color: rgb(var(--color-cream-rgb)) !important;
+      /* Fond noir au hover */
+      background: rgb(var(--color-black-rgb)) !important;
+      /* Texte jaune au hover */
+      color: rgb(var(--color-yellow-rgb)) !important;
     }
 
     .button-primary:active {
-      /* Fond accent plus foncé */
-      background: rgba(var(--color-accent-rgb), 0.9) !important;
+      background: rgba(var(--color-black-rgb), 0.9) !important;
     }
   }
 
   .button-primary:focus-visible {
-    outline: 2px solid rgb(var(--color-accent-rgb));
+    outline: 2px solid rgb(var(--color-yellow-rgb));
     outline-offset: 2px;
-    /* Pas de box-shadow */
-    background: rgb(var(--color-accent-rgb)) !important;
-    color: rgb(var(--color-cream-rgb)) !important;
+    background: rgb(var(--color-black-rgb)) !important;
+    color: rgb(var(--color-yellow-rgb)) !important;
   }
 
   .button-primary:disabled {
@@ -70,11 +66,69 @@
     }
   }
 
-  /* Variantes supprimées - design unifié */
+  /* Bouton secondaire - Outline noir, fond transparent */
+  .button-secondary {
+    @apply inline-flex items-center justify-center gap-2 font-sans font-medium focus:outline-none;
+
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+
+    padding: 1rem 2rem;
+    border-radius: 0;
+
+    /* Fond transparent */
+    background: transparent !important;
+
+    /* Bordure noire */
+    border: 1px solid rgb(var(--color-black-rgb)) !important;
+
+    /* Texte noir */
+    color: rgb(var(--color-black-rgb)) !important;
+
+    box-shadow: none;
+
+    transition:
+      background-color 200ms ease,
+      color 200ms ease;
+  }
+
+  @media (hover: hover) {
+    .button-secondary:hover {
+      background: rgb(var(--color-black-rgb)) !important;
+      color: rgb(var(--color-white-rgb)) !important;
+    }
+
+    .button-secondary:active {
+      background: rgba(var(--color-black-rgb), 0.9) !important;
+    }
+  }
+
+  .button-secondary:focus-visible {
+    outline: 2px solid rgb(var(--color-yellow-rgb));
+    outline-offset: 2px;
+    background: rgb(var(--color-black-rgb)) !important;
+    color: rgb(var(--color-white-rgb)) !important;
+  }
+
+  .button-secondary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .button-secondary {
+      transition-duration: 0.01ms !important;
+    }
+  }
 }
 
 /* Icônes dans les boutons */
-.button-primary .button-icon {
+.button-primary .button-icon,
+.button-secondary .button-icon {
   /* Taille basée sur la hauteur de ligne du texte */
   height: 1em;
   width: 1em;
