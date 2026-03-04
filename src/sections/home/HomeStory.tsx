@@ -1,66 +1,142 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { m } from 'framer-motion';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollParallaxImage from '@/components/motion/ScrollParallaxImage';
+import ScrollScale from '@/components/motion/ScrollScale';
+import TextReveal from '@/components/motion/TextReveal';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
- * Section HomeStory - Section "Notre Histoire" de la page d'accueil
+ * Section HomeStory — Editorial Spread
  *
- * Design éditorial Kinfolk :
- * - Image de fond pleine hauteur (60-70% de la section)
- * - Texte en bas sur fond cream (30-40%)
- * - Transition nette entre image et texte
+ * Gradient bg from accent to white (fluid transition from Hero).
+ * Photo with ScrollParallaxImage + ScrollScale zoom-in.
+ * TextReveal scroll mode on title. Animated CTA arrow.
+ *
+ * Mobile: photo full-width top, card below. SimpleAnimation fallback.
  *
  * @component
- * @returns {JSX.Element} La section Notre Histoire avec image pleine et texte en bas
  */
-const HomeStory = forwardRef<HTMLElement>(() => {
+const HomeStory = forwardRef<HTMLElement>((_, ref) => {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
   return (
     <section
+      ref={(el) => {
+        sectionRef.current = el;
+        if (typeof ref === 'function') ref(el);
+        else if (ref) ref.current = el;
+      }}
       id="story"
-      className="relative w-full overflow-hidden bg-background"
+      className="relative w-full bg-gradient-to-b from-accent to-white py-20 sm:py-28 lg:py-36"
       aria-labelledby="story-title"
     >
-      {/* Image pleine largeur à hauteur naturelle */}
-      <div className="relative min-h-screen w-full bg-background">
-        <SimpleAnimation type="fade" delay={0} immediate={true}>
-          <img
-            src="/images/our-story-eyeglasses.jpg"
-            alt="Lunettes élégantes sur un fond ensoleillé"
-            className="max-h-[120vh] min-h-screen w-full object-cover"
-            loading="lazy"
-          />
-        </SimpleAnimation>
+      <div className="relative mx-auto max-w-container px-6 sm:px-10 md:px-16">
+        <div className="relative flex flex-col items-center lg:flex-row lg:items-start lg:justify-center">
+          {/* Photo with parallax + scale zoom-in */}
+          <div className="w-full lg:w-auto">
+            {/* Mobile: SimpleAnimation fallback */}
+            <div className="lg:hidden">
+              <SimpleAnimation type="slide-left" delay={0} className="w-full">
+                <div className="group bg-white p-3">
+                  <div className="aspect-[4/5] w-full overflow-hidden">
+                    <img
+                      src="/images/our-story-eyeglasses.jpg"
+                      alt="Lunettes artisanales - La Lunetterie du Coin"
+                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                </div>
+              </SimpleAnimation>
+            </div>
 
-        {/* Rectangle de texte superposé en bas de l'image */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
-          <SimpleAnimation type="slide-up" delay={200}>
-            <div className="w-full max-w-6xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
-              <span className="text-body-sm font-medium uppercase tracking-wider text-black/50">
-                Depuis 2016
-              </span>
+            {/* Desktop: ScrollParallaxImage + ScrollScale */}
+            <div className="hidden lg:block">
+              <ScrollScale scaleRange={[0.92, 1]}>
+                <div className="relative z-0 w-full lg:w-[380px] xl:w-[420px] 2xl:w-[480px]">
+                  <div className="group bg-white p-3">
+                    <ScrollParallaxImage
+                      src="/images/our-story-eyeglasses.jpg"
+                      alt="Lunettes artisanales - La Lunetterie du Coin"
+                      parallaxRange={[-60, 60]}
+                      scaleRange={[1, 1.05]}
+                      loading="lazy"
+                      sizes="(min-width: 1024px) 420px, 100vw"
+                      widths={[384, 640, 768]}
+                      aspectRatio="4/5"
+                    />
+                  </div>
+                </div>
+              </ScrollScale>
+            </div>
+          </div>
 
-              <h2 id="story-title" className="heading-section">
-                Une lunetterie différente
-              </h2>
+          {/* Card with text — overlapping the photo */}
+          <SimpleAnimation
+            type="slide-up"
+            delay={200}
+            className="relative z-10 -mt-12 w-full sm:-mt-16 lg:-ml-12 lg:mt-16 lg:w-auto xl:mt-20"
+          >
+            <div className="bg-white px-8 py-10 sm:px-10 sm:py-12 lg:max-w-md xl:max-w-lg">
+              {/* Mobile: static title. Desktop: TextReveal scroll */}
+              <div className="lg:hidden">
+                <h2
+                  id="story-title"
+                  className="text-heading text-black"
+                  style={{ fontSize: 'clamp(1.75rem, 3.5vw, 3.5rem)' }}
+                >
+                  Une lunetterie différente
+                </h2>
+              </div>
 
-              <p className="text-body-lg leading-relaxed text-text">
-                Romain a ouvert La Lunetterie du Coin avec une conviction : proposer des lunettes de
-                qualité tout en donnant une seconde vie aux montures.
+              <div className="hidden lg:block">
+                <TextReveal
+                  as="h2"
+                  mode="scroll"
+                  splitBy="words"
+                  className="text-heading text-black"
+                  style={{ fontSize: 'clamp(2rem, 4vw, 4rem)' }}
+                >
+                  Une lunetterie différente
+                </TextReveal>
+              </div>
+
+              <p className="mt-5 text-body leading-relaxed text-black/70 sm:mt-6">
+                Romain a ouvert La Lunetterie du Coin avec une conviction&nbsp;: proposer des
+                lunettes de qualité tout en donnant une seconde vie aux montures.
               </p>
 
-              <p className="text-body leading-relaxed text-black/50">
-                Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie
-                expertise optique, style contemporain et engagement écologique. Chaque paire est
-                sélectionnée avec soin, qu'elle soit neuve ou d'occasion.
-              </p>
-
-              <a
-                href="/a-propos"
-                className="button-secondary px-6 py-3 text-body"
-                aria-label="Découvrir notre histoire"
-              >
-                Nous découvrir
-              </a>
+              {/* CTA with animated arrow on hover */}
+              {prefersReducedMotion ? (
+                <Link
+                  to="/a-propos"
+                  className="text-heading mt-6 inline-flex items-center gap-2 underline underline-offset-4 transition-opacity duration-300 hover:opacity-60 sm:mt-8"
+                  style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.25rem)' }}
+                >
+                  Nous découvrir
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              ) : (
+                <Link
+                  to="/a-propos"
+                  className="group/cta text-heading mt-6 inline-flex items-center gap-2 underline underline-offset-4 transition-opacity duration-300 hover:opacity-60 sm:mt-8"
+                  style={{ fontSize: 'clamp(0.95rem, 1.2vw, 1.25rem)' }}
+                >
+                  Nous découvrir
+                  <m.span
+                    className="inline-block"
+                    whileHover={{ x: 8 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                  >
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </m.span>
+                </Link>
+              )}
             </div>
           </SimpleAnimation>
         </div>

@@ -8,6 +8,8 @@ import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 type LayoutProps = {
   children: React.ReactNode;
+  /** Controls navbar visibility — used for splash/hero choreography on HomePage. */
+  navbarRevealed?: boolean;
 };
 
 /**
@@ -16,13 +18,13 @@ type LayoutProps = {
  * - Contenu et navigations en z-base et plus.
  * - A11y : SkipLink + <main id="main" tabIndex={-1}> focusable.
  */
-export default function Layout({ children }: LayoutProps) {
+export default function Layout({ children, navbarRevealed }: LayoutProps) {
   return (
     <div className="relative min-h-screen bg-background text-primary">
       {/* Contenu simplifié - plus de Background animé */}
       <div className="relative z-base">
         <SkipLink />
-        <Navbar />
+        <Navbar revealed={navbarRevealed} />
         <main id="main" tabIndex={-1} className="min-h-screen">
           {children}
         </main>

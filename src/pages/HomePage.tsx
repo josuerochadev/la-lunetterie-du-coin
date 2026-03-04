@@ -1,5 +1,9 @@
+import { useState } from 'react';
+
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
+import SectionTransition from '@/components/motion/SectionTransition';
+import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
 import HomeServices from '@/sections/home/HomeServices';
@@ -9,11 +13,17 @@ import HomeTestimonials from '@/sections/home/HomeTestimonials';
 import HomeContact from '@/sections/home/HomeContact';
 import CursorFollower from '@/components/common/CursorFollower';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Seo } from '@/seo/Seo';
 import { LocalBusinessJsonLd } from '@/seo/LocalBusinessJsonLd';
 
 export default function HomePage() {
   useNativeScroll();
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  // Navbar is hidden during splash, revealed by hero choreography
+  const [navbarRevealed, setNavbarRevealed] = useState(prefersReducedMotion);
+
   return (
     <>
       <Seo
@@ -23,29 +33,52 @@ export default function HomePage() {
       />
       <LocalBusinessJsonLd />
       <CursorFollower />
+
+      {/* Splash intro — fixed overlay above everything */}
+      {!prefersReducedMotion && <HomeSplash />}
+
       <div className="relative z-base">
-        <Layout>
-          {/* Hero avec effet parallax - reste sticky pendant que les autres scrollent par-dessus */}
-          <StickySection zIndex={11} enableSticky={true}>
-            <HomeHero />
+        <Layout navbarRevealed={navbarRevealed}>
+          {/* Spacer for splash scroll transition (50vh of scroll before hero sticks) */}
+          {!prefersReducedMotion && <div className="h-[50vh] bg-accent" aria-hidden="true" />}
+
+          {/* Hero — sticky parallax */}
+          <StickySection zIndex={11} enableSticky={true} wrapperMinHeight="200vh">
+            <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
           </StickySection>
-          {/* Toutes les autres sections scrollent normalement avec z-index croissant */}
+
+          {/* Hero → Story : gradient in Story does the transition */}
           <StickySection zIndex={12}>
             <HomeStory />
           </StickySection>
+
+          {/* Story → Services */}
           <StickySection zIndex={13}>
+            <SectionTransition variant="fade" fromColor="white" toColor="black" />
             <HomeServices />
           </StickySection>
+
+          {/* Services → Offers */}
           <StickySection zIndex={14}>
+            <SectionTransition variant="fade" fromColor="black" toColor="white" />
             <HomeOffers />
           </StickySection>
+
+          {/* Offers → Engagement */}
           <StickySection zIndex={15}>
+            <SectionTransition variant="pattern" />
             <HomeEngagement />
           </StickySection>
+
+          {/* Engagement → Testimonials */}
           <StickySection zIndex={16}>
+            <SectionTransition variant="fade" fromColor="black" toColor="white" />
             <HomeTestimonials />
           </StickySection>
+
+          {/* Testimonials → Contact */}
           <StickySection zIndex={17}>
+            <SectionTransition variant="diagonal" fromColor="white" toColor="#FDD835" />
             <HomeContact />
           </StickySection>
         </Layout>
