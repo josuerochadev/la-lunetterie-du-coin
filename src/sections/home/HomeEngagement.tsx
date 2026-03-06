@@ -57,6 +57,7 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
       id="engagement"
       className="relative w-full overflow-hidden bg-black py-section"
       aria-labelledby="engagement-title"
+      data-navbar-theme="light"
     >
       {/* EyePattern with drift (desktop) / static (mobile/reduced) */}
       {prefersReducedMotion ? (

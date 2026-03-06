@@ -53,6 +53,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
       id="services"
       className="relative w-full overflow-hidden bg-black py-section"
       aria-labelledby="services-title"
+      data-navbar-theme="light"
     >
       {/* EyePattern with drift (desktop) / static (mobile/reduced) */}
       {prefersReducedMotion ? (

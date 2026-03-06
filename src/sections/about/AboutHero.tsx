@@ -8,7 +8,7 @@ import EyePattern from '@/components/common/EyePattern';
  */
 export default function AboutHero() {
   return (
-    <section id="hero" className="relative w-full bg-black py-section">
+    <section id="hero" className="relative w-full bg-black py-section" data-navbar-theme="light">
       <EyePattern variant="blanc" opacity={0.03} />
       <div className="mx-auto max-w-container px-container-x">
         <div className="mx-auto max-w-6xl">

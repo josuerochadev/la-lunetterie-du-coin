@@ -40,21 +40,21 @@ export default function HomePage() {
       <div className="relative z-base">
         <Layout navbarRevealed={navbarRevealed}>
           {/* Spacer for splash scroll transition (50vh of scroll before hero sticks) */}
-          {!prefersReducedMotion && <div className="h-[50vh] bg-accent" aria-hidden="true" />}
+          {!prefersReducedMotion && <div className="h-screen" aria-hidden="true" />}
 
           {/* Hero — sticky parallax */}
-          <StickySection zIndex={11} enableSticky={true} wrapperMinHeight="200vh">
+          <StickySection zIndex={11} enableSticky={true} wrapperMinHeight="250vh">
             <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
           </StickySection>
 
-          {/* Hero → Story : gradient in Story does the transition */}
+          {/* Hero → Story : fade from accent/yellow to black */}
           <StickySection zIndex={12}>
+            <SectionTransition variant="fade" fromColor="#FDD835" toColor="black" />
             <HomeStory />
           </StickySection>
 
-          {/* Story → Services */}
+          {/* Story → Services (both black, no transition needed) */}
           <StickySection zIndex={13}>
-            <SectionTransition variant="fade" fromColor="white" toColor="black" />
             <HomeServices />
           </StickySection>
 

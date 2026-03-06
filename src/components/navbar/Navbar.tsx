@@ -1,10 +1,14 @@
 import type React from 'react';
-import { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useLocation, Link } from 'react-router-dom';
+import Phone from 'lucide-react/dist/esm/icons/phone';
+import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
 import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
+import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
-import { MENU_ANIMATION_DURATION } from '@/config/menu';
+import { MENU_ANIMATION_DURATION, CALENDLY_URL } from '@/config/menu';
+import { STORE_INFO } from '@/config/store';
 import { useMotionPreference } from '@/a11y/useMotionPreference';
 import { cn } from '@/lib/cn';
 
@@ -14,21 +18,79 @@ interface NavbarProps {
 }
 
 /**
- * Composant Navbar — Symbole seul centré
+ * Composant Navbar — Barre horizontale complète
  *
- * Le logo symbole (oeil) centré en haut de page ouvre le menu full-screen.
- * Hover : opacité + léger scale. Active : press effect.
+ * Adapts colors based on `data-navbar-theme` attribute on sections:
+ *   - data-navbar-theme="light" → light text/icons (for dark backgrounds)
+ *   - default → dark text/icons (for light backgrounds)
  *
- * Supports delayed reveal via `revealed` prop for splash intro choreography.
- *
- * @component
+ * Uses IntersectionObserver to detect which section is at the top of the viewport.
  */
 const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [inSplashZone, setInSplashZone] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const prm = useMotionPreference();
+
+  const isLight = theme === 'light';
+
+  // Hide navbar when user scrolls back up into the splash zone (homepage only)
+  useEffect(() => {
+    if (location.pathname !== '/') {
+      setInSplashZone(false);
+      return;
+    }
+
+    const handleScroll = () => {
+      const vh = window.innerHeight;
+      // Splash zone = before the hero section starts (~0.85vh threshold)
+      setInSplashZone(window.scrollY < vh * 0.85);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [location.pathname]);
+
+  const isVisible = revealed && !inSplashZone;
+
+  // Observe sections with data-navbar-theme to switch navbar colors
+  const observeSections = useCallback(() => {
+    const sections = document.querySelectorAll('[data-navbar-theme]');
+    if (sections.length === 0) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        // Find sections that are intersecting the top of the viewport
+        const active = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+        if (active.length > 0) {
+          const closest = active[0];
+          const sectionTheme = (closest.target as HTMLElement).dataset.navbarTheme;
+          setTheme(sectionTheme === 'light' ? 'light' : 'dark');
+        } else {
+          setTheme('dark');
+        }
+      },
+      {
+        // Observe only the top strip of the viewport where the navbar sits
+        rootMargin: '0px 0px -90% 0px',
+        threshold: 0,
+      },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    return observeSections();
+  }, [observeSections, location.pathname]);
 
   useEffect(() => {
     if (menuActive) {
@@ -53,39 +115,126 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
     buttonRef.current?.focus();
   };
 
-  const handleClick = (e: React.MouseEvent) => {
-    if (location.pathname === '/' && e.detail === 2) {
+  const handleLogoClick = () => {
+    if (location.pathname === '/') {
       window.scrollTo({
         top: 0,
         left: 0,
         behavior: prm ? 'auto' : 'smooth',
       });
-      return;
     }
-    handleToggle();
   };
+
+  // Color classes based on theme
+  const textColor = isLight ? 'text-accent' : 'text-black';
+  const hoverColor = isLight ? 'hover:text-white' : 'hover:text-accent';
+  const outlineColor = isLight ? 'focus-visible:outline-accent' : 'focus-visible:outline-black';
+  const LogoSymbole = isLight ? LogoSymboleJaune : LogoSymboleNoir;
 
   return (
     <>
-      {/* Symbole oeil centré — fixe en haut */}
+      {/* Navbar horizontale — fixe en haut */}
       <header
         className={cn(
-          'fixed left-0 right-0 top-0 z-navbar flex justify-center pt-4 sm:pt-6',
+          'fixed left-0 right-0 top-0 z-navbar flex items-center px-4 pt-4 sm:px-6 sm:pt-6',
           'transition-all duration-500 ease-out',
-          revealed ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-5 opacity-0',
+          isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-5 opacity-0',
         )}
       >
-        <button
-          ref={buttonRef}
-          type="button"
-          onClick={handleClick}
-          aria-label={menuActive ? 'Fermer le menu' : 'Ouvrir le menu'}
-          aria-expanded={menuActive}
-          aria-controls="main-menu"
-          className="cursor-pointer rounded-full p-2 transition-all duration-300 hover:scale-110 hover:opacity-70 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-black active:scale-95"
-        >
-          <LogoSymboleNoir className="h-10 w-auto sm:h-12 lg:h-14" aria-hidden="true" />
-        </button>
+        <nav className="flex w-full items-center gap-3 sm:gap-4" aria-label="Navigation principale">
+          {/* Logo symbole — scroll-to-top on homepage, link to / otherwise */}
+          {location.pathname === '/' ? (
+            <button
+              type="button"
+              onClick={handleLogoClick}
+              aria-label="Retour en haut de page"
+              className={cn(
+                'cursor-pointer rounded-full p-1.5 transition-all duration-300 hover:scale-110 hover:opacity-70 active:scale-95',
+                `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+              )}
+            >
+              <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
+            </button>
+          ) : (
+            <Link
+              to="/"
+              aria-label="Accueil — La Lunetterie du Coin"
+              className={cn(
+                'rounded-full p-1.5 transition-all duration-300 hover:scale-110 hover:opacity-70 active:scale-95',
+                `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+              )}
+            >
+              <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
+            </Link>
+          )}
+
+          {/* "Menu" — ouvre le FullScreenMenu */}
+          <button
+            ref={buttonRef}
+            type="button"
+            onClick={handleToggle}
+            aria-label={menuActive ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={menuActive}
+            aria-controls="main-menu"
+            className={cn(
+              'cursor-pointer text-body-sm font-medium transition-colors duration-300',
+              textColor,
+              hoverColor,
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            Menu
+          </button>
+
+          {/* Téléphone — hidden on mobile */}
+          <a
+            href={`tel:${STORE_INFO.phone.tel}`}
+            className={cn(
+              'hidden items-center gap-1.5 text-body-sm transition-colors duration-300 lg:flex',
+              textColor,
+              hoverColor,
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            <Phone className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>{STORE_INFO.phone.display}</span>
+          </a>
+
+          {/* Localisation — hidden on mobile */}
+          <a
+            href={STORE_INFO.address.googleMapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'hidden items-center gap-1.5 text-body-sm transition-colors duration-300 lg:flex',
+              textColor,
+              hoverColor,
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+            <span>{STORE_INFO.address.city}</span>
+          </a>
+
+          {/* Spacer */}
+          <div className="flex-grow" />
+
+          {/* CTA Prendre RDV */}
+          <a
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={cn(
+              'hidden rounded-full px-5 py-2 text-body-sm font-medium transition-all duration-300 active:scale-95 sm:inline-flex',
+              isLight
+                ? 'bg-accent text-black hover:brightness-110'
+                : 'bg-secondary-orange text-black hover:brightness-110',
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            Prendre RDV
+          </a>
+        </nav>
       </header>
 
       {/* Menu plein écran */}
