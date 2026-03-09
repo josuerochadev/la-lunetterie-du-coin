@@ -46,13 +46,15 @@ export default function SectionTransition({
   );
 
   if (variant === 'fade') {
+    // Eased multi-stop gradient: starts very gradually, accelerates mid, eases into target
+    // This avoids the hard visible line that a simple 2-color linear-gradient creates
     return (
       <div
         ref={ref}
         className="pointer-events-none relative w-full"
         style={{
           height,
-          background: `linear-gradient(to bottom, ${fromColor}, ${toColor})`,
+          background: `linear-gradient(to bottom, ${fromColor} 0%, color-mix(in srgb, ${fromColor} 95%, ${toColor}) 8%, color-mix(in srgb, ${fromColor} 80%, ${toColor}) 20%, color-mix(in srgb, ${fromColor} 55%, ${toColor}) 40%, color-mix(in srgb, ${fromColor} 30%, ${toColor}) 60%, color-mix(in srgb, ${fromColor} 10%, ${toColor}) 80%, ${toColor} 100%)`,
         }}
         aria-hidden="true"
       />

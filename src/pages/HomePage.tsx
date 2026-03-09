@@ -47,9 +47,8 @@ export default function HomePage() {
             <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
           </StickySection>
 
-          {/* Hero → Story : fade from accent/yellow to black */}
+          {/* Hero → Story : gradient integrated into Story section */}
           <StickySection zIndex={12}>
-            <SectionTransition variant="fade" fromColor="#FDD835" toColor="black" />
             <HomeStory />
           </StickySection>
 

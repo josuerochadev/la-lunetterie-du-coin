@@ -1,5 +1,5 @@
 import { forwardRef, useEffect, useState } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -57,19 +57,24 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
 
   // --- Scroll-linked parallax values (desktop only) ---
 
+  // Spring config: smooth inertia for all scroll-linked motion
+  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
+
   // Title: starts off-screen RIGHT, glides left across full viewport, exits left
-  const titleX = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-100vw']);
+  const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-100vw']);
+  const titleX = useSpring(titleXRaw, springConfig);
 
   // Photos: "curtain" effect with 3 keyframes
   // Start far apart → converge at midpoint → separate again as they exit
   const stickyMid = stickyStart + scrollRange * 0.5;
 
   // Left photo — steady pace, smaller (25%)
-  const photoLeftX = useTransform(
+  const photoLeftXRaw = useTransform(
     scrollY,
     [stickyStart, stickyMid, stickyEnd],
     ['-60vw', '20vw', '100vw'],
   );
+  const photoLeftX = useSpring(photoLeftXRaw, springConfig);
   const photoLeftScale = useTransform(
     scrollY,
     [stickyStart, stickyStart + scrollRange * 0.4],
@@ -82,11 +87,12 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   );
 
   // Right photo — faster, larger (35%), converges then separates
-  const photoRightX = useTransform(
+  const photoRightXRaw = useTransform(
     scrollY,
     [stickyStart, stickyMid, stickyEnd],
     ['-10vw', '47vw', '140vw'],
   );
+  const photoRightX = useSpring(photoRightXRaw, springConfig);
   const photoRightScale = useTransform(
     scrollY,
     [stickyStart, stickyStart + scrollRange * 0.3],

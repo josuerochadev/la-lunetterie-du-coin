@@ -1,26 +1,59 @@
-import { forwardRef } from 'react';
+import { forwardRef, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { m } from 'framer-motion';
+import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import TextReveal from '@/components/motion/TextReveal';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
- * Section HomeStory — Editorial Spread
+ * Section HomeStory — 3-column editorial with scroll-driven parallax
  *
- * Dark background section with two-column layout:
- *   - Left: large photo (sticky on desktop) with title overlaid at the bottom
- *   - Right: body text and CTA that scroll naturally past the sticky photo
+ * Desktop layout (scroll-driven):
+ *   - Left column: title "La Lunetterie du Coin" — scrolls up (slightly slower)
+ *   - Center column: photo — sticky, with slight zoom, expands fullscreen at end
+ *   - Right column: body text + CTA — scrolls up
+ *   - End: photo goes fullscreen, transition phrase fades in centered
  *
- * The section is tall enough (min-h-[150vh]) to give the text room to scroll
- * while the photo stays pinned.
- *
- * Mobile: stacked layout, photo top with title overlay, text below.
+ * Mobile: stacked layout with SimpleAnimation entrance.
+ * Reduced motion: static layout, no scroll effects.
  */
 const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // Track scroll progress through the section
+  const { scrollYProgress } = useScroll({
+    target: prefersReducedMotion ? undefined : sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Spring for smooth motion
+  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
+
+  // Title scrolls up slightly slower than body text (parallax offset)
+  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.7], [100, -300]);
+  const titleY = useSpring(titleYRaw, springConfig);
+
+  // Body text scrolls up at normal pace
+  const textYRaw = useTransform(scrollYProgress, [0.1, 0.7], [150, -400]);
+  const textY = useSpring(textYRaw, springConfig);
+
+  // Photo: slight zoom during scroll
+  const photoScale = useTransform(scrollYProgress, [0.1, 0.6], [1, 1.05]);
+
+  // End sequence: photo expands to fullscreen, phrase fades in
+  // Photo grows from its column size to fullscreen
+  const photoExpandScale = useTransform(scrollYProgress, [0.65, 0.85], [1, 2.8]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0.6]);
+
+  // Transition phrase fades in at the end
+  const phraseOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.75, 0.88], [40, 0]);
+  const phraseYSpring = useSpring(phraseY, springConfig);
+
+  // Entrance opacity for all elements (scroll-triggered reveal)
+  const entranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
   return (
     <section
@@ -30,10 +63,19 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
-      <div className="relative mx-auto max-w-container px-6 sm:px-10 md:px-16">
+      {/* Integrated gradient: accent → black, no separate transition element */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+        style={{
+          background:
+            'linear-gradient(to bottom, #FDD835 0%, color-mix(in srgb, #FDD835 95%, black) 8%, color-mix(in srgb, #FDD835 80%, black) 20%, color-mix(in srgb, #FDD835 55%, black) 40%, color-mix(in srgb, #FDD835 30%, black) 60%, color-mix(in srgb, #FDD835 10%, black) 80%, transparent 100%)',
+        }}
+        aria-hidden="true"
+      />
+
+      <div ref={sectionRef} className="relative">
         {/* ===== Mobile layout — stacked ===== */}
-        <div className="flex flex-col gap-8 py-20 sm:py-28 lg:hidden">
-          {/* Photo with title overlay */}
+        <div className="flex flex-col gap-8 px-6 py-20 sm:px-10 sm:py-28 md:px-16 lg:hidden">
           <SimpleAnimation type="slide-up" delay={0} className="w-full">
             <div className="relative aspect-[4/5] w-full overflow-hidden">
               <img
@@ -42,21 +84,19 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 className="h-full w-full object-cover"
                 loading="lazy"
               />
-              {/* Gradient overlay for title readability */}
-              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
-              <h2
-                id="story-title"
-                className="text-heading absolute bottom-6 left-6 right-6 text-accent"
-                style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}
-              >
-                Une lunetterie
-                <br />
-                différente
-              </h2>
             </div>
           </SimpleAnimation>
 
-          {/* Text content */}
+          <SimpleAnimation type="slide-up" delay={100}>
+            <h2
+              id="story-title"
+              className="text-heading text-accent"
+              style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}
+            >
+              La Lunetterie du Coin
+            </h2>
+          </SimpleAnimation>
+
           <SimpleAnimation type="slide-up" delay={200}>
             <p className="text-body leading-relaxed text-accent/80">
               La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des lunettes
@@ -76,79 +116,146 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
           </SimpleAnimation>
         </div>
 
-        {/* ===== Desktop layout — two columns, photo sticky ===== */}
-        <div className="hidden min-h-[150vh] lg:flex lg:gap-16 xl:gap-20">
-          {/* Left column — sticky photo with title overlay */}
-          <div className="w-[45%] py-20 xl:py-28">
-            <div className="sticky top-[10vh]">
-              <SimpleAnimation type="slide-left" delay={0}>
-                <div className="relative overflow-hidden">
-                  <img
-                    src="/images/our-story-eyeglasses.jpg"
-                    alt="Lunettes artisanales - La Lunetterie du Coin"
-                    className="aspect-[3/4] w-full object-cover"
-                    loading="lazy"
-                  />
-                  {/* Gradient overlay for title readability */}
-                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/70 to-transparent" />
+        {/* ===== Desktop layout — 3 columns, scroll-driven ===== */}
+        <div className="hidden min-h-[250vh] lg:block">
+          <div className="sticky top-0 h-screen overflow-hidden">
+            {/* 3-column grid */}
+            <div className="relative flex h-full items-center px-16 xl:px-20">
+              {/* Left column — title, scrolls up slightly slower */}
+              {prefersReducedMotion ? (
+                <div className="w-[22%] pr-8">
+                  <h2
+                    id="story-title"
+                    className="text-heading text-accent"
+                    style={{ fontSize: 'clamp(1.5rem, 2.2vw, 2.5rem)' }}
+                  >
+                    La Lunetterie
+                    <br />
+                    du Coin
+                  </h2>
+                </div>
+              ) : (
+                <m.div
+                  className="w-[22%] pr-8 will-change-transform"
+                  style={{ y: titleY, opacity: entranceOpacity }}
+                >
+                  <h2
+                    id="story-title"
+                    className="text-heading text-accent"
+                    style={{ fontSize: 'clamp(1.5rem, 2.2vw, 2.5rem)' }}
+                  >
+                    La Lunetterie
+                    <br />
+                    du Coin
+                  </h2>
+                </m.div>
+              )}
 
-                  {/* Title overlaid on photo */}
-                  <div className="absolute bottom-8 left-8 right-4">
-                    <TextReveal
-                      as="h2"
-                      mode="scroll"
-                      splitBy="words"
-                      className="text-heading text-accent"
-                      style={{ fontSize: 'clamp(2rem, 3.5vw, 3.5rem)' }}
-                    >
-                      Une lunetterie différente
-                    </TextReveal>
+              {/* Center column — sticky photo with zoom + fullscreen expand */}
+              {prefersReducedMotion ? (
+                <div className="w-[32%] px-4">
+                  <div className="overflow-hidden">
+                    <img
+                      src="/images/our-story-eyeglasses.jpg"
+                      alt="Lunettes artisanales - La Lunetterie du Coin"
+                      className="aspect-[3/4] w-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                 </div>
-              </SimpleAnimation>
-            </div>
-          </div>
-
-          {/* Right column — scrolling text content */}
-          <div className="flex w-[55%] flex-col justify-center py-20 xl:py-28">
-            <SimpleAnimation type="slide-up" delay={200}>
-              <p
-                className="text-accent/80"
-                style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.6 }}
-              >
-                La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des lunettes
-                de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg
-                de Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style
-                contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
-                qu&apos;elle soit neuve ou d&apos;occasion.
-              </p>
-            </SimpleAnimation>
-
-            <SimpleAnimation type="slide-up" delay={400}>
-              {prefersReducedMotion ? (
-                <Link
-                  to="/a-propos"
-                  className="mt-10 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
-                >
-                  Nous découvrir
-                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                </Link>
               ) : (
-                <Link
-                  to="/a-propos"
-                  className="group/cta mt-10 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
+                <m.div
+                  className="w-[32%] px-4 will-change-transform"
+                  style={{
+                    scale: photoExpandScale,
+                    opacity: photoExpandOpacity,
+                  }}
                 >
-                  Nous découvrir
-                  <m.span
-                    className="inline-block"
-                    whileHover={{ x: 8 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  >
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                  </m.span>
-                </Link>
+                  <m.div className="overflow-hidden" style={{ opacity: entranceOpacity }}>
+                    <m.img
+                      src="/images/our-story-eyeglasses.jpg"
+                      alt="Lunettes artisanales - La Lunetterie du Coin"
+                      className="aspect-[3/4] w-full object-cover"
+                      loading="lazy"
+                      style={{ scale: photoScale }}
+                    />
+                  </m.div>
+                </m.div>
               )}
-            </SimpleAnimation>
+
+              {/* Right column — body text + CTA, scrolls up */}
+              {prefersReducedMotion ? (
+                <div className="w-[46%] pl-8">
+                  <p
+                    className="text-accent/80"
+                    style={{ fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', lineHeight: 1.7 }}
+                  >
+                    La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des
+                    lunettes de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur
+                    du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise
+                    optique, style contemporain et engagement écologique. Chaque paire est
+                    sélectionnée avec soin, qu&apos;elle soit neuve ou d&apos;occasion.
+                  </p>
+                  <Link
+                    to="/a-propos"
+                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
+                  >
+                    Nous découvrir
+                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                  </Link>
+                </div>
+              ) : (
+                <m.div
+                  className="w-[46%] pl-8 will-change-transform"
+                  style={{ y: textY, opacity: entranceOpacity }}
+                >
+                  <p
+                    className="text-accent/80"
+                    style={{ fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', lineHeight: 1.7 }}
+                  >
+                    La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des
+                    lunettes de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur
+                    du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise
+                    optique, style contemporain et engagement écologique. Chaque paire est
+                    sélectionnée avec soin, qu&apos;elle soit neuve ou d&apos;occasion.
+                  </p>
+                  <Link
+                    to="/a-propos"
+                    className="group/cta mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
+                  >
+                    Nous découvrir
+                    <m.span
+                      className="inline-block"
+                      whileHover={{ x: 8 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    >
+                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    </m.span>
+                  </Link>
+                </m.div>
+              )}
+            </div>
+
+            {/* Transition phrase — fades in as photo goes fullscreen */}
+            {!prefersReducedMotion && (
+              <m.div
+                className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-8"
+                style={{ opacity: phraseOpacity }}
+                aria-hidden="true"
+              >
+                <m.h3
+                  className="text-heading text-center text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+                  style={{
+                    fontSize: 'clamp(2rem, 4vw, 4rem)',
+                    y: phraseYSpring,
+                  }}
+                >
+                  Une expertise complète pour
+                  <br />
+                  prendre soin de votre vue
+                </m.h3>
+              </m.div>
+            )}
           </div>
         </div>
       </div>

@@ -63,9 +63,8 @@ const HomeServices = forwardRef<HTMLElement>(() => {
       )}
 
       <div className="relative z-10 mx-auto max-w-container px-container-x">
-        {/* Header */}
+        {/* Header — title only, subtitle moved to Story transition */}
         <div className="mb-16 max-w-2xl lg:mb-24">
-          {/* Mobile: SimpleAnimation. Desktop: TextReveal */}
           <div className="lg:hidden">
             <SimpleAnimation type="slide-up" delay={0}>
               <h2 id="services-title" className="heading-section mb-4 text-white">
@@ -84,10 +83,6 @@ const HomeServices = forwardRef<HTMLElement>(() => {
               {HOMEPAGE_SECTIONS.services.title}
             </TextReveal>
           </div>
-
-          <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-white/50">{HOMEPAGE_SECTIONS.services.subtitle}</p>
-          </SimpleAnimation>
         </div>
 
         {/* Services — full-width alternating rows */}
