@@ -106,41 +106,42 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   // Photo entrance opacity (early reveal)
   const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
-  // Photo: slight zoom during scroll
-  const photoScale = useTransform(scrollYProgress, [0.1, 0.6], [1, 1.05]);
+  // Photo: zoom starts only after text fades out
+  const photoScale = useTransform(scrollYProgress, [0.56, 0.72], [1, 1.05]);
 
   // --- Phase 2: title & text enter later, once photo is settled ---
   // Text content fades in after photo is established
   const textEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
 
-  // Title scrolls up from below, exits before photo expand
-  const titleYRaw = useTransform(scrollYProgress, [0.22, 0.5], [150, -200]);
+  // Title scrolls up from below, arrives at top and stays (sticky effect)
+  const titleYRaw = useTransform(scrollYProgress, [0.22, 0.33], [150, 0]);
   const titleY = useSpring(titleYRaw, springConfig);
-  const titleFadeOut = useTransform(scrollYProgress, [0.42, 0.5], [1, 0]);
 
-  // Body text scrolls up from below, exits before photo expand
-  const textYRaw = useTransform(scrollYProgress, [0.22, 0.5], [180, -250]);
+  // Body text scrolls up far — CTA must reach ~30vh before fade starts
+  const textYRaw = useTransform(scrollYProgress, [0.22, 0.56], [250, -400]);
   const textY = useSpring(textYRaw, springConfig);
-  const textFadeOut = useTransform(scrollYProgress, [0.42, 0.5], [1, 0]);
+
+  // Both fade out together only once CTA is high enough on screen
+  const contentFadeOut = useTransform(scrollYProgress, [0.54, 0.58], [1, 0]);
 
   // --- End sequence: photo expands fullscreen, phrase fades in ---
-  const photoLeft = useTransform(scrollYProgress, [0.55, 0.7], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.55, 0.7], ['36%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.55, 0.7], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.6, 0.7], [1, 0.7]);
+  const photoLeft = useTransform(scrollYProgress, [0.6, 0.75], ['28%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.6, 0.75], ['36%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.6, 0.75], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.65, 0.75], [1, 0.7]);
 
   // Transition phrase fades in as photo goes fullscreen
-  const phraseOpacity = useTransform(scrollYProgress, [0.63, 0.73], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.63, 0.73], [40, 0]);
+  const phraseOpacity = useTransform(scrollYProgress, [0.68, 0.78], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.68, 0.78], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
-  // Combined opacities: fade in + fade out
+  // Combined opacities: fade in + shared fade out
   const titleCombinedOpacity = useTransform(
-    [textEntranceOpacity, titleFadeOut] as const,
+    [textEntranceOpacity, contentFadeOut] as const,
     ([a, b]: number[]) => Math.min(a, b),
   );
   const textCombinedOpacity = useTransform(
-    [textEntranceOpacity, textFadeOut] as const,
+    [textEntranceOpacity, contentFadeOut] as const,
     ([a, b]: number[]) => Math.min(a, b),
   );
 
@@ -202,7 +203,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
         </div>
 
         {/* ===== Desktop layout — 3 columns, scroll-driven ===== */}
-        <div className="hidden min-h-[400vh] lg:block">
+        <div className="hidden min-h-[450vh] lg:block">
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* 3-column grid */}
             <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
