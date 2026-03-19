@@ -70,7 +70,7 @@ export default function HomeSplash() {
       <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[#FEEB09]">
         <m.video
           ref={videoRef}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-contain"
           autoPlay
           muted
           playsInline

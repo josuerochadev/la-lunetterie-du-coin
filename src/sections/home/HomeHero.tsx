@@ -36,7 +36,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
 
   // Scroll range for parallax (same as before)
   const stickyStart = vh;
-  const stickyEnd = vh * 2.5;
+  const stickyEnd = vh * 3.5;
   const scrollRange = stickyEnd - stickyStart;
 
   // Trigger choreography when clip reveal is mostly done
@@ -61,10 +61,10 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
 
   // --- Scroll-linked values (desktop only) ---
 
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
+  const springConfig = { stiffness: 50, damping: 40, mass: 0.8 };
 
   // ClipPath reveal: entire hero section wipes in from left → right
-  const clipRaw = useTransform(scrollY, [vh * 0.3, vh * 0.9], [100, 0]);
+  const clipRaw = useTransform(scrollY, [vh * 0.2, vh * 1.0], [100, 0]);
   const clipSmooth = useSpring(clipRaw, springConfig);
   const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 

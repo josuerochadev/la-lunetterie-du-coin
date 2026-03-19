@@ -41,7 +41,7 @@ export default function HomePage() {
         <Layout navbarRevealed={navbarRevealed}>
           {/* Spacer — scroll distance for splash fade + hero clip reveal + hero parallax */}
           {!prefersReducedMotion && (
-            <div className="pointer-events-none h-screen lg:h-[350vh]" aria-hidden="true" />
+            <div className="pointer-events-none h-screen lg:h-[450vh]" aria-hidden="true" />
           )}
 
           {/* Hero — fixed overlay on desktop (clipPath L→R), in-flow on mobile */}
