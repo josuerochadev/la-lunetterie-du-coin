@@ -41,7 +41,7 @@ export default function MenuLinkItem({
   const isActive = isHash(href) && href === `#${activeSection}`;
 
   const linkClasses = featured
-    ? 'button-primary inline-block text-center'
+    ? 'group relative inline-block text-title-md font-medium text-accent transition-colors duration-200 hover:text-black focus-visible:text-black focus-ring'
     : 'group relative inline-block text-title-md font-medium transition-colors duration-200 hover:text-accent focus-visible:text-accent focus-ring';
 
   const activeIndicator = isActive && !featured && (

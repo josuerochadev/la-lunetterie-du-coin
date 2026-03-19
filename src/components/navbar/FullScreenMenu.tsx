@@ -5,6 +5,7 @@ import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
 import Logo from '@/components/common/Logo';
+import LinkCTA from '@/components/common/LinkCTA';
 import { getSocialIcon } from '@/lib/iconRegistry';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
@@ -140,15 +141,15 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                   </a>
 
                   {/* CTA Prendre RDV */}
-                  <a
+                  <LinkCTA
                     href={MENU_CTA.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="button-primary mt-4 inline-flex px-6 py-3 text-body-sm"
+                    className="mt-4 text-body-sm"
                   >
                     {MENU_CTA.label}
-                  </a>
+                  </LinkCTA>
                 </div>
               </SimpleAnimation>
 

@@ -2,14 +2,11 @@ import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
-import Phone from 'lucide-react/dist/esm/icons/phone';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
 import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
 import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { MENU_ANIMATION_DURATION, CALENDLY_URL } from '@/config/menu';
-import { STORE_INFO } from '@/config/store';
 import { cn } from '@/lib/cn';
 
 interface NavbarProps {
@@ -26,11 +23,16 @@ interface NavbarProps {
  *
  * Uses IntersectionObserver to detect which section is at the top of the viewport.
  */
+const HOVER_ZONE_HEIGHT = 80;
+
 const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [inSplashZone, setInSplashZone] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  const [scrollingUp, setScrollingUp] = useState(false);
+  const lastScrollY = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
 
@@ -54,7 +56,34 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location.pathname]);
 
-  const isVisible = revealed && !inSplashZone;
+  // Desktop: show navbar when mouse enters top zone
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setHovered(e.clientY <= HOVER_ZONE_HEIGHT);
+    };
+    const handleMouseLeave = () => setHovered(false);
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
+  // Mobile: show navbar when scrolling up
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setScrollingUp(currentY < lastScrollY.current && currentY > 0);
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const isVisible = revealed && !inSplashZone && (hovered || scrollingUp || menuActive);
 
   // Detect navbar theme by sampling the element visually behind the navbar.
   // Uses elementFromPoint to handle sticky/z-index overlapping sections correctly.
@@ -128,24 +157,20 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-5 opacity-0',
         )}
       >
-        <nav className="flex w-full items-center gap-3 sm:gap-4" aria-label="Navigation principale">
+        <nav
+          className="flex w-full items-center justify-center gap-3 sm:gap-4"
+          aria-label="Navigation principale"
+        >
           {/* Logo symbole */}
           <Link
             to="/"
             aria-label="Accueil — La Lunetterie du Coin"
             className={cn(
-              'group/nav relative rounded-full p-1.5 transition-all duration-300',
+              'rounded-full p-1.5 transition-transform duration-300 hover:scale-110',
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
-            <span
-              className={cn(
-                'absolute -bottom-0.5 left-1/4 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-1/2',
-                underlineColor,
-              )}
-              aria-hidden="true"
-            />
           </Link>
 
           {/* "Menu" — ouvre le FullScreenMenu */}
@@ -175,67 +200,6 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
               aria-hidden="true"
             />
           </button>
-
-          {/* Téléphone — hidden on mobile */}
-          <a
-            href={`tel:${STORE_INFO.phone.tel}`}
-            className={cn(
-              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold lg:flex',
-              textColor,
-              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
-            )}
-          >
-            <Phone className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>{STORE_INFO.phone.display}</span>
-            {/* Invisible bold duplicate to reserve width */}
-            <span
-              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
-              aria-hidden="true"
-            >
-              <span className="h-3.5 w-3.5 shrink-0" />
-              <span>{STORE_INFO.phone.display}</span>
-            </span>
-            <span
-              className={cn(
-                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
-                underlineColor,
-              )}
-              aria-hidden="true"
-            />
-          </a>
-
-          {/* Localisation — hidden on mobile */}
-          <a
-            href={STORE_INFO.address.googleMapsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold lg:flex',
-              textColor,
-              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
-            )}
-          >
-            <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
-            <span>{STORE_INFO.address.city}</span>
-            {/* Invisible bold duplicate to reserve width */}
-            <span
-              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
-              aria-hidden="true"
-            >
-              <span className="h-3.5 w-3.5 shrink-0" />
-              <span>{STORE_INFO.address.city}</span>
-            </span>
-            <span
-              className={cn(
-                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
-                underlineColor,
-              )}
-              aria-hidden="true"
-            />
-          </a>
-
-          {/* Spacer */}
-          <div className="flex-grow" />
 
           {/* CTA Prendre RDV — text + arrow, same underline pattern */}
           <a
