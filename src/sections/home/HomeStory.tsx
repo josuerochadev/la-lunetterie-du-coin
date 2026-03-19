@@ -32,12 +32,12 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   // Spring for smooth motion
   const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
-  // Title scrolls up slightly slower than body text (parallax offset)
-  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.7], [100, -300]);
+  // Title scrolls up slightly slower — reduced range so it stays on screen longer
+  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.8], [80, -150]);
   const titleY = useSpring(titleYRaw, springConfig);
 
-  // Body text scrolls up at normal pace
-  const textYRaw = useTransform(scrollYProgress, [0.1, 0.7], [150, -400]);
+  // Body text scrolls up — reduced range so it stays readable longer
+  const textYRaw = useTransform(scrollYProgress, [0.1, 0.8], [100, -180]);
   const textY = useSpring(textYRaw, springConfig);
 
   // Photo: slight zoom during scroll
@@ -60,7 +60,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
     <section
       ref={ref}
       id="story"
-      className="relative w-full bg-black pt-[20vh]"
+      className="relative w-full bg-black pt-[35vh]"
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
@@ -159,7 +159,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     <img
                       src="/images/our-story-eyeglasses.jpg"
                       alt="Lunettes artisanales - La Lunetterie du Coin"
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition-all duration-500 ease-out hover:scale-105 hover:brightness-110"
                       loading="lazy"
                     />
                   </div>
@@ -173,13 +173,15 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                   }}
                 >
                   <m.div className="h-full overflow-hidden" style={{ opacity: entranceOpacity }}>
-                    <m.img
-                      src="/images/our-story-eyeglasses.jpg"
-                      alt="Lunettes artisanales - La Lunetterie du Coin"
-                      className="h-full w-full object-cover"
-                      loading="lazy"
-                      style={{ scale: photoScale }}
-                    />
+                    <div className="h-full transition-transform duration-500 ease-out hover:scale-105">
+                      <m.img
+                        src="/images/our-story-eyeglasses.jpg"
+                        alt="Lunettes artisanales - La Lunetterie du Coin"
+                        className="h-full w-full object-cover transition-[filter] duration-500 ease-out hover:brightness-110"
+                        loading="lazy"
+                        style={{ scale: photoScale }}
+                      />
+                    </div>
                   </m.div>
                 </m.div>
               )}

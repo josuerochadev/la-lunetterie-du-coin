@@ -140,11 +140,12 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
       id="hero"
       className={
         prefersReducedMotion
-          ? 'relative h-screen w-full overflow-hidden bg-[#FEEB09]'
-          : 'relative h-screen w-full overflow-hidden bg-[#FEEB09] lg:fixed lg:inset-0 lg:z-[10]'
+          ? 'relative h-screen w-full overflow-hidden bg-accent'
+          : 'relative h-screen w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10]'
       }
       style={!prefersReducedMotion && isLg ? { clipPath: heroClip } : undefined}
       aria-labelledby="hero-title"
+      data-navbar-theme="dark"
       {...props}
     >
       {/* ===== Desktop photos — full height, behind title, left → right ===== */}
