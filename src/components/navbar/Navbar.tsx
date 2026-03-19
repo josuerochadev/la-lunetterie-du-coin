@@ -127,7 +127,7 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
 
   // Color classes based on theme
   const textColor = isLight ? 'text-accent' : 'text-black';
-  const hoverColor = isLight ? 'hover:text-white' : 'hover:text-accent';
+  const underlineColor = isLight ? 'bg-accent' : 'bg-black';
   const outlineColor = isLight ? 'focus-visible:outline-accent' : 'focus-visible:outline-black';
   const LogoSymbole = isLight ? LogoSymboleJaune : LogoSymboleNoir;
 
@@ -177,27 +177,39 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
             aria-expanded={menuActive}
             aria-controls="main-menu"
             className={cn(
-              'cursor-pointer text-body-sm font-medium transition-colors duration-300',
+              'group/nav relative cursor-pointer text-body-sm font-medium',
               textColor,
-              hoverColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             Menu
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
           </button>
 
           {/* Téléphone — hidden on mobile */}
           <a
             href={`tel:${STORE_INFO.phone.tel}`}
             className={cn(
-              'hidden items-center gap-1.5 text-body-sm transition-colors duration-300 lg:flex',
+              'group/nav relative hidden items-center gap-1.5 text-body-sm lg:flex',
               textColor,
-              hoverColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             <Phone className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{STORE_INFO.phone.display}</span>
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
           </a>
 
           {/* Localisation — hidden on mobile */}
@@ -206,14 +218,20 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'hidden items-center gap-1.5 text-body-sm transition-colors duration-300 lg:flex',
+              'group/nav relative hidden items-center gap-1.5 text-body-sm lg:flex',
               textColor,
-              hoverColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{STORE_INFO.address.city}</span>
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
           </a>
 
           {/* Spacer */}

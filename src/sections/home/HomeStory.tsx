@@ -59,16 +59,16 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
     <section
       ref={ref}
       id="story"
-      className="relative w-full bg-black"
+      className="relative w-full bg-black pt-[20vh]"
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
-      {/* Integrated gradient: accent → black, no separate transition element */}
+      {/* Integrated gradient: accent → black, smooth blend with hero behind */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-[40vh]"
+        className="pointer-events-none absolute inset-x-0 -top-[25vh] h-[75vh]"
         style={{
           background:
-            'linear-gradient(to bottom, #FDD835 0%, color-mix(in srgb, #FDD835 95%, black) 8%, color-mix(in srgb, #FDD835 80%, black) 20%, color-mix(in srgb, #FDD835 55%, black) 40%, color-mix(in srgb, #FDD835 30%, black) 60%, color-mix(in srgb, #FDD835 10%, black) 80%, transparent 100%)',
+            'linear-gradient(to bottom, transparent 0%, rgba(254,235,9,0.3) 10%, rgba(254,235,9,0.6) 18%, #FEEB09 27%, color-mix(in srgb, #FEEB09 90%, black) 35%, color-mix(in srgb, #FEEB09 65%, black) 48%, color-mix(in srgb, #FEEB09 35%, black) 62%, color-mix(in srgb, #FEEB09 12%, black) 78%, black 100%)',
         }}
         aria-hidden="true"
       />

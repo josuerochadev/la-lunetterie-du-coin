@@ -77,7 +77,7 @@ export default function HomePage() {
 
           {/* Testimonials → Contact */}
           <StickySection zIndex={17}>
-            <SectionTransition variant="diagonal" fromColor="white" toColor="#FDD835" />
+            <SectionTransition variant="diagonal" fromColor="white" toColor="#FEEB09" />
             <HomeContact />
           </StickySection>
         </Layout>

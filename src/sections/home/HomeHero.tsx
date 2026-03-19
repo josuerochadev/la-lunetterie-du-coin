@@ -40,7 +40,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     if (prefersReducedMotion) return;
 
     const unsubscribe = scrollY.on('change', (v) => {
-      if (!choreographyStarted && v > vh * 0.95) {
+      if (!choreographyStarted && v > vh * 0.7) {
         setChoreographyStarted(true);
       }
     });
@@ -68,23 +68,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   // Start far apart → converge at midpoint → separate again as they exit
   const stickyMid = stickyStart + scrollRange * 0.5;
 
-  // Left photo — steady pace, smaller (25%)
-  const photoLeftXRaw = useTransform(
-    scrollY,
-    [stickyStart, stickyMid, stickyEnd],
-    ['-60vw', '20vw', '100vw'],
-  );
-  const photoLeftX = useSpring(photoLeftXRaw, springConfig);
-  const photoLeftScale = useTransform(
-    scrollY,
-    [stickyStart, stickyStart + scrollRange * 0.4],
-    [1.03, 1],
-  );
-  const photoLeftOpacity = useTransform(
-    scrollY,
-    [stickyStart, stickyMid, stickyEnd],
-    [0.7, 1, 0.7],
-  );
+  // Left photo is now handled by HomeSplash (fixed overlay, pure horizontal movement)
 
   // Right photo — faster, larger (35%), converges then separates
   const photoRightXRaw = useTransform(
@@ -108,14 +92,29 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   const blocksStart = stickyStart + scrollRange * 0.3;
   const blocksEnd = stickyStart + scrollRange * 0.6;
 
+  // Fade out all hero content before Story section overlaps
+  const heroContentFadeOut = useTransform(
+    scrollY,
+    [stickyEnd - scrollRange * 0.15, stickyEnd],
+    [1, 0],
+  );
+
   const block1Y = useTransform(scrollY, [blocksStart, blocksEnd], [120, 0]);
   const block1X = useTransform(scrollY, [blocksStart, blocksEnd], [-20, 0]);
-  const block1Opacity = useTransform(scrollY, [blocksStart, blocksEnd], [0, 1]);
+  const block1OpacityIn = useTransform(scrollY, [blocksStart, blocksEnd], [0, 1]);
+  const block1Opacity = useTransform(
+    [block1OpacityIn, heroContentFadeOut] as const,
+    ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
+  );
 
   const block2Start = blocksStart + scrollRange * 0.08;
   const block2Y = useTransform(scrollY, [block2Start, blocksEnd], [120, 0]);
   const block2X = useTransform(scrollY, [block2Start, blocksEnd], [20, 0]);
-  const block2Opacity = useTransform(scrollY, [block2Start, blocksEnd], [0, 1]);
+  const block2OpacityIn = useTransform(scrollY, [block2Start, blocksEnd], [0, 1]);
+  const block2Opacity = useTransform(
+    [block2OpacityIn, heroContentFadeOut] as const,
+    ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
+  );
 
   // Scroll indicator: fades out when photos enter viewport
   const indicatorOpacity = useTransform(
@@ -130,12 +129,11 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     <section
       ref={ref}
       id="hero"
-      className="relative h-screen w-full overflow-hidden bg-accent"
+      className="relative h-screen w-full overflow-hidden"
       aria-labelledby="hero-title"
       {...props}
     >
-      {/* ===== Background ===== */}
-      <div className="absolute inset-0 bg-accent" aria-hidden="true" />
+      {/* ===== Background — transparent, splash yellow shows through ===== */}
 
       {/* ===== Desktop photos — full height, behind title, left → right ===== */}
       {prefersReducedMotion ? (
@@ -163,27 +161,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
         </>
       ) : (
         <>
-          {/* Left photo — slower, smaller */}
-          <m.div
-            className="absolute left-0 top-0 z-10 hidden h-full w-[25%] overflow-hidden will-change-transform lg:block"
-            initial={{ opacity: 0 }}
-            animate={c ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.4 }}
-            style={{
-              x: photoLeftX,
-              scale: photoLeftScale,
-              opacity: photoLeftOpacity,
-            }}
-          >
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-left.jpg"
-              alt="Lunettes elegantes - La Lunetterie du Coin"
-              className="h-full w-full object-cover"
-              loading="eager"
-              sizes="25vw"
-              widths={[384, 640, 768, 1024]}
-            />
-          </m.div>
+          {/* Left photo is rendered by HomeSplash as a fixed overlay (no vertical movement) */}
 
           {/* Right photo — faster, larger */}
           <m.div

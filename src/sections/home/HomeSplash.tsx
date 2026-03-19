@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { m } from 'framer-motion';
+import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 type VideoFormat = 'portrait' | 'square' | 'landscape';
@@ -22,12 +23,13 @@ function getVideoFormat(): VideoFormat {
  * HomeSplash — Fullscreen animated logo intro overlay
  *
  * Plays the brand logo animation fullscreen with a matching yellow background.
+ * Video fades out as the user starts scrolling, revealing the yellow background
+ * underneath for a seamless transition to the hero section.
+ *
  * Uses responsive video formats:
  *   - Mobile (<640px): portrait 9:16
  *   - Tablet (640–1023px): square 1:1
  *   - Desktop (≥1024px): landscape 16:9
- *
- * Stays fixed and immobile. The hero section scrolls OVER it (parallax cover).
  *
  * Reduced motion: skipped entirely (returns null).
  */
@@ -37,6 +39,30 @@ export default function HomeSplash() {
   const [format, setFormat] = useState<VideoFormat>(() =>
     typeof window !== 'undefined' ? getVideoFormat() : 'landscape',
   );
+
+  const { scrollY } = useScroll();
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+
+  // Video fades out as user scrolls through the spacer into the hero
+  const videoOpacity = useTransform(scrollY, [vh * 0.15, vh * 0.55], [1, 0]);
+
+  // Left photo — full lifecycle: curtain entry, then parallax with hero, then fade out
+  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
+  const stickyStart = vh;
+  const stickyEnd = vh * 2.5;
+  const scrollRange = stickyEnd - stickyStart;
+  const stickyMid = stickyStart + scrollRange * 0.5;
+
+  // Curtain entry (left → right), settle, then parallax movement
+  const photoXRaw = useTransform(
+    scrollY,
+    [vh * 0.35, vh * 0.85, stickyStart + scrollRange * 0.3, stickyMid, stickyEnd],
+    ['-30vw', '0vw', '0vw', '20vw', '100vw'],
+  );
+  const photoX = useSpring(photoXRaw, springConfig);
+  const photoScale = useTransform(scrollY, [vh * 0.35, vh * 0.85], [1.05, 1]);
+  // Fade out as hero section exits
+  const photoOpacity = useTransform(scrollY, [stickyEnd - scrollRange * 0.15, stickyEnd], [1, 0]);
 
   // Update video format on resize
   useEffect(() => {
@@ -68,12 +94,25 @@ export default function HomeSplash() {
           muted
           playsInline
           preload="auto"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, ease: 'easeOut' }}
+          style={{ opacity: videoOpacity }}
         >
           <source src={VIDEO_SOURCES[format]} type="video/mp4" />
         </m.video>
+
+        {/* Left photo — curtain entry then parallax, stays fixed at viewport level */}
+        <m.div
+          className="absolute inset-y-0 left-0 hidden w-[25%] overflow-hidden will-change-transform lg:block"
+          style={{ x: photoX, scale: photoScale, opacity: photoOpacity }}
+        >
+          <ResponsiveImage
+            src="/images/hero-eyeglasses-left.jpg"
+            alt=""
+            className="h-full w-full object-cover"
+            loading="eager"
+            sizes="25vw"
+            widths={[384, 640, 768, 1024]}
+          />
+        </m.div>
       </div>
     </div>
   );
