@@ -1,10 +1,81 @@
-import { forwardRef, useRef } from 'react';
-import { m, useScroll, useSpring, useTransform } from 'framer-motion';
+import { forwardRef, useMemo, useRef } from 'react';
+import { m, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import TextReveal from '@/components/motion/TextReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+
+/**
+ * Word-by-word scroll reveal driven by an external scrollYProgress.
+ * Unlike TextReveal, works inside sticky containers.
+ */
+function ScrollWordReveal({
+  children,
+  scrollYProgress,
+  revealStart,
+  revealEnd,
+  as: Tag = 'p',
+  className,
+  style,
+}: {
+  children: string;
+  scrollYProgress: MotionValue<number>;
+  /** scrollYProgress value where reveal begins */
+  revealStart: number;
+  /** scrollYProgress value where all words are fully revealed */
+  revealEnd: number;
+  as?: 'h2' | 'h3' | 'p' | 'span';
+  className?: string;
+  style?: import('react').CSSProperties;
+}) {
+  const words = useMemo(() => children.split(/\s+/).filter(Boolean), [children]);
+
+  return (
+    <Tag className={className} style={style}>
+      {words.map((word, i) => (
+        <span key={i} className="inline-block">
+          <ScrollWord
+            scrollYProgress={scrollYProgress}
+            index={i}
+            total={words.length}
+            rangeStart={revealStart}
+            rangeEnd={revealEnd}
+          >
+            {word}
+          </ScrollWord>
+          {i < words.length - 1 ? '\u00A0' : ''}
+        </span>
+      ))}
+    </Tag>
+  );
+}
+
+function ScrollWord({
+  children,
+  scrollYProgress,
+  index,
+  total,
+  rangeStart,
+  rangeEnd,
+}: {
+  children: string;
+  scrollYProgress: MotionValue<number>;
+  index: number;
+  total: number;
+  rangeStart: number;
+  rangeEnd: number;
+}) {
+  const range = rangeEnd - rangeStart;
+  const wordStart = rangeStart + (index / total) * range;
+  const wordEnd = Math.min(wordStart + range / total + range * 0.2, rangeEnd);
+  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0.15, 1]);
+
+  return (
+    <m.span className="inline-block" style={{ opacity }}>
+      {children}
+    </m.span>
+  );
+}
 
 /**
  * Section HomeStory — 3-column editorial with scroll-driven parallax
@@ -31,40 +102,45 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   // Spring for smooth motion
   const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
-  // Title scrolls up and exits before photo expand starts
-  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.45], [80, -200]);
-  const titleY = useSpring(titleYRaw, springConfig);
-  const titleOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
-
-  // Body text scrolls up and exits before photo expand starts
-  const textYRaw = useTransform(scrollYProgress, [0.1, 0.45], [100, -250]);
-  const textY = useSpring(textYRaw, springConfig);
-  const textOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
+  // --- Phase 1: photo appears alone ---
+  // Photo entrance opacity (early reveal)
+  const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
   // Photo: slight zoom during scroll
   const photoScale = useTransform(scrollYProgress, [0.1, 0.6], [1, 1.05]);
 
-  // End sequence: photo expands to fullscreen by animating position/size
-  const photoLeft = useTransform(scrollYProgress, [0.5, 0.65], ['22%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.5, 0.65], ['38%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.5, 0.65], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.65], [1, 0.7]);
+  // --- Phase 2: title & text enter later, once photo is settled ---
+  // Text content fades in after photo is established
+  const textEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
 
-  // Transition phrase fades in, holds for a while, then stays
-  const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.68], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.58, 0.68], [40, 0]);
+  // Title scrolls up from below, exits before photo expand
+  const titleYRaw = useTransform(scrollYProgress, [0.22, 0.5], [150, -200]);
+  const titleY = useSpring(titleYRaw, springConfig);
+  const titleFadeOut = useTransform(scrollYProgress, [0.42, 0.5], [1, 0]);
+
+  // Body text scrolls up from below, exits before photo expand
+  const textYRaw = useTransform(scrollYProgress, [0.22, 0.5], [180, -250]);
+  const textY = useSpring(textYRaw, springConfig);
+  const textFadeOut = useTransform(scrollYProgress, [0.42, 0.5], [1, 0]);
+
+  // --- End sequence: photo expands fullscreen, phrase fades in ---
+  const photoLeft = useTransform(scrollYProgress, [0.55, 0.7], ['28%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.55, 0.7], ['36%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.55, 0.7], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.6, 0.7], [1, 0.7]);
+
+  // Transition phrase fades in as photo goes fullscreen
+  const phraseOpacity = useTransform(scrollYProgress, [0.63, 0.73], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.63, 0.73], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
-  // Entrance opacity for all elements (scroll-triggered reveal)
-  const entranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
-
-  // Combined opacity: fade in + fade out before photo expand
+  // Combined opacities: fade in + fade out
   const titleCombinedOpacity = useTransform(
-    [entranceOpacity, titleOpacity] as const,
+    [textEntranceOpacity, titleFadeOut] as const,
     ([a, b]: number[]) => Math.min(a, b),
   );
   const textCombinedOpacity = useTransform(
-    [entranceOpacity, textOpacity] as const,
+    [textEntranceOpacity, textFadeOut] as const,
     ([a, b]: number[]) => Math.min(a, b),
   );
 
@@ -126,36 +202,42 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
         </div>
 
         {/* ===== Desktop layout — 3 columns, scroll-driven ===== */}
-        <div className="hidden min-h-[350vh] lg:block">
+        <div className="hidden min-h-[400vh] lg:block">
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* 3-column grid */}
             <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
-              {/* Left column — title, scrolls up slightly slower */}
+              {/* Left column — title (28%), scrolls up */}
               {prefersReducedMotion ? (
-                <div className="w-[22%] pr-8">
-                  <h2 id="story-title" className="heading-section text-accent">
+                <div className="w-[28%] pr-8">
+                  <h2
+                    id="story-title"
+                    className="text-heading text-accent"
+                    style={{ fontSize: 'clamp(2rem, 4vw, 5.5rem)', lineHeight: 0.9 }}
+                  >
                     Notre Histoire
                   </h2>
                 </div>
               ) : (
                 <m.div
-                  className="w-[22%] pr-8 will-change-transform"
+                  className="w-[28%] pr-8 will-change-transform"
                   style={{ y: titleY, opacity: titleCombinedOpacity }}
                 >
-                  <TextReveal
+                  <ScrollWordReveal
                     as="h2"
-                    mode="scroll"
-                    splitBy="words"
-                    className="heading-section text-accent"
+                    scrollYProgress={scrollYProgress}
+                    revealStart={0.2}
+                    revealEnd={0.35}
+                    className="text-heading text-accent"
+                    style={{ fontSize: 'clamp(2rem, 4vw, 5.5rem)', lineHeight: 0.9 }}
                   >
                     Notre Histoire
-                  </TextReveal>
+                  </ScrollWordReveal>
                 </m.div>
               )}
 
-              {/* Center column — sticky photo with zoom + fullscreen expand */}
+              {/* Center column — photo (36%), zoom + fullscreen expand */}
               {prefersReducedMotion ? (
-                <div className="absolute inset-y-0 left-[22%] w-[38%] px-4">
+                <div className="absolute inset-y-0 left-[28%] w-[36%] px-4">
                   <div className="h-full overflow-hidden">
                     <img
                       src="/images/our-story-eyeglasses.jpg"
@@ -176,7 +258,10 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     opacity: photoExpandOpacity,
                   }}
                 >
-                  <m.div className="h-full overflow-hidden" style={{ opacity: entranceOpacity }}>
+                  <m.div
+                    className="h-full overflow-hidden"
+                    style={{ opacity: photoEntranceOpacity }}
+                  >
                     <div className="h-full transition-transform duration-500 ease-out hover:scale-105">
                       <m.img
                         src="/images/our-story-eyeglasses.jpg"
@@ -190,12 +275,12 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 </m.div>
               )}
 
-              {/* Right column — body text + CTA, scrolls up */}
+              {/* Right column — body text + CTA (36%), scrolls up */}
               {prefersReducedMotion ? (
-                <div className="ml-[38%] w-[40%] pl-8">
+                <div className="ml-[36%] w-[36%] pl-8">
                   <p
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
+                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.6 }}
                   >
                     Tout a commencé avec une conviction&nbsp;: proposer des lunettes de qualité tout
                     en donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg de Pierre à
@@ -209,22 +294,23 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 </div>
               ) : (
                 <m.div
-                  className="ml-[38%] w-[40%] pl-8 will-change-transform"
+                  className="ml-[36%] w-[36%] pl-8 will-change-transform"
                   style={{ y: textY, opacity: textCombinedOpacity }}
                 >
-                  <TextReveal
+                  <ScrollWordReveal
                     as="p"
-                    mode="scroll"
-                    splitBy="words"
+                    scrollYProgress={scrollYProgress}
+                    revealStart={0.22}
+                    revealEnd={0.38}
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
+                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.6 }}
                   >
                     Tout a commencé avec une conviction : proposer des lunettes de qualité tout en
                     donnant une seconde vie aux montures. Au cœur du Faubourg de Pierre à
                     Strasbourg, notre boutique indépendante allie expertise optique, style
                     contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
-                    qu&apos;elle soit neuve ou d&apos;occasion.
-                  </TextReveal>
+                    qu'elle soit neuve ou d'occasion.
+                  </ScrollWordReveal>
                   <LinkCTA to="/a-propos" theme="dark" className="mt-8">
                     Nous découvrir
                   </LinkCTA>
