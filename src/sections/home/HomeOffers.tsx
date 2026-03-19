@@ -51,7 +51,12 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="offers" className="relative w-full bg-background" aria-labelledby="offers-title">
+    <section
+      id="offers"
+      className="relative w-full bg-background"
+      aria-labelledby="offers-title"
+      data-navbar-theme="dark"
+    >
       {/* Small label header */}
       <div className="mx-auto max-w-container px-container-x pb-8 pt-section">
         <SimpleAnimation type="slide-up" delay={0}>

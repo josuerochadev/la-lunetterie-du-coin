@@ -14,13 +14,16 @@ interface HomeHeroProps {
 /**
  * HomeHero — "POUR L'AMOUR DES YEUX" with scroll-linked parallax
  *
- * Desktop scroll choreography (section is sticky for ~150vh of scroll):
- *   - Title: glides right → left across the viewport (z-20, in front of photos)
- *   - Photos: full-height, glide left → right (opposite), behind title, different speeds
- *   - Info blocks: centered, slide up from bottom sequentially, stop below title
+ * Desktop: fixed overlay revealed via clipPath left → right (curtain effect).
+ * No vertical movement — the section is always at the viewport, just clipped.
  *
- * Mobile: SimpleAnimation fallback, no scroll-linked parallax.
- * Reduced motion: everything shown immediately.
+ *   - ClipPath reveals the section from left to right during spacer scroll
+ *   - Title: glides right → left across the viewport (z-20, in front of photos)
+ *   - Photos: full-height, glide left → right, behind title, different speeds
+ *   - Info blocks: centered, slide up from bottom sequentially
+ *
+ * Mobile: in-flow section with SimpleAnimation fallback, no scroll-linked parallax.
+ * Reduced motion: everything shown immediately, in-flow.
  */
 const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...props }, ref) => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -29,13 +32,14 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   const { scrollY } = useScroll();
 
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const isLg = typeof window !== 'undefined' && window.innerWidth >= 1024;
 
-  // Sticky scroll range: hero enters at ~1vh spacer, stays for ~150vh
+  // Scroll range for parallax (same as before)
   const stickyStart = vh;
   const stickyEnd = vh * 2.5;
-  const scrollRange = stickyEnd - stickyStart; // ~1.5vh of scroll distance
+  const scrollRange = stickyEnd - stickyStart;
 
-  // Trigger choreography when hero is fully visible
+  // Trigger choreography when clip reveal is mostly done
   useEffect(() => {
     if (prefersReducedMotion) return;
 
@@ -55,20 +59,33 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     }
   }, [choreographyStarted, onRevealNavbar]);
 
-  // --- Scroll-linked parallax values (desktop only) ---
+  // --- Scroll-linked values (desktop only) ---
 
-  // Spring config: smooth inertia for all scroll-linked motion
   const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
+
+  // ClipPath reveal: entire hero section wipes in from left → right
+  const clipRaw = useTransform(scrollY, [vh * 0.3, vh * 0.9], [100, 0]);
+  const clipSmooth = useSpring(clipRaw, springConfig);
+  const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 
   // Title: starts off-screen RIGHT, glides left across full viewport, exits left
   const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-100vw']);
   const titleX = useSpring(titleXRaw, springConfig);
 
-  // Photos: "curtain" effect with 3 keyframes
-  // Start far apart → converge at midpoint → separate again as they exit
   const stickyMid = stickyStart + scrollRange * 0.5;
 
-  // Left photo is now handled by HomeSplash (fixed overlay, pure horizontal movement)
+  // Left photo — parallax movement (entry is handled by clipPath)
+  const photoLeftXRaw = useTransform(
+    scrollY,
+    [stickyStart + scrollRange * 0.3, stickyMid, stickyEnd],
+    ['0vw', '20vw', '100vw'],
+  );
+  const photoLeftX = useSpring(photoLeftXRaw, springConfig);
+  const photoLeftScale = useTransform(
+    scrollY,
+    [stickyStart, stickyStart + scrollRange * 0.4],
+    [1.03, 1],
+  );
 
   // Right photo — faster, larger (35%), converges then separates
   const photoRightXRaw = useTransform(
@@ -116,7 +133,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
   );
 
-  // Scroll indicator: fades out when photos enter viewport
+  // Scroll indicator: fades out when parallax starts
   const indicatorOpacity = useTransform(
     scrollY,
     [stickyStart, stickyStart + scrollRange * 0.15],
@@ -126,15 +143,18 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   const c = choreographyStarted;
 
   return (
-    <section
+    <m.section
       ref={ref}
       id="hero"
-      className="relative h-screen w-full overflow-hidden"
+      className={
+        prefersReducedMotion
+          ? 'relative h-screen w-full overflow-hidden bg-[#FEEB09]'
+          : 'relative h-screen w-full overflow-hidden bg-[#FEEB09] lg:fixed lg:inset-0 lg:z-[10]'
+      }
+      style={!prefersReducedMotion && isLg ? { clipPath: heroClip } : undefined}
       aria-labelledby="hero-title"
       {...props}
     >
-      {/* ===== Background — transparent, splash yellow shows through ===== */}
-
       {/* ===== Desktop photos — full height, behind title, left → right ===== */}
       {prefersReducedMotion ? (
         <>
@@ -161,7 +181,23 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
         </>
       ) : (
         <>
-          {/* Left photo is rendered by HomeSplash as a fixed overlay (no vertical movement) */}
+          {/* Left photo — revealed by clipPath curtain, then parallax */}
+          <m.div
+            className="absolute inset-y-0 left-0 z-10 hidden w-[25%] overflow-hidden will-change-transform lg:block"
+            style={{
+              x: photoLeftX,
+              scale: photoLeftScale,
+            }}
+          >
+            <ResponsiveImage
+              src="/images/hero-eyeglasses-left.jpg"
+              alt="Lunettes elegantes - La Lunetterie du Coin"
+              className="h-full w-full object-cover"
+              loading="eager"
+              sizes="25vw"
+              widths={[384, 640, 768, 1024]}
+            />
+          </m.div>
 
           {/* Right photo — faster, larger */}
           <m.div
@@ -338,7 +374,7 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
           </m.div>
         </m.div>
       )}
-    </section>
+    </m.section>
   );
 });
 

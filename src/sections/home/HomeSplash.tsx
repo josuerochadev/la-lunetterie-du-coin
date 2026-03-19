@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
-import { m, useScroll, useSpring, useTransform } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
-import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 type VideoFormat = 'portrait' | 'square' | 'landscape';
@@ -43,26 +42,8 @@ export default function HomeSplash() {
   const { scrollY } = useScroll();
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
 
-  // Video fades out as user scrolls through the spacer into the hero
+  // Video fades out as user scrolls — synced with hero clipPath reveal
   const videoOpacity = useTransform(scrollY, [vh * 0.15, vh * 0.55], [1, 0]);
-
-  // Left photo — full lifecycle: curtain entry, then parallax with hero, then fade out
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
-  const stickyStart = vh;
-  const stickyEnd = vh * 2.5;
-  const scrollRange = stickyEnd - stickyStart;
-  const stickyMid = stickyStart + scrollRange * 0.5;
-
-  // Curtain entry (left → right), settle, then parallax movement
-  const photoXRaw = useTransform(
-    scrollY,
-    [vh * 0.35, vh * 0.85, stickyStart + scrollRange * 0.3, stickyMid, stickyEnd],
-    ['-30vw', '0vw', '0vw', '20vw', '100vw'],
-  );
-  const photoX = useSpring(photoXRaw, springConfig);
-  const photoScale = useTransform(scrollY, [vh * 0.35, vh * 0.85], [1.05, 1]);
-  // Fade out as hero section exits
-  const photoOpacity = useTransform(scrollY, [stickyEnd - scrollRange * 0.15, stickyEnd], [1, 0]);
 
   // Update video format on resize
   useEffect(() => {
@@ -98,21 +79,6 @@ export default function HomeSplash() {
         >
           <source src={VIDEO_SOURCES[format]} type="video/mp4" />
         </m.video>
-
-        {/* Left photo — curtain entry then parallax, stays fixed at viewport level */}
-        <m.div
-          className="absolute inset-y-0 left-0 hidden w-[25%] overflow-hidden will-change-transform lg:block"
-          style={{ x: photoX, scale: photoScale, opacity: photoOpacity }}
-        >
-          <ResponsiveImage
-            src="/images/hero-eyeglasses-left.jpg"
-            alt=""
-            className="h-full w-full object-cover"
-            loading="eager"
-            sizes="25vw"
-            widths={[384, 640, 768, 1024]}
-          />
-        </m.div>
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
@@ -57,40 +57,38 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
 
   const isVisible = revealed && !inSplashZone;
 
-  // Observe sections with data-navbar-theme to switch navbar colors
-  const observeSections = useCallback(() => {
-    const sections = document.querySelectorAll('[data-navbar-theme]');
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        // Find sections that are intersecting the top of the viewport
-        const active = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-        if (active.length > 0) {
-          const closest = active[0];
-          const sectionTheme = (closest.target as HTMLElement).dataset.navbarTheme;
-          setTheme(sectionTheme === 'light' ? 'light' : 'dark');
-        } else {
-          setTheme('dark');
-        }
-      },
-      {
-        // Observe only the top strip of the viewport where the navbar sits
-        rootMargin: '0px 0px -90% 0px',
-        threshold: 0,
-      },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
+  // Detect navbar theme by sampling the element visually behind the navbar.
+  // Uses elementFromPoint to handle sticky/z-index overlapping sections correctly.
   useEffect(() => {
-    return observeSections();
-  }, [observeSections, location.pathname]);
+    const detectTheme = () => {
+      // Sample a point near the top center, behind the navbar
+      const x = window.innerWidth / 2;
+      const y = 60;
+
+      // Temporarily hide the navbar so elementFromPoint hits the section behind it
+      const header = document.querySelector('header');
+      if (header) header.style.pointerEvents = 'none';
+
+      const el = document.elementFromPoint(x, y);
+
+      if (header) header.style.pointerEvents = '';
+
+      if (!el) return;
+
+      // Walk up to find the closest ancestor with data-navbar-theme
+      const section = el.closest('[data-navbar-theme]');
+      if (section) {
+        const sectionTheme = (section as HTMLElement).dataset.navbarTheme;
+        setTheme(sectionTheme === 'light' ? 'light' : 'dark');
+      } else {
+        setTheme('dark');
+      }
+    };
+
+    detectTheme();
+    window.addEventListener('scroll', detectTheme, { passive: true });
+    return () => window.removeEventListener('scroll', detectTheme);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (menuActive) {

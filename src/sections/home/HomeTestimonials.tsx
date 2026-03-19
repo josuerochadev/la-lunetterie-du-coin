@@ -44,6 +44,7 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
       id="testimonials"
       className="relative w-full bg-background py-section"
       aria-labelledby="testimonials-title"
+      data-navbar-theme="dark"
     >
       <div className="mx-auto max-w-container px-container-x">
         {/* Header with rating */}

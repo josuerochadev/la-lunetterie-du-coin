@@ -34,6 +34,7 @@ const HomeContact = forwardRef<HTMLElement>(() => {
       id="contact"
       className="relative w-full overflow-hidden bg-accent py-section"
       aria-labelledby="contact-title"
+      data-navbar-theme="dark"
     >
       {/* EyePattern with subtle zoom on scroll (desktop) / static (mobile/reduced) */}
       {prefersReducedMotion ? (

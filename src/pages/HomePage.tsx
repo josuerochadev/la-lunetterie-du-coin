@@ -39,13 +39,13 @@ export default function HomePage() {
 
       <div className="relative z-base">
         <Layout navbarRevealed={navbarRevealed}>
-          {/* Spacer for splash scroll transition (50vh of scroll before hero sticks) */}
-          {!prefersReducedMotion && <div className="h-screen" aria-hidden="true" />}
+          {/* Spacer — scroll distance for splash fade + hero clip reveal + hero parallax */}
+          {!prefersReducedMotion && (
+            <div className="pointer-events-none h-screen lg:h-[350vh]" aria-hidden="true" />
+          )}
 
-          {/* Hero — sticky parallax */}
-          <StickySection zIndex={11} enableSticky={true} wrapperMinHeight="250vh">
-            <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
-          </StickySection>
+          {/* Hero — fixed overlay on desktop (clipPath L→R), in-flow on mobile */}
+          <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
 
           {/* Hero → Story : gradient integrated into Story section */}
           <StickySection zIndex={12}>
