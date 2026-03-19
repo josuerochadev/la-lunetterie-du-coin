@@ -11,7 +11,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
  * Section HomeStory — 3-column editorial with scroll-driven parallax
  *
  * Desktop layout (scroll-driven):
- *   - Left column: title "La Lunetterie du Coin" — scrolls up (slightly slower)
+ *   - Left column: title — scrolls up (slightly slower)
  *   - Center column: photo — sticky, with slight zoom, expands fullscreen at end
  *   - Right column: body text + CTA — scrolls up
  *   - End: photo goes fullscreen, transition phrase fades in centered
@@ -32,29 +32,42 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   // Spring for smooth motion
   const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
-  // Title scrolls up slightly slower — reduced range so it stays on screen longer
-  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.8], [80, -150]);
+  // Title scrolls up and exits before photo expand starts
+  const titleYRaw = useTransform(scrollYProgress, [0.1, 0.45], [80, -200]);
   const titleY = useSpring(titleYRaw, springConfig);
+  const titleOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
 
-  // Body text scrolls up — reduced range so it stays readable longer
-  const textYRaw = useTransform(scrollYProgress, [0.1, 0.8], [100, -180]);
+  // Body text scrolls up and exits before photo expand starts
+  const textYRaw = useTransform(scrollYProgress, [0.1, 0.45], [100, -250]);
   const textY = useSpring(textYRaw, springConfig);
+  const textOpacity = useTransform(scrollYProgress, [0.35, 0.45], [1, 0]);
 
   // Photo: slight zoom during scroll
   const photoScale = useTransform(scrollYProgress, [0.1, 0.6], [1, 1.05]);
 
-  // End sequence: photo expands to fullscreen, phrase fades in
-  // Photo grows from its column size to fullscreen
-  const photoExpandScale = useTransform(scrollYProgress, [0.65, 0.85], [1, 2.8]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0.6]);
+  // End sequence: photo expands to fullscreen by animating position/size
+  const photoLeft = useTransform(scrollYProgress, [0.5, 0.65], ['22%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.5, 0.65], ['38%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.5, 0.65], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.65], [1, 0.7]);
 
-  // Transition phrase fades in at the end
-  const phraseOpacity = useTransform(scrollYProgress, [0.75, 0.88], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.75, 0.88], [40, 0]);
+  // Transition phrase fades in, holds for a while, then stays
+  const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.68], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.58, 0.68], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
   // Entrance opacity for all elements (scroll-triggered reveal)
   const entranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
+
+  // Combined opacity: fade in + fade out before photo expand
+  const titleCombinedOpacity = useTransform(
+    [entranceOpacity, titleOpacity] as const,
+    ([a, b]: number[]) => Math.min(a, b),
+  );
+  const textCombinedOpacity = useTransform(
+    [entranceOpacity, textOpacity] as const,
+    ([a, b]: number[]) => Math.min(a, b),
+  );
 
   return (
     <section
@@ -94,17 +107,17 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
               className="text-heading text-accent"
               style={{ fontSize: 'clamp(1.75rem, 5vw, 3rem)' }}
             >
-              La Lunetterie du Coin
+              Notre Histoire
             </h2>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={200}>
             <p className="text-body leading-relaxed text-accent/80">
-              La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des lunettes
-              de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg de
-              Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style
-              contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
-              qu&apos;elle soit neuve ou d&apos;occasion.
+              Tout a commencé avec une conviction&nbsp;: proposer des lunettes de qualité tout en
+              donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg de Pierre à
+              Strasbourg, notre boutique indépendante allie expertise optique, style contemporain et
+              engagement écologique. Chaque paire est sélectionnée avec soin, qu&apos;elle soit
+              neuve ou d&apos;occasion.
             </p>
 
             <Link
@@ -125,7 +138,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
         </div>
 
         {/* ===== Desktop layout — 3 columns, scroll-driven ===== */}
-        <div className="hidden min-h-[250vh] lg:block">
+        <div className="hidden min-h-[350vh] lg:block">
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* 3-column grid */}
             <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
@@ -133,13 +146,13 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
               {prefersReducedMotion ? (
                 <div className="w-[22%] pr-8">
                   <h2 id="story-title" className="heading-section text-accent">
-                    La Lunetterie du Coin
+                    Notre Histoire
                   </h2>
                 </div>
               ) : (
                 <m.div
                   className="w-[22%] pr-8 will-change-transform"
-                  style={{ y: titleY, opacity: entranceOpacity }}
+                  style={{ y: titleY, opacity: titleCombinedOpacity }}
                 >
                   <TextReveal
                     as="h2"
@@ -147,14 +160,14 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     splitBy="words"
                     className="heading-section text-accent"
                   >
-                    La Lunetterie du Coin
+                    Notre Histoire
                   </TextReveal>
                 </m.div>
               )}
 
               {/* Center column — sticky photo with zoom + fullscreen expand */}
               {prefersReducedMotion ? (
-                <div className="absolute inset-y-0 left-[22%] w-[32%] px-4">
+                <div className="absolute inset-y-0 left-[22%] w-[38%] px-4">
                   <div className="h-full overflow-hidden">
                     <img
                       src="/images/our-story-eyeglasses.jpg"
@@ -166,9 +179,12 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 </div>
               ) : (
                 <m.div
-                  className="absolute inset-y-0 left-[22%] w-[32%] px-4 will-change-transform"
+                  className="absolute inset-y-0 will-change-transform"
                   style={{
-                    scale: photoExpandScale,
+                    left: photoLeft,
+                    width: photoWidth,
+                    paddingLeft: photoPadding,
+                    paddingRight: photoPadding,
                     opacity: photoExpandOpacity,
                   }}
                 >
@@ -188,16 +204,16 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
 
               {/* Right column — body text + CTA, scrolls up */}
               {prefersReducedMotion ? (
-                <div className="ml-[32%] w-[46%] pl-8">
+                <div className="ml-[38%] w-[40%] pl-8">
                   <p
                     className="text-accent/80"
                     style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
                   >
-                    La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des
-                    lunettes de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur
-                    du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise
-                    optique, style contemporain et engagement écologique. Chaque paire est
-                    sélectionnée avec soin, qu&apos;elle soit neuve ou d&apos;occasion.
+                    Tout a commencé avec une conviction&nbsp;: proposer des lunettes de qualité tout
+                    en donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg de Pierre à
+                    Strasbourg, notre boutique indépendante allie expertise optique, style
+                    contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
+                    qu&apos;elle soit neuve ou d&apos;occasion.
                   </p>
                   <Link
                     to="/a-propos"
@@ -216,8 +232,8 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 </div>
               ) : (
                 <m.div
-                  className="ml-[32%] w-[46%] pl-8 will-change-transform"
-                  style={{ y: textY, opacity: entranceOpacity }}
+                  className="ml-[38%] w-[40%] pl-8 will-change-transform"
+                  style={{ y: textY, opacity: textCombinedOpacity }}
                 >
                   <TextReveal
                     as="p"
@@ -226,9 +242,9 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     className="text-accent/80"
                     style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
                   >
-                    La Lunetterie du Coin a été ouverte avec une conviction : proposer des lunettes
-                    de qualité tout en donnant une seconde vie aux montures. Au cœur du Faubourg de
-                    Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style
+                    Tout a commencé avec une conviction : proposer des lunettes de qualité tout en
+                    donnant une seconde vie aux montures. Au cœur du Faubourg de Pierre à
+                    Strasbourg, notre boutique indépendante allie expertise optique, style
                     contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
                     qu&apos;elle soit neuve ou d&apos;occasion.
                   </TextReveal>
