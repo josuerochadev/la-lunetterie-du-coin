@@ -1,10 +1,9 @@
 import { forwardRef, useRef } from 'react';
-import { Link } from 'react-router-dom';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -79,10 +78,10 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
     >
       {/* Integrated gradient: accent → black, smooth blend with hero behind */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[25vh] h-[75vh]"
+        className="pointer-events-none absolute inset-x-0 -top-[12vh] h-[62vh]"
         style={{
           background:
-            'linear-gradient(to bottom, transparent 0%, rgba(254,235,9,0.3) 10%, rgba(254,235,9,0.6) 18%, #FEEB09 27%, color-mix(in srgb, #FEEB09 90%, black) 35%, color-mix(in srgb, #FEEB09 65%, black) 48%, color-mix(in srgb, #FEEB09 35%, black) 62%, color-mix(in srgb, #FEEB09 12%, black) 78%, black 100%)',
+            'linear-gradient(to bottom, #FEEB09 0%, #FEEB09 20%, color-mix(in srgb, #FEEB09 90%, black) 35%, color-mix(in srgb, #FEEB09 65%, black) 50%, color-mix(in srgb, #FEEB09 35%, black) 68%, color-mix(in srgb, #FEEB09 12%, black) 82%, black 100%)',
         }}
         aria-hidden="true"
       />
@@ -120,20 +119,9 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
               neuve ou d&apos;occasion.
             </p>
 
-            <Link
-              to="/a-propos"
-              className="group/cta relative mt-6 inline-flex items-center gap-2 text-body-sm font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold sm:mt-8"
-            >
+            <LinkCTA to="/a-propos" theme="dark" className="mt-6 text-body-sm sm:mt-8">
               Nous découvrir
-              <ArrowRight
-                className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
-                aria-hidden="true"
-              />
-              <span
-                className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
-                aria-hidden="true"
-              />
-            </Link>
+            </LinkCTA>
           </SimpleAnimation>
         </div>
 
@@ -215,20 +203,9 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
                     qu&apos;elle soit neuve ou d&apos;occasion.
                   </p>
-                  <Link
-                    to="/a-propos"
-                    className="group/cta relative mt-8 inline-flex items-center gap-2 text-body font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold"
-                  >
+                  <LinkCTA to="/a-propos" theme="dark" className="mt-8">
                     Nous découvrir
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                  </LinkCTA>
                 </div>
               ) : (
                 <m.div
@@ -248,20 +225,9 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
                     qu&apos;elle soit neuve ou d&apos;occasion.
                   </TextReveal>
-                  <Link
-                    to="/a-propos"
-                    className="group/cta relative mt-8 inline-flex items-center gap-2 text-body font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold"
-                  >
+                  <LinkCTA to="/a-propos" theme="dark" className="mt-8">
                     Nous découvrir
-                    <ArrowRight
-                      className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
-                      aria-hidden="true"
-                    />
-                    <span
-                      className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
-                      aria-hidden="true"
-                    />
-                  </Link>
+                  </LinkCTA>
                 </m.div>
               )}
             </div>

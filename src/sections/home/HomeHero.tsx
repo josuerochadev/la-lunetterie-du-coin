@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import { useEffect, useState } from 'react';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
@@ -11,14 +10,24 @@ interface HomeHeroProps {
   onRevealNavbar?: () => void;
 }
 
-/** Reusable info block used in both desktop and mobile layouts */
-function InfoBlock({ color, children }: { color: 'green' | 'orange'; children: ReactNode }) {
-  const borderClass = color === 'green' ? 'border-secondary-green' : 'border-secondary-orange';
-  const hoverClass =
-    color === 'green' ? 'hover:bg-secondary-green/10' : 'hover:bg-secondary-orange/10';
+/** Typographic info accent — keyword in display font with colored underline */
+function InfoAccent({
+  color,
+  keyword,
+  detail,
+}: {
+  color: 'green' | 'orange';
+  keyword: string;
+  detail: string;
+}) {
+  const barColor = color === 'green' ? 'bg-secondary-green' : 'bg-secondary-orange';
   return (
-    <div className={`border ${borderClass} px-5 py-4 transition-colors duration-300 ${hoverClass}`}>
-      <p className="text-body-sm text-black">{children}</p>
+    <div className="flex flex-col gap-1">
+      <span className="font-display text-title-sm uppercase leading-none text-black">
+        {keyword}
+      </span>
+      <div className={`h-[3px] w-8 ${barColor}`} />
+      <span className="text-body-sm text-black/70">{detail}</span>
     </div>
   );
 }
@@ -91,17 +100,17 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
   const clipSmooth = useSpring(clipRaw, springConfig);
   const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 
-  // Title: starts off-screen RIGHT, glides left across full viewport, exits left
-  const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-100vw']);
+  // Title: starts off-screen RIGHT, glides left across full viewport, exits far left
+  const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-150vw']);
   const titleX = useSpring(titleXRaw, springConfig);
 
   const stickyMid = stickyStart + scrollRange * 0.5;
 
-  // Left photo — parallax movement (entry is handled by clipPath)
+  // Left photo — enters from off-screen left, drifts right across viewport
   const photoLeftXRaw = useTransform(
     scrollY,
-    [stickyStart + scrollRange * 0.3, stickyMid, stickyEnd],
-    ['0vw', '20vw', '100vw'],
+    [stickyStart, stickyStart + scrollRange * 0.35, stickyMid, stickyEnd],
+    ['-30vw', '5vw', '20vw', '100vw'],
   );
   const photoLeftX = useSpring(photoLeftXRaw, springConfig);
   const photoLeftScale = useTransform(
@@ -110,11 +119,11 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
     [1.03, 1],
   );
 
-  // Right photo — faster, larger (35%), converges then separates
+  // Right photo — follows left, enters slightly later, maintains dynamic gap
   const photoRightXRaw = useTransform(
     scrollY,
-    [stickyStart, stickyMid, stickyEnd],
-    ['-10vw', '47vw', '140vw'],
+    [stickyStart + scrollRange * 0.08, stickyStart + scrollRange * 0.4, stickyMid, stickyEnd],
+    ['-40vw', '40vw', '55vw', '130vw'],
   );
   const photoRightX = useSpring(photoRightXRaw, springConfig);
   const photoRightScale = useTransform(
@@ -122,11 +131,11 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
     [stickyStart, stickyStart + scrollRange * 0.3],
     [1.02, 1],
   );
-  // Entrance fade-in + parallax opacity in a single motion value (avoids initial/style conflict)
-  const photoRightOpacity = useTransform(
+  // Fade in as it enters, slight fade on exit
+  const photoRightOpacityRaw = useTransform(
     scrollY,
-    [stickyStart * 0.7, stickyStart, stickyMid, stickyEnd],
-    [0, 0.7, 1, 0.7],
+    [stickyStart + scrollRange * 0.08, stickyStart + scrollRange * 0.25, stickyMid, stickyEnd],
+    [0, 1, 1, 0.7],
   );
 
   // Info blocks: slide up from bottom, staggered
@@ -136,9 +145,17 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
   // Fade out all hero content before Story section overlaps
   const heroContentFadeOut = useTransform(
     scrollY,
-    [stickyEnd - scrollRange * 0.15, stickyEnd],
+    [stickyEnd - scrollRange * 0.25, stickyEnd - scrollRange * 0.05],
     [1, 0],
   );
+
+  // Combined opacities: photos & title also fade out before Story gradient
+  const photoLeftOpacity = heroContentFadeOut;
+  const photoRightOpacity = useTransform(
+    [photoRightOpacityRaw, heroContentFadeOut] as const,
+    ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
+  );
+  const titleOpacity = heroContentFadeOut;
 
   const block1Y = useTransform(scrollY, [blocksStart, blocksEnd], [120, 0]);
   const block1X = useTransform(scrollY, [blocksStart, blocksEnd], [-20, 0]);
@@ -176,7 +193,9 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
       {/* ===== Desktop photos — full height, behind title, left → right ===== */}
       <m.div
         className="absolute inset-y-0 left-0 z-10 hidden w-[25%] overflow-hidden lg:block"
-        style={prm ? undefined : { x: photoLeftX, scale: photoLeftScale }}
+        style={
+          prm ? undefined : { x: photoLeftX, scale: photoLeftScale, opacity: photoLeftOpacity }
+        }
       >
         <ResponsiveImage
           src="/images/hero-eyeglasses-left.jpg"
@@ -207,37 +226,32 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
       {/* ===== Desktop title — in front of photos, right → left ===== */}
       <m.div
         className="absolute bottom-[30%] left-0 z-20 hidden w-full lg:block"
-        {...(!prm && {
-          initial: { opacity: 0 },
-          animate: c ? { opacity: 1 } : { opacity: 0 },
-          transition: { duration: 1, ease: 'easeOut', delay: 0.1 },
-        })}
-        style={prm ? undefined : { x: titleX }}
+        style={prm ? undefined : { x: titleX, opacity: titleOpacity }}
       >
-        <h1
-          id="hero-title"
-          className="text-heading whitespace-nowrap text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
-          style={{ fontSize: 'clamp(3rem, 10vw, 12rem)' }}
+        <m.div
+          {...(!prm && {
+            initial: { opacity: 0 },
+            animate: c ? { opacity: 1 } : { opacity: 0 },
+            transition: { duration: 1, ease: 'easeOut', delay: 0.1 },
+          })}
         >
-          POUR L&apos;AMOUR DES YEUX
-        </h1>
+          <h1
+            id="hero-title"
+            className="text-heading whitespace-nowrap text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
+            style={{ fontSize: 'clamp(3rem, 10vw, 12rem)' }}
+          >
+            POUR L&apos;AMOUR DES YEUX
+          </h1>
+        </m.div>
       </m.div>
 
-      {/* ===== Desktop info blocks — centered, slide up sequentially ===== */}
-      <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-4 lg:flex">
+      {/* ===== Desktop info accents — centered, slide up sequentially ===== */}
+      <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-12 lg:flex">
         <m.div style={prm ? undefined : { y: block1Y, x: block1X, opacity: block1Opacity }}>
-          <InfoBlock color="green">
-            Opticien à<br />
-            Strasbourg
-            <br />
-            depuis 2016.
-          </InfoBlock>
+          <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
         </m.div>
         <m.div style={prm ? undefined : { y: block2Y, x: block2X, opacity: block2Opacity }}>
-          <InfoBlock color="orange">
-            Neuf &<br />
-            Occasion.
-          </InfoBlock>
+          <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
         </m.div>
       </div>
 
@@ -257,17 +271,9 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={400} immediate={true}>
-            <div className="flex flex-wrap gap-4">
-              <InfoBlock color="green">
-                Opticien à<br />
-                Strasbourg
-                <br />
-                depuis 2016.
-              </InfoBlock>
-              <InfoBlock color="orange">
-                Neuf &<br />
-                Occasion.
-              </InfoBlock>
+            <div className="flex gap-10">
+              <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
+              <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
             </div>
           </SimpleAnimation>
         </div>
