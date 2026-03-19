@@ -235,16 +235,16 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           {/* Spacer */}
           <div className="flex-grow" />
 
-          {/* CTA Prendre RDV */}
+          {/* CTA Prendre RDV — outline that fills on hover */}
           <a
             href={CALENDLY_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'hidden rounded-full px-5 py-2 text-body-sm font-medium transition-all duration-300 active:scale-95 sm:inline-flex',
+              'hidden rounded-full border px-5 py-2 text-body-sm font-medium transition-all duration-300 active:scale-95 sm:inline-flex',
               isLight
-                ? 'bg-accent text-black hover:brightness-110'
-                : 'bg-secondary-orange text-black hover:brightness-110',
+                ? 'border-accent text-accent hover:bg-accent hover:text-black'
+                : 'border-black text-black hover:bg-black hover:text-accent',
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
