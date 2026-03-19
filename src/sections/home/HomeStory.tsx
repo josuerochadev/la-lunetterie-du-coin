@@ -4,6 +4,7 @@ import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -108,10 +109,17 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
 
             <Link
               to="/a-propos"
-              className="mt-6 inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-body-sm font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95 sm:mt-8"
+              className="group/cta relative mt-6 inline-flex items-center gap-2 text-body-sm font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold sm:mt-8"
             >
               Nous découvrir
-              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              <ArrowRight
+                className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
+                aria-hidden="true"
+              />
+              <span
+                className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
+                aria-hidden="true"
+              />
             </Link>
           </SimpleAnimation>
         </div>
@@ -120,18 +128,12 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
         <div className="hidden min-h-[250vh] lg:block">
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* 3-column grid */}
-            <div className="relative flex h-full items-center px-16 xl:px-20">
+            <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
               {/* Left column — title, scrolls up slightly slower */}
               {prefersReducedMotion ? (
                 <div className="w-[22%] pr-8">
-                  <h2
-                    id="story-title"
-                    className="text-heading text-accent"
-                    style={{ fontSize: 'clamp(1.5rem, 2.2vw, 2.5rem)' }}
-                  >
-                    La Lunetterie
-                    <br />
-                    du Coin
+                  <h2 id="story-title" className="heading-section text-accent">
+                    La Lunetterie du Coin
                   </h2>
                 </div>
               ) : (
@@ -139,43 +141,42 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                   className="w-[22%] pr-8 will-change-transform"
                   style={{ y: titleY, opacity: entranceOpacity }}
                 >
-                  <h2
-                    id="story-title"
-                    className="text-heading text-accent"
-                    style={{ fontSize: 'clamp(1.5rem, 2.2vw, 2.5rem)' }}
+                  <TextReveal
+                    as="h2"
+                    mode="scroll"
+                    splitBy="words"
+                    className="heading-section text-accent"
                   >
-                    La Lunetterie
-                    <br />
-                    du Coin
-                  </h2>
+                    La Lunetterie du Coin
+                  </TextReveal>
                 </m.div>
               )}
 
               {/* Center column — sticky photo with zoom + fullscreen expand */}
               {prefersReducedMotion ? (
-                <div className="w-[32%] px-4">
-                  <div className="overflow-hidden">
+                <div className="absolute inset-y-0 left-[22%] w-[32%] px-4">
+                  <div className="h-full overflow-hidden">
                     <img
                       src="/images/our-story-eyeglasses.jpg"
                       alt="Lunettes artisanales - La Lunetterie du Coin"
-                      className="aspect-[3/4] w-full object-cover"
+                      className="h-full w-full object-cover"
                       loading="lazy"
                     />
                   </div>
                 </div>
               ) : (
                 <m.div
-                  className="w-[32%] px-4 will-change-transform"
+                  className="absolute inset-y-0 left-[22%] w-[32%] px-4 will-change-transform"
                   style={{
                     scale: photoExpandScale,
                     opacity: photoExpandOpacity,
                   }}
                 >
-                  <m.div className="overflow-hidden" style={{ opacity: entranceOpacity }}>
+                  <m.div className="h-full overflow-hidden" style={{ opacity: entranceOpacity }}>
                     <m.img
                       src="/images/our-story-eyeglasses.jpg"
                       alt="Lunettes artisanales - La Lunetterie du Coin"
-                      className="aspect-[3/4] w-full object-cover"
+                      className="h-full w-full object-cover"
                       loading="lazy"
                       style={{ scale: photoScale }}
                     />
@@ -185,10 +186,10 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
 
               {/* Right column — body text + CTA, scrolls up */}
               {prefersReducedMotion ? (
-                <div className="w-[46%] pl-8">
+                <div className="ml-[32%] w-[46%] pl-8">
                   <p
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', lineHeight: 1.7 }}
+                    style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
                   >
                     La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des
                     lunettes de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur
@@ -198,39 +199,50 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                   </p>
                   <Link
                     to="/a-propos"
-                    className="mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
+                    className="group/cta relative mt-8 inline-flex items-center gap-2 text-body font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold"
                   >
                     Nous découvrir
-                    <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
+                      aria-hidden="true"
+                    />
                   </Link>
                 </div>
               ) : (
                 <m.div
-                  className="w-[46%] pl-8 will-change-transform"
+                  className="ml-[32%] w-[46%] pl-8 will-change-transform"
                   style={{ y: textY, opacity: entranceOpacity }}
                 >
-                  <p
+                  <TextReveal
+                    as="p"
+                    mode="scroll"
+                    splitBy="words"
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1rem, 1.5vw, 1.5rem)', lineHeight: 1.7 }}
+                    style={{ fontSize: 'clamp(1.1rem, 1.8vw, 1.75rem)', lineHeight: 1.7 }}
                   >
-                    La Lunetterie du Coin a été ouverte avec une conviction&nbsp;: proposer des
-                    lunettes de qualité tout en donnant une seconde vie aux montures. Au c&oelig;ur
-                    du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise
-                    optique, style contemporain et engagement écologique. Chaque paire est
-                    sélectionnée avec soin, qu&apos;elle soit neuve ou d&apos;occasion.
-                  </p>
+                    La Lunetterie du Coin a été ouverte avec une conviction : proposer des lunettes
+                    de qualité tout en donnant une seconde vie aux montures. Au cœur du Faubourg de
+                    Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style
+                    contemporain et engagement écologique. Chaque paire est sélectionnée avec soin,
+                    qu&apos;elle soit neuve ou d&apos;occasion.
+                  </TextReveal>
                   <Link
                     to="/a-propos"
-                    className="group/cta mt-8 inline-flex items-center gap-2 rounded-full bg-accent px-8 py-4 text-body font-medium text-black transition-all duration-300 hover:brightness-110 active:scale-95"
+                    className="group/cta relative mt-8 inline-flex items-center gap-2 text-body font-normal text-accent transition-[font-weight] duration-300 hover:font-semibold"
                   >
                     Nous découvrir
-                    <m.span
-                      className="inline-block"
-                      whileHover={{ x: 8 }}
-                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    >
-                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                    </m.span>
+                    <ArrowRight
+                      className="h-4 w-4 transition-transform duration-300 group-hover/cta:translate-x-1"
+                      aria-hidden="true"
+                    />
+                    <span
+                      className="absolute -bottom-1 left-0 h-[1.5px] w-0 bg-accent transition-all duration-300 group-hover/cta:w-full"
+                      aria-hidden="true"
+                    />
                   </Link>
                 </m.div>
               )}

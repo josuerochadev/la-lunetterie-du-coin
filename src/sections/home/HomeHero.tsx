@@ -1,6 +1,5 @@
 import { forwardRef, useEffect, useState } from 'react';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
-import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
@@ -131,13 +130,6 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
   const block2Opacity = useTransform(
     [block2OpacityIn, heroContentFadeOut] as const,
     ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
-  );
-
-  // Scroll indicator: fades out when parallax starts
-  const indicatorOpacity = useTransform(
-    scrollY,
-    [stickyStart, stickyStart + scrollRange * 0.15],
-    [1, 0],
   );
 
   const c = choreographyStarted;
@@ -357,23 +349,6 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
           />
         </SimpleAnimation>
       </div>
-
-      {/* ===== Scroll indicator ===== */}
-      {!prefersReducedMotion && (
-        <m.div
-          className="absolute bottom-8 left-1/2 z-30 hidden -translate-x-1/2 flex-col items-center gap-1 lg:flex"
-          style={{ opacity: indicatorOpacity }}
-          aria-hidden="true"
-        >
-          <span className="text-body-xs text-black/40">Défiler</span>
-          <m.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-          >
-            <ChevronDown className="h-5 w-5 text-black/40" />
-          </m.div>
-        </m.div>
-      )}
     </m.section>
   );
 });

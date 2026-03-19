@@ -4,7 +4,6 @@ import Navbar from '../navbar/Navbar';
 
 import Footer from '@/sections/shared/Footer';
 import SkipLink from '@/components/common/SkipLink';
-import ScrollToTopButton from '@/components/common/ScrollToTopButton';
 
 type LayoutProps = {
   children: React.ReactNode;
@@ -25,11 +24,10 @@ export default function Layout({ children, navbarRevealed }: LayoutProps) {
       <div className="relative z-base">
         <SkipLink />
         <Navbar revealed={navbarRevealed} />
-        <main id="main" tabIndex={-1} className="min-h-screen">
+        <main id="main" tabIndex={-1} className="min-h-screen outline-none">
           {children}
         </main>
         <Footer />
-        <ScrollToTopButton />
       </div>
     </div>
   );

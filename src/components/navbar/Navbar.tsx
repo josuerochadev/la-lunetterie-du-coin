@@ -1,6 +1,7 @@
 import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
+import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
@@ -9,7 +10,6 @@ import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { MENU_ANIMATION_DURATION, CALENDLY_URL } from '@/config/menu';
 import { STORE_INFO } from '@/config/store';
-import { useMotionPreference } from '@/a11y/useMotionPreference';
 import { cn } from '@/lib/cn';
 
 interface NavbarProps {
@@ -33,7 +33,6 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
   const [inSplashZone, setInSplashZone] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
-  const prm = useMotionPreference();
 
   const isLight = theme === 'light';
 
@@ -113,16 +112,6 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
     buttonRef.current?.focus();
   };
 
-  const handleLogoClick = () => {
-    if (location.pathname === '/') {
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: prm ? 'auto' : 'smooth',
-      });
-    }
-  };
-
   // Color classes based on theme
   const textColor = isLight ? 'text-accent' : 'text-black';
   const underlineColor = isLight ? 'bg-accent' : 'bg-black';
@@ -140,31 +129,24 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
         )}
       >
         <nav className="flex w-full items-center gap-3 sm:gap-4" aria-label="Navigation principale">
-          {/* Logo symbole — scroll-to-top on homepage, link to / otherwise */}
-          {location.pathname === '/' ? (
-            <button
-              type="button"
-              onClick={handleLogoClick}
-              aria-label="Retour en haut de page"
+          {/* Logo symbole */}
+          <Link
+            to="/"
+            aria-label="Accueil — La Lunetterie du Coin"
+            className={cn(
+              'group/nav relative rounded-full p-1.5 transition-all duration-300',
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
+            <span
               className={cn(
-                'cursor-pointer rounded-full p-1.5 transition-all duration-300 hover:scale-110 hover:opacity-70 active:scale-95',
-                `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+                'absolute -bottom-0.5 left-1/4 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-1/2',
+                underlineColor,
               )}
-            >
-              <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
-            </button>
-          ) : (
-            <Link
-              to="/"
-              aria-label="Accueil — La Lunetterie du Coin"
-              className={cn(
-                'rounded-full p-1.5 transition-all duration-300 hover:scale-110 hover:opacity-70 active:scale-95',
-                `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
-              )}
-            >
-              <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
-            </Link>
-          )}
+              aria-hidden="true"
+            />
+          </Link>
 
           {/* "Menu" — ouvre le FullScreenMenu */}
           <button
@@ -175,11 +157,15 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
             aria-expanded={menuActive}
             aria-controls="main-menu"
             className={cn(
-              'group/nav relative cursor-pointer text-body-sm font-medium',
+              'group/nav relative cursor-pointer text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
+            {/* Invisible bold duplicate to reserve width and prevent layout shift */}
+            <span className="invisible block h-0 font-semibold" aria-hidden="true">
+              Menu
+            </span>
             Menu
             <span
               className={cn(
@@ -194,13 +180,21 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           <a
             href={`tel:${STORE_INFO.phone.tel}`}
             className={cn(
-              'group/nav relative hidden items-center gap-1.5 text-body-sm lg:flex',
+              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold lg:flex',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             <Phone className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{STORE_INFO.phone.display}</span>
+            {/* Invisible bold duplicate to reserve width */}
+            <span
+              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
+              aria-hidden="true"
+            >
+              <span className="h-3.5 w-3.5 shrink-0" />
+              <span>{STORE_INFO.phone.display}</span>
+            </span>
             <span
               className={cn(
                 'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
@@ -216,13 +210,21 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'group/nav relative hidden items-center gap-1.5 text-body-sm lg:flex',
+              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold lg:flex',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
             <span>{STORE_INFO.address.city}</span>
+            {/* Invisible bold duplicate to reserve width */}
+            <span
+              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
+              aria-hidden="true"
+            >
+              <span className="h-3.5 w-3.5 shrink-0" />
+              <span>{STORE_INFO.address.city}</span>
+            </span>
             <span
               className={cn(
                 'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
@@ -235,20 +237,37 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           {/* Spacer */}
           <div className="flex-grow" />
 
-          {/* CTA Prendre RDV — outline that fills on hover */}
+          {/* CTA Prendre RDV — text + arrow, same underline pattern */}
           <a
             href={CALENDLY_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
-              'hidden rounded-full border px-5 py-2 text-body-sm font-medium transition-all duration-300 active:scale-95 sm:inline-flex',
-              isLight
-                ? 'border-accent text-accent hover:bg-accent hover:text-black'
-                : 'border-black text-black hover:bg-black hover:text-accent',
+              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold sm:inline-flex',
+              textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             Prendre RDV
+            <ArrowRight
+              className="h-3.5 w-3.5 transition-transform duration-300 group-hover/nav:translate-x-1"
+              aria-hidden="true"
+            />
+            {/* Invisible bold duplicate to reserve width */}
+            <span
+              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
+              aria-hidden="true"
+            >
+              <span>Prendre RDV</span>
+              <span className="h-3.5 w-3.5 shrink-0" />
+            </span>
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
           </a>
         </nav>
       </header>
