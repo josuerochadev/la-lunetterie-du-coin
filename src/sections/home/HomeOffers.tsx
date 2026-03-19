@@ -1,10 +1,10 @@
 import { forwardRef, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollParallaxImage from '@/components/motion/ScrollParallaxImage';
 import TextReveal from '@/components/motion/TextReveal';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
@@ -176,17 +176,14 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
                   </SimpleAnimation>
 
                   <SimpleAnimation type="slide-up" delay={600}>
-                    <a
+                    <LinkCTA
                       href={offer.link}
-                      className="button-primary group mt-2 inline-flex items-center gap-2 px-6 py-3 text-body"
+                      theme="dark"
+                      className="mt-2"
                       aria-label={`En savoir plus sur l'offre ${offer.title}`}
                     >
-                      Découvrir l'offre
-                      <ArrowRight
-                        className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                        aria-hidden="true"
-                      />
-                    </a>
+                      En savoir plus
+                    </LinkCTA>
                   </SimpleAnimation>
                 </div>
               </div>
@@ -198,13 +195,12 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
       {/* CTA global */}
       <div className="mx-auto max-w-container px-container-x pb-section pt-16 text-center">
         <SimpleAnimation type="slide-up" delay={200}>
-          <a
+          <LinkCTA
             href={HOMEPAGE_SECTIONS.offers.cta.link}
-            className="button-secondary px-6 py-3 text-body"
             aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
           >
             {HOMEPAGE_SECTIONS.offers.cta.text}
-          </a>
+          </LinkCTA>
         </SimpleAnimation>
       </div>
     </section>

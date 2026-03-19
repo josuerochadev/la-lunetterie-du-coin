@@ -1,11 +1,10 @@
 import { forwardRef, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import ScrollScale from '@/components/motion/ScrollScale';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -82,41 +81,19 @@ const HomeContact = forwardRef<HTMLElement>(() => {
 
           <SimpleAnimation type="slide-up" delay={100}>
             <p
-              className="mx-auto mb-10 max-w-xl text-black/60"
+              className="mx-auto mb-10 max-w-xl text-black/50"
               style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
             >
               Une question ? Besoin d'un conseil ? Nous sommes là pour vous accompagner.
             </p>
           </SimpleAnimation>
 
-          {/* CTA with ScrollScale grow on scroll (desktop) */}
-          {prefersReducedMotion ? (
-            <SimpleAnimation type="fade" delay={200}>
-              <a
-                href="/contact"
-                className="group inline-flex items-center gap-3 border-2 border-black bg-black px-8 py-4 text-body font-medium text-white transition-colors hover:bg-white hover:text-black focus-visible:bg-white focus-visible:text-black"
-              >
-                Nous contacter
-                <ArrowRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </a>
-            </SimpleAnimation>
-          ) : (
-            <ScrollScale scaleRange={[0.9, 1]}>
-              <a
-                href="/contact"
-                className="group inline-flex items-center gap-3 border-2 border-black bg-black px-8 py-4 text-body font-medium text-white transition-colors hover:bg-white hover:text-black focus-visible:bg-white focus-visible:text-black"
-              >
-                Nous contacter
-                <ArrowRight
-                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                  aria-hidden="true"
-                />
-              </a>
-            </ScrollScale>
-          )}
+          {/* CTA sur fond jaune */}
+          <SimpleAnimation type="fade" delay={200}>
+            <LinkCTA href="/contact" theme="accent">
+              Nous contacter
+            </LinkCTA>
+          </SimpleAnimation>
         </div>
       </div>
     </section>

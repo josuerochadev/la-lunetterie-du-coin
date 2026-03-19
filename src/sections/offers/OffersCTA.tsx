@@ -1,4 +1,5 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import LinkCTA from '@/components/common/LinkCTA';
 
 /**
  * Section OffersCTA - Call-to-Action final de la page Offres
@@ -19,9 +20,7 @@ export default function OffersCTA() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={200}>
-            <a href="/contact" className="button-primary px-6 py-3 text-body">
-              Nous contacter
-            </a>
+            <LinkCTA href="/contact">Nous contacter</LinkCTA>
           </SimpleAnimation>
         </div>
       </div>

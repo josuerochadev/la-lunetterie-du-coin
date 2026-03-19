@@ -41,13 +41,14 @@ export default function PrintButton({ className = '' }: PrintButtonProps) {
         <Button
           type="button"
           onClick={handlePrint}
-          className={`group mt-8 print:hidden ${className}`}
+          className={`mt-8 print:hidden ${className}`}
           aria-label="Imprimer cette page"
         >
-          <span className="flex items-center gap-2">
-            <Printer className="button-icon group-hover:rotate-12" aria-hidden="true" />
-            Imprimer cette page
-          </span>
+          <Printer
+            className="h-4 w-4 transition-transform duration-300 group-hover/cta:rotate-12"
+            aria-hidden="true"
+          />
+          Imprimer cette page
         </Button>
       </SimpleAnimation>
     </div>

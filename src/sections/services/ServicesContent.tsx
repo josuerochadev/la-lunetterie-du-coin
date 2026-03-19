@@ -1,4 +1,5 @@
 import { ServiceEditorialCard } from '@/components/services/ServiceEditorialCard';
+import LinkCTA from '@/components/common/LinkCTA';
 import { CALENDLY_URL } from '@/config/endpoints';
 import { SERVICES_DATA } from '@/data/services';
 
@@ -56,15 +57,14 @@ export default function ServicesContent() {
                   </div>
 
                   <div className={isEven ? '' : 'flex justify-end'}>
-                    <a
+                    <LinkCTA
                       href={CALENDLY_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="button-primary px-6 py-3 text-body"
                       aria-label="Prendre rendez-vous"
                     >
                       Prendre rendez-vous
-                    </a>
+                    </LinkCTA>
                   </div>
                 </>
               ) : undefined;

@@ -1,12 +1,12 @@
 import { forwardRef, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollParallaxImage from '@/components/motion/ScrollParallaxImage';
 import AnimatedCounter from '@/components/motion/AnimatedCounter';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -165,17 +165,13 @@ const HomeEngagement = forwardRef<HTMLElement>(() => {
                   planète.
                 </p>
 
-                <a
+                <LinkCTA
                   href="/offres#recyclage"
-                  className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-white focus-visible:text-white"
+                  theme="dark"
                   aria-label="En savoir plus sur notre programme de recyclage"
                 >
-                  Comment ça marche
-                  <ArrowRight
-                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                    aria-hidden="true"
-                  />
-                </a>
+                  En savoir plus
+                </LinkCTA>
               </div>
             </SimpleAnimation>
           </div>

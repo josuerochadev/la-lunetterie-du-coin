@@ -88,9 +88,7 @@ export default function ContactInfo() {
                     <div key={schedule.day} className="flex justify-between text-body-sm">
                       <dt className="font-medium text-text">{schedule.day}</dt>
                       <dd
-                        className={
-                          schedule.hours === 'Fermé' ? 'text-black/50/60' : 'text-black/50'
-                        }
+                        className={schedule.hours === 'Fermé' ? 'text-black/50' : 'text-black/50'}
                       >
                         {schedule.hours}
                       </dd>

@@ -1,11 +1,11 @@
 import { forwardRef, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollParallaxImage from '@/components/motion/ScrollParallaxImage';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
@@ -118,14 +118,13 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                       <p className="text-body leading-relaxed text-white/50">
                         {service.description}
                       </p>
-                      <a
+                      <LinkCTA
                         href={service.link}
-                        className="inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-white focus-visible:text-white"
+                        theme="dark"
                         aria-label={`En savoir plus sur ${service.title}`}
                       >
                         En savoir plus
-                        <ArrowRight className="h-4 w-4" aria-hidden="true" />
-                      </a>
+                      </LinkCTA>
                     </div>
                   </SimpleAnimation>
                 </div>
@@ -171,17 +170,13 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                             {service.description}
                           </p>
 
-                          <a
+                          <LinkCTA
                             href={service.link}
-                            className="group/link inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-white focus-visible:text-white"
+                            theme="dark"
                             aria-label={`En savoir plus sur ${service.title}`}
                           >
                             En savoir plus
-                            <ArrowRight
-                              className="h-4 w-4 transition-transform group-hover/link:translate-x-1"
-                              aria-hidden="true"
-                            />
-                          </a>
+                          </LinkCTA>
                         </div>
                       </SimpleAnimation>
                     </div>
@@ -195,13 +190,13 @@ const HomeServices = forwardRef<HTMLElement>(() => {
         {/* CTA */}
         <div className="mt-16 text-center lg:mt-24">
           <SimpleAnimation type="slide-up" delay={400}>
-            <a
+            <LinkCTA
               href={HOMEPAGE_SECTIONS.services.cta.link}
-              className="group inline-flex items-center gap-2 border border-white/30 px-6 py-3 text-body font-medium text-white transition-colors hover:border-accent hover:bg-accent hover:text-black focus-visible:border-accent focus-visible:bg-accent focus-visible:text-black"
+              theme="dark"
               aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
             >
               {HOMEPAGE_SECTIONS.services.cta.text}
-            </a>
+            </LinkCTA>
           </SimpleAnimation>
         </div>
       </div>

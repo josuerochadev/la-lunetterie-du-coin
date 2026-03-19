@@ -1,10 +1,10 @@
 import { forwardRef, useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
 import { RatingStars } from '@/components/common/RatingStars';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { TESTIMONIALS } from '@/data/testimonials';
 
@@ -202,18 +202,13 @@ const HomeTestimonials = forwardRef<HTMLElement>(() => {
         {/* CTA Google Reviews */}
         <SimpleAnimation type="slide-up" delay={300}>
           <div className="mt-12 text-center">
-            <a
+            <LinkCTA
               href="https://www.google.com/maps/place/La+Lunetterie+Du+Coin+Neuf+%26+Occasion/@48.5823394,7.7453277,17z/data=!4m8!3m7!1s0x4796c84f95e5e877:0x88d0f0f0f0f0f0f0!8m2!3d48.5823394!4d7.7479026!9m1!1b1!16s%2Fg%2F11c1qx0x0x"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
             >
-              Voir tous nos avis Google
-              <ArrowRight
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </a>
+              Voir nos avis Google
+            </LinkCTA>
           </div>
         </SimpleAnimation>
       </div>

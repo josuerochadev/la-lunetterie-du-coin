@@ -16,7 +16,7 @@ export default function AboutHero() {
             <div className="space-y-6">
               <h1 className="heading-page text-white">À propos de La Lunetterie du Coin</h1>
               <p
-                className="leading-relaxed text-white/70"
+                className="leading-relaxed text-white/50"
                 style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
               >
                 Pionnier des lunettes d'occasion à Strasbourg depuis 2016

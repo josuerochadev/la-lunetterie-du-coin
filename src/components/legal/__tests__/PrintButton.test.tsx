@@ -178,7 +178,7 @@ describe('PrintButton', () => {
       render(<PrintButton />);
 
       const button = screen.getByTestId('button');
-      expect(button).toHaveClass('group', 'mt-8', 'print:hidden');
+      expect(button).toHaveClass('mt-8', 'print:hidden');
     });
 
     it('should apply custom className when provided', () => {
@@ -200,7 +200,7 @@ describe('PrintButton', () => {
       render(<PrintButton />);
 
       const icon = screen.getByTestId('printer-icon');
-      expect(icon).toHaveClass('button-icon', 'group-hover:rotate-12');
+      expect(icon).toHaveClass('h-4', 'w-4');
     });
 
     it('should have print media query class', () => {
@@ -212,13 +212,12 @@ describe('PrintButton', () => {
   });
 
   describe('content structure', () => {
-    it('should have flex layout for icon and text', () => {
+    it('should have icon and text inside button', () => {
       render(<PrintButton />);
 
-      const content = document.querySelector('.flex.items-center.gap-2');
-      expect(content).toBeInTheDocument();
-      expect(content).toContainElement(screen.getByTestId('printer-icon'));
-      expect(content).toContainElement(screen.getByText('Imprimer cette page'));
+      const button = screen.getByTestId('button');
+      expect(button).toContainElement(screen.getByTestId('printer-icon'));
+      expect(button).toContainElement(screen.getByText('Imprimer cette page'));
     });
 
     it('should maintain proper text and icon relationship', () => {
@@ -312,7 +311,7 @@ describe('PrintButton', () => {
       render(<PrintButton className="" />);
 
       const button = screen.getByTestId('button');
-      expect(button).toHaveClass('group', 'mt-8', 'print:hidden');
+      expect(button).toHaveClass('mt-8', 'print:hidden');
     });
   });
 
@@ -358,14 +357,11 @@ describe('PrintButton', () => {
       expect(screen.getByLabelText('Imprimer cette page')).toBeInTheDocument();
     });
 
-    it('should have visual feedback with group hover classes', () => {
+    it('should have visual feedback with icon', () => {
       render(<PrintButton />);
 
-      const button = screen.getByTestId('button');
       const icon = screen.getByTestId('printer-icon');
-
-      expect(button).toHaveClass('group');
-      expect(icon).toHaveClass('group-hover:rotate-12');
+      expect(icon).toHaveClass('h-4', 'w-4');
     });
   });
 });

@@ -90,18 +90,18 @@ export const HOMEPAGE_SECTIONS = {
     title: 'Nos services',
     subtitle: 'Une expertise complète pour prendre soin de votre vue',
     cta: {
-      text: 'Découvrir tous nos services',
+      text: 'Découvrir nos services',
       link: '/services',
-      ariaLabel: 'Découvrir tous nos services',
+      ariaLabel: 'Découvrir nos services',
     },
   },
   offers: {
     title: 'Nos offres',
     subtitle: 'Des solutions pensées pour votre budget et pour la planète',
     cta: {
-      text: 'Voir plus sur nos offres',
+      text: 'Découvrir nos offres',
       link: '/offres',
-      ariaLabel: 'Voir plus sur nos offres',
+      ariaLabel: 'Découvrir nos offres',
     },
   },
 } as const;

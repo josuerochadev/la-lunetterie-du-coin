@@ -1,4 +1,5 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import LinkCTA from '@/components/common/LinkCTA';
 
 /**
  * Section ServicesCTA - Call-to-Action final de la page Services
@@ -19,13 +20,9 @@ export default function ServicesCTA() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={200}>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a href="/offres" className="button-secondary px-6 py-3 text-body">
-                Connaître nos offres
-              </a>
-              <a href="/contact" className="button-primary px-6 py-3 text-body">
-                Nous contacter
-              </a>
+            <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
+              <LinkCTA href="/offres">Découvrir nos offres</LinkCTA>
+              <LinkCTA href="/contact">Nous contacter</LinkCTA>
             </div>
           </SimpleAnimation>
         </div>

@@ -1,4 +1,5 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import Button from '@/components/common/Button';
 import type { FormSubmissionStatus } from '@/hooks/useFormStatus';
 
 interface FormSubmitButtonProps {
@@ -29,14 +30,14 @@ export default function FormSubmitButton({
   return (
     <SimpleAnimation type="slide-up" delay={animationIndex * 80} className="lg:col-span-2">
       <div className="flex justify-center pt-4">
-        <button
+        <Button
           type="submit"
           disabled={isDisabled}
-          className="button-primary px-6 py-3 text-body disabled:cursor-not-allowed disabled:opacity-60"
+          className="text-body disabled:cursor-not-allowed disabled:opacity-60"
           aria-label={getAriaLabel()}
         >
           {getButtonText()}
-        </button>
+        </Button>
       </div>
     </SimpleAnimation>
   );

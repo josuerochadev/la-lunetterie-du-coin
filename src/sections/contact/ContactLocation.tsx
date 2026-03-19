@@ -4,6 +4,7 @@ import Train from 'lucide-react/dist/esm/icons/train';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import SectionContainer from '@/components/common/SectionContainer';
+import LinkCTA from '@/components/common/LinkCTA';
 
 /**
  * ContactLocation - Plan d'accès et comment rejoindre la boutique
@@ -87,15 +88,14 @@ export default function ContactLocation() {
 
                 {/* Bouton Google Maps */}
                 <div className="pt-4">
-                  <a
+                  <LinkCTA
                     href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="button-secondary px-6 py-3 text-body"
+                    icon={MapPin}
                   >
-                    <MapPin className="h-5 w-5" aria-hidden="true" />
                     Voir sur Google Maps
-                  </a>
+                  </LinkCTA>
                 </div>
               </div>
             </div>
