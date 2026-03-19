@@ -1,59 +1,79 @@
+import { useEffect, useRef, useState } from 'react';
 import { m } from 'framer-motion';
 
-import motifCercleJaune from '@/assets/patterns/motif-cercle-jaune.svg';
-import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
+type VideoFormat = 'portrait' | 'square' | 'landscape';
+
+const VIDEO_SOURCES: Record<VideoFormat, string> = {
+  portrait: '/videos/logo-portrait.mp4',
+  square: '/videos/logo-square.mp4',
+  landscape: '/videos/logo-landscape.mp4',
+};
+
+function getVideoFormat(): VideoFormat {
+  const w = window.innerWidth;
+  if (w < 640) return 'portrait';
+  if (w < 1024) return 'square';
+  return 'landscape';
+}
+
 /**
- * HomeSplash — Iris-open intro overlay
+ * HomeSplash — Fullscreen animated logo intro overlay
  *
- * Fixed overlay with two visual layers:
- *   1. Yellow circle pattern fades in as full background
- *   2. Logo centered with breathing scale
+ * Plays the brand logo animation fullscreen with a matching yellow background.
+ * Uses responsive video formats:
+ *   - Mobile (<640px): portrait 9:16
+ *   - Tablet (640–1023px): square 1:1
+ *   - Desktop (≥1024px): landscape 16:9
  *
  * Stays fixed and immobile. The hero section scrolls OVER it (parallax cover).
- * When scrolling back up past the spacer, the splash is visible again.
- *
- * z-[9] places it below the main content wrapper (z-base = 10) so content
- * naturally covers it as user scrolls. The spacer area is transparent,
- * letting the splash show through.
  *
  * Reduced motion: skipped entirely (returns null).
  */
 export default function HomeSplash() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [format, setFormat] = useState<VideoFormat>(() =>
+    typeof window !== 'undefined' ? getVideoFormat() : 'landscape',
+  );
+
+  // Update video format on resize
+  useEffect(() => {
+    function handleResize() {
+      setFormat(getVideoFormat());
+    }
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Restart video when format changes
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      video.load();
+      video.play().catch(() => {});
+    }
+  }, [format]);
 
   if (prefersReducedMotion) return null;
 
   return (
     <div className="pointer-events-none fixed inset-0 z-[9]" aria-hidden="true">
-      <div className="relative h-screen w-full overflow-hidden bg-white">
-        {/* Layer 1: Yellow circle pattern — single instance, covers viewport */}
-        <m.div
-          className="absolute inset-0 flex items-center justify-center"
+      <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-[#FEEB09]">
+        <m.video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          autoPlay
+          muted
+          playsInline
+          preload="auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: 'easeOut' }}
-          style={{
-            maskImage:
-              'radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.8) 50%, black 70%)',
-            WebkitMaskImage:
-              'radial-gradient(ellipse at center, transparent 15%, rgba(0,0,0,0.4) 30%, rgba(0,0,0,0.8) 50%, black 70%)',
-          }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <img src={motifCercleJaune} alt="" className="h-full w-full object-cover" />
-        </m.div>
-
-        {/* Layer 2: Logo centered with breathing scale */}
-        <div className="relative z-[1] flex h-full items-center justify-center">
-          <m.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.5, ease: 'easeOut', delay: 0.5 }}
-          >
-            <LogoNO className="h-auto w-[250px] sm:w-[300px] md:w-[400px]" aria-hidden="true" />
-          </m.div>
-        </div>
+          <source src={VIDEO_SOURCES[format]} type="video/mp4" />
+        </m.video>
       </div>
     </div>
   );
