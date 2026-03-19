@@ -1,4 +1,5 @@
-import { forwardRef, useEffect, useState } from 'react';
+import type { ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -8,6 +9,18 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 interface HomeHeroProps {
   /** Called ~200ms after choreography starts to reveal the navbar */
   onRevealNavbar?: () => void;
+}
+
+/** Reusable info block used in both desktop and mobile layouts */
+function InfoBlock({ color, children }: { color: 'green' | 'orange'; children: ReactNode }) {
+  const borderClass = color === 'green' ? 'border-secondary-green' : 'border-secondary-orange';
+  const hoverClass =
+    color === 'green' ? 'hover:bg-secondary-green/10' : 'hover:bg-secondary-orange/10';
+  return (
+    <div className={`border ${borderClass} px-5 py-4 transition-colors duration-300 ${hoverClass}`}>
+      <p className="text-body-sm text-black">{children}</p>
+    </div>
+  );
 }
 
 /**
@@ -24,14 +37,25 @@ interface HomeHeroProps {
  * Mobile: in-flow section with SimpleAnimation fallback, no scroll-linked parallax.
  * Reduced motion: everything shown immediately, in-flow.
  */
-const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...props }, ref) => {
+function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [choreographyStarted, setChoreographyStarted] = useState(false);
+  const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800));
+  const [isLg, setIsLg] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth >= 1024,
+  );
+
+  // Keep vh and isLg in sync with viewport
+  useEffect(() => {
+    const handleResize = () => {
+      setVh(window.innerHeight);
+      setIsLg(window.innerWidth >= 1024);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const { scrollY } = useScroll();
-
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-  const isLg = typeof window !== 'undefined' && window.innerWidth >= 1024;
 
   // Scroll range for parallax (same as before)
   const stickyStart = vh;
@@ -98,10 +122,11 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     [stickyStart, stickyStart + scrollRange * 0.3],
     [1.02, 1],
   );
+  // Entrance fade-in + parallax opacity in a single motion value (avoids initial/style conflict)
   const photoRightOpacity = useTransform(
     scrollY,
-    [stickyStart, stickyMid, stickyEnd],
-    [0.7, 1, 0.7],
+    [stickyStart * 0.7, stickyStart, stickyMid, stickyEnd],
+    [0, 0.7, 1, 0.7],
   );
 
   // Info blocks: slide up from bottom, staggered
@@ -132,11 +157,11 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
     ([fadeIn, fadeOut]: number[]) => Math.min(fadeIn, fadeOut),
   );
 
+  const prm = prefersReducedMotion;
   const c = choreographyStarted;
 
   return (
     <m.section
-      ref={ref}
       id="hero"
       className={
         prefersReducedMotion
@@ -149,144 +174,72 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
       {...props}
     >
       {/* ===== Desktop photos — full height, behind title, left → right ===== */}
-      {prefersReducedMotion ? (
-        <>
-          <div className="absolute left-[5%] top-0 hidden h-full w-[25%] overflow-hidden lg:block">
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-left.jpg"
-              alt="Lunettes elegantes - La Lunetterie du Coin"
-              className="h-full w-full object-cover"
-              loading="eager"
-              sizes="25vw"
-              widths={[384, 640, 768, 1024]}
-            />
-          </div>
-          <div className="absolute left-[32%] top-0 hidden h-full w-[35%] overflow-hidden lg:block">
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-right.jpg"
-              alt="Collection de montures - La Lunetterie du Coin"
-              className="h-full w-full object-cover"
-              loading="eager"
-              sizes="30vw"
-              widths={[384, 640, 768, 1024]}
-            />
-          </div>
-        </>
-      ) : (
-        <>
-          {/* Left photo — revealed by clipPath curtain, then parallax */}
-          <m.div
-            className="absolute inset-y-0 left-0 z-10 hidden w-[25%] overflow-hidden will-change-transform lg:block"
-            style={{
-              x: photoLeftX,
-              scale: photoLeftScale,
-            }}
-          >
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-left.jpg"
-              alt="Lunettes elegantes - La Lunetterie du Coin"
-              className="h-full w-full object-cover"
-              loading="eager"
-              sizes="25vw"
-              widths={[384, 640, 768, 1024]}
-            />
-          </m.div>
+      <m.div
+        className="absolute inset-y-0 left-0 z-10 hidden w-[25%] overflow-hidden lg:block"
+        style={prm ? undefined : { x: photoLeftX, scale: photoLeftScale }}
+      >
+        <ResponsiveImage
+          src="/images/hero-eyeglasses-left.jpg"
+          alt="Lunettes elegantes - La Lunetterie du Coin"
+          className="h-full w-full object-cover"
+          loading="eager"
+          sizes="25vw"
+          widths={[384, 640, 768, 1024]}
+        />
+      </m.div>
 
-          {/* Right photo — faster, larger */}
-          <m.div
-            className="absolute left-0 top-0 z-10 hidden h-full w-[35%] overflow-hidden will-change-transform lg:block"
-            initial={{ opacity: 0 }}
-            animate={c ? { opacity: 1 } : { opacity: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut', delay: 0.55 }}
-            style={{
-              x: photoRightX,
-              scale: photoRightScale,
-              opacity: photoRightOpacity,
-            }}
-          >
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-right.jpg"
-              alt="Collection de montures - La Lunetterie du Coin"
-              className="h-full w-full object-cover"
-              loading="eager"
-              sizes="30vw"
-              widths={[384, 640, 768, 1024]}
-            />
-          </m.div>
-        </>
-      )}
+      <m.div
+        className="absolute left-0 top-0 z-10 hidden h-full w-[35%] overflow-hidden lg:block"
+        style={
+          prm ? undefined : { x: photoRightX, scale: photoRightScale, opacity: photoRightOpacity }
+        }
+      >
+        <ResponsiveImage
+          src="/images/hero-eyeglasses-right.jpg"
+          alt="Collection de montures - La Lunetterie du Coin"
+          className="h-full w-full object-cover"
+          loading="eager"
+          sizes="30vw"
+          widths={[384, 640, 768, 1024]}
+        />
+      </m.div>
 
       {/* ===== Desktop title — in front of photos, right → left ===== */}
-      {prefersReducedMotion ? (
-        <div className="absolute bottom-[30%] left-0 z-20 hidden w-full lg:block">
-          <h1
-            id="hero-title"
-            className="text-heading whitespace-nowrap text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
-            style={{ fontSize: 'clamp(3rem, 10vw, 12rem)' }}
-          >
-            POUR L&apos;AMOUR DES YEUX
-          </h1>
-        </div>
-      ) : (
-        <m.div
-          className="absolute bottom-[30%] left-0 z-20 hidden w-full will-change-transform lg:block"
-          initial={{ opacity: 0 }}
-          animate={c ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ duration: 1, ease: 'easeOut', delay: 0.1 }}
-          style={{ x: titleX }}
+      <m.div
+        className="absolute bottom-[30%] left-0 z-20 hidden w-full lg:block"
+        {...(!prm && {
+          initial: { opacity: 0 },
+          animate: c ? { opacity: 1 } : { opacity: 0 },
+          transition: { duration: 1, ease: 'easeOut', delay: 0.1 },
+        })}
+        style={prm ? undefined : { x: titleX }}
+      >
+        <h1
+          id="hero-title"
+          className="text-heading whitespace-nowrap text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
+          style={{ fontSize: 'clamp(3rem, 10vw, 12rem)' }}
         >
-          <h1
-            id="hero-title"
-            className="text-heading whitespace-nowrap text-black drop-shadow-[0_2px_10px_rgba(0,0,0,0.08)]"
-            style={{ fontSize: 'clamp(3rem, 10vw, 12rem)' }}
-          >
-            POUR L&apos;AMOUR DES YEUX
-          </h1>
-        </m.div>
-      )}
+          POUR L&apos;AMOUR DES YEUX
+        </h1>
+      </m.div>
 
       {/* ===== Desktop info blocks — centered, slide up sequentially ===== */}
-      {prefersReducedMotion ? (
-        <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-4 lg:flex">
-          <div className="border border-secondary-green px-5 py-4">
-            <p className="text-body-sm text-black">
-              Opticien à<br />
-              Strasbourg
-              <br />
-              depuis 2016.
-            </p>
-          </div>
-          <div className="border border-secondary-orange px-5 py-4">
-            <p className="text-body-sm text-black">
-              Neuf &<br />
-              Occasion.
-            </p>
-          </div>
-        </div>
-      ) : (
-        <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-4 will-change-transform lg:flex">
-          <m.div
-            className="border border-secondary-green px-5 py-4 transition-colors duration-300 hover:bg-secondary-green/10"
-            style={{ y: block1Y, x: block1X, opacity: block1Opacity }}
-          >
-            <p className="text-body-sm text-black">
-              Opticien à<br />
-              Strasbourg
-              <br />
-              depuis 2016.
-            </p>
-          </m.div>
-          <m.div
-            className="border border-secondary-orange px-5 py-4 transition-colors duration-300 hover:bg-secondary-orange/10"
-            style={{ y: block2Y, x: block2X, opacity: block2Opacity }}
-          >
-            <p className="text-body-sm text-black">
-              Neuf &<br />
-              Occasion.
-            </p>
-          </m.div>
-        </div>
-      )}
+      <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-4 lg:flex">
+        <m.div style={prm ? undefined : { y: block1Y, x: block1X, opacity: block1Opacity }}>
+          <InfoBlock color="green">
+            Opticien à<br />
+            Strasbourg
+            <br />
+            depuis 2016.
+          </InfoBlock>
+        </m.div>
+        <m.div style={prm ? undefined : { y: block2Y, x: block2X, opacity: block2Opacity }}>
+          <InfoBlock color="orange">
+            Neuf &<br />
+            Occasion.
+          </InfoBlock>
+        </m.div>
+      </div>
 
       {/* ===== Mobile content ===== */}
       <div className="relative z-10 flex h-full flex-col items-start justify-end px-6 pb-24 pt-20 sm:px-10 md:px-16 lg:hidden">
@@ -305,20 +258,16 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
 
           <SimpleAnimation type="slide-up" delay={400} immediate={true}>
             <div className="flex flex-wrap gap-4">
-              <div className="border border-secondary-green px-5 py-4 transition-colors duration-300 hover:bg-secondary-green/10">
-                <p className="text-body-sm text-black">
-                  Opticien à<br />
-                  Strasbourg
-                  <br />
-                  depuis 2016.
-                </p>
-              </div>
-              <div className="border border-secondary-orange px-5 py-4 transition-colors duration-300 hover:bg-secondary-orange/10">
-                <p className="text-body-sm text-black">
-                  Neuf &<br />
-                  Occasion.
-                </p>
-              </div>
+              <InfoBlock color="green">
+                Opticien à<br />
+                Strasbourg
+                <br />
+                depuis 2016.
+              </InfoBlock>
+              <InfoBlock color="orange">
+                Neuf &<br />
+                Occasion.
+              </InfoBlock>
             </div>
           </SimpleAnimation>
         </div>
@@ -352,8 +301,6 @@ const HomeHero = forwardRef<HTMLElement, HomeHeroProps>(({ onRevealNavbar, ...pr
       </div>
     </m.section>
   );
-});
-
-HomeHero.displayName = 'HomeHero';
+}
 
 export default HomeHero;
