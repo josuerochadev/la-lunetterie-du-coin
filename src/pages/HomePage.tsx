@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import SectionTransition from '@/components/motion/SectionTransition';
@@ -21,9 +19,6 @@ export default function HomePage() {
   useNativeScroll();
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Navbar is hidden during splash, revealed by hero choreography
-  const [navbarRevealed, setNavbarRevealed] = useState(prefersReducedMotion);
-
   return (
     <>
       <Seo
@@ -38,14 +33,14 @@ export default function HomePage() {
       {!prefersReducedMotion && <HomeSplash />}
 
       <div className="relative z-base">
-        <Layout navbarRevealed={navbarRevealed}>
+        <Layout>
           {/* Spacer — scroll distance for splash fade + hero clip reveal + hero parallax */}
           {!prefersReducedMotion && (
             <div className="pointer-events-none h-screen lg:h-[380vh]" aria-hidden="true" />
           )}
 
           {/* Hero — fixed overlay on desktop (clipPath L→R), in-flow on mobile */}
-          <HomeHero onRevealNavbar={() => setNavbarRevealed(true)} />
+          <HomeHero />
 
           {/* Hero → Story : gradient integrated into Story section */}
           <StickySection zIndex={12}>

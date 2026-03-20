@@ -9,11 +9,6 @@ import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { MENU_ANIMATION_DURATION, CALENDLY_URL } from '@/config/menu';
 import { cn } from '@/lib/cn';
 
-interface NavbarProps {
-  /** Controls navbar visibility — used for splash/hero choreography. Default true. */
-  revealed?: boolean;
-}
-
 /**
  * Composant Navbar — Barre horizontale complète
  *
@@ -25,36 +20,36 @@ interface NavbarProps {
  */
 const HOVER_ZONE_HEIGHT = 80;
 
-const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
+const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [inSplashZone, setInSplashZone] = useState(false);
   const [hovered, setHovered] = useState(false);
-  const [scrollingUp, setScrollingUp] = useState(false);
+  const [hiddenByScroll, setHiddenByScroll] = useState(true);
   const lastScrollY = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
 
   const isLight = theme === 'light';
 
-  // Hide navbar when user scrolls back up into the splash zone (homepage only)
+  // Auto-reveal navbar shortly after page load, then hide on scroll down
   useEffect(() => {
-    if (location.pathname !== '/') {
-      setInSplashZone(false);
-      return;
-    }
+    const timer = setTimeout(() => setHiddenByScroll(false), 1500);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
 
+  useEffect(() => {
     const handleScroll = () => {
-      const vh = window.innerHeight;
-      // Splash zone = before the hero section starts (~0.85vh threshold)
-      setInSplashZone(window.scrollY < vh * 0.85);
+      const currentY = window.scrollY;
+      if (currentY > lastScrollY.current && currentY > 50) {
+        setHiddenByScroll(true);
+      }
+      lastScrollY.current = currentY;
     };
 
-    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname]);
+  }, []);
 
   // Desktop: show navbar when mouse enters top zone
   useEffect(() => {
@@ -71,19 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
     };
   }, []);
 
-  // Mobile: show navbar when scrolling up
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentY = window.scrollY;
-      setScrollingUp(currentY < lastScrollY.current && currentY > 0);
-      lastScrollY.current = currentY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const isVisible = revealed && !inSplashZone && (hovered || scrollingUp || menuActive);
+  const isVisible = !hiddenByScroll || hovered || menuActive;
 
   // Detect navbar theme by sampling the element visually behind the navbar.
   // Uses elementFromPoint to handle sticky/z-index overlapping sections correctly.
@@ -143,7 +126,7 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
 
   // Color classes based on theme
   const textColor = isLight ? 'text-accent' : 'text-black';
-  const underlineColor = isLight ? 'bg-accent' : 'bg-black';
+  const underlineColor = 'bg-secondary-orange';
   const outlineColor = isLight ? 'focus-visible:outline-accent' : 'focus-visible:outline-black';
   const LogoSymbole = isLight ? LogoSymboleJaune : LogoSymboleNoir;
 
@@ -164,13 +147,14 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           {/* Logo symbole */}
           <Link
             to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             aria-label="Accueil — La Lunetterie du Coin"
             className={cn(
               'rounded-full p-1.5 transition-transform duration-300 hover:scale-110',
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
-            <LogoSymbole className="h-9 w-auto sm:h-10 lg:h-12" aria-hidden="true" />
+            <LogoSymbole className="h-6 w-auto sm:h-7 lg:h-8" aria-hidden="true" />
           </Link>
 
           {/* "Menu" — ouvre le FullScreenMenu */}
@@ -214,7 +198,7 @@ const Navbar: React.FC<NavbarProps> = ({ revealed = true }) => {
           >
             Prendre RDV
             <ArrowRight
-              className="h-3.5 w-3.5 transition-transform duration-300 group-hover/nav:translate-x-1"
+              className="h-3.5 w-3.5 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-1"
               aria-hidden="true"
             />
             {/* Invisible bold duplicate to reserve width */}

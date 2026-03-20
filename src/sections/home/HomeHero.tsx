@@ -5,11 +5,6 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
-interface HomeHeroProps {
-  /** Called ~200ms after choreography starts to reveal the navbar */
-  onRevealNavbar?: () => void;
-}
-
 /** Typographic info accent — keyword in display font with colored underline */
 function InfoAccent({
   color,
@@ -91,7 +86,7 @@ function HeroMobileContent() {
 // Desktop animated — all scroll hooks live here
 // ---------------------------------------------------------------------------
 
-function HeroAnimated({ onRevealNavbar }: HomeHeroProps) {
+function HeroAnimated() {
   const [choreographyStarted, setChoreographyStarted] = useState(false);
   const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800));
   const [isLg, setIsLg] = useState(
@@ -124,14 +119,6 @@ function HeroAnimated({ onRevealNavbar }: HomeHeroProps) {
     });
     return unsubscribe;
   }, [scrollY, choreographyStarted, vh]);
-
-  // Reveal navbar 200ms after choreography starts
-  useEffect(() => {
-    if (choreographyStarted && onRevealNavbar) {
-      const timer = setTimeout(onRevealNavbar, 200);
-      return () => clearTimeout(timer);
-    }
-  }, [choreographyStarted, onRevealNavbar]);
 
   // ClipPath reveal
   const clipRaw = useTransform(scrollY, [vh * 0.05, vh * 0.5], [100, 0]);
@@ -304,11 +291,11 @@ function HeroStatic() {
 // Main component
 // ---------------------------------------------------------------------------
 
-function HomeHero({ onRevealNavbar }: HomeHeroProps) {
+function HomeHero() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   if (prefersReducedMotion) return <HeroStatic />;
-  return <HeroAnimated onRevealNavbar={onRevealNavbar} />;
+  return <HeroAnimated />;
 }
 
 export default HomeHero;

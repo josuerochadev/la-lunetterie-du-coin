@@ -95,7 +95,7 @@ export default function HomeSplash() {
         {!videoFailed && (
           <m.video
             ref={videoRef}
-            className="h-[75%] w-[75%] object-contain sm:h-[80%] sm:w-[80%]"
+            className="h-[50%] w-[50%] object-contain sm:h-[55%] sm:w-[55%]"
             autoPlay
             muted
             playsInline
