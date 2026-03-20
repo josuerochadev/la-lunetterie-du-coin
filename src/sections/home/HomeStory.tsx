@@ -106,8 +106,8 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   // Photo entrance opacity (early reveal)
   const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
 
-  // Photo: zoom starts only after text fades out
-  const photoScale = useTransform(scrollYProgress, [0.56, 0.72], [1, 1.05]);
+  // Photo: zoom starts only once CTA is near viewport top
+  const photoScale = useTransform(scrollYProgress, [0.62, 0.78], [1, 1.05]);
 
   // --- Phase 2: title & text enter later, once photo is settled ---
   // Text content fades in after photo is established
@@ -117,22 +117,22 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
   const titleYRaw = useTransform(scrollYProgress, [0.22, 0.33], [150, 0]);
   const titleY = useSpring(titleYRaw, springConfig);
 
-  // Body text scrolls up far — CTA must reach ~30vh before fade starts
-  const textYRaw = useTransform(scrollYProgress, [0.22, 0.56], [250, -400]);
+  // Body text scrolls up far — CTA must reach near top of viewport before fade
+  const textYRaw = useTransform(scrollYProgress, [0.22, 0.62], [250, -450]);
   const textY = useSpring(textYRaw, springConfig);
 
-  // Both fade out together only once CTA is high enough on screen
-  const contentFadeOut = useTransform(scrollYProgress, [0.54, 0.58], [1, 0]);
+  // Both fade out together only once CTA is near the top of the viewport
+  const contentFadeOut = useTransform(scrollYProgress, [0.6, 0.64], [1, 0]);
 
   // --- End sequence: photo expands fullscreen, phrase fades in ---
-  const photoLeft = useTransform(scrollYProgress, [0.6, 0.75], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.6, 0.75], ['36%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.6, 0.75], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.65, 0.75], [1, 0.7]);
+  const photoLeft = useTransform(scrollYProgress, [0.66, 0.8], ['28%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.66, 0.8], ['36%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.66, 0.8], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0.7]);
 
   // Transition phrase fades in as photo goes fullscreen
-  const phraseOpacity = useTransform(scrollYProgress, [0.68, 0.78], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.68, 0.78], [40, 0]);
+  const phraseOpacity = useTransform(scrollYProgress, [0.74, 0.84], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.74, 0.84], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
   // Combined opacities: fade in + shared fade out
@@ -281,7 +281,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                 <div className="ml-[36%] w-[36%] pl-8">
                   <p
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.6 }}
+                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.35 }}
                   >
                     Tout a commencé avec une conviction&nbsp;: proposer des lunettes de qualité tout
                     en donnant une seconde vie aux montures. Au c&oelig;ur du Faubourg de Pierre à
@@ -304,7 +304,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
                     revealStart={0.22}
                     revealEnd={0.38}
                     className="text-accent/80"
-                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.6 }}
+                    style={{ fontSize: 'clamp(1.25rem, 2.2vw, 2.25rem)', lineHeight: 1.35 }}
                   >
                     Tout a commencé avec une conviction : proposer des lunettes de qualité tout en
                     donnant une seconde vie aux montures. Au cœur du Faubourg de Pierre à
