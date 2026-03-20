@@ -14,7 +14,8 @@ const SERVICE_COUNT = HOMEPAGE_SERVICES.length;
 const TITLE_END = 0.08; // Title arrives at top
 const ZOOM_END = 0.13; // Pattern zoom complete, services begin
 const SERVICES_START = ZOOM_END;
-const SERVICES_END = 0.95;
+const SERVICES_END = 0.78; // Services end earlier to leave room for outro
+const OUTRO_START = 0.8; // Pattern zooms to yellow + phrase appears
 
 // ---------------------------------------------------------------------------
 // Desktop sub-components
@@ -24,12 +25,24 @@ const SERVICES_END = 0.95;
  * Circle pattern background — zooms in to open center space for content.
  */
 function PatternBackground({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  // Gentle zoom: opens the center circle slightly then stops
-  const scale = useTransform(scrollYProgress, [0, TITLE_END * 0.5, ZOOM_END], [1.15, 1.15, 1.6]);
+  // Intro zoom out → hold during services → outro zoom in (circle closes, eyes fill screen)
+  const scale = useTransform(
+    scrollYProgress,
+    [0, TITLE_END * 0.5, ZOOM_END, OUTRO_START, OUTRO_START + 0.08],
+    [1.15, 1.15, 1.6, 1.6, 1.0],
+  );
   const scaleSpring = useSpring(scale, SPRING_CONFIG);
 
-  // Stay visible throughout the section
-  const opacity = useTransform(scrollYProgress, [0, 0.02], [0, 0.12]);
+  // Opacity: subtle during services, stronger during outro
+  const opacity = useTransform(
+    scrollYProgress,
+    [0, 0.02, OUTRO_START, OUTRO_START + 0.06],
+    [0, 0.12, 0.12, 0.3],
+  );
+
+  // Color: black during services → original yellow during outro
+  const brightness = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.06], [0, 1]);
+  const filter = useTransform(brightness, (v: number) => `brightness(${v})`);
 
   return (
     <m.div
@@ -37,11 +50,11 @@ function PatternBackground({ scrollYProgress }: { scrollYProgress: MotionValue<n
       style={{ scale: scaleSpring, opacity }}
       aria-hidden="true"
     >
-      <img
+      <m.img
         src={motifCercleUrl}
         alt=""
         className="h-[140%] w-[140%] max-w-none object-contain"
-        style={{ filter: 'brightness(0)' }}
+        style={{ filter }}
       />
     </m.div>
   );
@@ -237,27 +250,48 @@ function ServiceText({
 }
 
 /**
- * Final CTA — appears after all services.
+ * Outro — pattern zooms to yellow, big phrase + CTA appear centered.
  */
-function FinalCTA({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const opacity = useTransform(scrollYProgress, [0.93, 0.98], [0, 1]);
-  const yRaw = useTransform(scrollYProgress, [0.93, 0.98], [30, 0]);
-  const y = useSpring(yRaw, SPRING_CONFIG);
-  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const phraseStart = OUTRO_START + 0.04;
+  const phraseEnd = phraseStart + 0.06;
+
+  // Phrase fades in and rises
+  const phraseOpacity = useTransform(scrollYProgress, [phraseStart, phraseEnd], [0, 1]);
+  const phraseYRaw = useTransform(scrollYProgress, [phraseStart, phraseEnd], [50, 0]);
+  const phraseY = useSpring(phraseYRaw, SPRING_CONFIG);
+
+  // CTA fades in slightly after phrase
+  const ctaOpacity = useTransform(scrollYProgress, [phraseEnd, phraseEnd + 0.04], [0, 1]);
+  const ctaYRaw = useTransform(scrollYProgress, [phraseEnd, phraseEnd + 0.04], [20, 0]);
+  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const pointerEvents = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
   return (
-    <m.div
-      className="absolute inset-0 z-10 flex items-center justify-center"
-      style={{ opacity, y, pointerEvents }}
-    >
-      <LinkCTA
-        to={HOMEPAGE_SECTIONS.services.cta.link}
-        theme="light"
-        aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
+      <m.h3
+        className="text-heading text-center text-black"
+        style={{
+          fontSize: 'clamp(2.5rem, 6vw, 6rem)',
+          opacity: phraseOpacity,
+          y: phraseY,
+        }}
       >
-        {HOMEPAGE_SECTIONS.services.cta.text}
-      </LinkCTA>
-    </m.div>
+        TAPEZ-LEUR
+        <br />
+        DANS L&apos;OEIL
+      </m.h3>
+
+      <m.div style={{ opacity: ctaOpacity, y: ctaY, pointerEvents }}>
+        <LinkCTA
+          to={HOMEPAGE_SECTIONS.services.cta.link}
+          theme="light"
+          aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+        >
+          {HOMEPAGE_SECTIONS.services.cta.text}
+        </LinkCTA>
+      </m.div>
+    </div>
   );
 }
 
@@ -398,7 +432,8 @@ const HomeServices = forwardRef<HTMLElement>(() => {
       {/* ── Desktop: Scrollytelling ── */}
       <div ref={sectionRef} className="relative hidden lg:block">
         {/* Scroll height: title/zoom intro + per-service scroll + exit buffer */}
-        <div style={{ height: `${(SERVICE_COUNT * 2 + 2) * 100}vh` }}>
+        {/* Extra height for outro phase (pattern zoom + phrase) */}
+        <div style={{ height: `${(SERVICE_COUNT * 2 + 3) * 100}vh` }}>
           {/* Sticky viewport */}
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* Circle pattern background */}
@@ -446,7 +481,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                   </div>
                 </div>
 
-                <FinalCTA scrollYProgress={smoothProgress} />
+                <SectionOutro scrollYProgress={smoothProgress} />
               </>
             )}
           </div>
