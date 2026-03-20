@@ -55,7 +55,7 @@ const config: Config = {
         'title-xl': ['clamp(2.5rem, 5vw, 15rem)', '0.9'],
         'title-lg': ['clamp(2rem, 3vw, 10rem)', '0.9'],
         'title-md': ['clamp(1.5rem, 2.5vw, 5rem)', '0.9'],
-        'title-sm': ['clamp(1.25rem, 2vw, 3.5rem)', '1.1'],
+        'title-sm': ['clamp(1.25rem, 2vw, 3.5rem)', '0.9'],
 
         // Corps de texte - line-height 1.3
         'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.3'],
