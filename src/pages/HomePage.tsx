@@ -52,14 +52,13 @@ export default function HomePage() {
             <HomeStory />
           </StickySection>
 
-          {/* Story → Services (both black, no transition needed) */}
+          {/* Story → Services : gradient integrated into Services section */}
           <StickySection zIndex={13}>
             <HomeServices />
           </StickySection>
 
-          {/* Services → Offers */}
+          {/* Services → Offers (both white, no transition needed) */}
           <StickySection zIndex={14}>
-            <SectionTransition variant="fade" fromColor="black" toColor="white" />
             <HomeOffers />
           </StickySection>
 

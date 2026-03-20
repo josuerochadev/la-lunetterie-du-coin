@@ -1,159 +1,75 @@
 import { forwardRef, useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import EyePattern from '@/components/common/EyePattern';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
+import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = HOMEPAGE_SERVICES.length;
 
-// Scroll budget: entrance phase takes ~15%, then services share the rest
-const ENTRANCE_END = 0.12;
-const SERVICES_START = ENTRANCE_END;
+// Scroll budget
+const TITLE_END = 0.08; // Title arrives at top
+const ZOOM_END = 0.13; // Pattern zoom complete, services begin
+const SERVICES_START = ZOOM_END;
 const SERVICES_END = 0.95;
 
+// ---------------------------------------------------------------------------
+// Desktop sub-components
+// ---------------------------------------------------------------------------
+
 /**
- * Sticky crossfading image that changes based on scroll progress.
+ * Circle pattern background — zooms in to open center space for content.
  */
-function StickyServiceImage({
-  scrollYProgress,
-}: {
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-}) {
-  const range = SERVICES_END - SERVICES_START;
+function PatternBackground({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  // Gentle zoom: opens the center circle slightly then stops
+  const scale = useTransform(scrollYProgress, [0, TITLE_END * 0.5, ZOOM_END], [1.15, 1.15, 1.6]);
+  const scaleSpring = useSpring(scale, SPRING_CONFIG);
+
+  // Stay visible throughout the section
+  const opacity = useTransform(scrollYProgress, [0, 0.02], [0, 0.12]);
 
   return (
-    <div className="relative h-full w-full overflow-hidden rounded-sm">
-      {HOMEPAGE_SERVICES.map((service, i) => {
-        const segmentSize = range / SERVICE_COUNT;
-        const start = SERVICES_START + i * segmentSize;
-        const fadeIn = start + segmentSize * 0.05;
-        const fadeOut = start + segmentSize * 0.85;
-        const end = start + segmentSize;
-
-        return (
-          <ServiceImage
-            key={service.title}
-            src={service.image}
-            alt={service.title}
-            scrollYProgress={scrollYProgress}
-            fadeInRange={[Math.max(start - segmentSize * 0.05, SERVICES_START), fadeIn]}
-            fadeOutRange={[fadeOut, Math.min(end + segmentSize * 0.05, SERVICES_END)]}
-            isFirst={i === 0}
-            isLast={i === SERVICE_COUNT - 1}
-          />
-        );
-      })}
-    </div>
-  );
-}
-
-function ServiceImage({
-  src,
-  alt,
-  scrollYProgress,
-  fadeInRange,
-  fadeOutRange,
-  isFirst,
-  isLast,
-}: {
-  src: string;
-  alt: string;
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-  fadeInRange: [number, number];
-  fadeOutRange: [number, number];
-  isFirst: boolean;
-  isLast: boolean;
-}) {
-  const fadeIn = useTransform(scrollYProgress, fadeInRange, isFirst ? [1, 1] : [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, fadeOutRange, isLast ? [1, 1] : [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
-  const scale = useTransform(scrollYProgress, [fadeInRange[0], fadeOutRange[1]], [1.05, 1]);
-
-  return (
-    <m.div className="absolute inset-0" style={{ opacity }}>
-      <m.img
-        src={src}
-        alt={alt}
-        className="h-full w-full object-cover"
-        loading="lazy"
-        style={{ scale }}
+    <m.div
+      className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
+      style={{ scale: scaleSpring, opacity }}
+      aria-hidden="true"
+    >
+      <img
+        src={motifCercleUrl}
+        alt=""
+        className="h-[140%] w-[140%] max-w-none object-contain"
+        style={{ filter: 'brightness(0)' }}
       />
     </m.div>
   );
 }
 
 /**
- * Drifting eye pattern background with optional parallax entrance.
+ * Title "Nos Services" — fades in centered, rises to top, then fades out.
  */
-function DriftingEyePattern({
-  scrollYProgress: parentProgress,
-}: {
-  scrollYProgress?: import('framer-motion').MotionValue<number>;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-  const x = useTransform(scrollYProgress, [0, 1], [0, -120]);
-
-  // Parallax entrance: pattern starts lower and rises into place
-  const entranceY = useTransform(parentProgress ?? scrollYProgress, [0, ENTRANCE_END], [60, 0]);
-  const entranceYSpring = useSpring(entranceY, SPRING_CONFIG);
-
-  // Pattern opacity ramps up during entrance
-  const patternOpacity = useTransform(
-    parentProgress ?? scrollYProgress,
-    [0, ENTRANCE_END * 0.7],
-    [0, 1],
-  );
-
-  return (
-    <m.div
-      ref={ref}
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-      aria-hidden="true"
-      style={{ y: entranceYSpring, opacity: patternOpacity }}
-    >
-      <m.div className="absolute inset-0 w-[200%]" style={{ x }}>
-        <EyePattern variant="jaune" opacity={0.07} />
-      </m.div>
-    </m.div>
-  );
-}
-
-/**
- * Entrance header — title slides up and fades out before services begin.
- */
-function EntranceHeader({
-  scrollYProgress,
-}: {
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-}) {
-  // Fade in during entrance
-  const entranceOpacity = useTransform(scrollYProgress, [0.02, ENTRANCE_END * 0.7], [0, 1]);
-  // Fade out before services start
-  const exitOpacity = useTransform(scrollYProgress, [ENTRANCE_END * 0.85, ENTRANCE_END], [1, 0]);
-  const opacity = useTransform([entranceOpacity, exitOpacity] as const, ([a, b]: number[]) =>
-    Math.min(a, b),
-  );
-
-  const yRaw = useTransform(scrollYProgress, [0.02, ENTRANCE_END * 0.7], [100, 0]);
+function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  // Rise from center to top
+  const yRaw = useTransform(scrollYProgress, [0, TITLE_END], ['40vh', '6vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
 
+  // Fade in quickly
+  const fadeIn = useTransform(scrollYProgress, [0, 0.02], [0, 1]);
+  // Fade out before services start
+  const fadeOut = useTransform(scrollYProgress, [ZOOM_END, ZOOM_END + 0.04], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+
   return (
     <m.div
-      className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center"
-      style={{ opacity, y }}
+      className="pointer-events-none absolute inset-x-0 z-30 flex justify-center"
+      style={{ top: y, opacity }}
     >
       <h2
         id="services-title"
-        className="heading-section text-center text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
-        style={{ fontSize: 'clamp(2rem, 4vw, 4rem)' }}
+        className="text-heading text-center text-black"
+        style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)' }}
       >
         {HOMEPAGE_SECTIONS.services.title}
       </h2>
@@ -162,66 +78,246 @@ function EntranceHeader({
 }
 
 /**
- * Service content wrapper — handles the entrance fade for the image+text block.
+ * Photo stack — all photos layered in the same position.
+ * Transitions use clipPath (slide-up reveal) instead of crossfade.
+ * First photo fades in on entrance, last photo fades out on exit.
  */
-function ServiceContent({
-  scrollYProgress,
-  rawScrollYProgress,
-  prefersReducedMotion,
-}: {
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-  rawScrollYProgress: import('framer-motion').MotionValue<number>;
-  prefersReducedMotion: boolean;
-}) {
-  // Content fades in after the entrance title fades out
-  const contentOpacity = useTransform(
-    rawScrollYProgress,
-    [ENTRANCE_END * 0.8, ENTRANCE_END],
+function PhotoStack({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const range = SERVICES_END - SERVICES_START;
+  const segmentSize = range / SERVICE_COUNT;
+
+  // Shared Y: photo container enters from below, settles, then exits at end
+  const firstStart = SERVICES_START;
+  const enterEnd = firstStart + segmentSize * 0.2;
+  const lastEnd = SERVICES_START + range;
+  const exitStart = lastEnd - segmentSize * 0.22;
+
+  const yRaw = useTransform(
+    scrollYProgress,
+    [firstStart, enterEnd, exitStart, lastEnd],
+    ['55vh', '0vh', '0vh', '-55vh'],
+  );
+  const y = useSpring(yRaw, SPRING_CONFIG);
+
+  // Fade in first photo, fade out last photo
+  const entranceFade = useTransform(
+    scrollYProgress,
+    [firstStart, firstStart + segmentSize * 0.08],
     [0, 1],
   );
-  const contentYRaw = useTransform(rawScrollYProgress, [ENTRANCE_END * 0.8, ENTRANCE_END], [40, 0]);
-  const contentY = useSpring(contentYRaw, SPRING_CONFIG);
-
-  const inner = (
-    <div className="flex w-full items-center gap-12 xl:gap-16">
-      {/* Left: Sticky crossfading image */}
-      <div className="relative aspect-[3/4] w-[50%] shrink-0 overflow-hidden rounded-sm">
-        {prefersReducedMotion ? (
-          <img
-            src={HOMEPAGE_SERVICES[0].image}
-            alt={HOMEPAGE_SERVICES[0].title}
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <StickyServiceImage scrollYProgress={scrollYProgress} />
-        )}
-      </div>
-
-      {/* Right: Current service text */}
-      <div className="flex min-h-0 flex-1 flex-col justify-center">
-        {prefersReducedMotion ? (
-          <StaticServiceList />
-        ) : (
-          <ScrollServiceText scrollYProgress={scrollYProgress} />
-        )}
-      </div>
-    </div>
+  const exitFade = useTransform(scrollYProgress, [exitStart, lastEnd], [1, 0]);
+  const containerOpacity = useTransform([entranceFade, exitFade] as const, ([a, b]: number[]) =>
+    Math.min(a, b),
   );
 
-  if (prefersReducedMotion) return inner;
+  return (
+    <m.div
+      className="relative aspect-[3/4] w-[45%] shrink-0 overflow-hidden rounded-sm"
+      style={{ y, opacity: containerOpacity }}
+    >
+      {/* Base photo (service 0) — always visible underneath */}
+      <img
+        src={HOMEPAGE_SERVICES[0].image}
+        alt={HOMEPAGE_SERVICES[0].title}
+        className="absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+      />
 
-  return <m.div style={{ opacity: contentOpacity, y: contentY }}>{inner}</m.div>;
+      {/* Photos 1+ reveal via clipPath slide-up (volet effect) */}
+      {HOMEPAGE_SERVICES.slice(1).map((service, i) => {
+        const idx = i + 1; // actual service index
+        const revealStart = SERVICES_START + idx * segmentSize;
+        const revealEnd = revealStart + segmentSize * 0.3;
+
+        return (
+          <PhotoReveal
+            key={service.title}
+            src={service.image}
+            alt={service.title}
+            scrollYProgress={scrollYProgress}
+            revealStart={revealStart}
+            revealEnd={revealEnd}
+          />
+        );
+      })}
+    </m.div>
+  );
 }
 
 /**
- * Section HomeServices — Scrollytelling
+ * Single photo that reveals from bottom to top via clipPath.
+ * Once revealed, stays visible (stacks on top of previous photos).
+ */
+function PhotoReveal({
+  src,
+  alt,
+  scrollYProgress,
+  revealStart,
+  revealEnd,
+}: {
+  src: string;
+  alt: string;
+  scrollYProgress: MotionValue<number>;
+  revealStart: number;
+  revealEnd: number;
+}) {
+  // clipPath: inset(100% 0 0 0) → inset(0% 0 0 0) — reveals from bottom
+  const clipRaw = useTransform(scrollYProgress, [revealStart, revealEnd], [100, 0]);
+  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
+  const clipPath = useTransform(clipSmooth, (v: number) => `inset(${v}% 0 0 0)`);
+
+  return (
+    <m.div className="absolute inset-0" style={{ clipPath }}>
+      <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+    </m.div>
+  );
+}
+
+/**
+ * Service text block — scrolls independently alongside the photo stack.
+ * Each text enters from below, scrolls up, then exits.
+ */
+function ServiceText({
+  service,
+  index,
+  scrollYProgress,
+}: {
+  service: (typeof HOMEPAGE_SERVICES)[number];
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const range = SERVICES_END - SERVICES_START;
+  const segmentSize = range / SERVICE_COUNT;
+  const start = SERVICES_START + index * segmentSize;
+
+  const enterEnd = start + segmentSize * 0.2;
+  const textScrollEnd = start + segmentSize * 0.75;
+  const exitStart = start + segmentSize * 0.78;
+  const end = start + segmentSize;
+
+  // Text: enter from below → scroll up alongside photo → exit up
+  const yRaw = useTransform(
+    scrollYProgress,
+    [start, enterEnd, textScrollEnd, exitStart, end],
+    ['65vh', '18vh', '-18vh', '-18vh', '-65vh'],
+  );
+  const y = useSpring(yRaw, SPRING_CONFIG);
+
+  // Opacity: fade in / fade out
+  const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.08], [0, 1]);
+  const fadeOut = useTransform(scrollYProgress, [exitStart, end], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+
+  return (
+    <m.div
+      className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
+      style={{ opacity, y, pointerEvents }}
+    >
+      <span className="mb-4 text-sm font-medium uppercase tracking-widest text-black/30">
+        {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+      </span>
+
+      <h3
+        className="text-heading mb-5 text-black"
+        style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)' }}
+      >
+        {service.title}
+      </h3>
+
+      <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-black/50">
+        {service.description}
+      </p>
+
+      <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
+        En savoir plus
+      </LinkCTA>
+    </m.div>
+  );
+}
+
+/**
+ * Final CTA — appears after all services.
+ */
+function FinalCTA({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const opacity = useTransform(scrollYProgress, [0.93, 0.98], [0, 1]);
+  const yRaw = useTransform(scrollYProgress, [0.93, 0.98], [30, 0]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
+  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+
+  return (
+    <m.div
+      className="absolute inset-0 z-10 flex items-center justify-center"
+      style={{ opacity, y, pointerEvents }}
+    >
+      <LinkCTA
+        to={HOMEPAGE_SECTIONS.services.cta.link}
+        theme="light"
+        aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+      >
+        {HOMEPAGE_SECTIONS.services.cta.text}
+      </LinkCTA>
+    </m.div>
+  );
+}
+
+/**
+ * Static fallback for reduced motion.
+ */
+function StaticServiceList() {
+  return (
+    <div className="mx-auto max-w-container space-y-16 px-container-x">
+      {HOMEPAGE_SERVICES.map((service, i) => (
+        <div key={service.title} className="flex items-center gap-12">
+          <div className="relative aspect-[3/4] w-[45%] shrink-0 overflow-hidden rounded-sm">
+            <img
+              src={service.image}
+              alt={service.title}
+              className="h-full w-full object-cover"
+              loading="lazy"
+            />
+          </div>
+          <div className="w-[45%]">
+            <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-black/30">
+              {String(i + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+            </span>
+            <h3
+              id={i === 0 ? 'services-title' : undefined}
+              className="text-heading mb-3 text-black"
+              style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)' }}
+            >
+              {service.title}
+            </h3>
+            <p className="text-body leading-relaxed text-black/50">{service.description}</p>
+            <LinkCTA
+              to={service.link}
+              theme="light"
+              className="mt-4"
+              aria-label={`En savoir plus sur ${service.title}`}
+            >
+              En savoir plus
+            </LinkCTA>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
+/**
+ * Section HomeServices — Scrollytelling with circle pattern
  *
- * Sticky image on the left crossfades between services.
- * Service descriptions scroll on the right, each taking ~100vh.
- * Eye pattern background with horizontal drift.
- * Reveal transition at entry.
+ * White background with circle eye-pattern (zooms to reveal center space).
+ * Title rises to top, then services parade through:
+ *   - Photo enters from below, settles at center
+ *   - Text scrolls up alongside the photo
+ *   - When text reaches top of photo, next service enters
  *
- * Mobile: simple stack (image + text per service).
+ * Mobile: simple stacked cards with SimpleAnimation.
  */
 const HomeServices = forwardRef<HTMLElement>(() => {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -232,27 +328,22 @@ const HomeServices = forwardRef<HTMLElement>(() => {
     offset: ['start start', 'end end'],
   });
 
-  // Smooth scroll progress for image transitions
   const smoothProgress = useSpring(scrollYProgress, SPRING_CONFIG);
 
   return (
     <section
       id="services"
       aria-labelledby="services-title"
-      data-navbar-theme="light"
-      className="relative bg-black"
+      data-navbar-theme="dark"
+      className="relative bg-white"
     >
+      {/* No gradient — StickySection stacking creates the depth/overlap effect */}
+
       {/* ── Mobile ── */}
       <div className="px-container-x py-section lg:hidden">
-        {prefersReducedMotion ? (
-          <EyePattern variant="jaune" opacity={0.05} />
-        ) : (
-          <DriftingEyePattern />
-        )}
-
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="heading-section mb-12 text-white">
+            <h2 id="services-title" className="heading-section mb-12 text-black">
               {HOMEPAGE_SECTIONS.services.title}
             </h2>
           </SimpleAnimation>
@@ -271,15 +362,15 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3
-                      className="text-heading text-white"
+                      className="text-heading text-black"
                       style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}
                     >
                       {service.title}
                     </h3>
-                    <p className="text-body leading-relaxed text-white/50">{service.description}</p>
+                    <p className="text-body leading-relaxed text-black/50">{service.description}</p>
                     <LinkCTA
-                      href={service.link}
-                      theme="dark"
+                      to={service.link}
+                      theme="light"
                       aria-label={`En savoir plus sur ${service.title}`}
                     >
                       En savoir plus
@@ -293,8 +384,8 @@ const HomeServices = forwardRef<HTMLElement>(() => {
           <div className="mt-16 text-center">
             <SimpleAnimation type="slide-up" delay={400}>
               <LinkCTA
-                href={HOMEPAGE_SECTIONS.services.cta.link}
-                theme="dark"
+                to={HOMEPAGE_SECTIONS.services.cta.link}
+                theme="light"
                 aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
               >
                 {HOMEPAGE_SECTIONS.services.cta.text}
@@ -306,196 +397,64 @@ const HomeServices = forwardRef<HTMLElement>(() => {
 
       {/* ── Desktop: Scrollytelling ── */}
       <div ref={sectionRef} className="relative hidden lg:block">
-        {/* Height: services + entrance buffer + exit buffer */}
-        <div style={{ height: `${(SERVICE_COUNT + 2) * 100}vh` }}>
-          {/* Integrated gradient: blends with Story's black ending */}
-          <div
-            className="pointer-events-none absolute inset-x-0 -top-[10vh] z-20 h-[50vh]"
-            style={{
-              background:
-                'linear-gradient(to bottom, black 0%, black 30%, color-mix(in srgb, black 85%, transparent) 50%, color-mix(in srgb, black 40%, transparent) 70%, transparent 100%)',
-            }}
-            aria-hidden="true"
-          />
-
-          {/* Pattern background with parallax entrance */}
-          {prefersReducedMotion ? (
-            <EyePattern variant="jaune" opacity={0.07} />
-          ) : (
-            <DriftingEyePattern scrollYProgress={scrollYProgress} />
-          )}
-
-          {/* Sticky container — fills viewport */}
+        {/* Scroll height: title/zoom intro + per-service scroll + exit buffer */}
+        <div style={{ height: `${(SERVICE_COUNT * 2 + 2) * 100}vh` }}>
+          {/* Sticky viewport */}
           <div className="sticky top-0 h-screen overflow-hidden">
-            <div className="relative z-10 mx-auto flex h-full max-w-container flex-col justify-center px-container-x">
-              {/* Entrance title — visible during intro, fades out when services start */}
-              {!prefersReducedMotion && <EntranceHeader scrollYProgress={scrollYProgress} />}
+            {/* Circle pattern background */}
+            {!prefersReducedMotion && <PatternBackground scrollYProgress={scrollYProgress} />}
 
-              {/* Service content — image left, text right */}
-              <ServiceContent
-                scrollYProgress={smoothProgress}
-                rawScrollYProgress={scrollYProgress}
-                prefersReducedMotion={prefersReducedMotion}
-              />
-            </div>
+            {/* Title — rises to top then fades */}
+            {!prefersReducedMotion ? (
+              <SectionTitle scrollYProgress={scrollYProgress} />
+            ) : (
+              <div className="absolute inset-x-0 top-[6vh] z-30 flex justify-center">
+                <h2
+                  id="services-title"
+                  className="text-heading text-black"
+                  style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)' }}
+                >
+                  {HOMEPAGE_SECTIONS.services.title}
+                </h2>
+              </div>
+            )}
+
+            {/* Service content — photo stack + text */}
+            {prefersReducedMotion ? (
+              <div className="flex h-full items-center">
+                <StaticServiceList />
+              </div>
+            ) : (
+              <>
+                {/* Shared layout: photo left, text right */}
+                <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                  <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                    {/* Photo stack — clip-path volet transitions */}
+                    <PhotoStack scrollYProgress={smoothProgress} />
+
+                    {/* Text — each service scrolls independently */}
+                    <div className="relative flex w-[45%] flex-col justify-center">
+                      {HOMEPAGE_SERVICES.map((service, i) => (
+                        <ServiceText
+                          key={service.title}
+                          service={service}
+                          index={i}
+                          scrollYProgress={smoothProgress}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <FinalCTA scrollYProgress={smoothProgress} />
+              </>
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 });
-
-/**
- * Scroll-driven service text — crossfades between services.
- */
-function ScrollServiceText({
-  scrollYProgress,
-}: {
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-}) {
-  const range = SERVICES_END - SERVICES_START;
-
-  return (
-    <div className="relative">
-      {HOMEPAGE_SERVICES.map((service, i) => {
-        const segmentSize = range / SERVICE_COUNT;
-        const start = SERVICES_START + i * segmentSize;
-        const fadeIn = start + segmentSize * 0.08;
-        const fadeOut = start + segmentSize * 0.82;
-        const end = start + segmentSize;
-
-        return (
-          <ServiceTextBlock
-            key={service.title}
-            service={service}
-            index={i}
-            scrollYProgress={scrollYProgress}
-            fadeInRange={[Math.max(start - segmentSize * 0.02, SERVICES_START), fadeIn]}
-            fadeOutRange={[fadeOut, Math.min(end + segmentSize * 0.02, SERVICES_END)]}
-            isFirst={i === 0}
-            isLast={i === SERVICE_COUNT - 1}
-          />
-        );
-      })}
-
-      {/* Section CTA — appears after last service */}
-      <ServiceCTA scrollYProgress={scrollYProgress} />
-    </div>
-  );
-}
-
-function ServiceTextBlock({
-  service,
-  index,
-  scrollYProgress,
-  fadeInRange,
-  fadeOutRange,
-  isFirst,
-  isLast,
-}: {
-  service: (typeof HOMEPAGE_SERVICES)[number];
-  index: number;
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-  fadeInRange: [number, number];
-  fadeOutRange: [number, number];
-  isFirst: boolean;
-  isLast: boolean;
-}) {
-  const fadeIn = useTransform(scrollYProgress, fadeInRange, isFirst ? [1, 1] : [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, fadeOutRange, isLast ? [1, 1] : [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
-  const yIn = useTransform(scrollYProgress, fadeInRange, isFirst ? [0, 0] : [30, 0]);
-  const yOut = useTransform(scrollYProgress, fadeOutRange, isLast ? [0, 0] : [0, -20]);
-  const y = useTransform([yIn, yOut] as const, ([a, b]: number[]) => a + b);
-
-  return (
-    <m.div
-      className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
-      style={{ opacity, y }}
-    >
-      {/* Step indicator */}
-      <span className="mb-4 text-sm font-medium uppercase tracking-widest text-accent">
-        {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-      </span>
-
-      <h2
-        id={index === 0 ? 'services-title' : undefined}
-        className="text-heading mb-5 text-white"
-        style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)' }}
-      >
-        {service.title}
-      </h2>
-
-      <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-white/60">
-        {service.description}
-      </p>
-
-      <LinkCTA href={service.link} theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
-        En savoir plus
-      </LinkCTA>
-    </m.div>
-  );
-}
-
-/**
- * CTA that appears at the end of the scroll sequence.
- */
-function ServiceCTA({
-  scrollYProgress,
-}: {
-  scrollYProgress: import('framer-motion').MotionValue<number>;
-}) {
-  const opacity = useTransform(scrollYProgress, [0.92, 0.98], [0, 1]);
-  const y = useTransform(scrollYProgress, [0.92, 0.98], [20, 0]);
-
-  return (
-    <m.div
-      className="absolute inset-0 flex flex-col items-start justify-center"
-      style={{ opacity, y }}
-    >
-      <LinkCTA
-        href={HOMEPAGE_SECTIONS.services.cta.link}
-        theme="dark"
-        aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
-      >
-        {HOMEPAGE_SECTIONS.services.cta.text}
-      </LinkCTA>
-    </m.div>
-  );
-}
-
-/**
- * Static fallback for reduced motion.
- */
-function StaticServiceList() {
-  return (
-    <div className="space-y-12">
-      {HOMEPAGE_SERVICES.map((service, i) => (
-        <div key={service.title}>
-          <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-accent">
-            {String(i + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-          </span>
-          <h2
-            id={i === 0 ? 'services-title' : undefined}
-            className="text-heading mb-3 text-white"
-            style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)' }}
-          >
-            {service.title}
-          </h2>
-          <p className="text-body leading-relaxed text-white/50">{service.description}</p>
-          <LinkCTA
-            href={service.link}
-            theme="dark"
-            className="mt-3"
-            aria-label={`En savoir plus sur ${service.title}`}
-          >
-            En savoir plus
-          </LinkCTA>
-        </div>
-      ))}
-    </div>
-  );
-}
 
 HomeServices.displayName = 'HomeServices';
 
