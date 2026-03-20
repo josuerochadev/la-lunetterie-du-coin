@@ -66,8 +66,8 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
 
   const { scrollY } = useScroll();
 
-  // Scroll range for parallax (same as before)
-  const stickyStart = vh;
+  // Scroll range for parallax — starts early so content appears during clip reveal
+  const stickyStart = vh * 0.5;
   const stickyEnd = vh * 3.5;
   const scrollRange = stickyEnd - stickyStart;
 
@@ -76,7 +76,7 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
     if (prefersReducedMotion) return;
 
     const unsubscribe = scrollY.on('change', (v) => {
-      if (!choreographyStarted && v > vh * 0.7) {
+      if (!choreographyStarted && v > vh * 0.3) {
         setChoreographyStarted(true);
       }
     });
@@ -95,8 +95,8 @@ function HomeHero({ onRevealNavbar, ...props }: HomeHeroProps) {
 
   const springConfig = { stiffness: 50, damping: 40, mass: 0.8 };
 
-  // ClipPath reveal: entire hero section wipes in from left → right
-  const clipRaw = useTransform(scrollY, [vh * 0.2, vh * 1.0], [100, 0]);
+  // ClipPath reveal: entire hero section wipes in from left → right (fast)
+  const clipRaw = useTransform(scrollY, [vh * 0.05, vh * 0.5], [100, 0]);
   const clipSmooth = useSpring(clipRaw, springConfig);
   const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 

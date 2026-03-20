@@ -203,7 +203,7 @@ const HomeStory = forwardRef<HTMLElement>((_, ref) => {
         </div>
 
         {/* ===== Desktop layout — 3 columns, scroll-driven ===== */}
-        <div className="hidden min-h-[450vh] lg:block">
+        <div className="hidden min-h-[400vh] lg:block">
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* 3-column grid */}
             <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">

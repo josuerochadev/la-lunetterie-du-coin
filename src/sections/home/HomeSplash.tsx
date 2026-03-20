@@ -49,7 +49,7 @@ export default function HomeSplash() {
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
 
   // Video fades out as user scrolls — synced with hero clipPath reveal
-  const videoOpacity = useTransform(scrollY, [vh * 0.15, vh * 0.55], [1, 0]);
+  const videoOpacity = useTransform(scrollY, [vh * 0.08, vh * 0.3], [1, 0]);
 
   // Pause video once fully faded out to free resources (but keep yellow bg)
   useEffect(() => {
@@ -57,7 +57,7 @@ export default function HomeSplash() {
       const video = videoRef.current;
       if (!video) return;
 
-      if (v > vh * 0.7 && !videoPaused) {
+      if (v > vh * 0.45 && !videoPaused) {
         video.pause();
         setVideoPaused(true);
       } else if (v < vh * 0.1 && videoPaused) {
