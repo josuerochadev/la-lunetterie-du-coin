@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from 'react';
+import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -79,11 +79,7 @@ function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number
       className="pointer-events-none absolute inset-x-0 z-30 flex justify-center"
       style={{ top: y, opacity }}
     >
-      <h2
-        id="services-title"
-        className="text-heading text-center text-black"
-        style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)' }}
-      >
+      <h2 id="services-title" className="heading-section text-center text-black">
         {HOMEPAGE_SECTIONS.services.title}
       </h2>
     </m.div>
@@ -231,12 +227,7 @@ function ServiceText({
         {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
       </span>
 
-      <h3
-        className="text-heading mb-5 text-black"
-        style={{ fontSize: 'clamp(1.75rem, 3vw, 2.75rem)' }}
-      >
-        {service.title}
-      </h3>
+      <h3 className="text-subtitle mb-5 text-title-sm text-black">{service.title}</h3>
 
       <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-black/50">
         {service.description}
@@ -270,12 +261,8 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   return (
     <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
       <m.h3
-        className="text-heading text-center text-black"
-        style={{
-          fontSize: 'clamp(2.5rem, 6vw, 6rem)',
-          opacity: phraseOpacity,
-          y: phraseY,
-        }}
+        className="text-heading text-center text-title-xl text-black"
+        style={{ opacity: phraseOpacity, y: phraseY }}
       >
         TAPEZ-LEUR
         <br />
@@ -317,8 +304,7 @@ function StaticServiceList() {
             </span>
             <h3
               id={i === 0 ? 'services-title' : undefined}
-              className="text-heading mb-3 text-black"
-              style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)' }}
+              className="text-subtitle mb-3 text-title-sm text-black"
             >
               {service.title}
             </h3>
@@ -353,7 +339,7 @@ function StaticServiceList() {
  *
  * Mobile: simple stacked cards with SimpleAnimation.
  */
-const HomeServices = forwardRef<HTMLElement>(() => {
+function HomeServices() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
 
@@ -361,8 +347,6 @@ const HomeServices = forwardRef<HTMLElement>(() => {
     target: prefersReducedMotion ? undefined : sectionRef,
     offset: ['start start', 'end end'],
   });
-
-  const smoothProgress = useSpring(scrollYProgress, SPRING_CONFIG);
 
   return (
     <section
@@ -395,12 +379,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                     />
                   </div>
                   <div className="mt-6 space-y-3">
-                    <h3
-                      className="text-heading text-black"
-                      style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}
-                    >
-                      {service.title}
-                    </h3>
+                    <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
                     <p className="text-body leading-relaxed text-black/50">{service.description}</p>
                     <LinkCTA
                       to={service.link}
@@ -444,11 +423,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
               <SectionTitle scrollYProgress={scrollYProgress} />
             ) : (
               <div className="absolute inset-x-0 top-[6vh] z-30 flex justify-center">
-                <h2
-                  id="services-title"
-                  className="text-heading text-black"
-                  style={{ fontSize: 'clamp(2rem, 5vw, 4.5rem)' }}
-                >
+                <h2 id="services-title" className="heading-section text-black">
                   {HOMEPAGE_SECTIONS.services.title}
                 </h2>
               </div>
@@ -465,7 +440,7 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                 <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
                   <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
                     {/* Photo stack — clip-path volet transitions */}
-                    <PhotoStack scrollYProgress={smoothProgress} />
+                    <PhotoStack scrollYProgress={scrollYProgress} />
 
                     {/* Text — each service scrolls independently */}
                     <div className="relative flex w-[45%] flex-col justify-center">
@@ -474,14 +449,14 @@ const HomeServices = forwardRef<HTMLElement>(() => {
                           key={service.title}
                           service={service}
                           index={i}
-                          scrollYProgress={smoothProgress}
+                          scrollYProgress={scrollYProgress}
                         />
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <SectionOutro scrollYProgress={smoothProgress} />
+                <SectionOutro scrollYProgress={scrollYProgress} />
               </>
             )}
           </div>
@@ -489,8 +464,6 @@ const HomeServices = forwardRef<HTMLElement>(() => {
       </div>
     </section>
   );
-});
-
-HomeServices.displayName = 'HomeServices';
+}
 
 export default HomeServices;
