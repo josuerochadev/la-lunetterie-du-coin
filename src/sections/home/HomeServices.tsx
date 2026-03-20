@@ -412,7 +412,7 @@ function HomeServices() {
       <div ref={sectionRef} className="relative hidden lg:block">
         {/* Scroll height: title/zoom intro + per-service scroll + exit buffer */}
         {/* Extra height for outro phase (pattern zoom + phrase) */}
-        <div style={{ height: `${(SERVICE_COUNT * 2 + 3) * 100}vh` }}>
+        <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
           {/* Sticky viewport */}
           <div className="sticky top-0 h-screen overflow-hidden">
             {/* Circle pattern background */}

@@ -136,7 +136,7 @@ function StoryDesktopAnimated() {
   );
 
   return (
-    <div ref={sectionRef} className="hidden min-h-[400vh] lg:block">
+    <div ref={sectionRef} className="hidden min-h-[350vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           {/* Left — title */}
@@ -223,7 +223,7 @@ function StoryDesktopAnimated() {
 
 function StoryDesktopStatic() {
   return (
-    <div className="hidden min-h-[400vh] lg:block">
+    <div className="hidden min-h-[350vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           <div className="w-[28%] pr-8">
@@ -276,12 +276,9 @@ function HomeStory() {
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
-      {/* Integrated gradient: accent → black */}
+      {/* Convex eyelid curve — elliptical arc wider than viewport, no flat edges */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[12vh] h-[62vh]"
-        style={{
-          background: 'linear-gradient(to bottom, #FEEB09 0%, #FEEB09 20%, transparent 100%)',
-        }}
+        className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
         aria-hidden="true"
       />
 
