@@ -63,21 +63,19 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 1,
     title: 'Recyclage',
-    image: '/images/homepage-offer-recyclage.jpg',
-    catchphrase: "Vos anciennes lunettes valent de l'or",
+    image: '/images/homepage-offer-recyclage.png',
+    catchphrase: 'DU PASSÉ FAITES TABLE RASE',
     summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
-    details:
-      "Donnez une seconde vie à vos lunettes tout en économisant sur votre nouvel équipement. Un geste pour votre budget et pour la planète.\n\nRapportez toutes vos anciennes paires, peu importe leur état, et bénéficiez d'une réduction immédiate.",
+    details: '',
     link: '/offres#recyclage',
   },
   {
     id: 2,
     title: 'Deuxième paire',
-    image: '/images/homepage-offer-second-pair.jpg',
-    catchphrase: 'Deux paires, deux styles, un prix imbattable',
+    image: '/images/homepage-offer-second-pair.png',
+    catchphrase: 'LE COUP DE FOUDRE ×2',
     summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
-    details:
-      "Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.\n\n59€ pour des verres unifocaux, 89€ pour des progressifs. Verres antireflet durci inclus. Cumulable avec l'offre recyclage !",
+    details: '',
     link: '/offres#deuxieme-paire',
   },
 ];

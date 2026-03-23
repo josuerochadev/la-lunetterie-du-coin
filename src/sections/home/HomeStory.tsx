@@ -210,20 +210,20 @@ function StoryDesktopAnimated() {
           <m.div className="flex flex-col items-center" style={{ y: phraseYSpring }}>
             <div className="flex items-baseline gap-[0.3em]">
               <m.span
-                className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+                className="text-heading text-title-xl text-accent"
                 style={{ opacity: surroundingFade }}
               >
                 VOYEZ
               </m.span>
               <m.span
-                className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
+                className="text-heading text-title-xl text-accent"
                 style={{ scale: grandScaleSpring }}
               >
                 GRAND
               </m.span>
             </div>
             <m.span
-              className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+              className="text-heading text-title-xl text-accent"
               style={{ opacity: surroundingFade }}
             >
               PAYEZ PETIT
