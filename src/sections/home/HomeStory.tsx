@@ -121,10 +121,16 @@ function StoryDesktopAnimated() {
   const photoPadding = useTransform(scrollYProgress, [0.5, 0.6], [16, 0]);
   const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.62], [1, 0.7]);
 
-  // Transition phrase — appears early, stays until end
+  // Transition phrase — appears, then "GRAND" zooms to fill screen
   const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.66], [0, 1]);
   const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
+
+  // "GRAND" zoom-out phase
+  const grandScale = useTransform(scrollYProgress, [0.72, 0.82], [1, 50]);
+  const grandScaleSpring = useSpring(grandScale, { stiffness: 60, damping: 30, mass: 0.5 });
+  const surroundingFade = useTransform(scrollYProgress, [0.71, 0.75], [1, 0]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.76, 0.82], [0, 1]);
 
   // Combined opacities
   const titleCombinedOpacity = useTransform(
@@ -150,7 +156,7 @@ function StoryDesktopAnimated() {
               scrollYProgress={scrollYProgress}
               revealStart={0.15}
               revealEnd={0.28}
-              className="heading-section text-accent"
+              className="heading-section text-white"
             >
               {STORY_TITLE}
             </ScrollWordReveal>
@@ -196,25 +202,46 @@ function StoryDesktopAnimated() {
           </m.div>
         </div>
 
-        {/* Transition phrase */}
+        {/* Transition phrase — "GRAND" zooms to yellow fullscreen */}
         <m.div
           className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8"
           style={{ opacity: phraseOpacity }}
         >
-          <m.h3
-            className="text-heading text-center text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
-            style={{ y: phraseYSpring }}
-          >
-            Une expertise complète pour
-            <br />
-            prendre soin de votre vue
-          </m.h3>
-          <m.div style={{ y: phraseYSpring }}>
+          <m.div className="flex flex-col items-center" style={{ y: phraseYSpring }}>
+            <div className="flex items-baseline gap-[0.3em]">
+              <m.span
+                className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+                style={{ opacity: surroundingFade }}
+              >
+                VOYEZ
+              </m.span>
+              <m.span
+                className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.3)]"
+                style={{ scale: grandScaleSpring }}
+              >
+                GRAND
+              </m.span>
+            </div>
+            <m.span
+              className="text-heading text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
+              style={{ opacity: surroundingFade }}
+            >
+              PAYEZ PETIT
+            </m.span>
+          </m.div>
+          <m.div style={{ opacity: surroundingFade }}>
             <LinkCTA to="/a-propos" theme="dark">
               Nous découvrir
             </LinkCTA>
           </m.div>
         </m.div>
+
+        {/* Yellow overlay — fills screen as GRAND zooms */}
+        <m.div
+          className="absolute inset-0 z-30 bg-accent"
+          style={{ opacity: yellowOverlay }}
+          aria-hidden="true"
+        />
       </div>
     </div>
   );
@@ -230,7 +257,7 @@ function StoryDesktopStatic() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           <div className="w-[28%] pr-8">
-            <h2 id="story-title" className="heading-section text-accent">
+            <h2 id="story-title" className="heading-section text-white">
               {STORY_TITLE}
             </h2>
           </div>
@@ -299,7 +326,7 @@ function HomeStory() {
         </SimpleAnimation>
 
         <SimpleAnimation type="slide-up" delay={100}>
-          <h2 id="story-title" className="text-heading text-title-md text-accent">
+          <h2 id="story-title" className="text-heading text-title-md text-white">
             {STORY_TITLE}
           </h2>
         </SimpleAnimation>

@@ -53,7 +53,7 @@ const HomeOffers = forwardRef<HTMLElement>(() => {
   return (
     <section
       id="offers"
-      className="relative w-full bg-background"
+      className="relative w-full bg-accent"
       aria-labelledby="offers-title"
       data-navbar-theme="dark"
     >
