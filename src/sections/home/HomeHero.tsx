@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -28,55 +27,80 @@ function InfoAccent({
 }
 
 // ---------------------------------------------------------------------------
-// Mobile content — shared between animated and static
+// Mobile content — choreographed entrance mirroring desktop energy
 // ---------------------------------------------------------------------------
 
 function HeroMobileContent() {
+  const ease = [0.25, 0.1, 0.25, 1] as const;
+
   return (
     <>
-      <div className="relative z-10 flex h-full flex-col items-start justify-end px-container-x pb-24 pt-20 lg:hidden">
-        <div className="w-full space-y-8 sm:space-y-10">
-          <SimpleAnimation type="slide-up" delay={200} immediate={true}>
-            <h1 id="hero-title" className="text-heading text-title-xl text-black">
-              POUR L&apos;AMOUR
-              <br />
-              DES YEUX
-            </h1>
-          </SimpleAnimation>
+      {/* Photo top-right — slides in from right with scale */}
+      <m.div
+        className="absolute -right-[3%] top-[6%] z-[5] h-[30%] w-[44%] overflow-hidden sm:w-[36%] md:h-[34%] md:w-[30%] lg:hidden"
+        initial={{ x: '60%', opacity: 0, scale: 1.08 }}
+        animate={{ x: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease, delay: 0.3 }}
+      >
+        <ResponsiveImage
+          src="/images/hero-eyeglasses-right.jpg"
+          alt="Collection de montures"
+          className="h-full w-full object-cover"
+          loading="eager"
+          sizes="44vw"
+          widths={[384, 640]}
+        />
+      </m.div>
 
-          <SimpleAnimation type="slide-up" delay={400} immediate={true}>
-            <div className="flex gap-10">
-              <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
-              <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
-            </div>
-          </SimpleAnimation>
-        </div>
+      {/* Photo bottom-left — slides in from left with scale */}
+      <m.div
+        className="absolute -left-[3%] bottom-[18%] z-[5] h-[30%] w-[44%] overflow-hidden sm:w-[36%] md:h-[34%] md:w-[30%] lg:hidden"
+        initial={{ x: '-60%', opacity: 0, scale: 1.08 }}
+        animate={{ x: 0, opacity: 1, scale: 1 }}
+        transition={{ duration: 0.9, ease, delay: 0.5 }}
+      >
+        <ResponsiveImage
+          src="/images/hero-eyeglasses-left.jpg"
+          alt="Lunettes elegantes"
+          className="h-full w-full object-cover"
+          loading="eager"
+          sizes="44vw"
+          widths={[384, 640]}
+        />
+      </m.div>
+
+      {/* Title — centred, slides up with fade */}
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x lg:hidden">
+        <m.h1
+          id="hero-title"
+          className="text-heading text-center text-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
+          style={{ fontSize: 'clamp(2.4rem, 9vw, 4.5rem)' }}
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, ease, delay: 0.15 }}
+        >
+          POUR L&apos;AMOUR
+          <br />
+          DES YEUX
+        </m.h1>
       </div>
 
-      <div className="absolute -right-[5%] top-[8%] h-[28%] w-[40%] overflow-hidden sm:w-[32%] md:h-[32%] md:w-[26%] lg:hidden">
-        <SimpleAnimation type="slide-right" delay={500} immediate={true} className="h-full w-full">
-          <ResponsiveImage
-            src="/images/hero-eyeglasses-right.jpg"
-            alt="Collection de montures"
-            className="h-full w-full object-cover"
-            loading="eager"
-            sizes="40vw"
-            widths={[384, 640]}
-          />
-        </SimpleAnimation>
-      </div>
-
-      <div className="absolute -left-[5%] bottom-[5%] h-[28%] w-[40%] overflow-hidden sm:w-[32%] md:h-[32%] md:w-[26%] lg:hidden">
-        <SimpleAnimation type="slide-left" delay={600} immediate={true} className="h-full w-full">
-          <ResponsiveImage
-            src="/images/hero-eyeglasses-left.jpg"
-            alt="Lunettes elegantes"
-            className="h-full w-full object-cover"
-            loading="eager"
-            sizes="40vw"
-            widths={[384, 640]}
-          />
-        </SimpleAnimation>
+      {/* Info accents — staggered cascade at the bottom */}
+      <div className="absolute bottom-[6%] left-0 z-10 flex w-full justify-center gap-10 px-container-x lg:hidden">
+        <m.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, ease, delay: 0.7 }}
+        >
+          <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
+        </m.div>
+        <m.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.7, ease, delay: 0.85 }}
+        >
+          <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
+        </m.div>
       </div>
     </>
   );
@@ -126,7 +150,7 @@ function HeroAnimated() {
   const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 
   // Title
-  const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['100vw', '-150vw']);
+  const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['130vw', '-150vw']);
   const titleX = useSpring(titleXRaw, springConfig);
 
   // Left photo

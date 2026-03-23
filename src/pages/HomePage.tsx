@@ -47,14 +47,14 @@ export default function HomePage() {
             <HomeStory />
           </StickySection>
 
-          {/* Story → Services : gradient integrated into Services section */}
+          {/* Story → Offers */}
           <StickySection zIndex={13}>
-            <HomeServices />
+            <HomeOffers />
           </StickySection>
 
-          {/* Services → Offers (both white, no transition needed) */}
+          {/* Offers → Services */}
           <StickySection zIndex={14}>
-            <HomeOffers />
+            <HomeServices />
           </StickySection>
 
           {/* Offers → Engagement */}

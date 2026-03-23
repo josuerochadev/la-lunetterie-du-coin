@@ -81,9 +81,10 @@ function ScrollWord({
   const wordStart = rangeStart + (index / total) * range;
   const wordEnd = Math.min(wordStart + range / total + range * 0.2, rangeEnd);
   const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0.15, 1]);
+  const y = useTransform(scrollYProgress, [wordStart, wordEnd], [12, 0]);
 
   return (
-    <m.span className="inline-block" style={{ opacity }}>
+    <m.span className="inline-block" style={{ opacity, y }}>
       {children}
     </m.span>
   );
@@ -102,27 +103,27 @@ function StoryDesktopAnimated() {
     offset: ['start end', 'end start'],
   });
 
-  // Phase 1: photo appears alone
-  const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.15], [0, 1]);
-  const photoScale = useTransform(scrollYProgress, [0.62, 0.78], [1, 1.05]);
+  // Phase 1: photo appears alone — starts at ~60% height, grows + zooms continuously
+  const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);
+  const photoHeight = useTransform(scrollYProgress, [0.05, 0.5], ['60%', '100%']);
+  const photoScale = useTransform(scrollYProgress, [0.05, 0.6], [1, 1.12]);
 
   // Phase 2: title & text enter
-  const textEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.22, 0.33], [150, 0]);
+  const textEntranceOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.17, 0.28], [150, 0]);
   const titleY = useSpring(titleYRaw, springConfig);
-  const textYRaw = useTransform(scrollYProgress, [0.22, 0.62], [250, -450]);
-  const textY = useSpring(textYRaw, springConfig);
-  const contentFadeOut = useTransform(scrollYProgress, [0.6, 0.64], [1, 0]);
+  // Text block: no bulk Y translation — each word slides down individually
+  const contentFadeOut = useTransform(scrollYProgress, [0.45, 0.5], [1, 0]);
 
   // End sequence: photo expands fullscreen
-  const photoLeft = useTransform(scrollYProgress, [0.66, 0.8], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.66, 0.8], ['36%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.66, 0.8], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0.7]);
+  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['28%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['36%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.5, 0.6], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.62], [1, 0.7]);
 
-  // Transition phrase
-  const phraseOpacity = useTransform(scrollYProgress, [0.74, 0.84], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.74, 0.84], [40, 0]);
+  // Transition phrase — appears early, stays until end
+  const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.66], [0, 1]);
+  const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
   // Combined opacities
@@ -136,7 +137,7 @@ function StoryDesktopAnimated() {
   );
 
   return (
-    <div ref={sectionRef} className="hidden min-h-[350vh] lg:block">
+    <div ref={sectionRef} className="hidden min-h-[450vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           {/* Left — title */}
@@ -147,20 +148,21 @@ function StoryDesktopAnimated() {
             <ScrollWordReveal
               as="h2"
               scrollYProgress={scrollYProgress}
-              revealStart={0.2}
-              revealEnd={0.35}
+              revealStart={0.15}
+              revealEnd={0.28}
               className="heading-section text-accent"
             >
               {STORY_TITLE}
             </ScrollWordReveal>
           </m.div>
 
-          {/* Center — photo */}
+          {/* Center — photo: starts ~60% height, grows to full + continuous zoom */}
           <m.div
-            className="absolute inset-y-0 will-change-transform"
+            className="absolute top-1/2 -translate-y-1/2 will-change-transform"
             style={{
               left: photoLeft,
               width: photoWidth,
+              height: photoHeight,
               paddingLeft: photoPadding,
               paddingRight: photoPadding,
               opacity: photoExpandOpacity,
@@ -180,28 +182,24 @@ function StoryDesktopAnimated() {
           {/* Right — body + CTA */}
           <m.div
             className="ml-[36%] w-[36%] pl-8 will-change-transform"
-            style={{ y: textY, opacity: textCombinedOpacity }}
+            style={{ opacity: textCombinedOpacity }}
           >
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
-              revealStart={0.22}
-              revealEnd={0.38}
-              className="text-body-lg text-accent/80"
+              revealStart={0.17}
+              revealEnd={0.32}
+              className="text-body-xl text-white/80"
             >
               {STORY_BODY}
             </ScrollWordReveal>
-            <LinkCTA to="/a-propos" theme="dark" className="mt-8">
-              Nous découvrir
-            </LinkCTA>
           </m.div>
         </div>
 
         {/* Transition phrase */}
         <m.div
-          className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center px-8"
+          className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8"
           style={{ opacity: phraseOpacity }}
-          aria-hidden="true"
         >
           <m.h3
             className="text-heading text-center text-title-xl text-accent drop-shadow-[0_2px_20px_rgba(0,0,0,0.5)]"
@@ -211,6 +209,11 @@ function StoryDesktopAnimated() {
             <br />
             prendre soin de votre vue
           </m.h3>
+          <m.div style={{ y: phraseYSpring }}>
+            <LinkCTA to="/a-propos" theme="dark">
+              Nous découvrir
+            </LinkCTA>
+          </m.div>
         </m.div>
       </div>
     </div>
@@ -223,7 +226,7 @@ function StoryDesktopAnimated() {
 
 function StoryDesktopStatic() {
   return (
-    <div className="hidden min-h-[350vh] lg:block">
+    <div className="hidden min-h-[450vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           <div className="w-[28%] pr-8">
@@ -244,7 +247,7 @@ function StoryDesktopStatic() {
           </div>
 
           <div className="ml-[36%] w-[36%] pl-8">
-            <p className="text-body-lg text-accent/80">{STORY_BODY_HTML}</p>
+            <p className="text-body-xl text-white/80">{STORY_BODY_HTML}</p>
             <LinkCTA to="/a-propos" theme="dark" className="mt-8">
               Nous découvrir
             </LinkCTA>
@@ -302,7 +305,7 @@ function HomeStory() {
         </SimpleAnimation>
 
         <SimpleAnimation type="slide-up" delay={200}>
-          <p className="text-body leading-relaxed text-accent/80">{STORY_BODY_HTML}</p>
+          <p className="text-body-lg leading-relaxed text-white/80">{STORY_BODY_HTML}</p>
           <LinkCTA to="/a-propos" theme="dark" className="mt-6 text-body-sm sm:mt-8">
             Nous découvrir
           </LinkCTA>
