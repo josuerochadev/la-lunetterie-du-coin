@@ -20,8 +20,9 @@ const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 //  0.38 – 0.50  Image 1 fades out + card 1 peels away
 //  0.50 – 0.62  Image 2 fades in + perspective tilt settles (RIGHT)
 //  0.62 – 0.82  Image 2 visible, card 2 enters
-//  0.82 – 0.92  Image 2 fades out + card 2 exits
-//  0.92 – 1.00  Global CTA
+//  0.82 – 0.88  Image 2 fades out + card 2 exits
+//  0.86 – 0.96  Outro phrase "UNE PAIRE QUI A DU CHIEN"
+//  0.94 – 1.00  Gradient yellow → white
 // ---------------------------------------------------------------------------
 
 const SCROLL_HEIGHT_VH = 500; // total scroll budget in vh
@@ -225,8 +226,16 @@ function OffersDesktop() {
   const card0Pointer = useTransform(card0Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
   const card1Pointer = useTransform(card1Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
 
-  // Global CTA
-  const ctaOpacity = useTransform(scrollYProgress, [0.88, 0.94], [0, 1]);
+  // --- Outro: phrase + CTA (staggered) + gradient to white ---
+  const phraseOpacity = useTransform(scrollYProgress, [0.86, 0.91, 0.96, 1.0], [0, 1, 1, 0]);
+  const phraseYRaw = useTransform(scrollYProgress, [0.86, 0.91], [50, 0]);
+  const phraseY = useSpring(phraseYRaw, SPRING_CONFIG);
+  // CTA appears slightly after phrase, like Story & Services
+  const ctaOpacity = useTransform(scrollYProgress, [0.91, 0.95], [0, 1]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.91, 0.95], [20, 0]);
+  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const ctaPointer = useTransform(ctaOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const gradientOpacity = useTransform(scrollYProgress, [0.96, 1.0], [0, 1]);
 
   const imgTransforms = [
     {
@@ -328,10 +337,10 @@ function OffersDesktop() {
               }}
             >
               {/* Card — editorial cutout with accent bar */}
-              <div className="relative overflow-hidden rounded-r-2xl bg-black/90 shadow-2xl backdrop-blur-md">
-                {/* Yellow accent bar — left edge */}
+              <div className="group/card relative overflow-hidden rounded-r-3xl bg-black/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.5)]">
+                {/* Accent bar — left edge, expands on hover */}
                 <div
-                  className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
+                  className="absolute bottom-0 left-0 top-0 w-2.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-3.5"
                   aria-hidden="true"
                 />
 
@@ -359,18 +368,37 @@ function OffersDesktop() {
           ))}
         </div>
 
-        {/* Global CTA — appears at the end */}
-        <m.div
-          className="absolute inset-x-0 bottom-[30vh] z-20 text-center"
-          style={{ opacity: ctaOpacity }}
-        >
-          <LinkCTA
-            href={HOMEPAGE_SECTIONS.offers.cta.link}
-            aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+        {/* Outro — phrase + CTA (staggered entrance like Story & Services) */}
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
+          <m.h3
+            className="text-heading text-center text-title-xl text-black"
+            style={{ opacity: phraseOpacity, y: phraseY }}
           >
-            {HOMEPAGE_SECTIONS.offers.cta.text}
-          </LinkCTA>
-        </m.div>
+            UNE PAIRE
+            <br />
+            QUI A DU CHIEN
+          </m.h3>
+
+          <m.div style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}>
+            <LinkCTA
+              to={HOMEPAGE_SECTIONS.offers.cta.link}
+              aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+            >
+              {HOMEPAGE_SECTIONS.offers.cta.text}
+            </LinkCTA>
+          </m.div>
+        </div>
+
+        {/* Gradient overlay — yellow to white transition */}
+        <m.div
+          className="absolute inset-0 z-30"
+          style={{
+            opacity: gradientOpacity,
+            background:
+              'linear-gradient(to bottom, rgba(254,235,9,0) 0%, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,1) 100%)',
+          }}
+          aria-hidden="true"
+        />
       </div>
     </div>
   );
@@ -445,7 +473,7 @@ function HomeOffers() {
     <section
       ref={sectionRef}
       id="offers"
-      className="relative w-full bg-accent"
+      className="pointer-events-none relative w-full bg-accent"
       aria-labelledby="offers-title"
       data-navbar-theme="dark"
     >
@@ -453,7 +481,9 @@ function HomeOffers() {
       {!prefersReducedMotion && <OffersDesktop />}
 
       {/* Mobile / reduced-motion — stacked */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      <div
+        className={prefersReducedMotion ? 'pointer-events-auto' : 'pointer-events-auto lg:hidden'}
+      >
         <div className="mx-auto max-w-container px-container-x pb-4 pt-section text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2

@@ -64,6 +64,9 @@ function StoryDesktopAnimated() {
   const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
   const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
 
+  // Pointer events — disable outro overlay when not visible
+  const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+
   // Combined opacities
   const titleCombinedOpacity = useTransform(
     [textEntranceOpacity, contentFadeOut] as const,
@@ -137,7 +140,7 @@ function StoryDesktopAnimated() {
         {/* Transition phrase — "GRAND" zooms to yellow fullscreen */}
         <m.div
           className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8"
-          style={{ opacity: phraseOpacity }}
+          style={{ opacity: phraseOpacity, pointerEvents: phrasePointer }}
         >
           <m.div className="flex flex-col items-center" style={{ y: phraseYSpring }}>
             <div className="flex items-baseline gap-[0.3em]">
@@ -170,7 +173,7 @@ function StoryDesktopAnimated() {
 
         {/* Yellow overlay — fills screen as GRAND zooms */}
         <m.div
-          className="absolute inset-0 z-30 bg-accent"
+          className="pointer-events-none absolute inset-0 z-30 bg-accent"
           style={{ opacity: yellowOverlay }}
           aria-hidden="true"
         />

@@ -259,7 +259,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   const pointerEvents = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
   return (
-    <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
+    <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
       <m.h3
         className="text-heading text-center text-title-xl text-black"
         style={{ opacity: phraseOpacity, y: phraseY }}
@@ -269,7 +269,10 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
         DANS L&apos;OEIL
       </m.h3>
 
-      <m.div style={{ opacity: ctaOpacity, y: ctaY, pointerEvents }}>
+      <m.div
+        className="pointer-events-auto"
+        style={{ opacity: ctaOpacity, y: ctaY, pointerEvents }}
+      >
         <LinkCTA
           to={HOMEPAGE_SECTIONS.services.cta.link}
           theme="light"
@@ -353,12 +356,12 @@ function HomeServices() {
       id="services"
       aria-labelledby="services-title"
       data-navbar-theme="dark"
-      className="relative bg-white"
+      className="pointer-events-none relative bg-white"
     >
       {/* No gradient — StickySection stacking creates the depth/overlap effect */}
 
       {/* ── Mobile ── */}
-      <div className="px-container-x py-section lg:hidden">
+      <div className="pointer-events-auto px-container-x py-section lg:hidden">
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="heading-section mb-12 text-black">
