@@ -18,7 +18,6 @@ export type HomepageOffer = {
   image: string;
   catchphrase: string;
   summary: string;
-  details: string;
   link: string;
 };
 
@@ -63,19 +62,17 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 1,
     title: 'Recyclage',
-    image: '/images/homepage-offer-recyclage.png',
+    image: '/images/homepage-offer-recyclage.webp',
     catchphrase: 'DU PASSÉ FAITES TABLE RASE',
     summary: "Jusqu'à 70€ de remise en rapportant vos anciennes montures.",
-    details: '',
     link: '/offres#recyclage',
   },
   {
     id: 2,
     title: 'Deuxième paire',
-    image: '/images/homepage-offer-second-pair.png',
+    image: '/images/homepage-offer-second-pair.webp',
     catchphrase: 'LE COUP DE FOUDRE ×2',
     summary: 'Obtenez une deuxième paire à partir de 59€ selon vos besoins.',
-    details: '',
     link: '/offres#deuxieme-paire',
   },
 ];

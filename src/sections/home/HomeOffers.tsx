@@ -1,83 +1,377 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
-import motifBlancUrl from '@/assets/patterns/motif-blanc.svg';
+import motifJauneUrl from '@/assets/patterns/motif-jaune.svg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 
 // ---------------------------------------------------------------------------
-// Desktop — parallax layers: catchphrase + floating product + text
+// Scroll budget (fraction of scrollYProgress)
+//
+//  0.00 – 0.06  Title word-reveal
+//  0.06 – 0.18  Image 1 fades in + perspective tilt settles (LEFT)
+//  0.18 – 0.38  Image 1 visible, card 1 enters (center, slide-up)
+//  0.38 – 0.50  Image 1 fades out + card 1 peels away
+//  0.50 – 0.62  Image 2 fades in + perspective tilt settles (RIGHT)
+//  0.62 – 0.82  Image 2 visible, card 2 enters
+//  0.82 – 0.92  Image 2 fades out + card 2 exits
+//  0.92 – 1.00  Global CTA
 // ---------------------------------------------------------------------------
 
-function OfferBlock({ offer, index }: { offer: (typeof HOMEPAGE_OFFERS)[number]; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+const SCROLL_HEIGHT_VH = 500; // total scroll budget in vh
+
+// Per-offer scroll windows (normalised 0-1)
+const OFFERS_TIMELINE = [
+  {
+    imgIn: [0.06, 0.18],
+    hold: [0.18, 0.38],
+    imgOut: [0.38, 0.5],
+    cardIn: [0.16, 0.26],
+    cardOut: [0.38, 0.48],
+  },
+  {
+    imgIn: [0.5, 0.62],
+    hold: [0.62, 0.82],
+    imgOut: [0.82, 0.92],
+    cardIn: [0.58, 0.68],
+    cardOut: [0.82, 0.9],
+  },
+] as const;
+
+// Image placement: first LEFT, second RIGHT — with strong 3D tilt
+const IMAGE_LAYOUT = [
+  { x: '-18%', rotateZ: -8, rotateY: 14, rotateX: 8 }, // left-leaning
+  { x: '18%', rotateZ: 6, rotateY: -14, rotateX: 8 }, // right-leaning
+] as const;
+
+// ---------------------------------------------------------------------------
+// Desktop — sticky scrollytelling
+// ---------------------------------------------------------------------------
+
+function OffersDesktop() {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
+    target: sectionRef,
+    offset: ['start start', 'end end'],
   });
 
-  const number = String(index + 1).padStart(2, '0');
-  const isEven = index % 2 === 0;
+  // Title — stays visible throughout offers, fades out only for final CTA
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.04, 0.88, 0.93], [0, 1, 1, 0]);
 
-  // Layer 1 — Catchphrase: slowest parallax
-  const catchphraseOpacity = useTransform(scrollYProgress, [0.1, 0.22], [0, 1]);
-  const catchphraseYRaw = useTransform(scrollYProgress, [0.0, 1.0], [100, -50]);
-  const catchphraseY = useSpring(catchphraseYRaw, SPRING_CONFIG);
+  // --- Image 0 (LEFT) ---
+  const img0Opacity = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[0].imgIn[0],
+      OFFERS_TIMELINE[0].imgIn[1],
+      OFFERS_TIMELINE[0].imgOut[0],
+      OFFERS_TIMELINE[0].imgOut[1],
+    ],
+    [0, 1, 1, 0],
+  );
+  // Tilt entrance: starts tilted, settles to layout values
+  const img0RotateYRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].imgIn[0], OFFERS_TIMELINE[0].hold[0]],
+    [IMAGE_LAYOUT[0].rotateY + 10, IMAGE_LAYOUT[0].rotateY],
+  );
+  const img0RotateY = useSpring(img0RotateYRaw, SPRING_CONFIG);
+  const img0RotateXRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].imgIn[0], OFFERS_TIMELINE[0].hold[0]],
+    [IMAGE_LAYOUT[0].rotateX + 8, IMAGE_LAYOUT[0].rotateX],
+  );
+  const img0RotateX = useSpring(img0RotateXRaw, SPRING_CONFIG);
+  const img0YRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].imgIn[0], OFFERS_TIMELINE[0].imgOut[1]],
+    [300, -300],
+  );
+  const img0Y = useSpring(img0YRaw, SPRING_CONFIG);
+  const img0Scale = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].imgIn[0], OFFERS_TIMELINE[0].hold[0], OFFERS_TIMELINE[0].imgOut[1]],
+    [0.85, 1, 1.04],
+  );
 
-  // Layer 2 — Product image: medium parallax, larger range
-  const imageOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
-  const imageYRaw = useTransform(scrollYProgress, [0.0, 1.0], [200, -120]);
-  const imageY = useSpring(imageYRaw, SPRING_CONFIG);
-  const imageRotate = useTransform(scrollYProgress, [0.0, 1.0], isEven ? [-6, 6] : [6, -6]);
-  const imageScale = useTransform(scrollYProgress, [0.1, 0.5], [0.92, 1]);
+  // --- Image 1 (RIGHT) ---
+  const img1Opacity = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[1].imgIn[0],
+      OFFERS_TIMELINE[1].imgIn[1],
+      OFFERS_TIMELINE[1].imgOut[0],
+      OFFERS_TIMELINE[1].imgOut[1],
+    ],
+    [0, 1, 1, 0],
+  );
+  const img1RotateYRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].imgIn[0], OFFERS_TIMELINE[1].hold[0]],
+    [IMAGE_LAYOUT[1].rotateY - 10, IMAGE_LAYOUT[1].rotateY],
+  );
+  const img1RotateY = useSpring(img1RotateYRaw, SPRING_CONFIG);
+  const img1RotateXRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].imgIn[0], OFFERS_TIMELINE[1].hold[0]],
+    [IMAGE_LAYOUT[1].rotateX + 8, IMAGE_LAYOUT[1].rotateX],
+  );
+  const img1RotateX = useSpring(img1RotateXRaw, SPRING_CONFIG);
+  const img1YRaw = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].imgIn[0], OFFERS_TIMELINE[1].imgOut[1]],
+    [300, -300],
+  );
+  const img1Y = useSpring(img1YRaw, SPRING_CONFIG);
+  const img1Scale = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].imgIn[0], OFFERS_TIMELINE[1].hold[0], OFFERS_TIMELINE[1].imgOut[1]],
+    [0.85, 1, 1.04],
+  );
 
-  // Layer 3 — Summary/CTA: fastest parallax
-  const textOpacity = useTransform(scrollYProgress, [0.22, 0.35], [0, 1]);
-  const textYRaw = useTransform(scrollYProgress, [0.0, 1.0], [280, -140]);
-  const textY = useSpring(textYRaw, SPRING_CONFIG);
+  // --- Card 0 — enters from below, peels away left ---
+  const card0Opacity = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[0].cardIn[0],
+      OFFERS_TIMELINE[0].cardIn[1],
+      OFFERS_TIMELINE[0].cardOut[0],
+      OFFERS_TIMELINE[0].cardOut[1],
+    ],
+    [0, 1, 1, 0],
+  );
+  const card0YRaw = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[0].cardIn[0],
+      OFFERS_TIMELINE[0].cardIn[1],
+      OFFERS_TIMELINE[0].cardOut[0],
+      OFFERS_TIMELINE[0].cardOut[1],
+    ],
+    [100, 0, 0, -80],
+  );
+  const card0Y = useSpring(card0YRaw, SPRING_CONFIG);
+  const card0Rotate = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].cardOut[0], OFFERS_TIMELINE[0].cardOut[1]],
+    [0, -8],
+  );
+  const card0X = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[0].cardOut[0], OFFERS_TIMELINE[0].cardOut[1]],
+    [0, -120],
+  );
+  const card0Scale = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[0].cardIn[0],
+      OFFERS_TIMELINE[0].cardIn[1],
+      OFFERS_TIMELINE[0].cardOut[0],
+      OFFERS_TIMELINE[0].cardOut[1],
+    ],
+    [0.92, 1, 1, 0.9],
+  );
 
-  const ctaOpacity = useTransform(scrollYProgress, [0.3, 0.42], [0, 1]);
+  // --- Card 1 — enters from below, peels away right ---
+  const card1Opacity = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[1].cardIn[0],
+      OFFERS_TIMELINE[1].cardIn[1],
+      OFFERS_TIMELINE[1].cardOut[0],
+      OFFERS_TIMELINE[1].cardOut[1],
+    ],
+    [0, 1, 1, 0],
+  );
+  const card1YRaw = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[1].cardIn[0],
+      OFFERS_TIMELINE[1].cardIn[1],
+      OFFERS_TIMELINE[1].cardOut[0],
+      OFFERS_TIMELINE[1].cardOut[1],
+    ],
+    [100, 0, 0, -80],
+  );
+  const card1Y = useSpring(card1YRaw, SPRING_CONFIG);
+  const card1Rotate = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].cardOut[0], OFFERS_TIMELINE[1].cardOut[1]],
+    [0, 6],
+  );
+  const card1X = useTransform(
+    scrollYProgress,
+    [OFFERS_TIMELINE[1].cardOut[0], OFFERS_TIMELINE[1].cardOut[1]],
+    [0, 120],
+  );
+  const card1Scale = useTransform(
+    scrollYProgress,
+    [
+      OFFERS_TIMELINE[1].cardIn[0],
+      OFFERS_TIMELINE[1].cardIn[1],
+      OFFERS_TIMELINE[1].cardOut[0],
+      OFFERS_TIMELINE[1].cardOut[1],
+    ],
+    [0.92, 1, 1, 0.9],
+  );
+
+  // Pointer events — disable interaction when card is invisible to avoid blocking clicks
+  const card0Pointer = useTransform(card0Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const card1Pointer = useTransform(card1Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+
+  // Global CTA
+  const ctaOpacity = useTransform(scrollYProgress, [0.9, 0.96], [0, 1]);
+
+  const imgTransforms = [
+    {
+      opacity: img0Opacity,
+      rotateX: img0RotateX,
+      rotateY: img0RotateY,
+      y: img0Y,
+      scale: img0Scale,
+    },
+    {
+      opacity: img1Opacity,
+      rotateX: img1RotateX,
+      rotateY: img1RotateY,
+      y: img1Y,
+      scale: img1Scale,
+    },
+  ];
+  const cardTransforms = [
+    {
+      opacity: card0Opacity,
+      y: card0Y,
+      x: card0X,
+      rotate: card0Rotate,
+      scale: card0Scale,
+      pointerEvents: card0Pointer,
+    },
+    {
+      opacity: card1Opacity,
+      y: card1Y,
+      x: card1X,
+      rotate: card1Rotate,
+      scale: card1Scale,
+      pointerEvents: card1Pointer,
+    },
+  ];
 
   return (
-    <div ref={ref} className="hidden min-h-[80vh] py-[12vh] lg:block">
-      <div className="mx-auto flex max-w-container items-center gap-8 px-container-x xl:gap-12">
-        {/* Text column — 40% */}
-        <div className={`relative z-10 w-[40%] ${isEven ? 'order-1' : 'order-2'}`}>
-          {/* Label + Catchphrase — slow layer */}
-          <m.div style={{ opacity: catchphraseOpacity, y: catchphraseY }}>
-            <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-black/30">
-              {number} / {String(OFFER_COUNT).padStart(2, '0')}
-            </span>
-            <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
-          </m.div>
+    <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+      {/* Sticky viewport */}
+      <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
+        {/* Title — fades in/out */}
+        <m.div
+          className="pointer-events-none absolute inset-x-0 top-0 z-20 pt-section text-center"
+          style={{ opacity: titleOpacity }}
+        >
+          <ScrollWordReveal
+            as="h2"
+            id="offers-title"
+            scrollYProgress={scrollYProgress}
+            revealStart={0.0}
+            revealEnd={0.06}
+            className="heading-section text-black"
+          >
+            {HOMEPAGE_SECTIONS.offers.title}
+          </ScrollWordReveal>
+        </m.div>
 
-          {/* Summary + CTA — fast layer */}
-          <m.div className="mt-5" style={{ opacity: textOpacity, y: textY }}>
-            <p className="max-w-lg text-body-lg leading-relaxed text-black/50">{offer.summary}</p>
-            <m.div style={{ opacity: ctaOpacity }} className="mt-4">
-              <LinkCTA href={offer.link} aria-label={`En savoir plus sur l'offre ${offer.title}`}>
-                En savoir plus
-              </LinkCTA>
+        {/* Image layer — large, alternating left/right with 3D tilt */}
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          {HOMEPAGE_OFFERS.map((offer, i) => (
+            <m.div
+              key={offer.id}
+              className="absolute inset-0 flex items-center justify-center"
+              style={{
+                opacity: imgTransforms[i].opacity,
+                rotateX: imgTransforms[i].rotateX,
+                rotateY: imgTransforms[i].rotateY,
+                y: imgTransforms[i].y,
+                scale: imgTransforms[i].scale,
+                rotate: IMAGE_LAYOUT[i].rotateZ,
+                x: IMAGE_LAYOUT[i].x,
+                transformOrigin: 'center center',
+                transformStyle: 'preserve-3d',
+              }}
+            >
+              <img
+                src={offer.image}
+                alt={offer.title}
+                className="h-[200vh] w-auto max-w-none object-contain drop-shadow-2xl"
+                loading={i === 0 ? 'eager' : 'lazy'}
+              />
             </m.div>
-          </m.div>
+          ))}
         </div>
 
-        {/* Product image — 60%, larger */}
+        {/* Card layer — stacked at viewport center */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          {HOMEPAGE_OFFERS.map((offer, i) => {
+            const number = String(i + 1).padStart(2, '0');
+            return (
+              <m.div
+                key={offer.id}
+                className="absolute w-full max-w-2xl px-container-x"
+                style={{
+                  opacity: cardTransforms[i].opacity,
+                  y: cardTransforms[i].y,
+                  x: cardTransforms[i].x,
+                  rotate: cardTransforms[i].rotate,
+                  scale: cardTransforms[i].scale,
+                  pointerEvents: cardTransforms[i].pointerEvents,
+                }}
+              >
+                <div className="relative overflow-hidden rounded-3xl bg-black/95 px-8 py-10 shadow-2xl backdrop-blur-sm xl:px-12 xl:py-12">
+                  {/* Motif jaune — texture */}
+                  <img
+                    src={motifJauneUrl}
+                    alt=""
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
+                  />
+
+                  <div className="relative z-10">
+                    <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/30">
+                      {number} / {String(OFFER_COUNT).padStart(2, '0')}
+                    </span>
+                    <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
+                    <p className="mt-4 max-w-lg text-body-lg leading-relaxed text-white/60">
+                      {offer.summary}
+                    </p>
+                    <LinkCTA
+                      to={offer.link}
+                      theme="dark"
+                      className="mt-6"
+                      aria-label={`En savoir plus sur l'offre ${offer.title}`}
+                    >
+                      En savoir plus
+                    </LinkCTA>
+                  </div>
+                </div>
+              </m.div>
+            );
+          })}
+        </div>
+
+        {/* Global CTA — appears at the end */}
         <m.div
-          className={`relative w-[60%] ${isEven ? 'order-2' : 'order-1'}`}
-          style={{ opacity: imageOpacity, y: imageY, rotate: imageRotate, scale: imageScale }}
+          className="absolute inset-x-0 bottom-[30vh] z-20 text-center"
+          style={{ opacity: ctaOpacity }}
         >
-          <img
-            src={offer.image}
-            alt={offer.title}
-            className="h-auto w-full object-contain"
-            loading="lazy"
-          />
+          <LinkCTA
+            href={HOMEPAGE_SECTIONS.offers.cta.link}
+            aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+          >
+            {HOMEPAGE_SECTIONS.offers.cta.text}
+          </LinkCTA>
         </m.div>
       </div>
     </div>
@@ -85,7 +379,7 @@ function OfferBlock({ offer, index }: { offer: (typeof HOMEPAGE_OFFERS)[number];
 }
 
 // ---------------------------------------------------------------------------
-// Mobile — stacked editorial cards
+// Mobile — stacked: image + black card below
 // ---------------------------------------------------------------------------
 
 function OfferMobileBlock({
@@ -96,19 +390,11 @@ function OfferMobileBlock({
   index: number;
 }) {
   const number = String(index + 1).padStart(2, '0');
-  return (
-    <article className="py-12 lg:hidden">
-      <div className="px-container-x">
-        <SimpleAnimation type="slide-up" delay={0}>
-          <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-black/30">
-            {number} / {String(OFFER_COUNT).padStart(2, '0')}
-          </span>
-          <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
-        </SimpleAnimation>
-      </div>
 
-      <div className="mt-6 px-container-x">
-        <SimpleAnimation type="fade" delay={100}>
+  return (
+    <article className="py-10 lg:hidden">
+      <div className="px-container-x">
+        <SimpleAnimation type="fade" delay={0}>
           <img
             src={offer.image}
             alt={offer.title}
@@ -119,36 +405,33 @@ function OfferMobileBlock({
       </div>
 
       <div className="mt-6 px-container-x">
-        <SimpleAnimation type="slide-up" delay={200}>
-          <p className="text-body-lg leading-relaxed text-black/50">{offer.summary}</p>
-          <LinkCTA
-            href={offer.link}
-            className="mt-4"
-            aria-label={`En savoir plus sur l'offre ${offer.title}`}
-          >
-            En savoir plus
-          </LinkCTA>
+        <SimpleAnimation type="slide-up" delay={150}>
+          <div className="relative overflow-hidden rounded-2xl bg-black px-6 py-8">
+            <img
+              src={motifJauneUrl}
+              alt=""
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
+            />
+            <div className="relative z-10">
+              <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/30">
+                {number} / {String(OFFER_COUNT).padStart(2, '0')}
+              </span>
+              <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
+              <p className="mt-3 text-body-lg leading-relaxed text-white/60">{offer.summary}</p>
+              <LinkCTA
+                href={offer.link}
+                theme="dark"
+                className="mt-5"
+                aria-label={`En savoir plus sur l'offre ${offer.title}`}
+              >
+                En savoir plus
+              </LinkCTA>
+            </div>
+          </div>
         </SimpleAnimation>
       </div>
     </article>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Background pattern with scroll-driven fade-in
-// ---------------------------------------------------------------------------
-
-function PatternBackground({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const opacity = useTransform(scrollYProgress, [0.0, 0.08], [0, 0.4]);
-
-  return (
-    <m.div
-      className="pointer-events-none sticky top-0 z-0 -mb-[100vh] flex h-screen items-center justify-center"
-      style={{ opacity }}
-      aria-hidden="true"
-    >
-      <img src={motifBlancUrl} alt="" className="h-[140%] w-[140%] max-w-none object-contain" />
-    </m.div>
   );
 }
 
@@ -159,10 +442,6 @@ function PatternBackground({ scrollYProgress }: { scrollYProgress: MotionValue<n
 function HomeOffers() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
 
   return (
     <section
@@ -172,42 +451,36 @@ function HomeOffers() {
       aria-labelledby="offers-title"
       data-navbar-theme="dark"
     >
-      {/* Background pattern — sticky, fades in once, stays for whole section */}
-      {!prefersReducedMotion && <PatternBackground scrollYProgress={scrollYProgress} />}
+      {/* Desktop — sticky scrollytelling */}
+      {!prefersReducedMotion && <OffersDesktop />}
 
-      {/* Section title */}
-      <div className="relative z-10 mx-auto max-w-container px-container-x pb-4 pt-section">
-        <SimpleAnimation type="slide-up" delay={0}>
-          <h2 id="offers-title" className="heading-section text-black">
-            {HOMEPAGE_SECTIONS.offers.title}
-          </h2>
-        </SimpleAnimation>
-      </div>
+      {/* Mobile / reduced-motion — stacked */}
+      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+        <div className="mx-auto max-w-container px-container-x pb-4 pt-section text-center">
+          <SimpleAnimation type="slide-up" delay={0}>
+            <h2
+              id={prefersReducedMotion ? 'offers-title' : undefined}
+              className="heading-section text-black"
+            >
+              {HOMEPAGE_SECTIONS.offers.title}
+            </h2>
+          </SimpleAnimation>
+        </div>
 
-      {/* Offers — editorial longform */}
-      <div className="relative z-10">
-        {HOMEPAGE_OFFERS.map((offer, index) =>
-          prefersReducedMotion ? (
-            <OfferMobileBlock key={offer.id} offer={offer} index={index} />
-          ) : (
-            <div key={offer.id}>
-              <OfferBlock offer={offer} index={index} />
-              <OfferMobileBlock offer={offer} index={index} />
-            </div>
-          ),
-        )}
-      </div>
+        {HOMEPAGE_OFFERS.map((offer, index) => (
+          <OfferMobileBlock key={offer.id} offer={offer} index={index} />
+        ))}
 
-      {/* CTA global */}
-      <div className="relative z-10 mx-auto max-w-container px-container-x pb-section pt-8 text-center lg:pt-4">
-        <SimpleAnimation type="slide-up" delay={200}>
-          <LinkCTA
-            href={HOMEPAGE_SECTIONS.offers.cta.link}
-            aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
-          >
-            {HOMEPAGE_SECTIONS.offers.cta.text}
-          </LinkCTA>
-        </SimpleAnimation>
+        <div className="mx-auto max-w-container px-container-x pb-section pt-8 text-center">
+          <SimpleAnimation type="slide-up" delay={200}>
+            <LinkCTA
+              href={HOMEPAGE_SECTIONS.offers.cta.link}
+              aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+            >
+              {HOMEPAGE_SECTIONS.offers.cta.text}
+            </LinkCTA>
+          </SimpleAnimation>
+        </div>
       </div>
     </section>
   );
