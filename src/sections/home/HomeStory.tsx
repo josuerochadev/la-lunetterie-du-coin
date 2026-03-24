@@ -58,11 +58,11 @@ function StoryDesktopAnimated() {
   const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
   const phraseYSpring = useSpring(phraseY, springConfig);
 
-  // "GRAND" zoom-out phase
-  const grandScale = useTransform(scrollYProgress, [0.72, 0.82], [1, 50]);
+  // "GRAND" zoom-out phase — pushed later to reduce dead yellow scroll before Offers
+  const grandScale = useTransform(scrollYProgress, [0.76, 0.88], [1, 50]);
   const grandScaleSpring = useSpring(grandScale, { stiffness: 60, damping: 30, mass: 0.5 });
-  const surroundingFade = useTransform(scrollYProgress, [0.71, 0.75], [1, 0]);
-  const yellowOverlay = useTransform(scrollYProgress, [0.76, 0.82], [0, 1]);
+  const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
 
   // Combined opacities
   const titleCombinedOpacity = useTransform(

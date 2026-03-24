@@ -29,18 +29,18 @@ const SCROLL_HEIGHT_VH = 500; // total scroll budget in vh
 // Per-offer scroll windows (normalised 0-1)
 const OFFERS_TIMELINE = [
   {
-    imgIn: [0.06, 0.18],
-    hold: [0.18, 0.38],
-    imgOut: [0.38, 0.5],
-    cardIn: [0.16, 0.26],
-    cardOut: [0.38, 0.48],
+    imgIn: [0.02, 0.12],
+    hold: [0.12, 0.34],
+    imgOut: [0.34, 0.46],
+    cardIn: [0.1, 0.2],
+    cardOut: [0.34, 0.44],
   },
   {
-    imgIn: [0.5, 0.62],
-    hold: [0.62, 0.82],
-    imgOut: [0.82, 0.92],
-    cardIn: [0.58, 0.68],
-    cardOut: [0.82, 0.9],
+    imgIn: [0.46, 0.56],
+    hold: [0.56, 0.78],
+    imgOut: [0.78, 0.88],
+    cardIn: [0.52, 0.62],
+    cardOut: [0.78, 0.86],
   },
 ] as const;
 
@@ -62,7 +62,7 @@ function OffersDesktop() {
   });
 
   // Title — stays visible throughout offers, fades out only for final CTA
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.04, 0.88, 0.93], [0, 1, 1, 0]);
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.03, 0.84, 0.89], [0, 1, 1, 0]);
 
   // --- Image 0 (LEFT) ---
   const img0Opacity = useTransform(
@@ -226,7 +226,7 @@ function OffersDesktop() {
   const card1Pointer = useTransform(card1Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
 
   // Global CTA
-  const ctaOpacity = useTransform(scrollYProgress, [0.9, 0.96], [0, 1]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.88, 0.94], [0, 1]);
 
   const imgTransforms = [
     {
@@ -277,7 +277,7 @@ function OffersDesktop() {
             id="offers-title"
             scrollYProgress={scrollYProgress}
             revealStart={0.0}
-            revealEnd={0.06}
+            revealEnd={0.04}
             className="heading-section text-black"
           >
             {HOMEPAGE_SECTIONS.offers.title}
@@ -314,51 +314,49 @@ function OffersDesktop() {
 
         {/* Card layer — stacked at viewport center */}
         <div className="absolute inset-0 z-10 flex items-center justify-center">
-          {HOMEPAGE_OFFERS.map((offer, i) => {
-            const number = String(i + 1).padStart(2, '0');
-            return (
-              <m.div
-                key={offer.id}
-                className="absolute w-full max-w-2xl px-container-x"
-                style={{
-                  opacity: cardTransforms[i].opacity,
-                  y: cardTransforms[i].y,
-                  x: cardTransforms[i].x,
-                  rotate: cardTransforms[i].rotate,
-                  scale: cardTransforms[i].scale,
-                  pointerEvents: cardTransforms[i].pointerEvents,
-                }}
-              >
-                <div className="relative overflow-hidden rounded-3xl bg-black/95 px-8 py-10 shadow-2xl backdrop-blur-sm xl:px-12 xl:py-12">
-                  {/* Motif jaune — texture */}
-                  <img
-                    src={motifJauneUrl}
-                    alt=""
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
-                  />
+          {HOMEPAGE_OFFERS.map((offer, i) => (
+            <m.div
+              key={offer.id}
+              className="absolute w-full max-w-2xl px-container-x"
+              style={{
+                opacity: cardTransforms[i].opacity,
+                y: cardTransforms[i].y,
+                x: cardTransforms[i].x,
+                rotate: cardTransforms[i].rotate,
+                scale: cardTransforms[i].scale,
+                pointerEvents: cardTransforms[i].pointerEvents,
+              }}
+            >
+              {/* Card — editorial cutout with accent bar */}
+              <div className="relative overflow-hidden rounded-r-2xl bg-black/90 shadow-2xl backdrop-blur-md">
+                {/* Yellow accent bar — left edge */}
+                <div
+                  className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
+                  aria-hidden="true"
+                />
 
-                  <div className="relative z-10">
-                    <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/30">
-                      {number} / {String(OFFER_COUNT).padStart(2, '0')}
-                    </span>
-                    <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-                    <p className="mt-4 max-w-lg text-body-lg leading-relaxed text-white/60">
-                      {offer.summary}
-                    </p>
-                    <LinkCTA
-                      to={offer.link}
-                      theme="dark"
-                      className="mt-6"
-                      aria-label={`En savoir plus sur l'offre ${offer.title}`}
-                    >
-                      En savoir plus
-                    </LinkCTA>
-                  </div>
+                <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12">
+                  {/* Catchphrase — Please Heavy, hero-scale */}
+                  <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
+
+                  {/* Summary */}
+                  <p className="mt-5 max-w-md text-body-lg leading-relaxed text-white/50">
+                    {offer.summary}
+                  </p>
+
+                  {/* CTA */}
+                  <LinkCTA
+                    to={offer.link}
+                    theme="dark"
+                    className="mt-8"
+                    aria-label={`En savoir plus sur l'offre ${offer.title}`}
+                  >
+                    En savoir plus
+                  </LinkCTA>
                 </div>
-              </m.div>
-            );
-          })}
+              </div>
+            </m.div>
+          ))}
         </div>
 
         {/* Global CTA — appears at the end */}
