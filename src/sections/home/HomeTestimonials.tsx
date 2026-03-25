@@ -7,15 +7,14 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { RatingStars } from '@/components/common/RatingStars';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
+import { STORE_INFO } from '@/config/store';
 
+const ACCENT_HEX = '#FEEB09'; // --color-yellow-rgb, single source of truth
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;
 const SCROLL_HEIGHT_VH = 240;
-
-const GOOGLE_REVIEWS_URL =
-  'https://www.google.com/maps/place/La+Lunetterie+Du+Coin+Neuf+%26+Occasion/@48.5823394,7.7453277,17z/data=!4m8!3m7!1s0x4796c84f95e5e877:0x88d0f0f0f0f0f0f0!8m2!3d48.5823394!4d7.7479026!9m1!1b1!16s%2Fg%2F11c1qx0x0x';
 
 // ── Scroll budget (normalised 0–1) ──────────────────────────────────────────
 //
@@ -286,14 +285,14 @@ function HomeTestimonials() {
         style={{
           background: [
             'linear-gradient(to bottom,',
-            '#FEEB09 0%,',
-            'color-mix(in srgb, #FEEB09 92%, black) 8%,',
-            'color-mix(in srgb, #FEEB09 80%, black) 18%,',
-            'color-mix(in srgb, #FEEB09 65%, black) 30%,',
-            'color-mix(in srgb, #FEEB09 45%, black) 44%,',
-            'color-mix(in srgb, #FEEB09 28%, black) 58%,',
-            'color-mix(in srgb, #FEEB09 14%, black) 72%,',
-            'color-mix(in srgb, #FEEB09 5%, black) 86%,',
+            `${ACCENT_HEX} 0%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 92%, black) 8%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 80%, black) 18%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 65%, black) 30%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 45%, black) 44%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 28%, black) 58%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 14%, black) 72%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 5%, black) 86%,`,
             'black 100%)',
           ].join(' '),
         }}
@@ -419,7 +418,7 @@ function HomeTestimonials() {
           <SimpleAnimation type="slide-up" delay={400}>
             <div className="mt-12 text-center">
               <LinkCTA
-                href={GOOGLE_REVIEWS_URL}
+                href={STORE_INFO.googleReviewsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 theme="dark"

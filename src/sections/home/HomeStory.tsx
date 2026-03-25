@@ -13,15 +13,6 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
   "Tout a commencé avec une conviction : proposer des lunettes de qualité tout en donnant une seconde vie aux montures. Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style contemporain et engagement écologique. Chaque paire est sélectionnée avec soin, qu'elle soit neuve ou d'occasion.";
-const STORY_BODY_HTML = (
-  <>
-    Tout a commencé avec une conviction&nbsp;: proposer des lunettes de qualité tout en donnant une
-    seconde vie aux montures. Au c&oelig;ur du Faubourg de Pierre à Strasbourg, notre boutique
-    indépendante allie expertise optique, style contemporain et engagement écologique. Chaque paire
-    est sélectionnée avec soin, qu&apos;elle soit neuve ou d&apos;occasion.
-  </>
-);
-
 // ---------------------------------------------------------------------------
 // Desktop animated layout — all scroll hooks live here
 // ---------------------------------------------------------------------------
@@ -210,7 +201,7 @@ function StoryDesktopStatic() {
           </div>
 
           <div className="ml-[36%] w-[36%] pl-8">
-            <p className="text-body-xl text-white/80">{STORY_BODY_HTML}</p>
+            <p className="text-body-xl text-white/80">{STORY_BODY}</p>
             <LinkCTA to="/a-propos" theme="dark" className="mt-8">
               Nous découvrir
             </LinkCTA>
@@ -271,7 +262,7 @@ function HomeStory() {
         </SimpleAnimation>
 
         <SimpleAnimation type="slide-up" delay={200}>
-          <p className="text-body-lg leading-relaxed text-white/80">{STORY_BODY_HTML}</p>
+          <p className="text-body-lg leading-relaxed text-white/80">{STORY_BODY}</p>
           <LinkCTA to="/a-propos" theme="dark" className="mt-6 text-body-sm sm:mt-8">
             Nous découvrir
           </LinkCTA>
