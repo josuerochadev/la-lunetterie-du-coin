@@ -26,6 +26,7 @@ const Navbar: React.FC = () => {
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [hovered, setHovered] = useState(false);
   const [hiddenByScroll, setHiddenByScroll] = useState(true);
+  const [hiddenByFooter, setHiddenByFooter] = useState(false);
   const lastScrollY = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
@@ -66,7 +67,7 @@ const Navbar: React.FC = () => {
     };
   }, []);
 
-  const isVisible = !hiddenByScroll || hovered || menuActive;
+  const isVisible = !hiddenByFooter && (!hiddenByScroll || hovered || menuActive);
 
   // Detect navbar theme by sampling the element visually behind the navbar.
   // Uses elementFromPoint to handle sticky/z-index overlapping sections correctly.
@@ -85,6 +86,13 @@ const Navbar: React.FC = () => {
       if (header) header.style.pointerEvents = '';
 
       if (!el) return;
+
+      // Hide navbar when over the footer
+      if (el.closest('#footer')) {
+        setHiddenByFooter(true);
+        return;
+      }
+      setHiddenByFooter(false);
 
       // Walk up to find the closest ancestor with data-navbar-theme
       const section = el.closest('[data-navbar-theme]');

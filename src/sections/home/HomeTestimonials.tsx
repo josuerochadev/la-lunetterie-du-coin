@@ -24,7 +24,6 @@ const GOOGLE_REVIEWS_URL =
 //  0.08 – 0.28  Featured quote (word-by-word 0.10–0.24) + author
 //  0.28 – 0.34  Featured exits upward
 //  0.34 – 0.78  Testimonial parade (5 items, one at a time)
-//  0.78 – 0.92  Background → accent exit gradient
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Desktop sub-components ──────────────────────────────────────────────────
@@ -226,21 +225,6 @@ function TestimonialSlide({
   );
 }
 
-/**
- * Outro — simple accent gradient for seamless transition to Contact.
- */
-function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const bgOpacity = useTransform(scrollYProgress, [0.78, 0.92], [0, 1]);
-
-  return (
-    <m.div
-      className="pointer-events-none absolute inset-0 z-30 bg-accent"
-      style={{ opacity: bgOpacity }}
-      aria-hidden="true"
-    />
-  );
-}
-
 // ── Desktop scrollytelling ──────────────────────────────────────────────────
 
 function TestimonialsDesktop() {
@@ -270,8 +254,6 @@ function TestimonialsDesktop() {
             ))}
           </div>
         </div>
-
-        <SectionOutro scrollYProgress={scrollYProgress} />
       </div>
     </div>
   );
@@ -296,7 +278,7 @@ function HomeTestimonials() {
       id="testimonials"
       aria-labelledby="testimonials-title"
       data-navbar-theme="light"
-      className="pointer-events-none relative bg-black"
+      className="relative bg-black"
     >
       {/* Top gradient — smooth yellow → black transition from Services */}
       <div
@@ -447,9 +429,6 @@ function HomeTestimonials() {
             </div>
           </SimpleAnimation>
         </div>
-
-        {/* Bottom gradient — smooth black → accent transition for Contact below */}
-        <div className="h-20 bg-gradient-to-b from-black to-accent" aria-hidden="true" />
       </div>
     </section>
   );
