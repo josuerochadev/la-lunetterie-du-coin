@@ -12,7 +12,7 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;
-const SCROLL_HEIGHT_VH = 280;
+const SCROLL_HEIGHT_VH = 240;
 
 const GOOGLE_REVIEWS_URL =
   'https://www.google.com/maps/place/La+Lunetterie+Du+Coin+Neuf+%26+Occasion/@48.5823394,7.7453277,17z/data=!4m8!3m7!1s0x4796c84f95e5e877:0x88d0f0f0f0f0f0f0!8m2!3d48.5823394!4d7.7479026!9m1!1b1!16s%2Fg%2F11c1qx0x0x';

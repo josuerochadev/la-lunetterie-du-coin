@@ -30,7 +30,7 @@ const textColorMap: Record<string, string> = {
 const underlineColorMap: Record<string, string> = {
   light: 'bg-secondary-orange',
   dark: 'bg-secondary-orange',
-  accent: 'bg-black',
+  accent: 'bg-secondary-orange',
 };
 
 export default function LinkCTA({

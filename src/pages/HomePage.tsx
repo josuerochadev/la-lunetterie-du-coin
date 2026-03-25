@@ -1,6 +1,5 @@
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
-import SectionTransition from '@/components/motion/SectionTransition';
 import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
@@ -63,7 +62,6 @@ export default function HomePage() {
 
           {/* Testimonials → Contact */}
           <StickySection zIndex={16}>
-            <SectionTransition variant="diagonal" fromColor="white" toColor="#FEEB09" />
             <HomeContact />
           </StickySection>
         </Layout>

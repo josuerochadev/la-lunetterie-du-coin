@@ -28,13 +28,13 @@ export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
         </div>
 
         {/* Signature */}
-        <p>
+        <p className="text-white/50">
           Développé par{' '}
           <a
             href="https://josuerocha.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
+            className="focus-style font-semibold text-secondary-blue transition-colors duration-300 hover:text-accent"
           >
             Josué Rocha
           </a>

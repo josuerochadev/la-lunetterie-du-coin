@@ -13,7 +13,7 @@ import { FOOTER_SOCIALS } from '@/config/footer';
 export default function FooterSocial() {
   return (
     <div className="lg:w-auto">
-      <h3 className="mb-3 text-body font-bold uppercase tracking-wider text-accent">Suivez-nous</h3>
+      <h3 className="text-subtitle mb-4 text-body-sm text-accent">Suivez-nous</h3>
       <div className="flex gap-4">
         {FOOTER_SOCIALS.map((social) => {
           const Icon = getSocialIcon(social.iconName);

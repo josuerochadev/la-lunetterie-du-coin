@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 import { m, useTransform, type MotionValue } from 'framer-motion';
 
 function ScrollWord({
@@ -37,6 +37,7 @@ export default function ScrollWordReveal({
   as: Tag = 'p',
   className,
   id,
+  style,
 }: {
   children: string;
   scrollYProgress: MotionValue<number>;
@@ -45,11 +46,12 @@ export default function ScrollWordReveal({
   as?: 'h2' | 'h3' | 'p' | 'span';
   className?: string;
   id?: string;
+  style?: CSSProperties;
 }) {
   const words = useMemo(() => children.split(/\s+/).filter(Boolean), [children]);
 
   return (
-    <Tag className={className} id={id}>
+    <Tag className={className} id={id} style={style}>
       {words.map((word, i) => (
         <span key={i} className="inline-block">
           <ScrollWord
