@@ -10,21 +10,19 @@ import AboutEngagement from '@/sections/about/AboutEngagement';
 import AboutCTA from '@/sections/about/AboutCTA';
 
 /**
- * Page À propos - Architecture modulaire avec sections séparées
+ * Page À propos — Scrollytelling immersif (Rebranding 2026)
  *
- * Pattern cohérent avec HomePage : chaque section est un composant
- * indépendant et réutilisable dans `src/sections/about/`.
+ * Flow chromatique :
+ *   Hero (noir) → Histoire (noir, expansion jaune) → Valeurs (jaune)
+ *   → Équipe (noir) → Engagement (blanc) → CTA (jaune) → Footer (navy)
  *
- * Sections :
- * - AboutHero - Titre et tagline de la page
- * - AboutHistory - Notre histoire avec image pleine largeur
- * - AboutValues - Grid de 3 valeurs avec icônes
- * - AboutTeam - Présentation de Romain Corato
- * - AboutEngagement - Stats et engagement écologique
- * - AboutCTA - Call-to-action final
- *
- * @component
- * @returns {JSX.Element} Page À propos modulaire
+ * Transitions :
+ *   Hero→Histoire : continuation noire fluide
+ *   Histoire→Valeurs : overlay jaune (comme HomeStory→HomeOffers)
+ *   Valeurs→Équipe : courbe convexe noire (comme HomeHero→HomeStory)
+ *   Équipe→Engagement : transition directe
+ *   Engagement→CTA : reveal jaune (comme HomeContact)
+ *   CTA→Footer : courbe convexe du footer
  */
 export default function AboutPage() {
   useNativeScroll();
@@ -37,28 +35,32 @@ export default function AboutPage() {
         canonicalPath="/a-propos"
       />
       <Layout>
-        {/* Hero avec effet parallax - reste sticky pendant que les autres scrollent par-dessus */}
-        <StickySection zIndex={11} enableSticky={true}>
+        {/* Hero — fond noir, word reveal "DEPUIS 2016" */}
+        <StickySection zIndex={11} enableSticky>
           <AboutHero />
         </StickySection>
 
-        {/* Toutes les autres sections scrollent normalement avec z-index croissant */}
+        {/* Histoire — fond noir, photo reveal + expansion jaune */}
         <StickySection zIndex={12}>
           <AboutHistory />
         </StickySection>
 
+        {/* Valeurs — fond jaune, cards cascade 3D */}
         <StickySection zIndex={13}>
           <AboutValues />
         </StickySection>
 
+        {/* Équipe — fond noir, portrait parallax + bio word reveal */}
         <StickySection zIndex={14}>
           <AboutTeam />
         </StickySection>
 
+        {/* Engagement — fond blanc, counter géant + stats */}
         <StickySection zIndex={15}>
           <AboutEngagement />
         </StickySection>
 
+        {/* CTA — zoom "VENEZ NOUS VOIR" + hold pour footer */}
         <StickySection zIndex={16}>
           <AboutCTA />
         </StickySection>

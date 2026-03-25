@@ -1,54 +1,173 @@
+import { useRef } from 'react';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
 
 import { VALUES_DATA } from '@/data/about';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import EyePattern from '@/components/common/EyePattern';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
-/**
- * Mapping des noms d'icônes vers les composants Lucide
- */
 const iconMap = {
   heart: Heart,
   leaf: Leaf,
   award: Award,
 } as const;
 
-/**
- * Section Valeurs de la page À propos
- *
- * Grid de 3 colonnes affichant les valeurs fondamentales
- * avec icônes, titres et descriptions.
- *
- * @component
- * @returns {JSX.Element} Valeurs section
- */
-export default function AboutValues() {
-  return (
-    <section id="valeurs" className="relative w-full bg-background py-section">
-      <div className="mx-auto max-w-container px-container-x">
-        <SimpleAnimation type="slide-up" delay={0}>
-          <div className="mb-12 text-center">
-            <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-black/50">
-              Nos engagements
-            </span>
-            <h2 className="heading-section">Une lunetterie au coin qu'apporte du cœur</h2>
-          </div>
-        </SimpleAnimation>
+const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
-        <div className="grid gap-12 md:grid-cols-3 lg:gap-16">
-          {VALUES_DATA.map((value) => {
-            const Icon = iconMap[value.iconName];
-            return (
-              <SimpleAnimation key={value.title} type="slide-up" delay={0}>
-                <div className="space-y-4 border-t border-black/10 pt-6">
-                  <Icon className="h-8 w-8 text-accent" strokeWidth={1.5} aria-hidden="true" />
-                  <h3 className="heading-subsection">{value.title}</h3>
-                  <p className="text-body leading-relaxed text-black/50">{value.description}</p>
-                </div>
-              </SimpleAnimation>
-            );
-          })}
+// ---------------------------------------------------------------------------
+// Animated value card — hooks at component level (not inside .map())
+// ---------------------------------------------------------------------------
+
+function ValueCard({
+  value,
+  index,
+  scrollYProgress,
+}: {
+  value: (typeof VALUES_DATA)[number];
+  index: number;
+  scrollYProgress: import('framer-motion').MotionValue<number>;
+}) {
+  const start = 0.1 + index * 0.1;
+  const end = start + 0.12;
+
+  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+  const yRaw = useTransform(scrollYProgress, [start, end], [100, 0]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
+
+  const tiltDir = index === 0 ? 6 : index === 2 ? -6 : 0;
+  const rotateYRaw = useTransform(scrollYProgress, [start, end], [tiltDir, 0]);
+  const rotateY = useSpring(rotateYRaw, SPRING_CONFIG);
+  const rotateXRaw = useTransform(scrollYProgress, [start, end], [8, 0]);
+  const rotateX = useSpring(rotateXRaw, SPRING_CONFIG);
+  const scale = useTransform(scrollYProgress, [start, end], [0.9, 1]);
+
+  const Icon = iconMap[value.iconName];
+
+  return (
+    <m.div
+      className="will-change-transform"
+      style={{
+        opacity,
+        y,
+        rotateY,
+        rotateX,
+        scale,
+        transformStyle: 'preserve-3d',
+      }}
+    >
+      <div className="space-y-5">
+        <Icon className="h-10 w-10 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
+        <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+        <p className="text-body leading-relaxed text-black/50">{value.description}</p>
+      </div>
+    </m.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Desktop animated — scroll-driven card cascade with 3D tilt
+//
+//  300vh container
+//
+//  0.00 – 0.10  Title ScrollWordReveal
+//  0.10 – 0.25  Card 1 enters (slide-up + tilt settle)
+//  0.20 – 0.35  Card 2 enters (staggered)
+//  0.30 – 0.45  Card 3 enters (staggered)
+//  0.45 – 1.00  Hold
+// ---------------------------------------------------------------------------
+
+function ValuesDesktop() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
+
+  // Title
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.05], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.0, 0.08], [60, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  return (
+    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+      <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
+        <div className="flex h-full flex-col items-center justify-center px-container-x">
+          {/* Title */}
+          <m.div className="mb-16 text-center" style={{ opacity: titleOpacity, y: titleY }}>
+            <ScrollWordReveal
+              as="h2"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.0}
+              revealEnd={0.08}
+              className="heading-section text-black"
+            >
+              Une lunetterie qui a du cœur
+            </ScrollWordReveal>
+          </m.div>
+
+          {/* Cards — 3 columns */}
+          <div className="grid w-full max-w-6xl grid-cols-3 gap-12">
+            {VALUES_DATA.map((value, i) => (
+              <ValueCard
+                key={value.title}
+                value={value}
+                index={i}
+                scrollYProgress={scrollYProgress}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
+export default function AboutValues() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  return (
+    <section id="valeurs" className="relative w-full bg-accent" data-navbar-theme="dark">
+      <EyePattern variant="jaune" opacity={0.07} />
+
+      {/* Desktop animated */}
+      {!prefersReducedMotion && <ValuesDesktop />}
+
+      {/* Mobile / reduced-motion fallback */}
+      <div className={prefersReducedMotion ? 'relative z-10' : 'relative z-10 lg:hidden'}>
+        <div className="mx-auto max-w-container px-container-x py-section">
+          <SimpleAnimation type="slide-up" delay={0}>
+            <div className="mb-12 text-center">
+              <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+            </div>
+          </SimpleAnimation>
+
+          <div className="grid gap-10 md:grid-cols-3 md:gap-12">
+            {VALUES_DATA.map((value, i) => {
+              const Icon = iconMap[value.iconName];
+              return (
+                <SimpleAnimation key={value.title} type="slide-up" delay={100 + i * 100}>
+                  <div className="space-y-4">
+                    <Icon
+                      className="h-8 w-8 text-secondary-orange"
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                    />
+                    <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+                    <p className="text-body leading-relaxed text-black/50">{value.description}</p>
+                  </div>
+                </SimpleAnimation>
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
