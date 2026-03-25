@@ -1,4 +1,4 @@
-import { forwardRef, useRef } from 'react';
+import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -103,7 +103,7 @@ function ContactDesktop() {
  *
  * @component
  */
-const HomeContact = forwardRef<HTMLElement>(() => {
+export default function HomeContact() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
@@ -142,8 +142,4 @@ const HomeContact = forwardRef<HTMLElement>(() => {
       </div>
     </section>
   );
-});
-
-HomeContact.displayName = 'HomeContact';
-
-export default HomeContact;
+}
