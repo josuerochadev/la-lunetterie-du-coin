@@ -9,7 +9,7 @@ pnpm run typecheck || exit 1
 
 # Lint and format staged files only (much faster)
 echo "🧹 Linting and formatting staged files..."
-pnpm exec lint-staged || exit 1
+pnpm exec lint-staged --allow-empty || exit 1
 
 # Run tests related to changed files  
 echo "🧪 Running tests..."
