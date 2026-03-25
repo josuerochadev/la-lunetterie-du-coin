@@ -264,7 +264,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
             revealEnd={0.88}
             className="text-heading text-center text-title-xl text-white"
           >
-            {`ILS L'ONT DIT MIEUX QUE NOUS`}
+            ON VA FAIRE LA PAIRE
           </ScrollWordReveal>
         </m.div>
 
@@ -338,6 +338,34 @@ function HomeTestimonials() {
       data-navbar-theme="light"
       className="pointer-events-none relative bg-black"
     >
+      {/* Top gradient — smooth yellow → black transition from Services */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[40vh]"
+        style={{
+          background: [
+            'linear-gradient(to bottom,',
+            '#FEEB09 0%,',
+            'color-mix(in srgb, #FEEB09 92%, black) 8%,',
+            'color-mix(in srgb, #FEEB09 80%, black) 18%,',
+            'color-mix(in srgb, #FEEB09 65%, black) 30%,',
+            'color-mix(in srgb, #FEEB09 45%, black) 44%,',
+            'color-mix(in srgb, #FEEB09 28%, black) 58%,',
+            'color-mix(in srgb, #FEEB09 14%, black) 72%,',
+            'color-mix(in srgb, #FEEB09 5%, black) 86%,',
+            'black 100%)',
+          ].join(' '),
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-10 h-[40vh] backdrop-blur-[1px]"
+        style={{
+          maskImage: 'linear-gradient(to bottom, black 20%, transparent 80%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 20%, transparent 80%)',
+        }}
+        aria-hidden="true"
+      />
+
       {/* Desktop scrollytelling — only when animation is enabled */}
       {!prefersReducedMotion && <TestimonialsDesktop />}
 
