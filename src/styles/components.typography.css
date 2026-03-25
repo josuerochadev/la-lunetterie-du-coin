@@ -34,12 +34,12 @@
 
 /* ===== H2 - TITRES DE SECTIONS ===== */
 .heading-section {
-  @apply text-heading text-title-md text-text;
+  @apply text-heading text-title-lg text-text;
 }
 
 @screen sm {
   .heading-section {
-    @apply text-title-lg;
+    @apply text-title-xl;
   }
 }
 
