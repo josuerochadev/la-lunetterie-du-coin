@@ -30,7 +30,7 @@ function InfoAccent({
 // Mobile content — choreographed entrance mirroring desktop energy
 // ---------------------------------------------------------------------------
 
-function HeroMobileContent() {
+function HeroMobileContent({ titleId }: { titleId?: string }) {
   const ease = [0.25, 0.1, 0.25, 1] as const;
 
   return (
@@ -72,7 +72,7 @@ function HeroMobileContent() {
       {/* Title — centred, slides up with fade */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x lg:hidden">
         <m.h1
-          id="hero-title"
+          id={titleId}
           className="text-heading text-center text-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
           style={{ fontSize: 'clamp(2.4rem, 9vw, 4.5rem)' }}
           initial={{ y: 40, opacity: 0 }}
@@ -306,7 +306,7 @@ function HeroStatic() {
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
     >
-      <HeroMobileContent />
+      <HeroMobileContent titleId="hero-title" />
     </section>
   );
 }

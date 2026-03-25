@@ -88,6 +88,7 @@ function StoryDesktopAnimated() {
           >
             <ScrollWordReveal
               as="h2"
+              id="story-title"
               scrollYProgress={scrollYProgress}
               revealStart={0.15}
               revealEnd={0.28}
@@ -261,7 +262,10 @@ function HomeStory() {
         </SimpleAnimation>
 
         <SimpleAnimation type="slide-up" delay={100}>
-          <h2 id="story-title" className="text-heading text-title-md text-white">
+          <h2
+            id={prefersReducedMotion ? 'story-title' : undefined}
+            className="text-heading text-title-md text-white"
+          >
             {STORY_TITLE}
           </h2>
         </SimpleAnimation>
