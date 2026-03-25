@@ -5,6 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useIsLg } from '@/hooks/useIsLg';
 
 // ---------------------------------------------------------------------------
 // Shared content
@@ -73,10 +74,7 @@ function StoryDesktopAnimated() {
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           {/* Left — title */}
-          <m.div
-            className="w-[28%] pr-8 will-change-transform"
-            style={{ y: titleY, opacity: titleCombinedOpacity }}
-          >
+          <m.div className="w-[28%] pr-8" style={{ y: titleY, opacity: titleCombinedOpacity }}>
             <ScrollWordReveal
               as="h2"
               id="story-title"
@@ -91,7 +89,7 @@ function StoryDesktopAnimated() {
 
           {/* Center — photo: starts ~60% height, grows to full + continuous zoom */}
           <m.div
-            className="absolute top-1/2 -translate-y-1/2 will-change-transform"
+            className="absolute top-1/2 -translate-y-1/2"
             style={{
               left: photoLeft,
               width: photoWidth,
@@ -113,10 +111,7 @@ function StoryDesktopAnimated() {
           </m.div>
 
           {/* Right — body + CTA */}
-          <m.div
-            className="ml-[36%] w-[36%] pl-8 will-change-transform"
-            style={{ opacity: textCombinedOpacity }}
-          >
+          <m.div className="ml-[36%] w-[36%] pl-8" style={{ opacity: textCombinedOpacity }}>
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
@@ -225,6 +220,7 @@ function StoryDesktopStatic() {
  */
 function HomeStory() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
 
   return (
     <section
@@ -270,7 +266,7 @@ function HomeStory() {
       </div>
 
       {/* Desktop layout */}
-      {prefersReducedMotion ? <StoryDesktopStatic /> : <StoryDesktopAnimated />}
+      {isLg && (prefersReducedMotion ? <StoryDesktopStatic /> : <StoryDesktopAnimated />)}
     </section>
   );
 }

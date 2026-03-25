@@ -4,6 +4,7 @@ import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useIsLg } from '@/hooks/useIsLg';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
 
@@ -536,10 +537,12 @@ function StaticServiceList() {
  */
 function HomeServices() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
   const sectionRef = useRef<HTMLDivElement>(null);
+  const shouldAnimate = !prefersReducedMotion && isLg;
 
   const { scrollYProgress } = useScroll({
-    target: prefersReducedMotion ? undefined : sectionRef,
+    target: shouldAnimate ? sectionRef : undefined,
     offset: ['start start', 'end end'],
   });
 
@@ -606,59 +609,61 @@ function HomeServices() {
       </div>
 
       {/* ── Desktop: Scrollytelling ── */}
-      <div ref={sectionRef} className="relative hidden lg:block">
-        {/* Scroll height: title/zoom intro + per-service scroll + exit buffer */}
-        {/* Extra height for outro phase (pattern zoom + phrase) */}
-        <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
-          {/* Sticky viewport */}
-          <div className="sticky top-0 h-screen overflow-hidden">
-            {/* Circle pattern background */}
-            {!prefersReducedMotion && <PatternBackground scrollYProgress={scrollYProgress} />}
+      {isLg && (
+        <div ref={sectionRef} className="relative">
+          {/* Scroll height: title/zoom intro + per-service scroll + exit buffer */}
+          {/* Extra height for outro phase (pattern zoom + phrase) */}
+          <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
+            {/* Sticky viewport */}
+            <div className="sticky top-0 h-screen overflow-hidden">
+              {/* Circle pattern background */}
+              {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
 
-            {/* Title — rises to top then fades */}
-            {!prefersReducedMotion ? (
-              <SectionTitle scrollYProgress={scrollYProgress} />
-            ) : (
-              <div className="absolute inset-x-0 top-[6vh] z-30 flex justify-center">
-                <h2 id="services-title" className="heading-section text-black">
-                  {HOMEPAGE_SECTIONS.services.title}
-                </h2>
-              </div>
-            )}
+              {/* Title — rises to top then fades */}
+              {shouldAnimate ? (
+                <SectionTitle scrollYProgress={scrollYProgress} />
+              ) : (
+                <div className="absolute inset-x-0 top-[6vh] z-30 flex justify-center">
+                  <h2 id="services-title" className="heading-section text-black">
+                    {HOMEPAGE_SECTIONS.services.title}
+                  </h2>
+                </div>
+              )}
 
-            {/* Service content — photo stack + text */}
-            {prefersReducedMotion ? (
-              <div className="flex h-full items-center">
-                <StaticServiceList />
-              </div>
-            ) : (
-              <>
-                {/* Shared layout: photo left, text right */}
-                <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
-                  <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
-                    {/* Photo stack — clip-path volet transitions */}
-                    <PhotoStack scrollYProgress={scrollYProgress} />
+              {/* Service content — photo stack + text */}
+              {!shouldAnimate ? (
+                <div className="flex h-full items-center">
+                  <StaticServiceList />
+                </div>
+              ) : (
+                <>
+                  {/* Shared layout: photo left, text right */}
+                  <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                    <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                      {/* Photo stack — clip-path volet transitions */}
+                      <PhotoStack scrollYProgress={scrollYProgress} />
 
-                    {/* Text — each service scrolls independently */}
-                    <div className="relative flex w-[45%] flex-col justify-center">
-                      {HOMEPAGE_SERVICES.map((service, i) => (
-                        <ServiceText
-                          key={service.title}
-                          service={service}
-                          index={i}
-                          scrollYProgress={scrollYProgress}
-                        />
-                      ))}
+                      {/* Text — each service scrolls independently */}
+                      <div className="relative flex w-[45%] flex-col justify-center">
+                        {HOMEPAGE_SERVICES.map((service, i) => (
+                          <ServiceText
+                            key={service.title}
+                            service={service}
+                            index={i}
+                            scrollYProgress={scrollYProgress}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <SectionOutro scrollYProgress={scrollYProgress} />
-              </>
-            )}
+                  <SectionOutro scrollYProgress={scrollYProgress} />
+                </>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

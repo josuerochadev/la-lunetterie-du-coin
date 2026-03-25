@@ -4,6 +4,7 @@ import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useIsLg } from '@/hooks/useIsLg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const ZOOM_SPRING = { stiffness: 60, damping: 30, mass: 0.5 };
@@ -105,6 +106,7 @@ function ContactDesktop() {
  */
 export default function HomeContact() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
 
   return (
     <section
@@ -114,7 +116,7 @@ export default function HomeContact() {
       data-navbar-theme="dark"
     >
       {/* Desktop */}
-      {!prefersReducedMotion && <ContactDesktop />}
+      {!prefersReducedMotion && isLg && <ContactDesktop />}
 
       {/* Mobile / reduced-motion — stacked layout */}
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>

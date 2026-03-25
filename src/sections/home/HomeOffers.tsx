@@ -5,6 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useIsLg } from '@/hooks/useIsLg';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import motifJauneUrl from '@/assets/patterns/motif-jaune.svg';
 
@@ -460,6 +461,7 @@ function OfferMobileBlock({
 
 function HomeOffers() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
   const sectionRef = useRef<HTMLElement>(null);
 
   return (
@@ -471,7 +473,7 @@ function HomeOffers() {
       data-navbar-theme="dark"
     >
       {/* Desktop — sticky scrollytelling */}
-      {!prefersReducedMotion && <OffersDesktop />}
+      {!prefersReducedMotion && isLg && <OffersDesktop />}
 
       {/* Mobile / reduced-motion — stacked */}
       <div

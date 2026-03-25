@@ -8,6 +8,7 @@ import { RatingStars } from '@/components/common/RatingStars';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
+import { useIsLg } from '@/hooks/useIsLg';
 
 const ACCENT_HEX = '#FEEB09'; // --color-yellow-rgb, single source of truth
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
@@ -233,6 +234,12 @@ function TestimonialsDesktop() {
     offset: ['start start', 'end end'],
   });
 
+  // ── CTA — appears after parade, fades out before section exits ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.8, 0.86, 0.94, 0.98], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.8, 0.86], [30, 0]);
+  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+
   return (
     <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
@@ -253,6 +260,21 @@ function TestimonialsDesktop() {
             ))}
           </div>
         </div>
+
+        {/* CTA — appears after parade */}
+        <m.div
+          className="absolute inset-x-0 bottom-[15%] z-20 flex justify-center"
+          style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}
+        >
+          <LinkCTA
+            href={STORE_INFO.googleReviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            theme="dark"
+          >
+            Voir nos avis Google
+          </LinkCTA>
+        </m.div>
       </div>
     </div>
   );
@@ -271,6 +293,7 @@ function TestimonialsDesktop() {
  */
 function HomeTestimonials() {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
 
   return (
     <section
@@ -308,7 +331,7 @@ function HomeTestimonials() {
       />
 
       {/* Desktop scrollytelling — only when animation is enabled */}
-      {!prefersReducedMotion && <TestimonialsDesktop />}
+      {!prefersReducedMotion && isLg && <TestimonialsDesktop />}
 
       {/* Mobile / reduced-motion — stacked layout */}
       <div
