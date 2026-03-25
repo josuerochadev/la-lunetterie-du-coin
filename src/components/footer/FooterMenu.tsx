@@ -52,7 +52,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
                 <a
                   key={social.href}
                   href={social.href}
-                  className="focus-style text-black transition-colors duration-300 hover:text-accent"
+                  className="focus-style text-secondary-green transition-colors duration-300 hover:text-secondary-orange"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}

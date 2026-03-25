@@ -53,12 +53,20 @@ export default function Footer({
     <footer
       id="footer"
       {...rest}
-      className={clsx('relative z-10 w-full bg-primary text-accent', className)}
+      className={clsx('relative z-20 -mt-[8vw] w-full bg-primary text-accent', className)}
     >
-      <SectionContainer className="px-container-x py-12 lg:py-16">
-        {/* En-tête */}
-        <FooterLogo />
+      {/* Convex eyelid curve — same style as HomeStory */}
+      <div
+        className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-primary"
+        aria-hidden="true"
+      />
 
+      {/* Logo sitting on the curve */}
+      <div className="absolute -top-[6vw] left-1/2 z-10 -translate-x-1/2">
+        <FooterLogo />
+      </div>
+
+      <SectionContainer className="relative px-container-x pb-12 pt-[6vw] lg:pb-16">
         {/* Grille 3 colonnes avec largeurs adaptées au contenu */}
         <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">
           <FooterNavigation onLinkClick={onLinkClick} />

@@ -12,7 +12,7 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;
-const SCROLL_HEIGHT_VH = 600;
+const SCROLL_HEIGHT_VH = 280;
 
 const GOOGLE_REVIEWS_URL =
   'https://www.google.com/maps/place/La+Lunetterie+Du+Coin+Neuf+%26+Occasion/@48.5823394,7.7453277,17z/data=!4m8!3m7!1s0x4796c84f95e5e877:0x88d0f0f0f0f0f0f0!8m2!3d48.5823394!4d7.7479026!9m1!1b1!16s%2Fg%2F11c1qx0x0x';
@@ -20,13 +20,11 @@ const GOOGLE_REVIEWS_URL =
 // ── Scroll budget (normalised 0–1) ──────────────────────────────────────────
 //
 //  0.00 – 0.06  Title word-reveal
-//  0.01 – 0.80  Giant counter visible (0.0 → 4.9 during 0.02–0.12)
+//  0.01 – 0.78  Giant counter visible (0.0 → 4.9 during 0.02–0.12)
 //  0.08 – 0.28  Featured quote (word-by-word 0.10–0.24) + author
 //  0.28 – 0.34  Featured exits upward
 //  0.34 – 0.78  Testimonial parade (5 items, one at a time)
-//  0.80 – 0.92  Outro phrase word-by-word
-//  0.85 – 0.93  CTA visible
-//  0.93 – 1.00  Background → white exit gradient
+//  0.78 – 0.92  Background → accent exit gradient
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Desktop sub-components ──────────────────────────────────────────────────
@@ -53,7 +51,7 @@ function GiantRating({ scrollYProgress }: { scrollYProgress: MotionValue<number>
 
   const scaleRaw = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.1, 0.9]);
   const scale = useSpring(scaleRaw, SPRING_CONFIG);
-  const opacity = useTransform(scrollYProgress, [0.01, 0.06, 0.78, 0.82], [0, 0.18, 0.18, 0]);
+  const opacity = useTransform(scrollYProgress, [0.01, 0.06, 0.76, 0.8], [0, 0.18, 0.18, 0]);
   const y = useTransform(scrollYProgress, [0, 1], ['5%', '-15%']);
 
   return (
@@ -80,7 +78,7 @@ function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number
   const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '6vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
   const fadeIn = useTransform(scrollYProgress, [0, 0.03], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [0.78, 0.82], [1, 0]);
+  const fadeOut = useTransform(scrollYProgress, [0.76, 0.8], [1, 0]);
   const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
 
   return (
@@ -229,55 +227,17 @@ function TestimonialSlide({
 }
 
 /**
- * Outro — word-by-word phrase reveal + CTA + white exit gradient.
- *
- * Timeline:
- *   0.80 – 0.88  Phrase word-reveal
- *   0.85 – 0.89  CTA fades in
- *   0.90 – 0.93  Phrase + CTA fade out
- *   0.93 – 1.00  Background → white
+ * Outro — simple accent gradient for seamless transition to Contact.
  */
 function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const phraseOpacity = useTransform(scrollYProgress, [0.8, 0.85, 0.9, 0.93], [0, 1, 1, 0]);
-  const ctaOpacity = useTransform(scrollYProgress, [0.85, 0.89, 0.9, 0.93], [0, 1, 1, 0]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.85, 0.89], [20, 0]);
-  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
-  const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
-
-  const bgOpacity = useTransform(scrollYProgress, [0.93, 1.0], [0, 1]);
+  const bgOpacity = useTransform(scrollYProgress, [0.78, 0.92], [0, 1]);
 
   return (
-    <>
-      {/* White exit gradient — covers everything for seamless transition to next section */}
-      <m.div
-        className="pointer-events-none absolute inset-0 z-30 bg-white"
-        style={{ opacity: bgOpacity }}
-        aria-hidden="true"
-      />
-
-      <div className="pointer-events-none absolute inset-0 z-40 flex flex-col items-center justify-center gap-8 px-8">
-        <m.div style={{ opacity: phraseOpacity }}>
-          <ScrollWordReveal
-            as="h3"
-            scrollYProgress={scrollYProgress}
-            revealStart={0.8}
-            revealEnd={0.88}
-            className="text-heading text-center text-title-xl text-white"
-          >
-            ON VA FAIRE LA PAIRE
-          </ScrollWordReveal>
-        </m.div>
-
-        <m.div
-          className="pointer-events-auto"
-          style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}
-        >
-          <LinkCTA href={GOOGLE_REVIEWS_URL} target="_blank" rel="noopener noreferrer" theme="dark">
-            Voir nos avis Google
-          </LinkCTA>
-        </m.div>
-      </div>
-    </>
+    <m.div
+      className="pointer-events-none absolute inset-0 z-30 bg-accent"
+      style={{ opacity: bgOpacity }}
+      aria-hidden="true"
+    />
   );
 }
 
@@ -488,8 +448,8 @@ function HomeTestimonials() {
           </SimpleAnimation>
         </div>
 
-        {/* Bottom gradient — smooth black → white transition for SectionTransition below */}
-        <div className="h-20 bg-gradient-to-b from-black to-white" aria-hidden="true" />
+        {/* Bottom gradient — smooth black → accent transition for Contact below */}
+        <div className="h-20 bg-gradient-to-b from-black to-accent" aria-hidden="true" />
       </div>
     </section>
   );

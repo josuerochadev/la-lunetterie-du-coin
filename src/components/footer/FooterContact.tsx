@@ -15,7 +15,7 @@ export default function FooterContact() {
       <div className="space-y-3 text-body-sm text-white">
         {/* Adresse */}
         <div className="flex items-start gap-3">
-          <MapPin className="mt-1 h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          <MapPin className="mt-1 h-4 w-4 flex-shrink-0 text-secondary-green" aria-hidden="true" />
           <div>
             <p>{STORE_INFO.address.street}</p>
             <p>
@@ -26,7 +26,7 @@ export default function FooterContact() {
 
         {/* Téléphone */}
         <div className="flex items-center gap-3">
-          <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          <Phone className="h-4 w-4 flex-shrink-0 text-secondary-green" aria-hidden="true" />
           <a
             href={`tel:${STORE_INFO.phone.tel}`}
             className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
@@ -37,7 +37,7 @@ export default function FooterContact() {
 
         {/* Email */}
         <div className="flex items-center gap-3">
-          <Mail className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+          <Mail className="h-4 w-4 flex-shrink-0 text-secondary-green" aria-hidden="true" />
           <a
             href={`mailto:${COMPANY_EMAIL}`}
             className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
