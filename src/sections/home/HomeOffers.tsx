@@ -234,7 +234,6 @@ function OffersDesktop() {
   const ctaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = useTransform(ctaOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
-  const gradientOpacity = useTransform(scrollYProgress, [0.96, 1.0], [0, 1]);
 
   const imgTransforms = [
     {
@@ -393,17 +392,6 @@ function OffersDesktop() {
             </LinkCTA>
           </m.div>
         </div>
-
-        {/* Gradient overlay — yellow to white transition */}
-        <m.div
-          className="pointer-events-none absolute inset-0 z-30"
-          style={{
-            opacity: gradientOpacity,
-            background:
-              'linear-gradient(to bottom, rgba(254,235,9,0) 0%, rgba(255,255,255,0.4) 30%, rgba(255,255,255,0.8) 60%, rgba(255,255,255,1) 100%)',
-          }}
-          aria-hidden="true"
-        />
       </div>
     </div>
   );

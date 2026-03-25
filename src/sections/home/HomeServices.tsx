@@ -346,27 +346,27 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   );
   const w2Y = useTransform([w2InY, w2ExitY] as const, ([a, b]: number[]) => a + b);
 
-  // ── Logo video — starts at L'OEIL position, descends, holds, then rises ──
-  const LOGO_IN = 0.92; // synced with L'OEIL fade-out
+  // ── Logo video — appears after bg is fully yellow, descends, holds, rises ──
+  const LOGO_IN = 0.94; // synced with bg fully yellow (bgOpacity reaches 1 at 0.94)
   const LOGO_FLOAT_END = 0.99;
 
-  // Logo fades in as L'OEIL fades out, then fades out at end of float
+  // Logo fades in once background is fully yellow, fades out only at very top of viewport
   const logoOpacity = useTransform(
     scrollYProgress,
-    [LOGO_IN, LOGO_IN + 0.02, LOGO_FLOAT_END - 0.02, LOGO_FLOAT_END],
+    [LOGO_IN, LOGO_IN + 0.01, 0.985, LOGO_FLOAT_END],
     [0, 1, 1, 0],
   );
   // Scale: starts small → grows during descent/hold → shrinks slightly on exit
   const logoScale = useTransform(
     scrollYProgress,
-    [LOGO_IN, 0.94, 0.96, LOGO_FLOAT_END],
+    [LOGO_IN, 0.96, 0.975, LOGO_FLOAT_END],
     [1, 4, 6, 5],
   );
   const logoScaleSpring = useSpring(logoScale, SPRING_CONFIG);
   // Y trajectory: descend → hold center → rise up (arc movement)
   const logoYRaw = useTransform(
     scrollYProgress,
-    [LOGO_IN, 0.94, 0.96, LOGO_FLOAT_END],
+    [LOGO_IN, 0.96, 0.975, LOGO_FLOAT_END],
     [0, 15, 10, -55],
   );
   const logoY = useTransform(logoYRaw, (v: number) => `${v}vh`);
@@ -381,9 +381,9 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   // ── Background white → yellow ──
   const bgOpacity = useTransform(scrollYProgress, [0.9, 0.94], [0, 1]);
 
-  // ── CTA ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.92, 0.95, 0.98], [0, 1, 1, 0]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.92], [20, 0]);
+  // ── CTA — follows phrase timing: in after phrase, out shortly after phrase exits ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.92, 0.94], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
@@ -456,7 +456,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
                 playsInline
                 loop
                 preload="auto"
-                className="h-[1em] w-auto object-contain"
+                className="h-[1em] w-auto rounded-lg object-contain"
                 style={{ mixBlendMode: 'multiply' }}
                 aria-label="Logo animé La Lunetterie du Coin"
               />
