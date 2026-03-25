@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -9,6 +9,7 @@ import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = HOMEPAGE_SERVICES.length;
+const OUTRO_WORDS = ['TAPEZ-LEUR', 'DANS', "L'OEIL"] as const;
 
 // Scroll budget
 const TITLE_END = 0.08; // Title arrives at top
@@ -241,47 +242,235 @@ function ServiceText({
 }
 
 /**
- * Outro — pattern zooms to yellow, big phrase + CTA appear centered.
+ * Outro — word-by-word reveal → hold → staggered word-by-word exit upward →
+ * L'OEIL morphs into floating logo video → background white → yellow.
+ *
+ * Timeline (relative to scrollYProgress):
+ *   0.82 – 0.88  Words reveal: TAPEZ-LEUR → DANS → L'OEIL (opacity 0→1)
+ *   0.88 – 0.90  Hold — full phrase visible
+ *   0.89 – 0.92  CTA fades in
+ *   0.90 – 0.93  Staggered exit: TAPEZ-LEUR exits first, DANS next
+ *   0.90 – 0.94  Background white → yellow
+ *   0.92 – 0.94  L'OEIL text fades out, logo replaces it at same position
+ *   0.93 – 0.99  Logo grows large + floats upward with organic drift
+ *   0.95 – 0.98  CTA fades out
  */
 function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const phraseStart = OUTRO_START + 0.04;
-  const phraseEnd = phraseStart + 0.06;
+  const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Phrase fades in and rises
-  const phraseOpacity = useTransform(scrollYProgress, [phraseStart, phraseEnd], [0, 1]);
-  const phraseYRaw = useTransform(scrollYProgress, [phraseStart, phraseEnd], [50, 0]);
-  const phraseY = useSpring(phraseYRaw, SPRING_CONFIG);
+  // ── Word-by-word entrance (opacity starts at 0, not 0.15) ──
+  const REVEAL_START = 0.82;
+  const REVEAL_END = 0.88;
+  const wordCount = OUTRO_WORDS.length;
 
-  // CTA fades in slightly after phrase
-  const ctaOpacity = useTransform(scrollYProgress, [phraseEnd, phraseEnd + 0.04], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [phraseEnd, phraseEnd + 0.04], [20, 0]);
+  const wordTimings = useMemo(() => {
+    const rng = REVEAL_END - REVEAL_START;
+    return OUTRO_WORDS.map((_, i) => {
+      const inStart = REVEAL_START + (i / wordCount) * rng;
+      const inEnd = Math.min(inStart + rng / wordCount + rng * 0.2, REVEAL_END);
+      return { inStart, inEnd };
+    });
+  }, [wordCount]);
+
+  // ── Word entrance transforms (0 → 1 opacity) ──
+  const w0InOpacity = useTransform(
+    scrollYProgress,
+    [wordTimings[0].inStart, wordTimings[0].inEnd],
+    [0, 1],
+  );
+  const w0InY = useTransform(
+    scrollYProgress,
+    [wordTimings[0].inStart, wordTimings[0].inEnd],
+    [12, 0],
+  );
+  const w1InOpacity = useTransform(
+    scrollYProgress,
+    [wordTimings[1].inStart, wordTimings[1].inEnd],
+    [0, 1],
+  );
+  const w1InY = useTransform(
+    scrollYProgress,
+    [wordTimings[1].inStart, wordTimings[1].inEnd],
+    [12, 0],
+  );
+  const w2InOpacity = useTransform(
+    scrollYProgress,
+    [wordTimings[2].inStart, wordTimings[2].inEnd],
+    [0, 1],
+  );
+  const w2InY = useTransform(
+    scrollYProgress,
+    [wordTimings[2].inStart, wordTimings[2].inEnd],
+    [12, 0],
+  );
+
+  // ── Staggered exit upward (TAPEZ-LEUR first, DANS next, L'OEIL last) ──
+  const EXIT_START = 0.9;
+  const EXIT_STAGGER = 0.012;
+
+  // Word 0 exit
+  const w0ExitOpacity = useTransform(scrollYProgress, [EXIT_START, EXIT_START + 0.02], [1, 0]);
+  const w0ExitYRaw = useTransform(scrollYProgress, [EXIT_START, EXIT_START + 0.025], [0, -60]);
+  const w0ExitY = useSpring(w0ExitYRaw, SPRING_CONFIG);
+
+  // Word 1 exit
+  const w1ExitOpacity = useTransform(
+    scrollYProgress,
+    [EXIT_START + EXIT_STAGGER, EXIT_START + EXIT_STAGGER + 0.02],
+    [1, 0],
+  );
+  const w1ExitYRaw = useTransform(
+    scrollYProgress,
+    [EXIT_START + EXIT_STAGGER, EXIT_START + EXIT_STAGGER + 0.025],
+    [0, -60],
+  );
+  const w1ExitY = useSpring(w1ExitYRaw, SPRING_CONFIG);
+
+  // Word 2 (L'OEIL) — text fades out separately so logo can take over
+  const w2TextOpacity = useTransform(scrollYProgress, [0.92, 0.94], [1, 0]);
+  const w2ExitYRaw = useTransform(scrollYProgress, [0.92, 0.94], [0, -30]);
+  const w2ExitY = useSpring(w2ExitYRaw, SPRING_CONFIG);
+
+  // Combine entrance + exit
+  const w0Opacity = useTransform([w0InOpacity, w0ExitOpacity] as const, ([a, b]: number[]) =>
+    Math.min(a, b),
+  );
+  const w0Y = useTransform([w0InY, w0ExitY] as const, ([a, b]: number[]) => a + b);
+  const w1Opacity = useTransform([w1InOpacity, w1ExitOpacity] as const, ([a, b]: number[]) =>
+    Math.min(a, b),
+  );
+  const w1Y = useTransform([w1InY, w1ExitY] as const, ([a, b]: number[]) => a + b);
+  // L'OEIL: entrance opacity × text fade-out (logo handles the rest)
+  const w2Opacity = useTransform([w2InOpacity, w2TextOpacity] as const, ([a, b]: number[]) =>
+    Math.min(a, b),
+  );
+  const w2Y = useTransform([w2InY, w2ExitY] as const, ([a, b]: number[]) => a + b);
+
+  // ── Logo video — starts at L'OEIL position, grows and floats ──
+  const LOGO_IN = 0.92; // synced with L'OEIL fade-out
+  const LOGO_FLOAT_END = 0.99;
+
+  // Logo fades in as L'OEIL fades out, then fades out at end of float
+  const logoOpacity = useTransform(
+    scrollYProgress,
+    [LOGO_IN, LOGO_IN + 0.02, LOGO_FLOAT_END - 0.02, LOGO_FLOAT_END],
+    [0, 1, 1, 0],
+  );
+  // Scale: starts small (text size) → grows large → shrinks slightly at end
+  const logoScale = useTransform(scrollYProgress, [LOGO_IN, 0.95, LOGO_FLOAT_END], [1, 6, 5]);
+  const logoScaleSpring = useSpring(logoScale, SPRING_CONFIG);
+  // Float upward
+  const logoYRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, -55]);
+  const logoY = useTransform(logoYRaw, (v: number) => `${v}vh`);
+  // Organic drift — sinusoidal X
+  const logoXRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, Math.PI * 2]);
+  const logoX = useTransform(logoXRaw, (v: number) => Math.sin(v) * 40);
+  const logoXSpring = useSpring(logoX, { stiffness: 50, damping: 20, mass: 1 });
+  // Gentle rotation
+  const logoRotateRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, Math.PI * 2]);
+  const logoRotate = useTransform(logoRotateRaw, (v: number) => Math.sin(v) * 4);
+
+  // ── Background white → yellow ──
+  const bgOpacity = useTransform(scrollYProgress, [0.9, 0.94], [0, 1]);
+
+  // ── CTA ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.92, 0.95, 0.98], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.92], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
-  const pointerEvents = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+
+  // Play/pause video based on visibility
+  useEffect(() => {
+    const unsubscribe = logoOpacity.on('change', (v: number) => {
+      const video = videoRef.current;
+      if (!video) return;
+      if (v > 0.05) {
+        if (video.paused) video.play();
+      } else {
+        if (!video.paused) {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }
+    });
+    return unsubscribe;
+  }, [logoOpacity]);
 
   return (
-    <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
-      <m.h3
-        className="text-heading text-center text-title-xl text-black"
-        style={{ opacity: phraseOpacity, y: phraseY }}
-      >
-        TAPEZ-LEUR
-        <br />
-        DANS L&apos;OEIL
-      </m.h3>
-
+    <>
+      {/* Yellow background overlay */}
       <m.div
-        className="pointer-events-auto"
-        style={{ opacity: ctaOpacity, y: ctaY, pointerEvents }}
-      >
-        <LinkCTA
-          to={HOMEPAGE_SECTIONS.services.cta.link}
-          theme="light"
-          aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+        className="pointer-events-none absolute inset-0 z-10 bg-accent"
+        style={{ opacity: bgOpacity }}
+        aria-hidden="true"
+      />
+
+      <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
+        {/* Phrase — word-by-word entrance + staggered exit */}
+        <h3 className="text-heading text-center text-title-xl text-black">
+          {/* Line 1: TAPEZ-LEUR */}
+          <span className="inline-block">
+            <m.span className="inline-block" style={{ opacity: w0Opacity, y: w0Y }}>
+              {OUTRO_WORDS[0]}
+            </m.span>
+          </span>
+          <br />
+          {/* Line 2: DANS + L'OEIL → logo */}
+          <span className="inline-block">
+            <m.span className="inline-block" style={{ opacity: w1Opacity, y: w1Y }}>
+              {OUTRO_WORDS[1]}
+            </m.span>
+          </span>
+          {'\u00A0'}
+          <span className="relative inline-block align-bottom">
+            {/* L'OEIL text — fades out, replaced by logo */}
+            <m.span className="inline-block" style={{ opacity: w2Opacity, y: w2Y }}>
+              {OUTRO_WORDS[2]}
+            </m.span>
+
+            {/* Logo video — spawns at L'OEIL position, then grows + floats */}
+            <m.span
+              className="absolute left-1/2 top-1/2 inline-flex origin-center items-center justify-center"
+              style={{
+                opacity: logoOpacity,
+                scale: logoScaleSpring,
+                y: logoY,
+                x: logoXSpring,
+                rotate: logoRotate,
+                translateX: '-50%',
+                translateY: '-50%',
+              }}
+            >
+              <video
+                ref={videoRef}
+                src="/videos/logo-animated.mp4"
+                muted
+                playsInline
+                loop
+                preload="auto"
+                className="h-[1em] w-auto object-contain"
+                style={{ mixBlendMode: 'multiply' }}
+                aria-label="Logo animé La Lunetterie du Coin"
+              />
+            </m.span>
+          </span>
+        </h3>
+
+        {/* CTA */}
+        <m.div
+          className="pointer-events-auto"
+          style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}
         >
-          {HOMEPAGE_SECTIONS.services.cta.text}
-        </LinkCTA>
-      </m.div>
-    </div>
+          <LinkCTA
+            to={HOMEPAGE_SECTIONS.services.cta.link}
+            theme="light"
+            aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+          >
+            {HOMEPAGE_SECTIONS.services.cta.text}
+          </LinkCTA>
+        </m.div>
+      </div>
+    </>
   );
 }
 

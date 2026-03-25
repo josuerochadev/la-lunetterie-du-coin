@@ -20,12 +20,13 @@ const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 //  0.38 – 0.50  Image 1 fades out + card 1 peels away
 //  0.50 – 0.62  Image 2 fades in + perspective tilt settles (RIGHT)
 //  0.62 – 0.82  Image 2 visible, card 2 enters
-//  0.82 – 0.88  Image 2 fades out + card 2 exits
-//  0.86 – 0.96  Outro phrase "UNE PAIRE QUI A DU CHIEN"
-//  0.94 – 1.00  Gradient yellow → white
+//  0.78 – 0.88  Image 2 fades out + card 2 exits
+//  0.82 – 0.95  Outro phrase "UNE PAIRE QUI A DU CHIEN" (word-by-word)
+//  0.87 – 0.95  CTA button visible
+//  0.96 – 1.00  Gradient yellow → white
 // ---------------------------------------------------------------------------
 
-const SCROLL_HEIGHT_VH = 500; // total scroll budget in vh
+const SCROLL_HEIGHT_VH = 550; // total scroll budget in vh
 
 // Per-offer scroll windows (normalised 0-1)
 const OFFERS_TIMELINE = [
@@ -63,7 +64,7 @@ function OffersDesktop() {
   });
 
   // Title — stays visible throughout offers, fades out only for final CTA
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.03, 0.84, 0.89], [0, 1, 1, 0]);
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.03, 0.78, 0.83], [0, 1, 1, 0]);
 
   // --- Image 0 (LEFT) ---
   const img0Opacity = useTransform(
@@ -226,13 +227,11 @@ function OffersDesktop() {
   const card0Pointer = useTransform(card0Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
   const card1Pointer = useTransform(card1Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
 
-  // --- Outro: phrase + CTA (staggered) + gradient to white ---
-  const phraseOpacity = useTransform(scrollYProgress, [0.86, 0.91, 0.96, 1.0], [0, 1, 1, 0]);
-  const phraseYRaw = useTransform(scrollYProgress, [0.86, 0.91], [50, 0]);
-  const phraseY = useSpring(phraseYRaw, SPRING_CONFIG);
+  // --- Outro: phrase (word-by-word reveal) + CTA (staggered) + gradient to white ---
+  const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.95, 0.98], [0, 1, 1, 0]);
   // CTA appears slightly after phrase, like Story & Services
-  const ctaOpacity = useTransform(scrollYProgress, [0.91, 0.95], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.91, 0.95], [20, 0]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.95, 0.98], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = useTransform(ctaOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
   const gradientOpacity = useTransform(scrollYProgress, [0.96, 1.0], [0, 1]);
@@ -368,16 +367,22 @@ function OffersDesktop() {
           ))}
         </div>
 
-        {/* Outro — phrase + CTA (staggered entrance like Story & Services) */}
+        {/* Outro — phrase (word-by-word reveal) + CTA (staggered entrance) */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
-          <m.h3
+          <m.div
             className="text-heading text-center text-title-xl text-black"
-            style={{ opacity: phraseOpacity, y: phraseY }}
+            style={{ opacity: phraseOpacity }}
           >
-            UNE PAIRE
-            <br />
-            QUI A DU CHIEN
-          </m.h3>
+            <ScrollWordReveal
+              as="h3"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.82}
+              revealEnd={0.88}
+              className="text-heading text-center text-title-xl text-black"
+            >
+              UNE PAIRE QUI A DU CHIEN
+            </ScrollWordReveal>
+          </m.div>
 
           <m.div style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}>
             <LinkCTA
@@ -391,7 +396,7 @@ function OffersDesktop() {
 
         {/* Gradient overlay — yellow to white transition */}
         <m.div
-          className="absolute inset-0 z-30"
+          className="pointer-events-none absolute inset-0 z-30"
           style={{
             opacity: gradientOpacity,
             background:
