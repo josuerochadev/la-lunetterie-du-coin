@@ -346,7 +346,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   );
   const w2Y = useTransform([w2InY, w2ExitY] as const, ([a, b]: number[]) => a + b);
 
-  // ── Logo video — starts at L'OEIL position, grows and floats ──
+  // ── Logo video — starts at L'OEIL position, descends, holds, then rises ──
   const LOGO_IN = 0.92; // synced with L'OEIL fade-out
   const LOGO_FLOAT_END = 0.99;
 
@@ -356,18 +356,26 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
     [LOGO_IN, LOGO_IN + 0.02, LOGO_FLOAT_END - 0.02, LOGO_FLOAT_END],
     [0, 1, 1, 0],
   );
-  // Scale: starts small (text size) → grows large → shrinks slightly at end
-  const logoScale = useTransform(scrollYProgress, [LOGO_IN, 0.95, LOGO_FLOAT_END], [1, 6, 5]);
+  // Scale: starts small → grows during descent/hold → shrinks slightly on exit
+  const logoScale = useTransform(
+    scrollYProgress,
+    [LOGO_IN, 0.94, 0.96, LOGO_FLOAT_END],
+    [1, 4, 6, 5],
+  );
   const logoScaleSpring = useSpring(logoScale, SPRING_CONFIG);
-  // Float upward
-  const logoYRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, -55]);
+  // Y trajectory: descend → hold center → rise up (arc movement)
+  const logoYRaw = useTransform(
+    scrollYProgress,
+    [LOGO_IN, 0.94, 0.96, LOGO_FLOAT_END],
+    [0, 15, 10, -55],
+  );
   const logoY = useTransform(logoYRaw, (v: number) => `${v}vh`);
-  // Organic drift — sinusoidal X
-  const logoXRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, Math.PI * 2]);
+  // Organic drift — sinusoidal X (starts during hold phase)
+  const logoXRaw = useTransform(scrollYProgress, [0.95, LOGO_FLOAT_END], [0, Math.PI * 2]);
   const logoX = useTransform(logoXRaw, (v: number) => Math.sin(v) * 40);
   const logoXSpring = useSpring(logoX, { stiffness: 50, damping: 20, mass: 1 });
   // Gentle rotation
-  const logoRotateRaw = useTransform(scrollYProgress, [0.94, LOGO_FLOAT_END], [0, Math.PI * 2]);
+  const logoRotateRaw = useTransform(scrollYProgress, [0.95, LOGO_FLOAT_END], [0, Math.PI * 2]);
   const logoRotate = useTransform(logoRotateRaw, (v: number) => Math.sin(v) * 4);
 
   // ── Background white → yellow ──
@@ -547,7 +555,11 @@ function HomeServices() {
       data-navbar-theme="dark"
       className="pointer-events-none relative bg-white"
     >
-      {/* No gradient — StickySection stacking creates the depth/overlap effect */}
+      {/* Concave curve — accent ellipse masks the top corners, creating an inward arc */}
+      <div
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
+        aria-hidden="true"
+      />
 
       {/* ── Mobile ── */}
       <div className="pointer-events-auto px-container-x py-section lg:hidden">
