@@ -5,7 +5,6 @@ import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
 import HomeServices from '@/sections/home/HomeServices';
-import HomeEngagement from '@/sections/home/HomeEngagement';
 import HomeOffers from '@/sections/home/HomeOffers';
 import HomeTestimonials from '@/sections/home/HomeTestimonials';
 import HomeContact from '@/sections/home/HomeContact';
@@ -57,20 +56,13 @@ export default function HomePage() {
             <HomeServices />
           </StickySection>
 
-          {/* Offers → Engagement */}
+          {/* Services → Testimonials */}
           <StickySection zIndex={15}>
-            <SectionTransition variant="pattern" />
-            <HomeEngagement />
-          </StickySection>
-
-          {/* Engagement → Testimonials */}
-          <StickySection zIndex={16}>
-            <SectionTransition variant="fade" fromColor="black" toColor="white" />
             <HomeTestimonials />
           </StickySection>
 
           {/* Testimonials → Contact */}
-          <StickySection zIndex={17}>
+          <StickySection zIndex={16}>
             <SectionTransition variant="diagonal" fromColor="white" toColor="#FEEB09" />
             <HomeContact />
           </StickySection>
