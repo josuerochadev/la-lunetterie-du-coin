@@ -320,8 +320,8 @@ function OffersDesktop() {
           ))}
         </div>
 
-        {/* Card layer — stacked at viewport center */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
+        {/* Card layer — stacked at viewport center, offset down to clear title */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center pt-24">
           {HOMEPAGE_OFFERS.map((offer, i) => (
             <m.div
               key={offer.id}
