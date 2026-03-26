@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
@@ -8,12 +8,19 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 const SPRING_TRANSITION = { type: 'spring' as const, stiffness: 80, damping: 30, mass: 0.5 };
 
 function HeroDesktop() {
+  const { scrollY } = useScroll();
+  const exitOpacity = useTransform(scrollY, [100, 400], [1, 0]);
+  const exitY = useTransform(scrollY, [100, 400], [0, -60]);
+
   return (
     <div className="hidden lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <EyePattern variant="blanc" opacity={0.03} />
 
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
+        <m.div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           <TextReveal
             as="h1"
             className="text-heading text-center text-accent"
@@ -30,7 +37,7 @@ function HeroDesktop() {
           >
             Bien vu pour vos yeux. Bien vu pour votre portefeuille.
           </m.p>
-        </div>
+        </m.div>
       </div>
     </div>
   );

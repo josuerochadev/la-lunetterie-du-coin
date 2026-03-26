@@ -319,13 +319,19 @@ export default function ServicesContent() {
       id="services-content"
       aria-labelledby="services-content-title"
       data-navbar-theme="light"
-      className="relative bg-black"
+      className="relative"
+      style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
     >
-      {/* Concave curve — accent ellipse masks the top, matching hero color (like HomeServices) */}
-      <div
-        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
+      {/* Convex dome — black dome with transparent corners revealing the hero behind */}
+      <svg
+        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        style={{ height: '12vw' }}
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
         aria-hidden="true"
-      />
+      >
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
+      </svg>
 
       {/* Mobile / reduced-motion */}
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>

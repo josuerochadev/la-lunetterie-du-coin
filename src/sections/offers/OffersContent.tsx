@@ -89,7 +89,7 @@ function OfferCard({
         pointerEvents: cardPointer,
       }}
     >
-      <div className="group/card relative overflow-hidden rounded-r-3xl bg-black/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.5)]">
+      <div className="group/card relative overflow-hidden rounded-r-3xl bg-white/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)]">
         {/* Accent bar */}
         <div
           className="absolute bottom-0 left-0 top-0 w-2.5 bg-accent transition-all duration-300 ease-out group-hover/card:w-3.5"
@@ -97,15 +97,15 @@ function OfferCard({
         />
 
         <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12">
-          <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
+          <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
 
-          <p className="mt-5 max-w-md text-body-lg text-white/50">{offer.description}</p>
+          <p className="mt-5 max-w-md text-body-lg text-black/50">{offer.description}</p>
 
           {/* Key highlights — first 3 details only */}
           <ul className="mt-6 space-y-2">
             {offer.details.slice(0, 3).map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body-sm text-white/40">
-                <span className="text-accent" aria-hidden="true">
+              <li key={i} className="flex gap-3 text-body-sm text-black/40">
+                <span className="text-black" aria-hidden="true">
                   •
                 </span>
                 <span>{detail}</span>
@@ -115,7 +115,7 @@ function OfferCard({
 
           <LinkCTA
             to="/contact"
-            theme="dark"
+            theme="light"
             className="mt-8"
             aria-label={`Profiter de ${offer.title}`}
           >
@@ -245,17 +245,17 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
 
       <SimpleAnimation type="slide-up" delay={150}>
         <div className="mt-6 space-y-4">
-          <span className="text-body-sm font-medium uppercase tracking-widest text-white/30">
+          <span className="text-body-sm font-medium uppercase tracking-widest text-black/30">
             {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
           </span>
-          <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-          <p className="text-body-lg text-white/50">{offer.description}</p>
+          <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
+          <p className="text-body-lg text-black/50">{offer.description}</p>
 
-          <div className="border border-white/10 p-5">
+          <div className="border border-black/10 p-5">
             <ul className="space-y-2">
               {offer.details.map((detail, i) => (
-                <li key={i} className="flex gap-3 text-body-sm text-white/40">
-                  <span className="text-accent" aria-hidden="true">
+                <li key={i} className="flex gap-3 text-body-sm text-black/40">
+                  <span className="text-black" aria-hidden="true">
                     •
                   </span>
                   <span>{detail}</span>
@@ -264,18 +264,18 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
             </ul>
           </div>
 
-          <div className="border-l-4 border-accent/30 bg-accent/5 p-4">
-            <h4 className="mb-2 text-body-sm font-medium text-white/60">Conditions</h4>
+          <div className="border-l-4 border-black/20 bg-black/5 p-4">
+            <h4 className="mb-2 text-body-sm font-medium text-black/60">Conditions</h4>
             <ul className="space-y-1">
               {offer.conditions.map((condition, i) => (
-                <li key={i} className="text-body-sm text-white/30">
+                <li key={i} className="text-body-sm text-black/30">
                   {condition}
                 </li>
               ))}
             </ul>
           </div>
 
-          <LinkCTA to="/contact" theme="dark" aria-label={`Profiter de ${offer.title}`}>
+          <LinkCTA to="/contact" theme="light" aria-label={`Profiter de ${offer.title}`}>
             En profiter
           </LinkCTA>
         </div>
@@ -293,7 +293,26 @@ export default function OffersContent() {
   const isLg = useIsLg();
 
   return (
-    <section id="offers-content" className="relative bg-black" data-navbar-theme="light">
+    <section
+      id="offers-content"
+      className="relative"
+      style={{
+        background:
+          'linear-gradient(to bottom, transparent 12vw, rgb(var(--color-yellow-rgb)) 12vw)',
+      }}
+      data-navbar-theme="dark"
+    >
+      {/* Convex dome — accent dome with transparent corners revealing the hero behind */}
+      <svg
+        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        style={{ height: '12vw' }}
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
+      </svg>
+
       {/* Desktop */}
       {!prefersReducedMotion && isLg && <OffersDesktop />}
 

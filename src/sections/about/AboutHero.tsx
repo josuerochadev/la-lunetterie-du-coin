@@ -1,4 +1,4 @@
-import { m } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
@@ -7,21 +7,20 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const SPRING_TRANSITION = { type: 'spring', stiffness: 80, damping: 30, mass: 0.5 };
 
-// ---------------------------------------------------------------------------
-// Desktop — content visible immediately with staggered entrance animations.
-// Section stays sticky so AboutHistory scrolls over it.
-// ---------------------------------------------------------------------------
-
 function HeroDesktop() {
+  const { scrollY } = useScroll();
+  const exitOpacity = useTransform(scrollY, [100, 400], [1, 0]);
+  const exitY = useTransform(scrollY, [100, 400], [0, -60]);
+
   return (
     <div className="hidden lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        {/* Eye pattern — visible from the start */}
         <EyePattern variant="blanc" opacity={0.03} />
 
-        {/* Content — centered, entrance animations on load */}
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
-          {/* "DEPUIS 2016" — visible immediately, slides up */}
+        <m.div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           <TextReveal
             as="h1"
             className="text-heading text-center text-accent"
@@ -30,7 +29,6 @@ function HeroDesktop() {
             L'EXPERT DES EX PAIRES
           </TextReveal>
 
-          {/* Subtitle — staggered */}
           <m.p
             className="mt-8 max-w-3xl text-center text-body-xl text-white/80"
             initial={{ opacity: 0, y: 30 }}
@@ -40,7 +38,6 @@ function HeroDesktop() {
             Depuis 2016, du style, du conseil et une seconde vie pour vos montures.
           </m.p>
 
-          {/* Tagline — last to appear */}
           <m.p
             className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30"
             initial={{ opacity: 0 }}
@@ -49,7 +46,7 @@ function HeroDesktop() {
           >
             Faubourg de Pierre, Strasbourg
           </m.p>
-        </div>
+        </m.div>
       </div>
     </div>
   );

@@ -37,21 +37,21 @@ function HistoryDesktop() {
     offset: ['start end', 'end start'],
   });
 
-  // Phase 1: Photo clipPath reveal + grow
-  const photoClipProgress = useTransform(scrollYProgress, [0.02, 0.12], [0, 1]);
+  // Phase 1: Photo clipPath reveal + grow (delayed so dome settles first)
+  const photoClipProgress = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);
   const photoClip = useTransform(photoClipProgress, (v) => {
     const inset = 50 - v * 50;
     return `inset(${inset}% ${inset}% ${inset}% ${inset}%)`;
   });
-  const photoHeight = useTransform(scrollYProgress, [0.05, 0.35], ['60%', '100%']);
-  const photoScale = useTransform(scrollYProgress, [0.05, 0.45], [1, 1.15]);
-  const photoEntranceOpacity = useTransform(scrollYProgress, [0.02, 0.08], [0, 1]);
+  const photoHeight = useTransform(scrollYProgress, [0.09, 0.35], ['60%', '100%']);
+  const photoScale = useTransform(scrollYProgress, [0.09, 0.45], [1, 1.15]);
+  const photoEntranceOpacity = useTransform(scrollYProgress, [0.06, 0.12], [0, 1]);
 
   // Phase 2: Title + text
-  const textOpacity = useTransform(scrollYProgress, [0.08, 0.14], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.08, 0.16], [100, 0]);
+  const textOpacity = useTransform(scrollYProgress, [0.12, 0.18], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.12, 0.2], [100, 0]);
   const titleY = useSpring(titleYRaw, springConfig);
-  const contentFadeOut = useTransform(scrollYProgress, [0.32, 0.38], [1, 0]);
+  const contentFadeOut = useTransform(scrollYProgress, [0.36, 0.42], [1, 0]);
 
   // Combined opacities
   const titleCombinedOpacity = useTransform(
@@ -64,27 +64,27 @@ function HistoryDesktop() {
   );
 
   // Phase 3: Photo expands fullscreen
-  const photoLeft = useTransform(scrollYProgress, [0.38, 0.5], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.38, 0.5], ['36%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.38, 0.5], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.45, 0.55], [1, 0.6]);
+  const photoLeft = useTransform(scrollYProgress, [0.42, 0.54], ['28%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.42, 0.54], ['36%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [0.42, 0.54], [16, 0]);
+  const photoExpandOpacity = useTransform(scrollYProgress, [0.49, 0.58], [1, 0.6]);
 
   // Phase 4: Transition phrase
-  const phraseOpacity = useTransform(scrollYProgress, [0.5, 0.58], [0, 1]);
-  const phraseYRaw = useTransform(scrollYProgress, [0.5, 0.58], [40, 0]);
+  const phraseOpacity = useTransform(scrollYProgress, [0.54, 0.62], [0, 1]);
+  const phraseYRaw = useTransform(scrollYProgress, [0.54, 0.62], [40, 0]);
   const phraseY = useSpring(phraseYRaw, springConfig);
-  const phraseFadeOut = useTransform(scrollYProgress, [0.68, 0.74], [1, 0]);
+  const phraseFadeOut = useTransform(scrollYProgress, [0.72, 0.78], [1, 0]);
   const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
 
   // Phase 5: Yellow overlay — starts right as phrase fades out
-  const yellowOverlay = useTransform(scrollYProgress, [0.65, 0.76], [0, 1]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.69, 0.8], [0, 1]);
 
   // Navbar theme strip — toggle data-navbar-theme attribute via ref
   // IO detects the attribute change on the next scroll-driven resolveTheme()
   const stripRef = useRef<HTMLDivElement>(null);
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (!stripRef.current) return;
-    if (v >= 0.65) {
+    if (v >= 0.69) {
       stripRef.current.setAttribute('data-navbar-theme', 'dark');
     } else {
       stripRef.current.removeAttribute('data-navbar-theme');
@@ -92,7 +92,7 @@ function HistoryDesktop() {
   });
 
   return (
-    <div ref={sectionRef} className="hidden min-h-[400vh] lg:block">
+    <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           {/* Left — title */}
@@ -103,9 +103,9 @@ function HistoryDesktop() {
             <ScrollWordReveal
               as="h2"
               scrollYProgress={scrollYProgress}
-              revealStart={0.08}
-              revealEnd={0.18}
-              className="heading-section text-white"
+              revealStart={0.12}
+              revealEnd={0.22}
+              className="heading-section text-black"
             >
               {STORY_TITLE}
             </ScrollWordReveal>
@@ -145,9 +145,9 @@ function HistoryDesktop() {
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
-              revealStart={0.12}
-              revealEnd={0.25}
-              className="text-body-xl text-white/80"
+              revealStart={0.16}
+              revealEnd={0.28}
+              className="text-body-xl text-black/60"
             >
               {STORY_BODY}
             </ScrollWordReveal>
@@ -156,9 +156,9 @@ function HistoryDesktop() {
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
-                revealStart={0.22}
+                revealStart={0.26}
                 revealEnd={0.32}
-                className="text-body-lg text-white/50"
+                className="text-body-lg text-black/40"
               >
                 {STORY_BODY_2}
               </ScrollWordReveal>
@@ -175,16 +175,16 @@ function HistoryDesktop() {
             <ScrollWordReveal
               as="h3"
               scrollYProgress={scrollYProgress}
-              revealStart={0.52}
-              revealEnd={0.62}
-              className="text-heading text-title-xl text-accent"
+              revealStart={0.56}
+              revealEnd={0.66}
+              className="text-heading text-title-xl text-black"
             >
               UNE VISION DIFFÉRENTE
             </ScrollWordReveal>
           </m.div>
 
           <m.div style={{ opacity: phraseFadeOut }}>
-            <LinkCTA to="/services" theme="dark">
+            <LinkCTA to="/services" theme="light">
               Voir nos services
             </LinkCTA>
           </m.div>
@@ -219,15 +219,24 @@ export default function AboutHistory() {
   return (
     <section
       id="histoire"
-      className="relative w-full bg-black"
+      className="relative w-full"
+      style={{
+        background:
+          'linear-gradient(to bottom, transparent 12vw, rgb(var(--color-yellow-rgb)) 12vw)',
+      }}
       aria-labelledby="histoire-title"
       data-navbar-theme="light"
     >
-      {/* Convex eyelid curve — seamless transition from Hero */}
-      <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
+      {/* Convex dome — accent dome with transparent corners revealing the hero behind */}
+      <svg
+        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        style={{ height: '12vw' }}
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
         aria-hidden="true"
-      />
+      >
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
+      </svg>
 
       {/* Desktop animated */}
       {!prefersReducedMotion && <HistoryDesktop />}
@@ -246,16 +255,16 @@ export default function AboutHistory() {
 
           <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12">
             <SimpleAnimation type="slide-up" delay={200}>
-              <div className="w-full max-w-4xl space-y-4 bg-black/90 px-container-x py-container-y backdrop-blur-sm">
-                <span className="text-body-sm font-medium uppercase tracking-wider text-accent/60">
+              <div className="w-full max-w-4xl space-y-4 bg-accent/90 px-container-x py-container-y backdrop-blur-sm">
+                <span className="text-body-sm font-medium uppercase tracking-wider text-black/40">
                   Notre histoire
                 </span>
-                <h2 id="histoire-title" className="heading-section text-white">
+                <h2 id="histoire-title" className="heading-section text-black">
                   Un peu d&apos;histoire
                 </h2>
-                <p className="text-body-lg text-white/80">{STORY_BODY}</p>
-                <p className="text-body text-white/50">{STORY_BODY_2}</p>
-                <LinkCTA to="/services" theme="dark" className="mt-4">
+                <p className="text-body-lg text-black/60">{STORY_BODY}</p>
+                <p className="text-body text-black/40">{STORY_BODY_2}</p>
+                <LinkCTA to="/services" theme="light" className="mt-4">
                   Voir nos services
                 </LinkCTA>
               </div>

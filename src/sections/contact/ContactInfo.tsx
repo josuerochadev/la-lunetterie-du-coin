@@ -9,13 +9,22 @@ import { OPENING_HOURS } from '@/data/contact';
 
 export default function ContactInfo() {
   return (
-    <section id="informations-pratiques" className="relative bg-black" data-navbar-theme="light">
-      {/* Convex curve transition from yellow hero */}
-      <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
-        data-navbar-theme="light"
+    <section
+      id="informations-pratiques"
+      className="relative"
+      style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
+      data-navbar-theme="light"
+    >
+      {/* Convex dome — black dome with transparent corners revealing the hero behind */}
+      <svg
+        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        style={{ height: '12vw' }}
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
         aria-hidden="true"
-      />
+      >
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
+      </svg>
 
       <div className="mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-5xl">

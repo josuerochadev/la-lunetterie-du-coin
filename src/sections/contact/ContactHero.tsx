@@ -1,14 +1,23 @@
+import { m, useScroll, useTransform } from 'framer-motion';
+
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 function HeroDesktop() {
+  const { scrollY } = useScroll();
+  const exitOpacity = useTransform(scrollY, [100, 400], [1, 0]);
+  const exitY = useTransform(scrollY, [100, 400], [0, -60]);
+
   return (
     <div className="hidden lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <EyePattern variant="jaune" opacity={0.03} />
 
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
+        <m.div
+          className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           <TextReveal
             as="h1"
             className="text-heading text-center text-black"
@@ -16,7 +25,7 @@ function HeroDesktop() {
           >
             PASSEZ NOUS VOIR
           </TextReveal>
-        </div>
+        </m.div>
       </div>
     </div>
   );
