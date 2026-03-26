@@ -69,44 +69,90 @@ const Navbar: React.FC = () => {
 
   const isVisible = !hiddenByFooter && (!hiddenByScroll || hovered || menuActive);
 
-  // Detect navbar theme by sampling the element visually behind the navbar.
-  // Uses elementFromPoint to handle sticky/z-index overlapping sections correctly.
+  // Detect navbar theme via IntersectionObserver on a thin band at the top
+  // of the viewport. Unlike elementFromPoint, IO detects elements regardless
+  // of pointer-events, so decorative curves and overlays are properly handled.
   useEffect(() => {
-    const detectTheme = () => {
-      // Sample a point near the top center, behind the navbar
-      const x = window.innerWidth / 2;
-      const y = 60;
+    const BAND_TOP = 40;
+    const BAND_BOTTOM = 80;
 
-      // Temporarily hide the navbar so elementFromPoint hits the section behind it
-      const header = document.querySelector('header');
-      if (header) header.style.pointerEvents = 'none';
+    const intersecting = new Set<Element>();
 
-      const el = document.elementFromPoint(x, y);
-
-      if (header) header.style.pointerEvents = '';
-
-      if (!el) return;
-
-      // Hide navbar when over the footer
-      if (el.closest('#footer')) {
-        setHiddenByFooter(true);
-        return;
+    const resolveTheme = () => {
+      // Check if footer is in the detection band
+      for (const el of intersecting) {
+        if (el.closest('#footer')) {
+          setHiddenByFooter(true);
+          return;
+        }
       }
       setHiddenByFooter(false);
 
-      // Walk up to find the closest ancestor with data-navbar-theme
-      const section = el.closest('[data-navbar-theme]');
-      if (section) {
-        const sectionTheme = (section as HTMLElement).dataset.navbarTheme;
-        setTheme(sectionTheme === 'light' ? 'light' : 'dark');
-      } else {
-        setTheme('dark');
+      // Collect themed elements with their current attribute value
+      const themed: { el: Element; theme: string }[] = [];
+      for (const el of intersecting) {
+        const t = (el as HTMLElement).dataset.navbarTheme;
+        if (t) themed.push({ el, theme: t });
       }
+
+      if (themed.length === 0) {
+        setTheme('dark');
+        return;
+      }
+
+      // Last in document order = visually on top (StickySection z-index pattern)
+      // Descendants also come after their ancestors, so nested overrides win.
+      themed.sort((a, b) => {
+        const pos = a.el.compareDocumentPosition(b.el);
+        return pos & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+
+      setTheme(themed[themed.length - 1].theme === 'light' ? 'light' : 'dark');
     };
 
-    detectTheme();
-    window.addEventListener('scroll', detectTheme, { passive: true });
-    return () => window.removeEventListener('scroll', detectTheme);
+    const createObserver = () => {
+      const bottomMargin = Math.max(0, window.innerHeight - BAND_BOTTOM);
+      return new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) intersecting.add(entry.target);
+            else intersecting.delete(entry.target);
+          }
+          resolveTheme();
+        },
+        { rootMargin: `-${BAND_TOP}px 0px -${bottomMargin}px 0px` },
+      );
+    };
+
+    let observer = createObserver();
+
+    const observeAll = () => {
+      observer.disconnect();
+      intersecting.clear();
+      observer = createObserver();
+      document
+        .querySelectorAll('[data-navbar-theme], [data-navbar-theme-dynamic], #footer')
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    };
+
+    // Small delay to ensure DOM is ready after route change
+    const timer = setTimeout(observeAll, 50);
+
+    // Re-read attributes on scroll (handles dynamic data-navbar-theme changes)
+    window.addEventListener('scroll', resolveTheme, { passive: true });
+
+    // Recreate observer on resize (rootMargin depends on viewport height)
+    const onResize = () => observeAll();
+    window.addEventListener('resize', onResize, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      window.removeEventListener('scroll', resolveTheme);
+      window.removeEventListener('resize', onResize);
+    };
   }, [location.pathname]);
 
   useEffect(() => {

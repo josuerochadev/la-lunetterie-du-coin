@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { m, useScroll, useSpring, useTransform } from 'framer-motion';
+import { m, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -13,7 +13,7 @@ import { useIsLg } from '@/hooks/useIsLg';
 
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
-  "Tout a commencé avec une conviction : proposer des lunettes de qualité tout en donnant une seconde vie aux montures. Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie expertise optique, style contemporain et engagement écologique. Chaque paire est sélectionnée avec soin, qu'elle soit neuve ou d'occasion.";
+  "Depuis 2016, au cœur de Strasbourg, on donne une seconde vie aux montures. Du neuf, de l'occasion, des créateurs — et toujours un conseil sans pression. Ici, chaque paire est choisie avec soin.";
 // ---------------------------------------------------------------------------
 // Desktop animated layout — all scroll hooks live here
 // ---------------------------------------------------------------------------
@@ -55,6 +55,17 @@ function StoryDesktopAnimated() {
   const grandScaleSpring = useSpring(grandScale, { stiffness: 60, damping: 30, mass: 0.5 });
   const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
   const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
+
+  // Navbar theme strip — switch to dark when GRAND fills screen with yellow
+  const storyStripRef = useRef<HTMLDivElement>(null);
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (!storyStripRef.current) return;
+    if (v >= 0.78) {
+      storyStripRef.current.setAttribute('data-navbar-theme', 'dark');
+    } else {
+      storyStripRef.current.removeAttribute('data-navbar-theme');
+    }
+  });
 
   // Pointer events — disable outro overlay when not visible
   const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
@@ -164,6 +175,13 @@ function StoryDesktopAnimated() {
           style={{ opacity: yellowOverlay }}
           aria-hidden="true"
         />
+
+        {/* Navbar theme override — switches to dark when GRAND fills screen */}
+        <div
+          ref={storyStripRef}
+          className="pointer-events-none absolute inset-x-0 top-0 z-40 h-20"
+          data-navbar-theme-dynamic=""
+        />
       </div>
     </div>
   );
@@ -233,6 +251,7 @@ function HomeStory() {
       <div
         className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
         aria-hidden="true"
+        data-navbar-theme="light"
       />
 
       {/* Mobile layout — stacked */}

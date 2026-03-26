@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -55,6 +55,17 @@ function ContactDesktop() {
   const ctaYRaw = useTransform(scrollYProgress, [0.26, 0.34], [30, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
 
+  // Navbar theme strip — starts "light" (black bg) then removes when yellow reveals
+  const contactStripRef = useRef<HTMLDivElement>(null);
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (!contactStripRef.current) return;
+    if (v < 0.03) {
+      contactStripRef.current.setAttribute('data-navbar-theme', 'light');
+    } else {
+      contactStripRef.current.removeAttribute('data-navbar-theme');
+    }
+  });
+
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-black">
@@ -89,6 +100,13 @@ function ContactDesktop() {
             </LinkCTA>
           </m.div>
         </div>
+        {/* Navbar theme override — light on initial black bg, removed when yellow reveals */}
+        <div
+          ref={contactStripRef}
+          className="pointer-events-none absolute inset-x-0 top-0 z-40 h-20"
+          data-navbar-theme-dynamic=""
+          data-navbar-theme="light"
+        />
       </div>
     </div>
   );

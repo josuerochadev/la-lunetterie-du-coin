@@ -55,10 +55,12 @@ export default function Footer({
       {...rest}
       className={clsx('relative z-20 -mt-[8vw] w-full bg-primary text-accent', className)}
     >
-      {/* Convex eyelid curve — same style as HomeStory */}
+      {/* Convex eyelid curve — same style as HomeStory.
+          data-navbar-theme makes IO detect this as footer → hides navbar early */}
       <div
         className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-primary"
         aria-hidden="true"
+        data-navbar-theme="light"
       />
 
       {/* Logo sitting on the curve */}

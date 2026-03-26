@@ -124,6 +124,7 @@ export default function AboutTeam() {
       <div
         className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
         aria-hidden="true"
+        data-navbar-theme="light"
       />
 
       {/* Desktop animated */}

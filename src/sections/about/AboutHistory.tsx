@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -76,8 +76,20 @@ function HistoryDesktop() {
   const phraseFadeOut = useTransform(scrollYProgress, [0.68, 0.74], [1, 0]);
   const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
 
-  // Phase 5: Yellow overlay
-  const yellowOverlay = useTransform(scrollYProgress, [0.7, 0.82], [0, 1]);
+  // Phase 5: Yellow overlay — starts right as phrase fades out
+  const yellowOverlay = useTransform(scrollYProgress, [0.65, 0.76], [0, 1]);
+
+  // Navbar theme strip — toggle data-navbar-theme attribute via ref
+  // IO detects the attribute change on the next scroll-driven resolveTheme()
+  const stripRef = useRef<HTMLDivElement>(null);
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (!stripRef.current) return;
+    if (v >= 0.65) {
+      stripRef.current.setAttribute('data-navbar-theme', 'dark');
+    } else {
+      stripRef.current.removeAttribute('data-navbar-theme');
+    }
+  });
 
   return (
     <div ref={sectionRef} className="hidden min-h-[400vh] lg:block">
@@ -185,13 +197,12 @@ function HistoryDesktop() {
           aria-hidden="true"
         />
 
-        {/* Navbar theme override — when yellow overlay is visible,
-            this thin strip at the top catches elementFromPoint and
-            tells the navbar to switch to dark (black text) */}
-        <m.div
-          className="absolute inset-x-0 top-0 z-40 h-20"
-          style={{ opacity: yellowOverlay }}
-          data-navbar-theme="dark"
+        {/* Navbar theme override — attribute toggled via ref when yellow
+            overlay is visible. IO picks it up as the most nested element. */}
+        <div
+          ref={stripRef}
+          className="pointer-events-none absolute inset-x-0 top-0 z-40 h-20"
+          data-navbar-theme-dynamic=""
         />
       </div>
     </div>
