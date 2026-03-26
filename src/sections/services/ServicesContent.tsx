@@ -8,12 +8,58 @@ import { useIsLg } from '@/hooks/useIsLg';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { CALENDLY_URL } from '@/config/endpoints';
 
+const ACCENT_HEX = '#FEEB09';
+
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = SERVICES_DATA.length;
 
 // Scroll budget
 const SERVICES_START = 0.06;
 const SERVICES_END = 0.94;
+
+// ---------------------------------------------------------------------------
+// Progress indicator — vertical dots showing active service
+// ---------------------------------------------------------------------------
+
+function ServiceProgressIndicator({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const fadeIn = useTransform(scrollYProgress, [SERVICES_START, SERVICES_START + 0.03], [0, 1]);
+  const fadeOut = useTransform(scrollYProgress, [SERVICES_END - 0.03, SERVICES_END], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+
+  const progressRaw = useTransform(
+    scrollYProgress,
+    [SERVICES_START, SERVICES_END],
+    [0, SERVICE_COUNT],
+  );
+  const progress = useSpring(progressRaw, SPRING_CONFIG);
+
+  return (
+    <m.div
+      className="flex shrink-0 flex-col items-center gap-3"
+      style={{ opacity }}
+      aria-hidden="true"
+    >
+      {Array.from({ length: SERVICE_COUNT }, (_, i) => (
+        <ProgressDot key={i} index={i} progress={progress} />
+      ))}
+    </m.div>
+  );
+}
+
+function ProgressDot({ index, progress }: { index: number; progress: MotionValue<number> }) {
+  const dotOpacity = useTransform(progress, (v: number) => (v >= index && v < index + 1 ? 1 : 0));
+  const bgOpacity = useTransform(dotOpacity, (v: number) => (v === 1 ? 0 : 1));
+
+  return (
+    <span className="relative h-2.5 w-2.5 rounded-full">
+      <m.span
+        className="absolute inset-0 rounded-full bg-orange/20"
+        style={{ opacity: bgOpacity }}
+      />
+      <m.span className="absolute inset-0 rounded-full bg-orange" style={{ opacity: dotOpacity }} />
+    </span>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Desktop sub-components — PhotoStack pattern from HomeServices
@@ -114,7 +160,7 @@ function PhotoReveal({
 }
 
 /**
- * Service text card — HomeOffers card style with accent bar.
+ * Service text — editorial free-text style (no card box).
  * Scrolls up alongside the photo stack.
  */
 function ServiceCard({
@@ -156,71 +202,69 @@ function ServiceCard({
       className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
       style={{ opacity, y, pointerEvents }}
     >
-      {/* Card — editorial cutout with accent bar (HomeOffers style) */}
-      <div className="relative overflow-hidden rounded-r-2xl bg-black/80 shadow-2xl backdrop-blur-md">
-        {/* Accent bar — left edge */}
-        <div className="absolute bottom-0 left-0 top-0 w-1.5 bg-accent" aria-hidden="true" />
+      {/* Counter */}
+      <span className="mb-4 block text-body-sm font-medium uppercase tracking-widest text-white/30">
+        {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+      </span>
 
-        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10">
-          {/* Counter */}
-          <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-white/30">
-            {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-          </span>
+      {/* Title — large accent */}
+      <h3
+        className="text-heading mb-5 text-accent"
+        style={{ fontSize: 'clamp(1.8rem, 3vw, 3.2rem)', lineHeight: '1.05' }}
+      >
+        {service.title}
+      </h3>
 
-          {/* Title */}
-          <h3 className="text-subtitle mb-4 text-title-sm text-accent">{service.title}</h3>
+      {/* Description */}
+      <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-white/60">
+        {service.description}
+      </p>
 
-          {/* Description */}
-          <p className="mb-6 max-w-md text-body leading-relaxed text-white/60">
-            {service.description}
-          </p>
+      {/* Details — 2 columns grid for digestibility */}
+      <ul className="mb-8 grid max-w-lg grid-cols-2 gap-x-6 gap-y-2.5">
+        {service.details.slice(0, 6).map((detail, i) => (
+          <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
+            <span
+              className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+              aria-hidden="true"
+            />
+            <span>{detail}</span>
+          </li>
+        ))}
+      </ul>
 
-          {/* Details — top 4 only on desktop to stay digestible */}
-          <ul className="mb-6 space-y-2">
-            {service.details.slice(0, 4).map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body text-white/40">
-                <span className="text-accent" aria-hidden="true">
-                  •
-                </span>
-                <span>{detail}</span>
-              </li>
-            ))}
+      {/* Examens: conditions */}
+      {isExamens && (
+        <div className="mb-8 max-w-lg border-l-2 border-accent/30 pl-5">
+          <h4 className="mb-2 text-body-sm font-medium text-white/50">
+            Conditions pour un examen en magasin
+          </h4>
+          <ul className="space-y-1 text-body-sm text-white/35">
+            <li>
+              Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+            </li>
+            <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+            <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
           </ul>
-
-          {/* Examens: conditions + Calendly CTA */}
-          {isExamens && (
-            <div className="mb-6 border-l-4 border-accent/30 bg-accent/5 p-4">
-              <h4 className="mb-2 text-body-sm font-medium text-white/60">
-                Conditions pour un examen en magasin
-              </h4>
-              <ul className="space-y-1 text-body-sm text-white/40">
-                <li>
-                  • Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
-                </li>
-                <li>• Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-                <li>• Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-              </ul>
-            </div>
-          )}
-
-          {/* CTA */}
-          {isExamens ? (
-            <LinkCTA
-              href={CALENDLY_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              theme="dark"
-              aria-label="Prendre rendez-vous pour un examen de vue"
-            >
-              Prendre rendez-vous
-            </LinkCTA>
-          ) : (
-            <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
-              Nous contacter
-            </LinkCTA>
-          )}
         </div>
-      </div>
+      )}
+
+      {/* CTA */}
+      {isExamens ? (
+        <LinkCTA
+          href={CALENDLY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          theme="dark"
+          aria-label="Prendre rendez-vous pour un examen de vue"
+        >
+          Prendre rendez-vous
+        </LinkCTA>
+      ) : (
+        <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
+          Nous contacter
+        </LinkCTA>
+      )}
     </m.div>
   );
 }
@@ -231,7 +275,7 @@ function ServiceCard({
 
 function MobileServiceList() {
   return (
-    <div className="space-y-20">
+    <div className="space-y-24">
       {SERVICES_DATA.map((service, index) => {
         const isExamens = service.id === 'examens';
         return (
@@ -245,50 +289,65 @@ function MobileServiceList() {
                   loading={index === 0 ? 'eager' : 'lazy'}
                 />
               </div>
-              <div className="mt-6 space-y-4">
-                <span className="text-body-sm font-medium uppercase tracking-widest text-white/30">
+              <div className="mt-8">
+                <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-white/30">
                   {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
                 </span>
-                <h3 className="text-subtitle text-title-sm text-white">{service.title}</h3>
-                <p className="text-body leading-relaxed text-white/60">{service.description}</p>
+                <h3
+                  className="text-heading mb-4 text-accent"
+                  style={{ fontSize: 'clamp(1.6rem, 6vw, 2.4rem)', lineHeight: '1.1' }}
+                >
+                  {service.title}
+                </h3>
+                <p className="mb-6 text-body-lg leading-relaxed text-white/60">
+                  {service.description}
+                </p>
 
-                <div className="border border-white/10 p-5">
-                  <ul className="space-y-2">
-                    {service.details.map((detail, i) => (
-                      <li key={i} className="flex gap-3 text-body text-white/40">
-                        <span className="text-accent" aria-hidden="true">
-                          •
-                        </span>
-                        <span>{detail}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                <ul className="mb-6 grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
+                  {service.details.map((detail, i) => (
+                    <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
+                      <span
+                        className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent"
+                        aria-hidden="true"
+                      />
+                      <span>{detail}</span>
+                    </li>
+                  ))}
+                </ul>
 
                 {isExamens && (
-                  <>
-                    <div className="border-l-4 border-accent/30 bg-accent/5 p-4">
-                      <h4 className="mb-2 text-body-sm font-medium text-white/60">
-                        Conditions pour un examen en magasin
-                      </h4>
-                      <ul className="space-y-1 text-body-sm text-white/40">
-                        <li>
-                          • Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
-                        </li>
-                        <li>• Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-                        <li>• Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-                      </ul>
-                    </div>
-                    <LinkCTA
-                      href={CALENDLY_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      theme="dark"
-                      aria-label="Prendre rendez-vous pour un examen de vue"
-                    >
-                      Prendre rendez-vous
-                    </LinkCTA>
-                  </>
+                  <div className="mb-6 border-l-2 border-accent/30 pl-4">
+                    <h4 className="mb-2 text-body-sm font-medium text-white/50">
+                      Conditions pour un examen en magasin
+                    </h4>
+                    <ul className="space-y-1 text-body-sm text-white/35">
+                      <li>
+                        Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                      </li>
+                      <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                      <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+                    </ul>
+                  </div>
+                )}
+
+                {isExamens ? (
+                  <LinkCTA
+                    href={CALENDLY_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    theme="dark"
+                    aria-label="Prendre rendez-vous pour un examen de vue"
+                  >
+                    Prendre rendez-vous
+                  </LinkCTA>
+                ) : (
+                  <LinkCTA
+                    to="/contact"
+                    theme="dark"
+                    aria-label={`En savoir plus sur ${service.title}`}
+                  >
+                    Nous contacter
+                  </LinkCTA>
                 )}
               </div>
             </SimpleAnimation>
@@ -361,14 +420,17 @@ export default function ServicesContent() {
                 Nos services en détail
               </h2>
 
-              {/* Service content — photo stack left + card right (HomeServices layout) */}
+              {/* Service content — photo stack left + progress + text right */}
               {shouldAnimate && (
                 <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
                   <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
                     {/* Photo stack — clip-path volet transitions */}
                     <PhotoStack scrollYProgress={scrollYProgress} />
 
-                    {/* Text cards — each scrolls independently alongside photos */}
+                    {/* Progress indicator — vertical dots */}
+                    <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
+
+                    {/* Text — each service scrolls independently */}
                     <div className="relative flex w-[45%] flex-col justify-center">
                       {SERVICES_DATA.map((service, i) => (
                         <ServiceCard
@@ -386,6 +448,26 @@ export default function ServicesContent() {
           </div>
         </div>
       )}
+
+      {/* Bottom gradient dissolve — smooth black → accent for CTA transition */}
+      <div
+        className="pointer-events-none relative z-[1] h-[65vh]"
+        style={{
+          background: [
+            'linear-gradient(to bottom,',
+            'black 0%,',
+            `color-mix(in srgb, ${ACCENT_HEX} 5%, black) 14%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 14%, black) 28%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 28%, black) 42%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 45%, black) 56%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 65%, black) 70%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 80%, black) 82%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 92%, black) 92%,`,
+            `${ACCENT_HEX} 100%)`,
+          ].join(' '),
+        }}
+        aria-hidden="true"
+      />
     </section>
   );
 }

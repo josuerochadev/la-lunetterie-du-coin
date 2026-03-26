@@ -1,25 +1,32 @@
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
+
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 
 export default function ServicesCTA() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'start start'],
+  });
+  // Motif fades in as the section scrolls into view (0 → 0.2 matching AboutCTA)
+  const motifOpacity = useTransform(scrollYProgress, [0.3, 1], [0, 0.2]);
+  const motifScale = useTransform(scrollYProgress, [0, 1], [1, 1.2]);
+
   return (
     <section
+      ref={sectionRef}
       className="relative flex min-h-screen w-full items-center bg-accent"
       data-navbar-theme="dark"
     >
-      {/* Convex curve transition from black services section */}
-      <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-accent"
-        data-navbar-theme="dark"
-        aria-hidden="true"
-      />
-
-      {/* Eye motif — circle frame around content */}
-      <img
+      {/* Eye motif — fades in via scroll, matches AboutCTA intensity (opacity 0.2) */}
+      <m.img
         src="/images/motif-cercle.png"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-10 mix-blend-multiply"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+        style={{ scale: motifScale, opacity: motifOpacity }}
       />
 
       <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
