@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -160,7 +160,45 @@ function PhotoReveal({
 }
 
 /**
- * Service text — editorial free-text style (no card box).
+ * Staggered child — adds a micro-delay to each element within a ServiceCard.
+ * Uses the card's entrance timing to offset opacity + Y for each child.
+ */
+function StaggerChild({
+  children,
+  scrollYProgress,
+  enterStart,
+  enterEnd,
+  exitStart,
+  exitEnd,
+  staggerIndex,
+}: {
+  children: ReactNode;
+  scrollYProgress: MotionValue<number>;
+  enterStart: number;
+  enterEnd: number;
+  exitStart: number;
+  exitEnd: number;
+  staggerIndex: number;
+}) {
+  const STAGGER_OFFSET = 0.008;
+  const offset = staggerIndex * STAGGER_OFFSET;
+
+  const fadeIn = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [0, 1]);
+  const fadeOut = useTransform(scrollYProgress, [exitStart - offset, exitEnd], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+
+  const yRaw = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [20, 0]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
+
+  return (
+    <m.div style={{ opacity, y }} className="will-change-transform">
+      {children}
+    </m.div>
+  );
+}
+
+/**
+ * Service text — editorial free-text style with staggered children.
  * Scrolls up alongside the photo stack.
  */
 function ServiceCard({
@@ -189,7 +227,7 @@ function ServiceCard({
   );
   const y = useSpring(yRaw, SPRING_CONFIG);
 
-  // Opacity: fade in / fade out
+  // Container opacity: fade in / fade out
   const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.08], [0, 1]);
   const fadeOut = useTransform(scrollYProgress, [exitStart, end], [1, 0]);
   const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
@@ -197,74 +235,134 @@ function ServiceCard({
 
   const isExamens = service.id === 'examens';
 
+  // Stagger timing — children enter slightly after the card, exit slightly before
+  const stEnter = start;
+  const stEnterEnd = start + segmentSize * 0.12;
+  const stExitStart = exitStart;
+  const stExitEnd = end;
+
   return (
     <m.div
       className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
       style={{ opacity, y, pointerEvents }}
     >
       {/* Counter */}
-      <span className="mb-4 block text-body-sm font-medium uppercase tracking-widest text-white/30">
-        {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-      </span>
+      <StaggerChild
+        scrollYProgress={scrollYProgress}
+        enterStart={stEnter}
+        enterEnd={stEnterEnd}
+        exitStart={stExitStart}
+        exitEnd={stExitEnd}
+        staggerIndex={0}
+      >
+        <span className="mb-4 block text-body-sm font-medium uppercase tracking-widest text-white/30">
+          {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+        </span>
+      </StaggerChild>
 
       {/* Title — large accent */}
-      <h3
-        className="text-heading mb-5 text-accent"
-        style={{ fontSize: 'clamp(1.8rem, 3vw, 3.2rem)', lineHeight: '1.05' }}
+      <StaggerChild
+        scrollYProgress={scrollYProgress}
+        enterStart={stEnter}
+        enterEnd={stEnterEnd}
+        exitStart={stExitStart}
+        exitEnd={stExitEnd}
+        staggerIndex={1}
       >
-        {service.title}
-      </h3>
+        <h3
+          className="text-heading mb-5 text-accent"
+          style={{ fontSize: 'clamp(1.8rem, 3vw, 3.2rem)', lineHeight: '1.05' }}
+        >
+          {service.title}
+        </h3>
+      </StaggerChild>
 
       {/* Description */}
-      <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-white/60">
-        {service.description}
-      </p>
+      <StaggerChild
+        scrollYProgress={scrollYProgress}
+        enterStart={stEnter}
+        enterEnd={stEnterEnd}
+        exitStart={stExitStart}
+        exitEnd={stExitEnd}
+        staggerIndex={2}
+      >
+        <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-white/60">
+          {service.description}
+        </p>
+      </StaggerChild>
 
-      {/* Details — 2 columns grid for digestibility */}
-      <ul className="mb-8 grid max-w-lg grid-cols-2 gap-x-6 gap-y-2.5">
-        {service.details.slice(0, 6).map((detail, i) => (
-          <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
-            <span
-              className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
-              aria-hidden="true"
-            />
-            <span>{detail}</span>
-          </li>
-        ))}
-      </ul>
+      {/* Details — 2 columns grid */}
+      <StaggerChild
+        scrollYProgress={scrollYProgress}
+        enterStart={stEnter}
+        enterEnd={stEnterEnd}
+        exitStart={stExitStart}
+        exitEnd={stExitEnd}
+        staggerIndex={3}
+      >
+        <ul className="mb-8 grid max-w-lg grid-cols-2 gap-x-6 gap-y-2.5">
+          {service.details.slice(0, 6).map((detail, i) => (
+            <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
+              <span
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                aria-hidden="true"
+              />
+              <span>{detail}</span>
+            </li>
+          ))}
+        </ul>
+      </StaggerChild>
 
       {/* Examens: conditions */}
       {isExamens && (
-        <div className="mb-8 max-w-lg border-l-2 border-accent/30 pl-5">
-          <h4 className="mb-2 text-body-sm font-medium text-white/50">
-            Conditions pour un examen en magasin
-          </h4>
-          <ul className="space-y-1 text-body-sm text-white/35">
-            <li>
-              Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
-            </li>
-            <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-            <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-          </ul>
-        </div>
+        <StaggerChild
+          scrollYProgress={scrollYProgress}
+          enterStart={stEnter}
+          enterEnd={stEnterEnd}
+          exitStart={stExitStart}
+          exitEnd={stExitEnd}
+          staggerIndex={4}
+        >
+          <div className="mb-8 max-w-lg border-l-2 border-accent/30 pl-5">
+            <h4 className="mb-2 text-body-sm font-medium text-white/50">
+              Conditions pour un examen en magasin
+            </h4>
+            <ul className="space-y-1 text-body-sm text-white/35">
+              <li>
+                Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+              </li>
+              <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+              <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+            </ul>
+          </div>
+        </StaggerChild>
       )}
 
       {/* CTA */}
-      {isExamens ? (
-        <LinkCTA
-          href={CALENDLY_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          theme="dark"
-          aria-label="Prendre rendez-vous pour un examen de vue"
-        >
-          Prendre rendez-vous
-        </LinkCTA>
-      ) : (
-        <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
-          Nous contacter
-        </LinkCTA>
-      )}
+      <StaggerChild
+        scrollYProgress={scrollYProgress}
+        enterStart={stEnter}
+        enterEnd={stEnterEnd}
+        exitStart={stExitStart}
+        exitEnd={stExitEnd}
+        staggerIndex={isExamens ? 5 : 4}
+      >
+        {isExamens ? (
+          <LinkCTA
+            href={CALENDLY_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            theme="dark"
+            aria-label="Prendre rendez-vous pour un examen de vue"
+          >
+            Prendre rendez-vous
+          </LinkCTA>
+        ) : (
+          <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
+            Nous contacter
+          </LinkCTA>
+        )}
+      </StaggerChild>
     </m.div>
   );
 }
@@ -422,27 +520,29 @@ export default function ServicesContent() {
 
               {/* Service content — photo stack left + progress + text right */}
               {shouldAnimate && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
-                  <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
-                    {/* Photo stack — clip-path volet transitions */}
-                    <PhotoStack scrollYProgress={scrollYProgress} />
+                <>
+                  <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                    <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                      {/* Photo stack — clip-path volet transitions */}
+                      <PhotoStack scrollYProgress={scrollYProgress} />
 
-                    {/* Progress indicator — vertical dots */}
-                    <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
+                      {/* Progress indicator — vertical dots */}
+                      <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
 
-                    {/* Text — each service scrolls independently */}
-                    <div className="relative flex w-[45%] flex-col justify-center">
-                      {SERVICES_DATA.map((service, i) => (
-                        <ServiceCard
-                          key={service.id}
-                          service={service}
-                          index={i}
-                          scrollYProgress={scrollYProgress}
-                        />
-                      ))}
+                      {/* Text — each service scrolls independently */}
+                      <div className="relative flex w-[45%] flex-col justify-center">
+                        {SERVICES_DATA.map((service, i) => (
+                          <ServiceCard
+                            key={service.id}
+                            service={service}
+                            index={i}
+                            scrollYProgress={scrollYProgress}
+                          />
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </>
               )}
             </div>
           </div>
