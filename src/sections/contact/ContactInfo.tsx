@@ -20,7 +20,7 @@ export default function ContactInfo() {
       <div className="mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-5xl">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 className="heading-section mb-12 text-center text-white">Informations pratiques</h2>
+            <h2 className="heading-section mb-12 text-center text-white">Les infos utiles</h2>
           </SimpleAnimation>
 
           <div className="grid gap-8 md:grid-cols-2 md:gap-12">

@@ -79,12 +79,6 @@ export default function ContactHero() {
                   nous voir
                 </h1>
               </SimpleAnimation>
-
-              <SimpleAnimation type="fade" delay={150}>
-                <p className="mt-6 text-body-sm font-medium uppercase tracking-widest text-black/30">
-                  Une question ? Besoin d&apos;un conseil ?
-                </p>
-              </SimpleAnimation>
             </div>
           </div>
         </div>

@@ -3,105 +3,104 @@ import Car from 'lucide-react/dist/esm/icons/car';
 import Train from 'lucide-react/dist/esm/icons/train';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
 import LinkCTA from '@/components/common/LinkCTA';
 
-/**
- * ContactLocation - Plan d'accès et comment rejoindre la boutique
- */
 export default function ContactLocation() {
   return (
-    <SectionContainer className="bg-background py-section" aria-labelledby="comment-rejoindre">
-      <div className="mx-auto max-w-container px-container-x">
-        <SimpleAnimation type="slide-up" delay={0}>
-          <h2 id="comment-rejoindre" className="heading-section mb-12 text-center">
-            Comment nous rejoindre
-          </h2>
-        </SimpleAnimation>
+    <section id="localisation" className="relative" data-navbar-theme="light">
+      {/* Full-screen shop photo with overlay */}
+      <div className="relative min-h-screen w-full">
+        <img
+          src="/images/contact-informations-boutique-outside.jpg"
+          alt="Façade de La Lunetterie du Coin"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="lazy"
+        />
+        {/* Dark overlay for text readability */}
+        <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
 
-        <div className="mx-auto max-w-6xl">
-          {/* Layout 50/50 : Photo gauche - Informations droite */}
-          <SimpleAnimation type="fade" delay={100}>
-            <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-              {/* Photo de la boutique */}
-              <div className="relative w-full">
-                <div className="relative aspect-[2/3] w-full overflow-hidden">
-                  <img
-                    src="/images/contact-informations-boutique-outside.jpg"
-                    alt="Façade de La Lunetterie du Coin"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
+        <div className="relative z-10 flex min-h-screen items-center">
+          <div className="mx-auto max-w-container px-container-x py-section">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
+            </SimpleAnimation>
 
-              {/* Informations d'accès */}
-              <div className="space-y-8">
-                {/* En voiture */}
-                <div className="border-t border-black/10 pt-6">
+            <div className="mx-auto grid max-w-4xl gap-8 md:grid-cols-2 md:gap-12">
+              {/* En voiture */}
+              <SimpleAnimation type="slide-right" delay={100}>
+                <div className="border-t border-white/20 pt-6">
                   <div className="mb-4 flex items-center gap-2">
                     <Car className="h-5 w-5 text-accent" aria-hidden="true" />
-                    <h3 className="heading-subsection">En voiture</h3>
+                    <h3 className="heading-subsection text-white">En voiture</h3>
                   </div>
-                  <div className="space-y-2 text-body text-black/50">
+                  <div className="space-y-2 text-body text-white/60">
                     <p>
-                      <span className="font-medium text-text">Parking payant</span> : Parking Halles
-                      et Opéra Broglie (environ 10 min à pied)
+                      <span className="font-medium text-white/80">Parking payant</span> : Parking
+                      Halles et Opéra Broglie (environ 10 min à pied)
                     </p>
                   </div>
                 </div>
+              </SimpleAnimation>
 
-                {/* En transports en commun */}
-                <div className="border-t border-black/10 pt-6">
+              {/* En transports en commun */}
+              <SimpleAnimation type="slide-left" delay={150}>
+                <div className="border-t border-white/20 pt-6">
                   <div className="mb-4 flex items-center gap-2">
                     <Train className="h-5 w-5 text-accent" aria-hidden="true" />
-                    <h3 className="heading-subsection">En transports</h3>
+                    <h3 className="heading-subsection text-white">En transports</h3>
                   </div>
-                  <div className="space-y-2 text-body text-black/50">
+                  <div className="space-y-2 text-body text-white/60">
                     <p>
-                      <span className="font-medium text-text">Tram B, C, F</span> : arrêt Broglie (7
-                      min à pied)
+                      <span className="font-medium text-white/80">Tram B, C, F</span> : arrêt
+                      Broglie (7 min à pied)
                     </p>
                     <p>
-                      <span className="font-medium text-text">Tram A, D</span> : arrêt Ancienne
+                      <span className="font-medium text-white/80">Tram A, D</span> : arrêt Ancienne
                       Synagogue / Les Halles (7 min à pied)
                     </p>
                     <p>
-                      <span className="font-medium text-text">Bus C3</span> : arrêt Faubourg de
+                      <span className="font-medium text-white/80">Bus C3</span> : arrêt Faubourg de
                       Pierre (2 min à pied)
                     </p>
                     <p>
-                      <span className="font-medium text-text">Bus C6</span> : arrêt Tribunal (5 min
-                      à pied)
+                      <span className="font-medium text-white/80">Bus C6</span> : arrêt Tribunal (5
+                      min à pied)
                     </p>
-                    <p className="pt-2">À 15 minutes à pied de la gare centrale de Strasbourg</p>
+                    <p className="pt-2 text-white/40">
+                      À 15 minutes à pied de la gare centrale de Strasbourg
+                    </p>
                   </div>
                 </div>
+              </SimpleAnimation>
 
-                {/* Accessibilité PMR */}
-                <div className="border-t border-black/10 pt-6">
-                  <p className="text-body text-black/50">
-                    <span className="font-medium text-text">Accessibilité :</span> Le magasin est
-                    accessible aux personnes à mobilité réduite
+              {/* Accessibilité */}
+              <SimpleAnimation type="fade" delay={200}>
+                <div className="border-t border-white/20 pt-6">
+                  <p className="text-body text-white/60">
+                    <span className="font-medium text-white/80">Accessibilité :</span> Le magasin
+                    est accessible aux personnes à mobilité réduite
                   </p>
                 </div>
+              </SimpleAnimation>
 
-                {/* Bouton Google Maps */}
-                <div className="pt-4">
+              {/* Google Maps */}
+              <SimpleAnimation type="fade" delay={250}>
+                <div className="flex items-end border-t border-white/20 pt-6">
                   <LinkCTA
                     href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                     target="_blank"
                     rel="noopener noreferrer"
                     icon={MapPin}
+                    theme="dark"
                   >
                     Voir sur Google Maps
                   </LinkCTA>
                 </div>
-              </div>
+              </SimpleAnimation>
             </div>
-          </SimpleAnimation>
+          </div>
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 }

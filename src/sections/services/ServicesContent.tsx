@@ -2,7 +2,6 @@ import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
@@ -13,74 +12,112 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = SERVICES_DATA.length;
 
 // Scroll budget
-const SERVICES_START = 0.05;
-const SERVICES_END = 0.95;
+const SERVICES_START = 0.06;
+const SERVICES_END = 0.94;
 
 // ---------------------------------------------------------------------------
-// Desktop sub-components
+// Desktop sub-components — PhotoStack pattern from HomeServices
 // ---------------------------------------------------------------------------
 
 /**
- * Photo for a single service — clips from bottom to top, then clips out when next arrives.
+ * Photo stack — all photos layered in one container, clipPath volet transitions.
+ * Container enters from below, exits at end. Photos reveal bottom-to-top.
  */
-function ServicePhoto({
-  service,
-  index,
-  scrollYProgress,
-}: {
-  service: ServiceData;
-  index: number;
-  scrollYProgress: MotionValue<number>;
-}) {
+function PhotoStack({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const range = SERVICES_END - SERVICES_START;
   const segmentSize = range / SERVICE_COUNT;
-  const start = SERVICES_START + index * segmentSize;
 
-  // Reveal: clipPath from bottom
-  const revealStart = start;
-  const revealEnd = start + segmentSize * 0.25;
-  const clipRaw = useTransform(scrollYProgress, [revealStart, revealEnd], [100, 0]);
-  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
-  const clipPath = useTransform(clipSmooth, (v: number) => `inset(${v}% 0 0 0)`);
+  // Shared Y: container enters from below, settles, exits at end
+  const firstStart = SERVICES_START;
+  const enterEnd = firstStart + segmentSize * 0.2;
+  const lastEnd = SERVICES_START + range;
+  const exitStart = lastEnd - segmentSize * 0.22;
 
-  // Fade out at end of segment (except last service which fades at section end)
-  const fadeOutStart = start + segmentSize * 0.8;
-  const fadeOutEnd = start + segmentSize;
-  const opacity =
-    index < SERVICE_COUNT - 1
-      ? // eslint-disable-next-line react-hooks/rules-of-hooks
-        useTransform(
-          scrollYProgress,
-          [revealStart, revealEnd, fadeOutStart, fadeOutEnd],
-          [0, 1, 1, 0],
-        )
-      : // eslint-disable-next-line react-hooks/rules-of-hooks
-        useTransform(scrollYProgress, [revealStart, revealEnd], [0, 1]);
+  const yRaw = useTransform(
+    scrollYProgress,
+    [firstStart, enterEnd, exitStart, lastEnd],
+    ['55vh', '0vh', '0vh', '-55vh'],
+  );
+  const y = useSpring(yRaw, SPRING_CONFIG);
 
-  // Alternating position: even = left, odd = right
-  const isLeft = index % 2 === 0;
+  // Fade in first photo, fade out last photo
+  const entranceFade = useTransform(
+    scrollYProgress,
+    [firstStart, firstStart + segmentSize * 0.08],
+    [0, 1],
+  );
+  const exitFade = useTransform(scrollYProgress, [exitStart, lastEnd], [1, 0]);
+  const containerOpacity = useTransform([entranceFade, exitFade] as const, ([a, b]: number[]) =>
+    Math.min(a, b),
+  );
 
   return (
     <m.div
-      className={`absolute top-1/2 aspect-[3/4] w-[42%] -translate-y-1/2 overflow-hidden rounded-sm ${
-        isLeft ? 'left-0' : 'right-0'
-      }`}
-      style={{ clipPath, opacity }}
+      className="relative aspect-[3/4] w-[45%] shrink-0 overflow-hidden rounded-sm"
+      style={{ y, opacity: containerOpacity }}
     >
+      {/* Base photo (service 0) — always visible underneath */}
       <img
-        src={service.image}
-        alt={service.title}
-        className="h-full w-full object-cover"
-        loading={index === 0 ? 'eager' : 'lazy'}
+        src={SERVICES_DATA[0].image}
+        alt={SERVICES_DATA[0].title}
+        className="absolute inset-0 h-full w-full object-cover"
+        loading="eager"
       />
+
+      {/* Photos 1+ reveal via clipPath slide-up (volet effect) */}
+      {SERVICES_DATA.slice(1).map((service, i) => {
+        const idx = i + 1;
+        const revealStart = SERVICES_START + idx * segmentSize;
+        const revealEnd = revealStart + segmentSize * 0.3;
+
+        return (
+          <PhotoReveal
+            key={service.id}
+            src={service.image}
+            alt={service.title}
+            scrollYProgress={scrollYProgress}
+            revealStart={revealStart}
+            revealEnd={revealEnd}
+          />
+        );
+      })}
     </m.div>
   );
 }
 
 /**
- * Text block for a single service — scrolls up alongside the photo.
+ * Single photo that reveals from bottom to top via clipPath.
+ * Once revealed, stays visible (stacks on top of previous photos).
  */
-function ServiceTextBlock({
+function PhotoReveal({
+  src,
+  alt,
+  scrollYProgress,
+  revealStart,
+  revealEnd,
+}: {
+  src: string;
+  alt: string;
+  scrollYProgress: MotionValue<number>;
+  revealStart: number;
+  revealEnd: number;
+}) {
+  const clipRaw = useTransform(scrollYProgress, [revealStart, revealEnd], [100, 0]);
+  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
+  const clipPath = useTransform(clipSmooth, (v: number) => `inset(${v}% 0 0 0)`);
+
+  return (
+    <m.div className="absolute inset-0" style={{ clipPath }}>
+      <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+    </m.div>
+  );
+}
+
+/**
+ * Service text card — HomeOffers card style with accent bar.
+ * Scrolls up alongside the photo stack.
+ */
+function ServiceCard({
   service,
   index,
   scrollYProgress,
@@ -94,59 +131,54 @@ function ServiceTextBlock({
   const start = SERVICES_START + index * segmentSize;
 
   const enterEnd = start + segmentSize * 0.2;
-  const textScrollEnd = start + segmentSize * 0.7;
-  const exitStart = start + segmentSize * 0.75;
+  const textScrollEnd = start + segmentSize * 0.75;
+  const exitStart = start + segmentSize * 0.78;
   const end = start + segmentSize;
 
-  // Y movement: enter from below → settle → exit up
+  // Y: enter from below → scroll up alongside photo → exit up
   const yRaw = useTransform(
     scrollYProgress,
     [start, enterEnd, textScrollEnd, exitStart, end],
-    ['55vh', '0vh', '0vh', '0vh', '-55vh'],
+    ['65vh', '18vh', '-18vh', '-18vh', '-65vh'],
   );
   const y = useSpring(yRaw, SPRING_CONFIG);
 
-  // Opacity
-  const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.1], [0, 1]);
+  // Opacity: fade in / fade out
+  const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.08], [0, 1]);
   const fadeOut = useTransform(scrollYProgress, [exitStart, end], [1, 0]);
   const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
   const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
-  // Title scroll reveal range
-  const titleRevealStart = start;
-  const titleRevealEnd = start + segmentSize * 0.2;
-
-  // Alternating position: even = text right, odd = text left
-  const isLeft = index % 2 === 0;
   const isExamens = service.id === 'examens';
 
   return (
     <m.div
-      className={`absolute inset-0 flex items-center ${isLeft ? 'justify-end' : 'justify-start'}`}
+      className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
       style={{ opacity, y, pointerEvents }}
     >
-      <div className={`w-[48%] ${isLeft ? '' : ''}`}>
-        <span className="mb-4 block text-body-sm font-medium uppercase tracking-widest text-white/30">
-          {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-        </span>
+      {/* Card — editorial cutout with accent bar (HomeOffers style) */}
+      <div className="relative overflow-hidden rounded-r-2xl bg-black/80 shadow-2xl backdrop-blur-md">
+        {/* Accent bar — left edge */}
+        <div className="absolute bottom-0 left-0 top-0 w-1.5 bg-accent" aria-hidden="true" />
 
-        <ScrollWordReveal
-          as="h3"
-          scrollYProgress={scrollYProgress}
-          revealStart={titleRevealStart}
-          revealEnd={titleRevealEnd}
-          className="text-subtitle mb-5 text-title-sm text-white"
-        >
-          {service.title}
-        </ScrollWordReveal>
+        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10">
+          {/* Counter */}
+          <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-white/30">
+            {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+          </span>
 
-        <p className="mb-6 max-w-lg text-body-lg text-white/50">{service.description}</p>
+          {/* Title */}
+          <h3 className="text-subtitle mb-4 text-title-sm text-accent">{service.title}</h3>
 
-        {/* Details list */}
-        <div className="mb-6 border border-white/10 p-5">
-          <ul className="space-y-2">
-            {service.details.map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body-sm text-white/40">
+          {/* Description */}
+          <p className="mb-6 max-w-md text-body leading-relaxed text-white/60">
+            {service.description}
+          </p>
+
+          {/* Details — top 4 only on desktop to stay digestible */}
+          <ul className="mb-6 space-y-2">
+            {service.details.slice(0, 4).map((detail, i) => (
+              <li key={i} className="flex gap-3 text-body text-white/40">
                 <span className="text-accent" aria-hidden="true">
                   •
                 </span>
@@ -154,20 +186,40 @@ function ServiceTextBlock({
               </li>
             ))}
           </ul>
-        </div>
 
-        {/* Calendly CTA for examens */}
-        {isExamens && (
-          <LinkCTA
-            href={CALENDLY_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            theme="dark"
-            aria-label="Prendre rendez-vous pour un examen de vue"
-          >
-            Prendre rendez-vous
-          </LinkCTA>
-        )}
+          {/* Examens: conditions + Calendly CTA */}
+          {isExamens && (
+            <div className="mb-6 border-l-4 border-accent/30 bg-accent/5 p-4">
+              <h4 className="mb-2 text-body-sm font-medium text-white/60">
+                Conditions pour un examen en magasin
+              </h4>
+              <ul className="space-y-1 text-body-sm text-white/40">
+                <li>
+                  • Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                </li>
+                <li>• Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                <li>• Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+              </ul>
+            </div>
+          )}
+
+          {/* CTA */}
+          {isExamens ? (
+            <LinkCTA
+              href={CALENDLY_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              theme="dark"
+              aria-label="Prendre rendez-vous pour un examen de vue"
+            >
+              Prendre rendez-vous
+            </LinkCTA>
+          ) : (
+            <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
+              Nous contacter
+            </LinkCTA>
+          )}
+        </div>
       </div>
     </m.div>
   );
@@ -198,12 +250,12 @@ function MobileServiceList() {
                   {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
                 </span>
                 <h3 className="text-subtitle text-title-sm text-white">{service.title}</h3>
-                <p className="text-body-lg text-white/50">{service.description}</p>
+                <p className="text-body leading-relaxed text-white/60">{service.description}</p>
 
                 <div className="border border-white/10 p-5">
                   <ul className="space-y-2">
                     {service.details.map((detail, i) => (
-                      <li key={i} className="flex gap-3 text-body-sm text-white/40">
+                      <li key={i} className="flex gap-3 text-body text-white/40">
                         <span className="text-accent" aria-hidden="true">
                           •
                         </span>
@@ -214,15 +266,29 @@ function MobileServiceList() {
                 </div>
 
                 {isExamens && (
-                  <LinkCTA
-                    href={CALENDLY_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    theme="dark"
-                    aria-label="Prendre rendez-vous pour un examen de vue"
-                  >
-                    Prendre rendez-vous
-                  </LinkCTA>
+                  <>
+                    <div className="border-l-4 border-accent/30 bg-accent/5 p-4">
+                      <h4 className="mb-2 text-body-sm font-medium text-white/60">
+                        Conditions pour un examen en magasin
+                      </h4>
+                      <ul className="space-y-1 text-body-sm text-white/40">
+                        <li>
+                          • Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                        </li>
+                        <li>• Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                        <li>• Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+                      </ul>
+                    </div>
+                    <LinkCTA
+                      href={CALENDLY_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      theme="dark"
+                      aria-label="Prendre rendez-vous pour un examen de vue"
+                    >
+                      Prendre rendez-vous
+                    </LinkCTA>
+                  </>
                 )}
               </div>
             </SimpleAnimation>
@@ -255,10 +321,9 @@ export default function ServicesContent() {
       data-navbar-theme="light"
       className="relative bg-black"
     >
-      {/* Convex curve transition from yellow hero */}
+      {/* Concave curve — accent ellipse masks the top, matching hero color (like HomeServices) */}
       <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
-        data-navbar-theme="light"
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
         aria-hidden="true"
       />
 
@@ -282,31 +347,35 @@ export default function ServicesContent() {
       {/* Desktop: Scrollytelling */}
       {isLg && (
         <div ref={sectionRef} className="relative">
-          <div style={{ height: `${SERVICE_COUNT * 180}vh` }}>
+          {/* Scroll height: per-service scroll + outro phase */}
+          <div style={{ height: `${(SERVICE_COUNT * 2 + 2) * 100}vh` }}>
+            {/* Sticky viewport */}
             <div className="sticky top-0 h-screen overflow-hidden">
-              <div className="absolute inset-0 z-10 px-container-x">
-                <div className="relative mx-auto h-full max-w-container">
-                  {/* Photos — alternating left/right with clipPath reveal */}
-                  {SERVICES_DATA.map((service, i) => (
-                    <ServicePhoto
-                      key={service.id}
-                      service={service}
-                      index={i}
-                      scrollYProgress={scrollYProgress}
-                    />
-                  ))}
+              <h2 id="services-content-title" className="sr-only">
+                Nos services en détail
+              </h2>
 
-                  {/* Text blocks — opposite side of photos */}
-                  {SERVICES_DATA.map((service, i) => (
-                    <ServiceTextBlock
-                      key={service.id}
-                      service={service}
-                      index={i}
-                      scrollYProgress={scrollYProgress}
-                    />
-                  ))}
+              {/* Service content — photo stack left + card right (HomeServices layout) */}
+              {shouldAnimate && (
+                <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                  <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                    {/* Photo stack — clip-path volet transitions */}
+                    <PhotoStack scrollYProgress={scrollYProgress} />
+
+                    {/* Text cards — each scrolls independently alongside photos */}
+                    <div className="relative flex w-[45%] flex-col justify-center">
+                      {SERVICES_DATA.map((service, i) => (
+                        <ServiceCard
+                          key={service.id}
+                          service={service}
+                          index={i}
+                          scrollYProgress={scrollYProgress}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </div>

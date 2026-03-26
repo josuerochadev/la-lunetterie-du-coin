@@ -29,16 +29,7 @@ function HeroDesktop() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
           >
-            Une expertise complète pour prendre soin de votre vue, avec style et conscience
-          </m.p>
-
-          <m.p
-            className="mt-6 text-body-sm font-medium uppercase tracking-widest text-black/30"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            5 services — 1 engagement
+            Vos yeux méritent le meilleur. On s&apos;en occupe.
           </m.p>
         </div>
       </div>
@@ -69,13 +60,7 @@ export default function ServicesHero() {
 
               <SimpleAnimation type="slide-up" delay={150}>
                 <p className="mt-6 max-w-2xl text-body-lg text-black/50">
-                  Une expertise complète pour prendre soin de votre vue, avec style et conscience
-                </p>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="fade" delay={300}>
-                <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-black/30">
-                  5 services — 1 engagement
+                  Vos yeux méritent le meilleur. On s&apos;en occupe.
                 </p>
               </SimpleAnimation>
             </div>

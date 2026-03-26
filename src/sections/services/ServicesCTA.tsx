@@ -1,5 +1,6 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
+import EyePattern from '@/components/common/EyePattern';
 
 export default function ServicesCTA() {
   return (
@@ -14,7 +15,9 @@ export default function ServicesCTA() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto max-w-container px-container-x py-section">
+      <EyePattern variant="jaune" opacity={0.03} />
+
+      <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-4xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2
@@ -26,15 +29,13 @@ export default function ServicesCTA() {
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mt-8 text-body-lg text-black/50">
-              Découvrez nos offres ou venez nous rencontrer en boutique
-            </p>
+            <p className="mt-8 text-body-lg text-black/50">Passez nous voir, le reste suivra.</p>
           </SimpleAnimation>
 
           <SimpleAnimation type="fade" delay={200}>
             <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row">
               <LinkCTA to="/offres" theme="accent">
-                Découvrir nos offres
+                Voir nos offres
               </LinkCTA>
               <LinkCTA to="/contact" theme="accent">
                 Nous contacter

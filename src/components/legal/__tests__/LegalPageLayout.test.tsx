@@ -11,27 +11,35 @@ vi.mock('@/components/common/Layout', () => ({
   ),
 }));
 
-vi.mock('@/components/common/SectionContainer', () => ({
-  default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="section-container" className={className}>
+vi.mock('@/components/common/StickySection', () => ({
+  default: ({ children, zIndex }: { children: React.ReactNode; zIndex: number }) => (
+    <div data-testid="sticky-section" data-z-index={zIndex}>
       {children}
     </div>
   ),
 }));
 
-// PageHeader is no longer used in the new design
+vi.mock('@/components/common/EyePattern', () => ({
+  default: () => <div data-testid="eye-pattern" />,
+}));
 
 vi.mock('@/components/motion/SimpleAnimation', () => ({
-  SimpleAnimation: ({ children, type, delay, immediate }: any) => (
-    <div
-      data-testid="simple-animation"
-      data-type={type}
-      data-delay={delay}
-      data-immediate={immediate}
-    >
+  SimpleAnimation: ({ children, type, delay }: any) => (
+    <div data-testid="simple-animation" data-type={type} data-delay={delay}>
       {children}
     </div>
   ),
+}));
+
+vi.mock('@/hooks/usePrefersReducedMotion', () => ({
+  usePrefersReducedMotion: () => true, // Always use reduced motion in tests
+}));
+
+vi.mock('framer-motion', () => ({
+  m: {
+    h1: ({ children, ...props }: any) => <h1 {...props}>{children}</h1>,
+    p: ({ children, ...props }: any) => <p {...props}>{children}</p>,
+  },
 }));
 
 vi.mock('@/seo/Seo', () => ({
@@ -67,8 +75,8 @@ describe('LegalPageLayout', () => {
 
       expect(screen.getByTestId('seo')).toBeInTheDocument();
       expect(screen.getByTestId('layout')).toBeInTheDocument();
-      expect(screen.getAllByTestId('section-container')).toHaveLength(2); // Hero + Content
-      expect(screen.getByRole('heading', { name: defaultProps.title })).toBeInTheDocument();
+      expect(screen.getAllByTestId('sticky-section')).toHaveLength(2); // Hero + Content
+      expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(screen.getByTestId('test-content')).toBeInTheDocument();
     });
 
@@ -114,7 +122,7 @@ describe('LegalPageLayout', () => {
       render(<LegalPageLayout {...defaultProps} />);
 
       const heading = screen.getByRole('heading', { level: 1 });
-      expect(heading).toHaveTextContent(defaultProps.title);
+      expect(heading).toHaveTextContent(defaultProps.title.toUpperCase());
     });
 
     it('should handle different title formats', () => {
@@ -123,14 +131,13 @@ describe('LegalPageLayout', () => {
         'Politique de Confidentialité',
         'Conditions Générales de Vente',
         'Very Long Legal Page Title That Might Wrap',
-        'Title With Special Characters: & <> "',
       ];
 
       titles.forEach((title) => {
         const { unmount } = render(<LegalPageLayout {...defaultProps} title={title} />);
 
         const heading = screen.getByRole('heading', { level: 1 });
-        expect(heading).toHaveTextContent(title);
+        expect(heading).toHaveTextContent(title.toUpperCase());
 
         unmount();
       });
@@ -157,34 +164,18 @@ describe('LegalPageLayout', () => {
       dateFormats.forEach((date) => {
         const { unmount } = render(<LegalPageLayout {...defaultProps} lastUpdated={date} />);
 
-        // Just check that the date appears somewhere
         expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
         unmount();
       });
     });
-
-    it('should wrap last updated in animation', () => {
-      render(<LegalPageLayout {...defaultProps} lastUpdated="Test Date" />);
-
-      const animations = screen.getAllByTestId('simple-animation');
-      const heroAnimation = animations.find((anim) =>
-        anim.textContent?.includes('Dernière mise à jour'),
-      );
-
-      expect(heroAnimation).toBeInTheDocument();
-      expect(heroAnimation).toHaveAttribute('data-type', 'slide-up');
-      expect(heroAnimation).toHaveAttribute('data-delay', '0');
-    });
   });
 
   describe('layout structure', () => {
-    it('should have two section containers (hero + content)', () => {
+    it('should have two sticky sections (hero + content)', () => {
       render(<LegalPageLayout {...defaultProps} />);
 
-      const sectionContainers = screen.getAllByTestId('section-container');
-      expect(sectionContainers).toHaveLength(2);
-      expect(sectionContainers[0]).toHaveClass('bg-background', 'py-section');
-      expect(sectionContainers[1]).toHaveClass('bg-background', 'py-section');
+      const stickySections = screen.getAllByTestId('sticky-section');
+      expect(stickySections).toHaveLength(2);
     });
 
     it('should have semantic article structure', () => {
@@ -194,6 +185,14 @@ describe('LegalPageLayout', () => {
       expect(article).toBeInTheDocument();
       expect(article).toHaveClass('mx-auto', 'max-w-content-readable', 'space-y-16');
     });
+
+    it('should have correct z-index ordering', () => {
+      render(<LegalPageLayout {...defaultProps} />);
+
+      const stickySections = screen.getAllByTestId('sticky-section');
+      expect(stickySections[0]).toHaveAttribute('data-z-index', '11');
+      expect(stickySections[1]).toHaveAttribute('data-z-index', '12');
+    });
   });
 
   describe('animations setup', () => {
@@ -202,26 +201,12 @@ describe('LegalPageLayout', () => {
 
       const animations = screen.getAllByTestId('simple-animation');
       const titleAnimation = animations.find((anim) =>
-        anim.textContent?.includes(defaultProps.title),
+        anim.textContent?.includes(defaultProps.title.toUpperCase()),
       );
 
       expect(titleAnimation).toBeInTheDocument();
       expect(titleAnimation).toHaveAttribute('data-type', 'slide-up');
       expect(titleAnimation).toHaveAttribute('data-delay', '0');
-    });
-
-    it('should handle animations when lastUpdated is provided', () => {
-      render(<LegalPageLayout {...defaultProps} lastUpdated="Test Date" />);
-
-      const animations = screen.getAllByTestId('simple-animation');
-      expect(animations.length).toBe(1); // Single hero animation containing both title and lastUpdated
-    });
-
-    it('should handle animations when no lastUpdated provided', () => {
-      render(<LegalPageLayout {...defaultProps} />);
-
-      const animations = screen.getAllByTestId('simple-animation');
-      expect(animations.length).toBe(1); // Only title animation
     });
   });
 
@@ -273,7 +258,6 @@ describe('LegalPageLayout', () => {
       const article = document.querySelector('article');
       expect(article).toBeInTheDocument();
 
-      // Should contain the h1 heading
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
     });
 
@@ -282,6 +266,13 @@ describe('LegalPageLayout', () => {
 
       expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
       expect(screen.getByText(/Test Date/)).toBeInTheDocument();
+    });
+
+    it('should have data-navbar-theme attributes', () => {
+      render(<LegalPageLayout {...defaultProps} />);
+
+      const sections = document.querySelectorAll('[data-navbar-theme]');
+      expect(sections.length).toBeGreaterThanOrEqual(2);
     });
   });
 
@@ -314,7 +305,7 @@ describe('LegalPageLayout', () => {
 
       render(<LegalPageLayout {...defaultProps} title={longTitle} />);
 
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(longTitle);
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(longTitle.toUpperCase());
     });
 
     it('should handle special characters in props', () => {
@@ -338,14 +329,12 @@ describe('LegalPageLayout', () => {
         </LegalPageLayout>,
       );
 
-      // All major components should be present
       expect(screen.getByTestId('seo')).toBeInTheDocument();
       expect(screen.getByTestId('layout')).toBeInTheDocument();
-      expect(screen.getAllByTestId('section-container')).toHaveLength(2);
+      expect(screen.getAllByTestId('sticky-section')).toHaveLength(2);
       expect(screen.getByRole('heading', { level: 1 })).toBeInTheDocument();
       expect(screen.getByTestId('integration-test')).toBeInTheDocument();
 
-      // Last updated should be shown
       expect(screen.getByText(/Dernière mise à jour/)).toBeInTheDocument();
     });
   });

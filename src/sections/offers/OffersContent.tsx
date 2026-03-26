@@ -101,36 +101,22 @@ function OfferCard({
 
           <p className="mt-5 max-w-md text-body-lg text-white/50">{offer.description}</p>
 
-          {/* Details */}
-          <div className="mt-6 border border-white/10 p-5">
-            <ul className="space-y-2">
-              {offer.details.map((detail, i) => (
-                <li key={i} className="flex gap-3 text-body-sm text-white/40">
-                  <span className="text-accent" aria-hidden="true">
-                    •
-                  </span>
-                  <span>{detail}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Conditions */}
-          <div className="mt-4 border-l-4 border-accent/30 bg-accent/5 p-4">
-            <h4 className="mb-2 text-body-sm font-medium text-white/60">Conditions</h4>
-            <ul className="space-y-1">
-              {offer.conditions.map((condition, i) => (
-                <li key={i} className="text-body-sm text-white/30">
-                  {condition}
-                </li>
-              ))}
-            </ul>
-          </div>
+          {/* Key highlights — first 3 details only */}
+          <ul className="mt-6 space-y-2">
+            {offer.details.slice(0, 3).map((detail, i) => (
+              <li key={i} className="flex gap-3 text-body-sm text-white/40">
+                <span className="text-accent" aria-hidden="true">
+                  •
+                </span>
+                <span>{detail}</span>
+              </li>
+            ))}
+          </ul>
 
           <LinkCTA
             to="/contact"
             theme="dark"
-            className="mt-6"
+            className="mt-8"
             aria-label={`Profiter de ${offer.title}`}
           >
             En profiter
@@ -308,13 +294,6 @@ export default function OffersContent() {
 
   return (
     <section id="offers-content" className="relative bg-black" data-navbar-theme="light">
-      {/* Convex curve transition from black hero */}
-      <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
-        data-navbar-theme="light"
-        aria-hidden="true"
-      />
-
       {/* Desktop */}
       {!prefersReducedMotion && isLg && <OffersDesktop />}
 

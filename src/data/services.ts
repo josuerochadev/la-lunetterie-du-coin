@@ -23,7 +23,7 @@ export const SERVICES_DATA: ServiceData[] = [
     id: 'neuves',
     title: 'Lunettes neuves',
     image: '/images/services-new-glasses-sun.jpg',
-    description: 'Une sélection pointue de créateurs indépendants et de marques iconiques.',
+    description: 'Créateurs indépendants, marques pointues. Que du style.',
     details: [
       'Large choix de montures contemporaines et intemporelles',
       'Marques indépendantes et créateurs locaux',
@@ -38,8 +38,7 @@ export const SERVICES_DATA: ServiceData[] = [
     id: 'occasion',
     title: "Lunettes d'occasion",
     image: '/images/services-second-hand-glasses.jpg',
-    description:
-      'Des montures de seconde main restaurées avec soin, pour un style unique à petit prix.',
+    description: "Restaurées avec soin, vendues à petit prix. L'occasion fait le style.",
     details: [
       'Montures vintage authentiques',
       'Modèles récents à prix réduits',
@@ -55,7 +54,7 @@ export const SERVICES_DATA: ServiceData[] = [
     title: 'Examens de vue',
     image: '/images/services-exams-machine.png',
     description:
-      "Contrôle visuel complet réalisé par Romain, opticien diplômé avec 10 ans d'expérience.",
+      'Un contrôle complet par Romain, opticien depuis plus de 15 ans. Vos yeux sont entre de bonnes mains.',
     details: [
       'Examen de vue complet (30 min)',
       'Réfraction précise',
@@ -70,7 +69,7 @@ export const SERVICES_DATA: ServiceData[] = [
     id: 'lentilles',
     title: 'Lentilles de contact',
     image: '/images/services-contact-lenses-shop-mirror.png',
-    description: 'Nous sommes revendeurs de toutes marques avec essai et adaptation sur mesure.',
+    description: 'Toutes les marques, essai en magasin, adaptation sur mesure. On gère.',
     details: [
       'Revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.)',
       'Lentilles journalières, mensuelles, annuelles',
@@ -85,7 +84,7 @@ export const SERVICES_DATA: ServiceData[] = [
     id: 'reparations',
     title: 'Réparations & Ajustements',
     image: '/images/services-reparations.jpg',
-    description: 'Service après-vente complet pour garder vos lunettes en parfait état.',
+    description: 'Un pépin ? On répare, on ajuste, on nettoie. Souvent dans la foulée.',
     details: [
       'Ajustements gratuits à vie pour nos clients',
       'Nettoyage professionnel gratuit',

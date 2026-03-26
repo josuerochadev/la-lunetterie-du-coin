@@ -1,29 +1,13 @@
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import Layout from '@/components/common/Layout';
-import SectionContainer from '@/components/common/SectionContainer';
-import ContactForm from '@/components/contact/ContactForm';
+import StickySection from '@/components/common/StickySection';
 import ContactHero from '@/sections/contact/ContactHero';
 import ContactInfo from '@/sections/contact/ContactInfo';
-import ContactAppointment from '@/sections/contact/ContactAppointment';
+import ContactFormSection from '@/sections/contact/ContactFormSection';
 import ContactLocation from '@/sections/contact/ContactLocation';
+import ContactAppointment from '@/sections/contact/ContactAppointment';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 
-/**
- * Page Contact complète
- *
- * Sections :
- * - Hero avec titre et intro
- * - Formulaire de contact
- * - Informations pratiques (adresse, téléphone, email, horaires)
- * - Prise de rendez-vous Calendly
- * - Plan d'accès Google Maps + Comment nous rejoindre
- *
- * Style éditorial minimal cohérent avec le redesign
- *
- * @component
- * @returns {JSX.Element} Page Contact complète
- */
 export default function ContactPage() {
   useNativeScroll();
 
@@ -35,34 +19,30 @@ export default function ContactPage() {
         canonicalPath="/contact"
       />
       <Layout>
-        {/* Hero */}
-        <ContactHero />
+        {/* Hero — fond jaune, "PASSEZ NOUS VOIR" zoom */}
+        <StickySection zIndex={11} enableSticky>
+          <ContactHero />
+        </StickySection>
 
-        {/* Formulaire de contact */}
-        <SectionContainer className="bg-background py-section" aria-labelledby="formulaire">
-          <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-3xl">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h2 id="formulaire" className="heading-section mb-8 text-center">
-                  Envoyez-nous un message
-                </h2>
-              </SimpleAnimation>
+        {/* Infos pratiques — fond noir, cascade */}
+        <StickySection zIndex={12}>
+          <ContactInfo />
+        </StickySection>
 
-              <SimpleAnimation type="fade" delay={100}>
-                <ContactForm />
-              </SimpleAnimation>
-            </div>
-          </div>
-        </SectionContainer>
+        {/* Formulaire — fond blanc */}
+        <StickySection zIndex={13}>
+          <ContactFormSection />
+        </StickySection>
 
-        {/* Informations pratiques */}
-        <ContactInfo />
+        {/* Localisation — photo plein écran */}
+        <StickySection zIndex={14}>
+          <ContactLocation />
+        </StickySection>
 
-        {/* Prise de rendez-vous Calendly */}
-        <ContactAppointment />
-
-        {/* Plan d'accès + Comment nous rejoindre */}
-        <ContactLocation />
+        {/* RDV Calendly — fond jaune */}
+        <StickySection zIndex={15} enableSticky wrapperMinHeight="200vh">
+          <ContactAppointment />
+        </StickySection>
       </Layout>
     </>
   );

@@ -16,16 +16,16 @@ function CTADesktop() {
     offset: ['start start', 'end end'],
   });
 
-  // "FONCEZ" zooms: scale 12 → 1
-  const foncezScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
-  const foncezScale = useSpring(foncezScaleRaw, ZOOM_SPRING);
+  // "ATTEND" zooms: scale 12 → 1
+  const attendScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
+  const attendScale = useSpring(attendScaleRaw, ZOOM_SPRING);
 
-  // "N'ATTENDEZ" slides up
+  // "ON" slides up
   const w1Opacity = useTransform(scrollYProgress, [0.14, 0.22], [0, 1]);
   const w1YRaw = useTransform(scrollYProgress, [0.14, 0.22], [40, 0]);
   const w1Y = useSpring(w1YRaw, SPRING_CONFIG);
 
-  // "PLUS" slides up
+  // "VOUS" slides up
   const w2Opacity = useTransform(scrollYProgress, [0.19, 0.27], [0, 1]);
   const w2YRaw = useTransform(scrollYProgress, [0.19, 0.27], [40, 0]);
   const w2Y = useSpring(w2YRaw, SPRING_CONFIG);
@@ -44,13 +44,13 @@ function CTADesktop() {
             style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
           >
             <m.span className="block" style={{ opacity: w1Opacity, y: w1Y }}>
-              N&apos;ATTENDEZ
+              ON
             </m.span>
             <m.span className="block" style={{ opacity: w2Opacity, y: w2Y }}>
-              PLUS
+              VOUS
             </m.span>
-            <m.span className="block origin-center" style={{ scale: foncezScale }}>
-              FONCEZ
+            <m.span className="block origin-center" style={{ scale: attendScale }}>
+              ATTEND
             </m.span>
           </h2>
 
@@ -90,9 +90,9 @@ export default function OffersCTA() {
                 className="text-heading mb-10 text-black"
                 style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
               >
-                N&apos;attendez plus
+                On vous
                 <br />
-                foncez
+                attend
               </h2>
             </SimpleAnimation>
 

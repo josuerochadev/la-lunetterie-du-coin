@@ -29,16 +29,7 @@ function HeroDesktop() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
           >
-            Des solutions pensées pour votre budget et pour la planète
-          </m.p>
-
-          <m.p
-            className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            Recyclage — Deuxième paire
+            Bien vu pour vos yeux. Bien vu pour votre portefeuille.
           </m.p>
         </div>
       </div>
@@ -69,13 +60,7 @@ export default function OffersHero() {
 
               <SimpleAnimation type="slide-up" delay={150}>
                 <p className="mt-6 max-w-2xl text-body-lg text-white/80">
-                  Des solutions pensées pour votre budget et pour la planète
-                </p>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="fade" delay={300}>
-                <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-white/30">
-                  Recyclage — Deuxième paire
+                  Bien vu pour vos yeux. Bien vu pour votre portefeuille.
                 </p>
               </SimpleAnimation>
             </div>
