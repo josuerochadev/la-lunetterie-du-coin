@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -18,6 +18,22 @@ const ZOOM_END = 0.13; // Pattern zoom complete, services begin
 const SERVICES_START = ZOOM_END;
 const SERVICES_END = 0.78; // Services end earlier to leave room for outro
 const OUTRO_START = 0.8; // Pattern zooms to yellow + phrase appears
+
+// Outro constants
+const REVEAL_START = 0.82;
+const REVEAL_END = 0.88;
+const EXIT_START = 0.9;
+const EXIT_STAGGER = 0.012;
+const LOGO_IN = 0.94;
+const LOGO_FLOAT_END = 0.99;
+
+const WORD_TIMINGS = OUTRO_WORDS.map((_, i) => {
+  const rng = REVEAL_END - REVEAL_START;
+  const wordCount = OUTRO_WORDS.length;
+  const inStart = REVEAL_START + (i / wordCount) * rng;
+  const inEnd = Math.min(inStart + rng / wordCount + rng * 0.2, REVEAL_END);
+  return { inStart, inEnd };
+});
 
 // ---------------------------------------------------------------------------
 // Desktop sub-components
@@ -257,55 +273,39 @@ function ServiceText({
 function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // ── Word-by-word entrance (opacity starts at 0, not 0.15) ──
-  const REVEAL_START = 0.82;
-  const REVEAL_END = 0.88;
-  const wordCount = OUTRO_WORDS.length;
-
-  const wordTimings = useMemo(() => {
-    const rng = REVEAL_END - REVEAL_START;
-    return OUTRO_WORDS.map((_, i) => {
-      const inStart = REVEAL_START + (i / wordCount) * rng;
-      const inEnd = Math.min(inStart + rng / wordCount + rng * 0.2, REVEAL_END);
-      return { inStart, inEnd };
-    });
-  }, [wordCount]);
-
   // ── Word entrance transforms (0 → 1 opacity) ──
   const w0InOpacity = useTransform(
     scrollYProgress,
-    [wordTimings[0].inStart, wordTimings[0].inEnd],
+    [WORD_TIMINGS[0].inStart, WORD_TIMINGS[0].inEnd],
     [0, 1],
   );
   const w0InY = useTransform(
     scrollYProgress,
-    [wordTimings[0].inStart, wordTimings[0].inEnd],
+    [WORD_TIMINGS[0].inStart, WORD_TIMINGS[0].inEnd],
     [12, 0],
   );
   const w1InOpacity = useTransform(
     scrollYProgress,
-    [wordTimings[1].inStart, wordTimings[1].inEnd],
+    [WORD_TIMINGS[1].inStart, WORD_TIMINGS[1].inEnd],
     [0, 1],
   );
   const w1InY = useTransform(
     scrollYProgress,
-    [wordTimings[1].inStart, wordTimings[1].inEnd],
+    [WORD_TIMINGS[1].inStart, WORD_TIMINGS[1].inEnd],
     [12, 0],
   );
   const w2InOpacity = useTransform(
     scrollYProgress,
-    [wordTimings[2].inStart, wordTimings[2].inEnd],
+    [WORD_TIMINGS[2].inStart, WORD_TIMINGS[2].inEnd],
     [0, 1],
   );
   const w2InY = useTransform(
     scrollYProgress,
-    [wordTimings[2].inStart, wordTimings[2].inEnd],
+    [WORD_TIMINGS[2].inStart, WORD_TIMINGS[2].inEnd],
     [12, 0],
   );
 
   // ── Staggered exit upward (TAPEZ-LEUR first, DANS next, L'ŒIL last) ──
-  const EXIT_START = 0.9;
-  const EXIT_STAGGER = 0.012;
 
   // Word 0 exit
   const w0ExitOpacity = useTransform(scrollYProgress, [EXIT_START, EXIT_START + 0.02], [1, 0]);
@@ -346,9 +346,6 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   const w2Y = useTransform([w2InY, w2ExitY] as const, ([a, b]: number[]) => a + b);
 
   // ── Logo video — appears after bg is fully yellow, descends, holds, rises ──
-  const LOGO_IN = 0.94; // synced with bg fully yellow (bgOpacity reaches 1 at 0.94)
-  const LOGO_FLOAT_END = 0.99;
-
   // Logo fades in once background is fully yellow, fades out only at very top of viewport
   const logoOpacity = useTransform(
     scrollYProgress,
@@ -392,7 +389,10 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
       const video = videoRef.current;
       if (!video) return;
       if (v > 0.05) {
-        if (video.paused) video.play();
+        if (video.paused) {
+          video.playbackRate = 2;
+          video.play().catch(() => {});
+        }
       } else {
         if (!video.paused) {
           video.pause();
@@ -454,7 +454,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
                 muted
                 playsInline
                 loop
-                preload="auto"
+                preload="metadata"
                 className="h-[1em] w-auto rounded-lg object-contain"
                 style={{ mixBlendMode: 'multiply' }}
                 aria-label="Logo animé La Lunetterie du Coin"
@@ -561,7 +561,9 @@ function HomeServices() {
       <div className="pointer-events-auto px-container-x py-section lg:hidden">
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 className="heading-section mb-12 text-black">{HOMEPAGE_SECTIONS.services.title}</h2>
+            <h2 id="services-title" className="heading-section mb-12 text-black">
+              {HOMEPAGE_SECTIONS.services.title}
+            </h2>
           </SimpleAnimation>
 
           <div className="space-y-16">
