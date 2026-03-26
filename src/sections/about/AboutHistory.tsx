@@ -184,6 +184,15 @@ function HistoryDesktop() {
           style={{ opacity: yellowOverlay }}
           aria-hidden="true"
         />
+
+        {/* Navbar theme override — when yellow overlay is visible,
+            this thin strip at the top catches elementFromPoint and
+            tells the navbar to switch to dark (black text) */}
+        <m.div
+          className="absolute inset-x-0 top-0 z-40 h-20"
+          style={{ opacity: yellowOverlay }}
+          data-navbar-theme="dark"
+        />
       </div>
     </div>
   );

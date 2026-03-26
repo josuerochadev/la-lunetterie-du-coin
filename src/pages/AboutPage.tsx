@@ -60,8 +60,8 @@ export default function AboutPage() {
           <AboutEngagement />
         </StickySection>
 
-        {/* CTA — zoom "VENEZ NOUS VOIR" + hold pour footer */}
-        <StickySection zIndex={16}>
+        {/* CTA — plein écran sticky, hold 200vh pour retarder le footer */}
+        <StickySection zIndex={16} enableSticky wrapperMinHeight="200vh">
           <AboutCTA />
         </StickySection>
       </Layout>

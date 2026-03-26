@@ -11,15 +11,15 @@ const TEAM_BIO =
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
 // ---------------------------------------------------------------------------
-// Desktop animated — portrait parallax + bio word reveal
+// Desktop animated — portrait with contained aspect ratio + bio word reveal
 //
 //  300vh container
 //
 //  0.00 – 0.10  Label "L'OPTICIEN" fades in
-//  0.02 – 0.20  Portrait clipPath reveal (bottom-to-top) + slow zoom
+//  0.02 – 0.20  Portrait clipPath reveal (bottom-to-top)
 //  0.08 – 0.22  "ROMAIN" enters giant + Y slide
 //  0.18 – 0.40  Bio text ScrollWordReveal
-//  0.40 – 1.00  Hold — photo continues slow zoom
+//  0.40 – 1.00  Hold
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
@@ -35,14 +35,13 @@ function TeamDesktop() {
   const labelYRaw = useTransform(scrollYProgress, [0.0, 0.06], [20, 0]);
   const labelY = useSpring(labelYRaw, SPRING_CONFIG);
 
-  // Portrait — clipPath reveal from bottom
+  // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
   const portraitClip = useTransform(clipProgress, (v) => {
     const bottom = 100 - v * 100;
     return `inset(0% 0% ${bottom}% 0%)`;
   });
-  const portraitScale = useTransform(scrollYProgress, [0.02, 0.6], [1.05, 1.18]);
-  const portraitY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-5%']);
+  const portraitScale = useTransform(scrollYProgress, [0.02, 0.6], [1, 1.04]);
 
   // Name — "ROMAIN"
   const nameOpacity = useTransform(scrollYProgress, [0.08, 0.16], [0, 1]);
@@ -55,22 +54,26 @@ function TeamDesktop() {
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="flex h-full">
-          {/* Left — Portrait with clipPath reveal */}
-          <div className="relative w-1/2 overflow-hidden">
-            <m.div className="h-full w-full" style={{ clipPath: portraitClip }}>
-              <m.img
-                src="/images/about-team-romain.jpg"
-                alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                className="h-full w-full object-cover object-center"
-                loading="lazy"
-                style={{ scale: portraitScale, y: portraitY }}
-              />
+        <div className="flex h-full items-center px-16 xl:px-20">
+          {/* Left — Portrait with contained aspect ratio */}
+          <div className="relative w-[45%] overflow-hidden">
+            <m.div style={{ clipPath: portraitClip }}>
+              <m.div
+                className="relative aspect-[3/4] w-full overflow-hidden"
+                style={{ scale: portraitScale }}
+              >
+                <img
+                  src="/images/about-team-romain.jpeg"
+                  alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                  className="h-full w-full object-cover object-top"
+                  loading="lazy"
+                />
+              </m.div>
             </m.div>
           </div>
 
           {/* Right — Name + Bio */}
-          <div className="flex w-1/2 flex-col justify-center px-16 xl:px-20">
+          <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20">
             <m.span
               className="mb-4 text-body-sm font-medium uppercase tracking-widest text-white/30"
               style={{ opacity: labelOpacity, y: labelY }}
@@ -147,9 +150,9 @@ export default function AboutTeam() {
             <div className="grid items-center gap-8 md:grid-cols-2">
               <div className="relative aspect-[3/4] overflow-hidden">
                 <img
-                  src="/images/about-team-romain.jpg"
+                  src="/images/about-team-romain.jpeg"
                   alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                  className="h-full w-full object-cover object-center"
+                  className="h-full w-full object-cover object-top"
                   loading="lazy"
                 />
               </div>
