@@ -1,6 +1,7 @@
 import { m } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -13,15 +14,13 @@ function HeroDesktop() {
         <EyePattern variant="jaune" opacity={0.03} />
 
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
-          <m.h1
+          <TextReveal
+            as="h1"
             className="text-heading text-center text-black"
             style={{ fontSize: 'clamp(3rem, 12vw, 14rem)', lineHeight: '0.95' }}
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...SPRING_TRANSITION, delay: 0.1 }}
           >
             NOS SERVICES
-          </m.h1>
+          </TextReveal>
 
           <m.p
             className="mt-8 max-w-3xl text-center text-body-xl text-black/50"
@@ -49,14 +48,13 @@ export default function ServicesHero() {
           <EyePattern variant="jaune" opacity={0.03} />
           <div className="relative z-10 mx-auto max-w-container px-container-x">
             <div className="flex flex-col items-center justify-center text-center">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h1
-                  className="text-heading text-black"
-                  style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
-                >
-                  NOS SERVICES
-                </h1>
-              </SimpleAnimation>
+              <TextReveal
+                as="h1"
+                className="text-heading text-black"
+                style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
+              >
+                NOS SERVICES
+              </TextReveal>
 
               <SimpleAnimation type="slide-up" delay={150}>
                 <p className="mt-6 max-w-2xl text-body-lg text-black/50">

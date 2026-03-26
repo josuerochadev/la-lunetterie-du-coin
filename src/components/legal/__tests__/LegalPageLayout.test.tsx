@@ -31,6 +31,14 @@ vi.mock('@/components/motion/SimpleAnimation', () => ({
   ),
 }));
 
+vi.mock('@/components/motion/TextReveal', () => ({
+  default: ({ children, as: Tag = 'div', className, style }: any) => (
+    <Tag data-testid="text-reveal" className={className} style={style}>
+      {children}
+    </Tag>
+  ),
+}));
+
 vi.mock('@/hooks/usePrefersReducedMotion', () => ({
   usePrefersReducedMotion: () => true, // Always use reduced motion in tests
 }));
@@ -196,17 +204,16 @@ describe('LegalPageLayout', () => {
   });
 
   describe('animations setup', () => {
-    it('should animate title with correct props', () => {
+    it('should animate title with TextReveal', () => {
       render(<LegalPageLayout {...defaultProps} />);
 
-      const animations = screen.getAllByTestId('simple-animation');
-      const titleAnimation = animations.find((anim) =>
-        anim.textContent?.includes(defaultProps.title.toUpperCase()),
+      const reveals = screen.getAllByTestId('text-reveal');
+      const titleReveal = reveals.find((el) =>
+        el.textContent?.includes(defaultProps.title.toUpperCase()),
       );
 
-      expect(titleAnimation).toBeInTheDocument();
-      expect(titleAnimation).toHaveAttribute('data-type', 'slide-up');
-      expect(titleAnimation).toHaveAttribute('data-delay', '0');
+      expect(titleReveal).toBeInTheDocument();
+      expect(titleReveal?.tagName).toBe('H1');
     });
   });
 

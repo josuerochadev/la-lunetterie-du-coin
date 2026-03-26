@@ -5,10 +5,9 @@ import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import EyePattern from '@/components/common/EyePattern';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Seo } from '@/seo/Seo';
-
-const SPRING_TRANSITION = { type: 'spring' as const, stiffness: 80, damping: 30, mass: 0.5 };
 
 type LegalPageLayoutProps = {
   title: string;
@@ -25,15 +24,13 @@ function HeroDesktop({ title, lastUpdated }: { title: string; lastUpdated?: stri
         <EyePattern variant="blanc" opacity={0.03} />
 
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
-          <m.h1
+          <TextReveal
+            as="h1"
             className="text-heading text-center text-accent"
             style={{ fontSize: 'clamp(3rem, 10vw, 10rem)', lineHeight: '0.95' }}
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...SPRING_TRANSITION, delay: 0.1 }}
           >
             {title.toUpperCase()}
-          </m.h1>
+          </TextReveal>
 
           {lastUpdated && (
             <m.p
@@ -74,14 +71,13 @@ export default function LegalPageLayout({
                 <EyePattern variant="blanc" opacity={0.03} />
                 <div className="relative z-10 mx-auto max-w-container px-container-x">
                   <div className="flex flex-col items-center justify-center text-center">
-                    <SimpleAnimation type="slide-up" delay={0}>
-                      <h1
-                        className="text-heading text-accent"
-                        style={{ fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: '0.95' }}
-                      >
-                        {title.toUpperCase()}
-                      </h1>
-                    </SimpleAnimation>
+                    <TextReveal
+                      as="h1"
+                      className="text-heading text-accent"
+                      style={{ fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: '0.95' }}
+                    >
+                      {title.toUpperCase()}
+                    </TextReveal>
 
                     {lastUpdated && (
                       <SimpleAnimation type="fade" delay={150}>

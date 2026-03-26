@@ -1,6 +1,7 @@
 import { m } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
@@ -21,15 +22,13 @@ function HeroDesktop() {
         {/* Content — centered, entrance animations on load */}
         <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
           {/* "DEPUIS 2016" — visible immediately, slides up */}
-          <m.h1
+          <TextReveal
+            as="h1"
             className="text-heading text-center text-accent"
             style={{ fontSize: 'clamp(3rem, 12vw, 14rem)', lineHeight: '0.95' }}
-            initial={{ opacity: 0, y: 60 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...SPRING_TRANSITION, delay: 0.1 }}
           >
-            L&apos;EXPERT DES EX PAIRES
-          </m.h1>
+            L'EXPERT DES EX PAIRES
+          </TextReveal>
 
           {/* Subtitle — staggered */}
           <m.p
@@ -74,14 +73,13 @@ export default function AboutHero() {
           <EyePattern variant="blanc" opacity={0.03} />
           <div className="relative z-10 mx-auto max-w-container px-container-x">
             <div className="flex flex-col items-center justify-center text-center">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h1
-                  className="text-heading text-accent"
-                  style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
-                >
-                  L&apos;EXPERT DES EX PAIRES
-                </h1>
-              </SimpleAnimation>
+              <TextReveal
+                as="h1"
+                className="text-heading text-accent"
+                style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
+              >
+                L'EXPERT DES EX PAIRES
+              </TextReveal>
 
               <SimpleAnimation type="slide-up" delay={150}>
                 <p className="mt-6 max-w-2xl text-body-lg text-white/80">

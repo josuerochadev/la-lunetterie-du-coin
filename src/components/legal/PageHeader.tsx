@@ -1,16 +1,16 @@
 // src/components/common/PageHeader.tsx
 import { Link } from 'react-router-dom';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 
 type Props = { title: string; backTo?: string };
 
 export default function PageHeader({ title, backTo = '/' }: Props) {
   return (
     <header className="mb-title-gap text-center">
-      <SimpleAnimation type="slide-down">
-        <h1 className="heading-page mb-title-gap pt-lg">{title}</h1>
-      </SimpleAnimation>
+      <TextReveal as="h1" className="heading-page mb-title-gap pt-lg">
+        {title}
+      </TextReveal>
       <nav aria-label="Fil d'Ariane" className="mt-8">
         <Link
           to={backTo}
