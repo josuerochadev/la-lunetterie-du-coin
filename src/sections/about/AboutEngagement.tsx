@@ -63,7 +63,8 @@ function GiantCounter({ scrollYProgress }: { scrollYProgress: MotionValue<number
 //  0.10 – 0.30  Stats enter as cascade (staggered)
 //  0.25 – 0.45  Body text ScrollWordReveal
 //  0.40 – 0.55  Highlight text fades in
-//  0.55 – 1.00  Hold
+//  0.55 – 0.70  Hold
+//  0.70 – 0.85  Exit — fade out + Y drift
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
@@ -122,12 +123,19 @@ function EngagementDesktop() {
   const highlightYRaw = useTransform(scrollYProgress, [0.4, 0.5], [20, 0]);
   const highlightY = useSpring(highlightYRaw, SPRING_CONFIG);
 
+  // Exit — fade out content (counter already fades at 0.7–0.8)
+  const exitOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
+
   return (
     <div ref={sectionRef} className="hidden h-[280vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <GiantCounter scrollYProgress={scrollYProgress} />
 
-        <div className="relative z-10 flex h-full flex-col items-center justify-center px-container-x">
+        <m.div
+          className="relative z-10 flex h-full flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           {/* Title */}
           <m.div className="mb-12 text-center" style={{ opacity: titleOpacity, y: titleY }}>
             <ScrollWordReveal
@@ -172,7 +180,7 @@ function EngagementDesktop() {
           >
             {ENGAGEMENT_HIGHLIGHT}
           </m.p>
-        </div>
+        </m.div>
       </div>
     </div>
   );

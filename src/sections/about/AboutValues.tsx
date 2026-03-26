@@ -77,7 +77,8 @@ function ValueCard({
 //  0.10 – 0.25  Card 1 enters (slide-up + tilt settle)
 //  0.20 – 0.35  Card 2 enters (staggered)
 //  0.30 – 0.45  Card 3 enters (staggered)
-//  0.45 – 1.00  Hold
+//  0.45 – 0.70  Hold
+//  0.70 – 0.85  Exit — fade out + Y drift
 // ---------------------------------------------------------------------------
 
 function ValuesDesktop() {
@@ -93,10 +94,17 @@ function ValuesDesktop() {
   const titleYRaw = useTransform(scrollYProgress, [0.0, 0.08], [60, 0]);
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
+  // Exit — fade out all content
+  const exitOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
+
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
-        <div className="flex h-full flex-col items-center justify-center px-container-x">
+        <m.div
+          className="flex h-full flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           {/* Title */}
           <m.div className="mb-16 text-center" style={{ opacity: titleOpacity, y: titleY }}>
             <ScrollWordReveal
@@ -121,7 +129,7 @@ function ValuesDesktop() {
               />
             ))}
           </div>
-        </div>
+        </m.div>
       </div>
     </div>
   );

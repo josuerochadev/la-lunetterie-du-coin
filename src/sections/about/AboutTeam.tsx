@@ -16,11 +16,11 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 //
 //  300vh container
 //
-//  0.00 – 0.10  Label "L'OPTICIEN" fades in
 //  0.02 – 0.20  Portrait clipPath reveal (bottom-to-top)
-//  0.08 – 0.22  "ROMAIN" enters giant + Y slide
+//  0.08 – 0.20  Name ScrollWordReveal + Y slide
 //  0.18 – 0.40  Bio text ScrollWordReveal
-//  0.40 – 1.00  Hold
+//  0.40 – 0.65  Hold
+//  0.65 – 0.80  Exit — fade out + Y drift
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
@@ -39,18 +39,25 @@ function TeamDesktop() {
   });
   const portraitScale = useTransform(scrollYProgress, [0.02, 0.6], [1, 1.04]);
 
-  // Name — "ROMAIN"
-  const nameOpacity = useTransform(scrollYProgress, [0.08, 0.16], [0, 1]);
+  // Name — entrance gate hides ScrollWordReveal's 0.15 base opacity
+  const nameEntrance = useTransform(scrollYProgress, [0.06, 0.1], [0, 1]);
   const nameYRaw = useTransform(scrollYProgress, [0.08, 0.16], [80, 0]);
   const nameY = useSpring(nameYRaw, SPRING_CONFIG);
 
-  // Bio text
-  const bioOpacity = useTransform(scrollYProgress, [0.18, 0.24], [0, 1]);
+  // Bio text — entrance gate hides ScrollWordReveal's 0.15 base opacity
+  const bioEntrance = useTransform(scrollYProgress, [0.16, 0.2], [0, 1]);
+
+  // Exit — fade out all content
+  const exitOpacity = useTransform(scrollYProgress, [0.65, 0.8], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.65, 0.8], [0, -40]);
 
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="flex h-full items-center px-16 xl:px-20">
+        <m.div
+          className="flex h-full items-center px-16 xl:px-20"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
           {/* Left — Portrait with contained aspect ratio */}
           <div className="relative w-[45%] overflow-hidden">
             <m.div style={{ clipPath: portraitClip }}>
@@ -70,21 +77,20 @@ function TeamDesktop() {
 
           {/* Right — Name + Bio */}
           <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20">
-            <m.h2
-              className="text-heading text-accent"
-              style={{
-                fontSize: 'clamp(3rem, 8vw, 10rem)',
-                lineHeight: '0.95',
-                opacity: nameOpacity,
-                y: nameY,
-              }}
-            >
-              L&apos;ŒIL DERRIÈRE
-              <br />
-              LA BOUTIQUE
-            </m.h2>
+            <m.div style={{ y: nameY, opacity: nameEntrance }}>
+              <ScrollWordReveal
+                as="h2"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.08}
+                revealEnd={0.2}
+                className="text-heading text-accent"
+                style={{ fontSize: 'clamp(3rem, 8vw, 10rem)', lineHeight: '0.95' }}
+              >
+                L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+              </ScrollWordReveal>
+            </m.div>
 
-            <m.div className="mt-8 max-w-lg" style={{ opacity: bioOpacity }}>
+            <m.div className="mt-8 max-w-lg" style={{ opacity: bioEntrance }}>
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
@@ -96,7 +102,7 @@ function TeamDesktop() {
               </ScrollWordReveal>
             </m.div>
           </div>
-        </div>
+        </m.div>
       </div>
     </div>
   );
