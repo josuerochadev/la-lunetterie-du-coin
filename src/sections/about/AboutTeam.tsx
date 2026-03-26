@@ -110,11 +110,13 @@ export default function AboutTeam() {
 
   return (
     <section id="equipe" className="relative w-full bg-black" data-navbar-theme="light">
-      {/* Convex curve — transition from Values (yellow) */}
+      {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) */}
       <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[40vh]"
+        style={{
+          background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
+        }}
         aria-hidden="true"
-        data-navbar-theme="light"
       />
 
       {/* Desktop animated */}

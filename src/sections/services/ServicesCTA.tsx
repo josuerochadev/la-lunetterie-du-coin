@@ -1,6 +1,5 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
-import EyePattern from '@/components/common/EyePattern';
 
 export default function ServicesCTA() {
   return (
@@ -15,7 +14,13 @@ export default function ServicesCTA() {
         aria-hidden="true"
       />
 
-      <EyePattern variant="jaune" opacity={0.03} />
+      {/* Eye motif — circle frame around content */}
+      <img
+        src="/images/motif-cercle.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-10 mix-blend-multiply"
+      />
 
       <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-4xl text-center">

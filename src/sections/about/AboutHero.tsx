@@ -37,15 +37,6 @@ function HeroDesktop() {
           >
             Depuis 2016, du style, du conseil et une seconde vie pour vos montures.
           </m.p>
-
-          <m.p
-            className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-          >
-            Faubourg de Pierre, Strasbourg
-          </m.p>
         </m.div>
       </div>
     </div>
@@ -81,12 +72,6 @@ export default function AboutHero() {
               <SimpleAnimation type="slide-up" delay={150}>
                 <p className="mt-6 max-w-2xl text-body-lg text-white/80">
                   Depuis 2016, du style, du conseil et une seconde vie pour vos montures.
-                </p>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="fade" delay={300}>
-                <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-white/30">
-                  Faubourg de Pierre, Strasbourg
                 </p>
               </SimpleAnimation>
             </div>
