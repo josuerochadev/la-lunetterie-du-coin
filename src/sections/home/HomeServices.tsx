@@ -482,6 +482,58 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
 }
 
 /**
+ * Vertical progress indicator — 4 segments showing which service is active.
+ * Visible only during the services phase (SERVICES_START – SERVICES_END).
+ */
+function ServiceProgressIndicator({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  // Fade in/out with the services phase
+  const fadeIn = useTransform(scrollYProgress, [SERVICES_START, SERVICES_START + 0.03], [0, 1]);
+  const fadeOut = useTransform(scrollYProgress, [SERVICES_END - 0.03, SERVICES_END], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+
+  // Progress through segments: 0 → SERVICE_COUNT
+  const progressRaw = useTransform(
+    scrollYProgress,
+    [SERVICES_START, SERVICES_END],
+    [0, SERVICE_COUNT],
+  );
+  const progress = useSpring(progressRaw, SPRING_CONFIG);
+
+  return (
+    <m.div
+      className="flex shrink-0 flex-col items-center gap-3"
+      style={{ opacity }}
+      aria-hidden="true"
+    >
+      {Array.from({ length: SERVICE_COUNT }, (_, i) => (
+        <ProgressDot key={i} index={i} progress={progress} />
+      ))}
+    </m.div>
+  );
+}
+
+function ProgressDot({ index, progress }: { index: number; progress: MotionValue<number> }) {
+  // Each dot is active when progress is within [index, index+1)
+  const dotOpacity = useTransform(progress, (v: number) => {
+    // Active: fully yellow. Otherwise: low opacity black.
+    return v >= index && v < index + 1 ? 1 : 0;
+  });
+  const bgOpacity = useTransform(dotOpacity, (v: number) => (v === 1 ? 0 : 1));
+
+  return (
+    <span className="relative h-2.5 w-2.5 rounded-full">
+      {/* Inactive state: orange at low opacity */}
+      <m.span
+        className="absolute inset-0 rounded-full bg-orange/20"
+        style={{ opacity: bgOpacity }}
+      />
+      {/* Active state: full orange */}
+      <m.span className="absolute inset-0 rounded-full bg-orange" style={{ opacity: dotOpacity }} />
+    </span>
+  );
+}
+
+/**
  * Static fallback for reduced motion.
  */
 function StaticServiceList() {
@@ -642,6 +694,9 @@ function HomeServices() {
                     <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
                       {/* Photo stack — clip-path volet transitions */}
                       <PhotoStack scrollYProgress={scrollYProgress} />
+
+                      {/* Progress indicator — centered in the gap */}
+                      <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
 
                       {/* Text — each service scrolls independently */}
                       <div className="relative flex w-[45%] flex-col justify-center">
