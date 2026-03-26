@@ -9,6 +9,32 @@ import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+
+/**
+ * Inline SVG feTurbulence grain overlay — gives photos an artisanal/film texture.
+ */
+const GRAIN_SVG_ID = 'home-services-grain';
+function GrainOverlay() {
+  return (
+    <div className="pointer-events-none absolute inset-0 z-10 opacity-[0.03] mix-blend-overlay">
+      <svg className="hidden">
+        <filter id={GRAIN_SVG_ID}>
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency="0.65"
+            numOctaves="3"
+            stitchTiles="stitch"
+          />
+        </filter>
+      </svg>
+      <div
+        className="h-full w-full"
+        style={{ filter: `url(#${GRAIN_SVG_ID})` }}
+        aria-hidden="true"
+      />
+    </div>
+  );
+}
 const SERVICE_COUNT = HOMEPAGE_SERVICES.length;
 const OUTRO_WORDS = ['TAPEZ-LEUR', 'DANS', "L'ŒIL"] as const;
 
@@ -114,7 +140,9 @@ function PhotoStack({ scrollYProgress }: { scrollYProgress: MotionValue<number> 
   const segmentSize = range / SERVICE_COUNT;
 
   // Shared Y: photo container enters from below, settles, then exits at end
-  const firstStart = SERVICES_START;
+  // Slight parallax lag (+0.02) so the photo trails behind the text
+  const PARALLAX_LAG = 0.02;
+  const firstStart = SERVICES_START + PARALLAX_LAG;
   const enterEnd = firstStart + segmentSize * 0.2;
   const lastEnd = SERVICES_START + range;
   const exitStart = lastEnd - segmentSize * 0.22;
@@ -122,7 +150,7 @@ function PhotoStack({ scrollYProgress }: { scrollYProgress: MotionValue<number> 
   const yRaw = useTransform(
     scrollYProgress,
     [firstStart, enterEnd, exitStart, lastEnd],
-    ['55vh', '0vh', '0vh', '-55vh'],
+    ['60vh', '0vh', '0vh', '-60vh'],
   );
   const y = useSpring(yRaw, SPRING_CONFIG);
 
@@ -167,6 +195,9 @@ function PhotoStack({ scrollYProgress }: { scrollYProgress: MotionValue<number> 
           />
         );
       })}
+
+      {/* Film grain texture */}
+      <GrainOverlay />
     </m.div>
   );
 }
@@ -378,7 +409,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   const bgOpacity = useTransform(scrollYProgress, [0.9, 0.94], [0, 1]);
 
   // ── CTA — follows phrase timing: in after phrase, out shortly after phrase exits ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.92, 0.94], [0, 1, 1, 0]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.96, 0.98], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
@@ -603,6 +634,16 @@ function HomeServices() {
       data-navbar-theme="dark"
       className="pointer-events-none relative bg-white"
     >
+      {/* Subtle noise texture over white background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.025]"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'repeat',
+        }}
+      />
+
       {/* Concave curve — accent ellipse masks the top corners, creating an inward arc */}
       <div
         className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
@@ -626,9 +667,10 @@ function HomeServices() {
                     <img
                       src={service.image}
                       alt={service.title}
-                      className="h-full w-full object-cover"
+                      className="h-full w-full object-cover transition-transform duration-300"
                       loading="lazy"
                     />
+                    <GrainOverlay />
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
