@@ -186,7 +186,12 @@ export default function AboutEngagement() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="engagement" className="relative w-full bg-background" data-navbar-theme="dark">
+    <section
+      id="engagement"
+      aria-label="Notre engagement écologique"
+      className="relative w-full bg-background"
+      data-navbar-theme="dark"
+    >
       {/* Desktop animated */}
       {!prefersReducedMotion && <EngagementDesktop />}
 

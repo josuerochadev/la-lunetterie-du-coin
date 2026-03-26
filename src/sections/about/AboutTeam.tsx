@@ -3,6 +3,7 @@ import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const TEAM_BIO =
@@ -57,11 +58,11 @@ function TeamDesktop() {
                 className="relative aspect-[3/4] w-full overflow-hidden"
                 style={{ scale: portraitScale }}
               >
-                <img
+                <ResponsiveImage
                   src="/images/about-team-romain.jpeg"
                   alt="Romain Corato, fondateur de La Lunetterie du Coin"
                   className="h-full w-full object-cover object-top"
-                  loading="lazy"
+                  sizes="(min-width: 1024px) 45vw, 100vw"
                 />
               </m.div>
             </m.div>
@@ -109,7 +110,12 @@ export default function AboutTeam() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="equipe" className="relative w-full bg-black" data-navbar-theme="light">
+    <section
+      id="equipe"
+      aria-label="Notre équipe"
+      className="relative w-full bg-black"
+      data-navbar-theme="light"
+    >
       {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) */}
       <div
         className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[40vh]"
@@ -141,11 +147,11 @@ export default function AboutTeam() {
           <SimpleAnimation type="slide-up" delay={100}>
             <div className="grid items-center gap-8 md:grid-cols-2">
               <div className="relative aspect-[3/4] overflow-hidden">
-                <img
+                <ResponsiveImage
                   src="/images/about-team-romain.jpeg"
                   alt="Romain Corato, fondateur de La Lunetterie du Coin"
                   className="h-full w-full object-cover object-top"
-                  loading="lazy"
+                  sizes="(min-width: 768px) 50vw, 100vw"
                 />
               </div>
               <div>

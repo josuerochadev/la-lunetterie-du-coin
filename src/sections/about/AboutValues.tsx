@@ -135,7 +135,12 @@ export default function AboutValues() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="valeurs" className="relative w-full bg-accent" data-navbar-theme="dark">
+    <section
+      id="valeurs"
+      aria-label="Nos valeurs"
+      className="relative w-full bg-accent"
+      data-navbar-theme="dark"
+    >
       <EyePattern variant="jaune" opacity={0.07} />
 
       {/* Desktop animated */}

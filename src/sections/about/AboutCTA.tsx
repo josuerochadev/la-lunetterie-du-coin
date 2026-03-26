@@ -13,6 +13,7 @@ export default function AboutCTA() {
 
   return (
     <section
+      aria-label="Nous rendre visite"
       className="relative flex min-h-screen w-full items-center overflow-hidden bg-accent"
       data-navbar-theme="dark"
     >

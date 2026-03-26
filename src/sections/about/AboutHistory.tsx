@@ -4,6 +4,7 @@ import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'fram
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const STORY_TITLE = 'Notre Histoire';
@@ -127,13 +128,16 @@ function HistoryDesktop() {
               className="h-full overflow-hidden"
               style={{ opacity: photoEntranceOpacity, clipPath: photoClip }}
             >
-              <m.img
-                src="/images/about-history-shop-indoors.png"
-                alt="Intérieur de La Lunetterie du Coin"
-                className="h-full w-full object-cover"
-                loading="eager"
-                style={{ scale: photoScale }}
-              />
+              <m.div className="h-full w-full" style={{ scale: photoScale }}>
+                <ResponsiveImage
+                  src="/images/about-history-shop-indoors.png"
+                  alt="Intérieur de La Lunetterie du Coin"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                  widths={[640, 768, 1024]}
+                  sizes="(min-width: 1024px) 36vw, 100vw"
+                />
+              </m.div>
             </m.div>
           </m.div>
 
@@ -245,11 +249,12 @@ export default function AboutHistory() {
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
         <div className="relative w-full">
           <SimpleAnimation type="fade" delay={0} immediate>
-            <img
+            <ResponsiveImage
               src="/images/about-history-shop-indoors.png"
               alt="Intérieur de La Lunetterie du Coin"
               className="max-h-[80vh] min-h-[50vh] w-full object-cover"
-              loading="lazy"
+              widths={[640, 768, 1024]}
+              sizes="100vw"
             />
           </SimpleAnimation>
 

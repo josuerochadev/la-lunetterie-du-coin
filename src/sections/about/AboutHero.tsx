@@ -51,7 +51,12 @@ export default function AboutHero() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="hero" className="relative w-full bg-black" data-navbar-theme="light">
+    <section
+      id="hero"
+      aria-label="À propos — L'expert des ex paires"
+      className="relative w-full bg-black"
+      data-navbar-theme="light"
+    >
       {/* Desktop — entrance animations, stays sticky */}
       {!prefersReducedMotion && <HeroDesktop />}
 
