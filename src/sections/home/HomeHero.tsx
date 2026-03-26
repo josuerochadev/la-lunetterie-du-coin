@@ -99,7 +99,11 @@ function HeroMobileContent({ titleId }: { titleId?: string }) {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.7, ease, delay: 0.85 }}
         >
-          <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
+          <InfoAccent
+            color="orange"
+            keyword="Neuf & Occasion"
+            detail="Du neuf, du vécu, du style."
+          />
         </m.div>
       </div>
     </>
@@ -284,7 +288,11 @@ function HeroAnimated() {
           <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
         </m.div>
         <m.div style={{ y: block2Y, x: block2X, opacity: block2Opacity }}>
-          <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Montures pour tous." />
+          <InfoAccent
+            color="orange"
+            keyword="Neuf & Occasion"
+            detail="Du neuf, du vécu, du style."
+          />
         </m.div>
       </div>
 

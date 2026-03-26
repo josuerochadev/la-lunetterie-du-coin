@@ -162,7 +162,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                       className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-green"
                       aria-hidden="true"
                     />
-                    <span className="relative font-medium leading-relaxed">
+                    <span className="relative font-medium">
                       {STORE_INFO.address.street}
                       <br />
                       {STORE_INFO.address.postalCode} {STORE_INFO.address.city}

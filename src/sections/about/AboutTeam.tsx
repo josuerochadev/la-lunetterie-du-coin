@@ -6,7 +6,7 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const TEAM_BIO =
-  "Passionné par l'optique depuis plus de 15 ans, Romain a fondé La Lunetterie du Coin en 2016 avec l'envie de proposer une alternative plus humaine et écologique. Expert en verres progressifs et grands myopes, il prend le temps d'expliquer et de conseiller chaque client.";
+  "Opticien depuis plus de 15 ans, Romain a lancé la boutique en 2016 avec une idée fixe : de bonnes lunettes, un vrai conseil, et moins de gâchis. Spécialiste des verres progressifs et des fortes corrections, il aime surtout trouver la paire à laquelle vous n'auriez pas pensé.";
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
@@ -29,11 +29,6 @@ function TeamDesktop() {
     target: sectionRef,
     offset: ['start start', 'end end'],
   });
-
-  // Label
-  const labelOpacity = useTransform(scrollYProgress, [0.0, 0.06], [0, 1]);
-  const labelYRaw = useTransform(scrollYProgress, [0.0, 0.06], [20, 0]);
-  const labelY = useSpring(labelYRaw, SPRING_CONFIG);
 
   // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
@@ -74,13 +69,6 @@ function TeamDesktop() {
 
           {/* Right — Name + Bio */}
           <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20">
-            <m.span
-              className="mb-4 text-body-sm font-medium uppercase tracking-widest text-white/30"
-              style={{ opacity: labelOpacity, y: labelY }}
-            >
-              L&apos;opticien fondateur
-            </m.span>
-
             <m.h2
               className="text-heading text-accent"
               style={{
@@ -90,7 +78,9 @@ function TeamDesktop() {
                 y: nameY,
               }}
             >
-              ROMAIN
+              L&apos;ŒIL DERRIÈRE
+              <br />
+              LA BOUTIQUE
             </m.h2>
 
             <m.div className="mt-8 max-w-lg" style={{ opacity: bioOpacity }}>
@@ -99,7 +89,7 @@ function TeamDesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.2}
                 revealEnd={0.38}
-                className="text-body-lg leading-relaxed text-white/70"
+                className="text-body-lg text-white/70"
               >
                 {TEAM_BIO}
               </ScrollWordReveal>
@@ -135,14 +125,13 @@ export default function AboutTeam() {
         <div className="mx-auto max-w-container px-container-x py-section">
           <SimpleAnimation type="slide-up" delay={0}>
             <div className="mb-8 text-center">
-              <span className="mb-4 inline-block text-body-sm font-medium uppercase tracking-wider text-white/30">
-                L&apos;opticien fondateur
-              </span>
               <h2
                 className="text-heading text-accent"
                 style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
               >
-                ROMAIN
+                L&apos;ŒIL DERRIÈRE
+                <br />
+                LA BOUTIQUE
               </h2>
             </div>
           </SimpleAnimation>
@@ -158,7 +147,7 @@ export default function AboutTeam() {
                 />
               </div>
               <div>
-                <p className="text-body-lg leading-relaxed text-white/70">{TEAM_BIO}</p>
+                <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
               </div>
             </div>
           </SimpleAnimation>

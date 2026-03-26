@@ -10,7 +10,7 @@ import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = HOMEPAGE_SERVICES.length;
-const OUTRO_WORDS = ['TAPEZ-LEUR', 'DANS', "L'OEIL"] as const;
+const OUTRO_WORDS = ['TAPEZ-LEUR', 'DANS', "L'ŒIL"] as const;
 
 // Scroll budget
 const TITLE_END = 0.08; // Title arrives at top
@@ -231,9 +231,7 @@ function ServiceText({
 
       <h3 className="text-subtitle mb-5 text-title-sm text-black">{service.title}</h3>
 
-      <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-black/50">
-        {service.description}
-      </p>
+      <p className="mb-8 max-w-lg text-body-lg text-black/50">{service.description}</p>
 
       <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
         En savoir plus
@@ -244,15 +242,15 @@ function ServiceText({
 
 /**
  * Outro — word-by-word reveal → hold → staggered word-by-word exit upward →
- * L'OEIL morphs into floating logo video → background white → yellow.
+ * L'ŒIL morphs into floating logo video → background white → yellow.
  *
  * Timeline (relative to scrollYProgress):
- *   0.82 – 0.88  Words reveal: TAPEZ-LEUR → DANS → L'OEIL (opacity 0→1)
+ *   0.82 – 0.88  Words reveal: TAPEZ-LEUR → DANS → L'ŒIL (opacity 0→1)
  *   0.88 – 0.90  Hold — full phrase visible
  *   0.89 – 0.92  CTA fades in
  *   0.90 – 0.93  Staggered exit: TAPEZ-LEUR exits first, DANS next
  *   0.90 – 0.94  Background white → yellow
- *   0.92 – 0.94  L'OEIL text fades out, logo replaces it at same position
+ *   0.92 – 0.94  L'ŒIL text fades out, logo replaces it at same position
  *   0.93 – 0.99  Logo grows large + floats upward with organic drift
  *   0.95 – 0.98  CTA fades out
  */
@@ -305,7 +303,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
     [12, 0],
   );
 
-  // ── Staggered exit upward (TAPEZ-LEUR first, DANS next, L'OEIL last) ──
+  // ── Staggered exit upward (TAPEZ-LEUR first, DANS next, L'ŒIL last) ──
   const EXIT_START = 0.9;
   const EXIT_STAGGER = 0.012;
 
@@ -327,7 +325,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
   );
   const w1ExitY = useSpring(w1ExitYRaw, SPRING_CONFIG);
 
-  // Word 2 (L'OEIL) — text fades out separately so logo can take over
+  // Word 2 (L'ŒIL) — text fades out separately so logo can take over
   const w2TextOpacity = useTransform(scrollYProgress, [0.92, 0.94], [1, 0]);
   const w2ExitYRaw = useTransform(scrollYProgress, [0.92, 0.94], [0, -30]);
   const w2ExitY = useSpring(w2ExitYRaw, SPRING_CONFIG);
@@ -341,7 +339,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
     Math.min(a, b),
   );
   const w1Y = useTransform([w1InY, w1ExitY] as const, ([a, b]: number[]) => a + b);
-  // L'OEIL: entrance opacity × text fade-out (logo handles the rest)
+  // L'ŒIL: entrance opacity × text fade-out (logo handles the rest)
   const w2Opacity = useTransform([w2InOpacity, w2TextOpacity] as const, ([a, b]: number[]) =>
     Math.min(a, b),
   );
@@ -424,7 +422,7 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
             </m.span>
           </span>
           <br />
-          {/* Line 2: DANS + L'OEIL → logo */}
+          {/* Line 2: DANS + L'ŒIL → logo */}
           <span className="inline-block">
             <m.span className="inline-block" style={{ opacity: w1Opacity, y: w1Y }}>
               {OUTRO_WORDS[1]}
@@ -432,12 +430,12 @@ function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number
           </span>
           {'\u00A0'}
           <span className="relative inline-block align-bottom">
-            {/* L'OEIL text — fades out, replaced by logo */}
+            {/* L'ŒIL text — fades out, replaced by logo */}
             <m.span className="inline-block" style={{ opacity: w2Opacity, y: w2Y }}>
               {OUTRO_WORDS[2]}
             </m.span>
 
-            {/* Logo video — spawns at L'OEIL position, then grows + floats */}
+            {/* Logo video — spawns at L'ŒIL position, then grows + floats */}
             <m.span
               className="absolute left-1/2 top-1/2 inline-flex origin-center items-center justify-center"
               style={{
@@ -504,7 +502,7 @@ function StaticServiceList() {
               {String(i + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
             </span>
             <h3 className="text-subtitle mb-3 text-title-sm text-black">{service.title}</h3>
-            <p className="text-body leading-relaxed text-black/50">{service.description}</p>
+            <p className="text-body text-black/50">{service.description}</p>
             <LinkCTA
               to={service.link}
               theme="light"
@@ -580,7 +578,7 @@ function HomeServices() {
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body leading-relaxed text-black/50">{service.description}</p>
+                    <p className="text-body text-black/50">{service.description}</p>
                     <LinkCTA
                       to={service.link}
                       theme="light"

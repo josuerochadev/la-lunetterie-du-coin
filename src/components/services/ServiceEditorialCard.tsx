@@ -62,7 +62,7 @@ export function ServiceEditorialCard({
         <h2 className="heading-section">{service.title}</h2>
 
         {/* Description */}
-        <p className="text-body-lg leading-relaxed text-text">{service.description}</p>
+        <p className="text-body-lg text-text">{service.description}</p>
 
         {/* Détails - Boîte centralisée avec bordure */}
         <div className={`border border-black p-6 ${isImageLeft ? '' : 'text-left'}`}>

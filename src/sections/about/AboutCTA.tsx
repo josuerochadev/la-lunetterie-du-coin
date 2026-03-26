@@ -14,19 +14,17 @@ export default function AboutCTA() {
       <div className="mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-4xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 className="heading-section text-black">Envie d&apos;en savoir plus ?</h2>
+            <h2 className="heading-section text-black">YEUX T&apos;AIMENT</h2>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mt-6 text-body-lg text-black/50">
-              Découvrez nos services ou venez nous rencontrer en boutique
-            </p>
+            <p className="mt-6 text-body-lg text-black/50">Venez voir par vous-même.</p>
           </SimpleAnimation>
 
           <SimpleAnimation type="fade" delay={200}>
             <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row">
               <LinkCTA to="/services" theme="accent">
-                Découvrir nos services
+                Voir nos services
               </LinkCTA>
               <LinkCTA to="/contact" theme="accent">
                 Nous contacter

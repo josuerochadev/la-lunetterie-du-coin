@@ -8,9 +8,9 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
-  'Romain ouvre La Lunetterie du Coin avec une conviction forte : proposer des lunettes de qualité tout en respectant la planète. Le concept ? Donner une seconde vie aux montures en les restaurant avec soin, tout en proposant une sélection pointue de créateurs indépendants.';
+  'En 2016, La Lunetterie du Coin ouvre ses portes avec une idée simple : restaurer des montures plutôt que les jeter. Ajoutez une sélection pointue de créateurs, un vrai conseil — et la boutique était née.';
 const STORY_BODY_2 =
-  "Aujourd'hui, la boutique est devenue une référence à Strasbourg pour celles et ceux qui cherchent des lunettes uniques, un service personnalisé et une démarche qui a du sens.";
+  "Aujourd'hui, c'est l'adresse à Strasbourg pour des lunettes uniques et un service qui prend le temps.";
 
 // ---------------------------------------------------------------------------
 // Desktop animated — scroll-driven photo reveal + text + expansion
@@ -185,7 +185,7 @@ function HistoryDesktop() {
 
           <m.div style={{ opacity: phraseFadeOut }}>
             <LinkCTA to="/services" theme="dark">
-              Découvrir nos services
+              Voir nos services
             </LinkCTA>
           </m.div>
         </m.div>
@@ -253,10 +253,10 @@ export default function AboutHistory() {
                 <h2 id="histoire-title" className="heading-section text-white">
                   Un peu d&apos;histoire
                 </h2>
-                <p className="text-body-lg leading-relaxed text-white/80">{STORY_BODY}</p>
-                <p className="text-body leading-relaxed text-white/50">{STORY_BODY_2}</p>
+                <p className="text-body-lg text-white/80">{STORY_BODY}</p>
+                <p className="text-body text-white/50">{STORY_BODY_2}</p>
                 <LinkCTA to="/services" theme="dark" className="mt-4">
-                  Découvrir nos services
+                  Voir nos services
                 </LinkCTA>
               </div>
             </SimpleAnimation>

@@ -277,7 +277,7 @@ function HomeStory() {
         </SimpleAnimation>
 
         <SimpleAnimation type="slide-up" delay={200}>
-          <p className="text-body-lg leading-relaxed text-white/80">{STORY_BODY}</p>
+          <p className="text-body-lg text-white/80">{STORY_BODY}</p>
           <LinkCTA to="/a-propos" theme="dark" className="mt-6 text-body-sm sm:mt-8">
             Nous découvrir
           </LinkCTA>

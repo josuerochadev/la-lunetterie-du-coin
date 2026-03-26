@@ -128,7 +128,7 @@ export default function ContactForm() {
         {/* Avertissement de confidentialité */}
         <div className="lg:col-span-2">
           <div className="border-l-4 border-accent/30 bg-accent/5 p-4">
-            <p className="text-body-sm leading-relaxed text-black/50">
+            <p className="text-body-sm text-black/50">
               <span className="font-medium text-text">Important :</span> Ne transmettez pas
               d'informations confidentielles ou sensibles via ce formulaire. Pour une communication
               sécurisée, contactez-nous directement par téléphone ou prenez rendez-vous.

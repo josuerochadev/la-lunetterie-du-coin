@@ -1,25 +1,11 @@
 import Layout from '@/components/common/Layout';
+import StickySection from '@/components/common/StickySection';
 import ServicesHero from '@/sections/services/ServicesHero';
 import ServicesContent from '@/sections/services/ServicesContent';
 import ServicesCTA from '@/sections/services/ServicesCTA';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 
-/**
- * Page Services détaillée
- *
- * Page complète présentant tous les services :
- * - Lunettes neuves
- * - Lunettes d'occasion / Recyclage
- * - Examens de vue
- * - Lentilles de contact
- * - Réparations et ajustements
- *
- * Style minimaliste cohérent avec les autres pages
- *
- * @component
- * @returns {JSX.Element} Page Services complète
- */
 export default function ServicesPage() {
   useNativeScroll();
 
@@ -31,9 +17,20 @@ export default function ServicesPage() {
         canonicalPath="/services"
       />
       <Layout>
-        <ServicesHero />
-        <ServicesContent />
-        <ServicesCTA />
+        {/* Hero — fond jaune, titre géant */}
+        <StickySection zIndex={11} enableSticky>
+          <ServicesHero />
+        </StickySection>
+
+        {/* Services — défilé éditorial immersif */}
+        <StickySection zIndex={12}>
+          <ServicesContent />
+        </StickySection>
+
+        {/* CTA final — fond jaune, sticky */}
+        <StickySection zIndex={13} enableSticky wrapperMinHeight="200vh">
+          <ServicesCTA />
+        </StickySection>
       </Layout>
     </>
   );

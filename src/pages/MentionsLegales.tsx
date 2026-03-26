@@ -32,7 +32,7 @@ export default function MentionsLegales() {
             Éditeur du site
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-black/50">
+          <div className="space-y-4 text-body text-black/50">
             <p>
               <strong className="font-medium text-text">Nom :</strong>
               <br />
@@ -78,7 +78,7 @@ export default function MentionsLegales() {
           </h2>
 
           <div className="border-t border-black/10 pt-8">
-            <div className="space-y-4 text-body leading-relaxed text-black/50">
+            <div className="space-y-4 text-body text-black/50">
               <p>
                 <strong className="font-medium text-text">Email :</strong>
                 <br />
@@ -111,7 +111,7 @@ export default function MentionsLegales() {
             Hébergeur
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-black/50">
+          <div className="space-y-4 text-body text-black/50">
             <p>
               <strong className="font-medium text-text">{HOST_NAME}</strong>
             </p>
@@ -126,7 +126,7 @@ export default function MentionsLegales() {
             Propriété intellectuelle
           </h2>
 
-          <p className="text-body leading-relaxed text-black/50">
+          <p className="text-body text-black/50">
             Le site et l'ensemble de ses contenus (textes, images, logos, éléments graphiques) sont
             protégés par le droit d'auteur. Toute reproduction ou représentation, totale ou
             partielle, sans autorisation préalable, est interdite.
@@ -140,7 +140,7 @@ export default function MentionsLegales() {
             Données personnelles & cookies
           </h2>
 
-          <p className="text-body leading-relaxed text-black/50">
+          <p className="text-body text-black/50">
             Pour toute demande relative à la protection des données, contactez l'éditeur aux
             coordonnées ci-dessus. Si des traceurs/cookies tiers sont utilisés, une politique de
             confidentialité et une bannière cookies doivent être mises en place.
@@ -154,14 +154,14 @@ export default function MentionsLegales() {
             Médiation de la consommation
           </h2>
 
-          <p className="mb-6 text-body leading-relaxed text-black/50">
+          <p className="mb-6 text-body text-black/50">
             Conformément à l'article L.612-1 du Code de la consommation, le client peut recourir à
             un médiateur de la consommation gratuitement.
           </p>
 
           <div className="border-t border-black/10 pt-8">
             <h3 className="heading-subsection mb-4">Médiateur compétent</h3>
-            <div className="space-y-4 text-body leading-relaxed text-black/50">
+            <div className="space-y-4 text-body text-black/50">
               <p>
                 <strong className="font-medium text-text">{MEDIATOR_NAME}</strong>
               </p>

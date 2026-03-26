@@ -1,22 +1,11 @@
 import Layout from '@/components/common/Layout';
+import StickySection from '@/components/common/StickySection';
 import OffersHero from '@/sections/offers/OffersHero';
 import OffersContent from '@/sections/offers/OffersContent';
 import OffersCTA from '@/sections/offers/OffersCTA';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 
-/**
- * Page Offres détaillée
- *
- * Page complète présentant nos deux offres principales :
- * - Programme de recyclage (jusqu'à 70€ de réduction)
- * - Deuxième paire (à partir de 59€)
- *
- * Style minimaliste cohérent avec ServicesPage
- *
- * @component
- * @returns {JSX.Element} Page Offres complète
- */
 export default function OffersPage() {
   useNativeScroll();
 
@@ -28,9 +17,20 @@ export default function OffersPage() {
         canonicalPath="/offres"
       />
       <Layout>
-        <OffersHero />
-        <OffersContent />
-        <OffersCTA />
+        {/* Hero — fond noir, titre accent */}
+        <StickySection zIndex={11} enableSticky>
+          <OffersHero />
+        </StickySection>
+
+        {/* Offres — carrousel sticky 3D */}
+        <StickySection zIndex={12}>
+          <OffersContent />
+        </StickySection>
+
+        {/* CTA — fond jaune, mot zoom */}
+        <StickySection zIndex={13} enableSticky wrapperMinHeight="200vh">
+          <OffersCTA />
+        </StickySection>
       </Layout>
     </>
   );

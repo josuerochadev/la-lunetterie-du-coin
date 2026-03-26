@@ -348,9 +348,7 @@ function OffersDesktop() {
                   <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
 
                   {/* Summary */}
-                  <p className="mt-5 max-w-md text-body-lg leading-relaxed text-white/50">
-                    {offer.summary}
-                  </p>
+                  <p className="mt-5 max-w-md text-body-lg text-white/50">{offer.summary}</p>
 
                   {/* CTA */}
                   <LinkCTA
@@ -438,7 +436,7 @@ function OfferMobileBlock({
                 {number} / {String(OFFER_COUNT).padStart(2, '0')}
               </span>
               <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-              <p className="mt-3 text-body-lg leading-relaxed text-white/60">{offer.summary}</p>
+              <p className="mt-3 text-body-lg text-white/60">{offer.summary}</p>
               <LinkCTA
                 href={offer.link}
                 theme="dark"

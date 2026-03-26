@@ -10,9 +10,9 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
 const ENGAGEMENT_BODY =
-  "Depuis 2016, nous proposons une alternative durable au marché traditionnel de l'optique. Nos montures d'occasion sont soigneusement restaurées, donnant une seconde vie à des pièces qui auraient fini à la décharge.";
+  "Des montures restaurées avec soin plutôt que jetées. Ici, l'occasion c'est pas du bas de gamme — c'est du bon sens.";
 const ENGAGEMENT_HIGHLIGHT =
-  "En rapportant vos anciennes lunettes, vous bénéficiez d'une réduction allant jusqu'à 70€ sur votre nouvel achat. Un geste pour votre portefeuille et pour la planète.";
+  "Ramenez vos anciennes lunettes : jusqu'à 70€ de remise sur votre prochain achat. Bon pour vous, bon pour la planète.";
 
 // ---------------------------------------------------------------------------
 // Giant background counter — counts from 0 to 2000+ (recycled pairs)
@@ -155,7 +155,7 @@ function EngagementDesktop() {
               scrollYProgress={scrollYProgress}
               revealStart={0.26}
               revealEnd={0.4}
-              className="text-body-lg leading-relaxed text-black/60"
+              className="text-body-lg text-black/60"
             >
               {ENGAGEMENT_BODY}
             </ScrollWordReveal>
@@ -214,7 +214,7 @@ export default function AboutEngagement() {
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={150}>
-              <div className="space-y-6 text-body leading-relaxed text-black/50">
+              <div className="space-y-6 text-body text-black/50">
                 <p className="text-text">{ENGAGEMENT_BODY}</p>
                 <p className="text-body-sm italic text-secondary-orange">{ENGAGEMENT_HIGHLIGHT}</p>
               </div>

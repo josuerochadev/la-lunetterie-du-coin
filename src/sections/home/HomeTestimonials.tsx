@@ -15,7 +15,7 @@ const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;
-const SCROLL_HEIGHT_VH = 240;
+const SCROLL_HEIGHT_VH = 180;
 
 // ── Scroll budget (normalised 0–1) ──────────────────────────────────────────
 //
@@ -93,7 +93,7 @@ function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number
         revealEnd={0.06}
         className="heading-section text-center text-white"
       >
-        Ils nous font confiance
+        On ne le dit pas, ils le disent.
       </ScrollWordReveal>
     </m.div>
   );
@@ -127,7 +127,7 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
               scrollYProgress={scrollYProgress}
               revealStart={0.1}
               revealEnd={0.24}
-              className="leading-relaxed text-white"
+              className="text-white"
             >
               {`\u201C${FEATURED.quote}\u201D`}
             </ScrollWordReveal>
@@ -198,10 +198,7 @@ function TestimonialSlide({
         <RatingStars rating={testimonial.rating} size="h-4 w-4" className="mb-6 justify-center" />
 
         <blockquote className="mb-6">
-          <p
-            className="leading-relaxed text-white/80"
-            style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}
-          >
+          <p className="text-white/80" style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}>
             &ldquo;{testimonial.quote}&rdquo;
           </p>
         </blockquote>
@@ -234,9 +231,9 @@ function TestimonialsDesktop() {
     offset: ['start start', 'end end'],
   });
 
-  // ── CTA — appears after parade, fades out before section exits ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.8, 0.86, 0.94, 0.98], [0, 1, 1, 0]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.8, 0.86], [30, 0]);
+  // ── CTA — visible during parade, exits with last testimonial ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [20, 0, 0, -30]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
@@ -345,7 +342,7 @@ function HomeTestimonials() {
                 id={prefersReducedMotion ? 'testimonials-title' : undefined}
                 className="heading-section text-white"
               >
-                Ils nous font confiance
+                On ne le dit pas, ils le disent.
               </h2>
             </SimpleAnimation>
 
@@ -377,10 +374,7 @@ function HomeTestimonials() {
 
               <SimpleAnimation type="slide-up" delay={150}>
                 <blockquote className="mb-8">
-                  <p
-                    className="leading-relaxed text-white/90"
-                    style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}
-                  >
+                  <p className="text-white/90" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>
                     &ldquo;{FEATURED.quote}&rdquo;
                   </p>
                 </blockquote>
@@ -411,9 +405,7 @@ function HomeTestimonials() {
                   <RatingStars rating={testimonial.rating} className="mb-4" />
 
                   <blockquote className="mb-5">
-                    <p className="text-body leading-relaxed text-white/70">
-                      &ldquo;{testimonial.quote}&rdquo;
-                    </p>
+                    <p className="text-body text-white/70">&ldquo;{testimonial.quote}&rdquo;</p>
                   </blockquote>
 
                   <footer>

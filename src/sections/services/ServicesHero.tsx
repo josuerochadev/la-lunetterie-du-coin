@@ -1,30 +1,85 @@
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { m } from 'framer-motion';
 
-/**
- * Section ServicesHero - Hero de la page Services
- *
- * Hero section avec titre et description.
- * Style cohérent avec HomePage, AboutPage et OffersPage.
- *
- * @component
- * @returns {JSX.Element} Hero section pour la page Services
- */
-export default function ServicesHero() {
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import EyePattern from '@/components/common/EyePattern';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+
+const SPRING_TRANSITION = { type: 'spring' as const, stiffness: 80, damping: 30, mass: 0.5 };
+
+function HeroDesktop() {
   return (
-    <section id="hero" className="relative w-full bg-background py-section">
-      <div className="mx-auto max-w-container px-container-x">
-        <div className="mx-auto max-w-5xl">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <div className="space-y-6">
-              <h1 className="heading-page">Nos services</h1>
-              <p
-                className="leading-relaxed text-black/50"
-                style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
-              >
-                Une expertise complète pour prendre soin de votre vue, avec style et conscience
-              </p>
+    <div className="hidden lg:block">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <EyePattern variant="jaune" opacity={0.03} />
+
+        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
+          <m.h1
+            className="text-heading text-center text-black"
+            style={{ fontSize: 'clamp(3rem, 12vw, 14rem)', lineHeight: '0.95' }}
+            initial={{ opacity: 0, y: 60 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...SPRING_TRANSITION, delay: 0.1 }}
+          >
+            NOS SERVICES
+          </m.h1>
+
+          <m.p
+            className="mt-8 max-w-3xl text-center text-body-xl text-black/50"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
+          >
+            Une expertise complète pour prendre soin de votre vue, avec style et conscience
+          </m.p>
+
+          <m.p
+            className="mt-6 text-body-sm font-medium uppercase tracking-widest text-black/30"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+          >
+            5 services — 1 engagement
+          </m.p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function ServicesHero() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
+  return (
+    <section id="hero" className="relative w-full bg-accent" data-navbar-theme="dark">
+      {!prefersReducedMotion && <HeroDesktop />}
+
+      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+        <div className="relative flex min-h-[70vh] items-center py-section">
+          <EyePattern variant="jaune" opacity={0.03} />
+          <div className="relative z-10 mx-auto max-w-container px-container-x">
+            <div className="flex flex-col items-center justify-center text-center">
+              <SimpleAnimation type="slide-up" delay={0}>
+                <h1
+                  className="text-heading text-black"
+                  style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
+                >
+                  NOS SERVICES
+                </h1>
+              </SimpleAnimation>
+
+              <SimpleAnimation type="slide-up" delay={150}>
+                <p className="mt-6 max-w-2xl text-body-lg text-black/50">
+                  Une expertise complète pour prendre soin de votre vue, avec style et conscience
+                </p>
+              </SimpleAnimation>
+
+              <SimpleAnimation type="fade" delay={300}>
+                <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-black/30">
+                  5 services — 1 engagement
+                </p>
+              </SimpleAnimation>
             </div>
-          </SimpleAnimation>
+          </div>
         </div>
       </div>
     </section>

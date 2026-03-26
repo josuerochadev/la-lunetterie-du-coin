@@ -1,28 +1,44 @@
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 
-/**
- * Section ServicesCTA - Call-to-Action final de la page Services
- */
 export default function ServicesCTA() {
   return (
-    <section className="relative w-full bg-background py-section">
-      <div className="mx-auto max-w-container px-container-x">
+    <section
+      className="relative flex min-h-screen w-full items-center bg-accent"
+      data-navbar-theme="dark"
+    >
+      {/* Convex curve transition from black services section */}
+      <div
+        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-accent"
+        data-navbar-theme="dark"
+        aria-hidden="true"
+      />
+
+      <div className="mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-4xl text-center">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 className="heading-section mb-6">Prêt à trouver la paire parfaite ?</h2>
+            <h2
+              className="text-heading text-black"
+              style={{ fontSize: 'clamp(2.5rem, 8vw, 8rem)', lineHeight: '0.95' }}
+            >
+              VOYEZ LA DIFFÉRENCE
+            </h2>
           </SimpleAnimation>
 
           <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-body-lg text-black/50">
+            <p className="mt-8 text-body-lg text-black/50">
               Découvrez nos offres ou venez nous rencontrer en boutique
             </p>
           </SimpleAnimation>
 
-          <SimpleAnimation type="slide-up" delay={200}>
-            <div className="flex flex-col items-center justify-center gap-6 sm:flex-row">
-              <LinkCTA href="/offres">Découvrir nos offres</LinkCTA>
-              <LinkCTA href="/contact">Nous contacter</LinkCTA>
+          <SimpleAnimation type="fade" delay={200}>
+            <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row">
+              <LinkCTA to="/offres" theme="accent">
+                Découvrir nos offres
+              </LinkCTA>
+              <LinkCTA to="/contact" theme="accent">
+                Nous contacter
+              </LinkCTA>
             </div>
           </SimpleAnimation>
         </div>

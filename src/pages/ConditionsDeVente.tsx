@@ -15,7 +15,7 @@ export default function ConditionsDeVente() {
             Fabrication et qualité
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-black/50">
+          <div className="space-y-4 text-body text-black/50">
             <p>
               Les lunettes sont manufacturées par nos spécialistes expérimentés et conçues à partir
               de matériaux nobles. Il est important de traiter vos lunettes avec délicatesse.
@@ -61,7 +61,7 @@ export default function ConditionsDeVente() {
             </div>
           </div>
 
-          <div className="space-y-4 text-body leading-relaxed text-black/50">
+          <div className="space-y-4 text-body text-black/50">
             <p>
               Il n'existe aucun droit de rétractation pour l'achat de produits personnalisés en
               boutique.
@@ -85,7 +85,7 @@ export default function ConditionsDeVente() {
             Changement de puissance des verres
           </h2>
 
-          <div className="space-y-6 text-body leading-relaxed text-black/50">
+          <div className="space-y-6 text-body text-black/50">
             <p>
               En cas de changement de puissance des verres dans les trente (30) jours suivant la
               livraison, des frais de montage s'appliquent pour l'ensemble de la commande.
@@ -119,7 +119,7 @@ export default function ConditionsDeVente() {
             Règlement par chèque et tiers payant
           </h2>
 
-          <div className="space-y-4 text-body leading-relaxed text-black/50">
+          <div className="space-y-4 text-body text-black/50">
             <p>
               <strong className="font-medium text-text">Règlement par chèque :</strong>
               <br />
@@ -140,7 +140,7 @@ export default function ConditionsDeVente() {
             Lentilles d'essai
           </h2>
 
-          <p className="text-body leading-relaxed text-black/50">
+          <p className="text-body text-black/50">
             Une participation aux frais de transport et logistique de <strong>7€</strong> est
             demandée pour toute commande de lentilles d'essai.
           </p>
@@ -163,7 +163,7 @@ export default function ConditionsDeVente() {
           <div className="space-y-12">
             <div>
               <h3 className="heading-subsection mb-4">01. Remise à la reprise</h3>
-              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body leading-relaxed text-black/50">
+              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body text-black/50">
                 <p>
                   <strong className="text-text">Limitation :</strong> une monture par transaction
                 </p>
@@ -180,7 +180,7 @@ export default function ConditionsDeVente() {
 
             <div>
               <h3 className="heading-subsection mb-4">02. Seconde paire</h3>
-              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body leading-relaxed text-black/50">
+              <div className="space-y-3 border-l-4 border-black/15 pl-6 text-body text-black/50">
                 <p>
                   <strong className="text-text">Tarification :</strong> valable sur la monture la
                   moins coûteuse

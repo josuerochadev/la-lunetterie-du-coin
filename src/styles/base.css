@@ -44,7 +44,7 @@
     @apply text-title-md font-bold;
   }
   p {
-    @apply leading-relaxed;
+    /* line-height inherited from text-body (1.3 / 130%) per brand guidelines */
   }
   small {
     @apply text-body-sm;

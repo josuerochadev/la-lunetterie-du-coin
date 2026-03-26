@@ -28,18 +28,17 @@ function HeroDesktop() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.1 }}
           >
-            DEPUIS 2016
+            L&apos;EXPERT DES EX PAIRES
           </m.h1>
 
           {/* Subtitle — staggered */}
           <m.p
-            className="mt-8 max-w-3xl text-center text-body-xl leading-relaxed text-white/80"
+            className="mt-8 max-w-3xl text-center text-body-xl text-white/80"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
           >
-            Pionnier des lunettes d&apos;occasion à Strasbourg, La Lunetterie du Coin allie style,
-            expertise et engagement écologique
+            Depuis 2016, du style, du conseil et une seconde vie pour vos montures.
           </m.p>
 
           {/* Tagline — last to appear */}
@@ -80,14 +79,13 @@ export default function AboutHero() {
                   className="text-heading text-accent"
                   style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
                 >
-                  DEPUIS 2016
+                  L&apos;EXPERT DES EX PAIRES
                 </h1>
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={150}>
-                <p className="mt-6 max-w-2xl text-body-lg leading-relaxed text-white/80">
-                  Pionnier des lunettes d&apos;occasion à Strasbourg, La Lunetterie du Coin allie
-                  style, expertise et engagement écologique
+                <p className="mt-6 max-w-2xl text-body-lg text-white/80">
+                  Depuis 2016, du style, du conseil et une seconde vie pour vos montures.
                 </p>
               </SimpleAnimation>
 

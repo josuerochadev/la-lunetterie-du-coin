@@ -31,14 +31,14 @@ export function OfferContent({
         <h3 className="heading-subsection-lg">{title}</h3>
 
         {/* Phrase d'accroche */}
-        <p className="text-body-lg font-medium italic leading-relaxed text-accent">{catchphrase}</p>
+        <p className="text-body-lg font-medium italic text-accent">{catchphrase}</p>
 
         {/* Résumé */}
-        <p className="text-body-lg font-medium leading-relaxed text-text">{summary}</p>
+        <p className="text-body-lg font-medium text-text">{summary}</p>
 
         {/* Détails */}
         <div className="space-y-3 pt-2">
-          <p className="whitespace-pre-line text-body leading-relaxed text-black/50">{details}</p>
+          <p className="whitespace-pre-line text-body text-black/50">{details}</p>
         </div>
 
         {/* CTA */}

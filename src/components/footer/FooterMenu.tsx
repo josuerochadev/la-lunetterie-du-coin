@@ -24,7 +24,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
       <div className="mx-auto flex w-fit flex-col items-center space-y-xs">
         <address
           aria-label="Adresse et horaires de la boutique"
-          className="space-y-1 text-center text-body-sm not-italic leading-relaxed"
+          className="space-y-1 text-center text-body-sm not-italic"
         >
           <p>
             {STORE_INFO.address.street} {STORE_INFO.address.postalCode} {STORE_INFO.address.city}

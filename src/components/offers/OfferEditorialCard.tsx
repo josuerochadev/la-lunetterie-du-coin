@@ -55,12 +55,10 @@ export function OfferEditorialCard({ offer, imagePosition, index = 0 }: OfferEdi
         <h2 className="heading-section">{offer.title}</h2>
 
         {/* Phrase d'accroche */}
-        <p className="text-body-lg font-medium italic leading-relaxed text-accent">
-          {offer.catchphrase}
-        </p>
+        <p className="text-body-lg font-medium italic text-accent">{offer.catchphrase}</p>
 
         {/* Description */}
-        <p className="text-body-lg leading-relaxed text-text">{offer.description}</p>
+        <p className="text-body-lg text-text">{offer.description}</p>
 
         {/* Détails - Boîte centralisée avec bordure */}
         <div className={`border border-black p-6 ${isImageLeft ? '' : 'text-left'}`}>
