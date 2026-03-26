@@ -13,7 +13,7 @@ export default function OffersPage() {
     <>
       <Seo
         title="Nos Offres - La Lunetterie du Coin"
-        description="Découvrez nos offres exclusives : jusqu'à 70€ de réduction avec le recyclage, deuxième paire à partir de 59€. Économisez en faisant un geste pour la planète."
+        description="Jusqu'à 70€ de remise en ramenant vos anciennes paires. Deuxième paire dès 59€. Bien vu pour vos yeux, bien vu pour votre portefeuille."
         canonicalPath="/offres"
       />
       <Layout>

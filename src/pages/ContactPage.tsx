@@ -15,7 +15,7 @@ export default function ContactPage() {
     <>
       <Seo
         title="Nous contacter - La Lunetterie du Coin"
-        description="Contactez La Lunetterie du Coin à Strasbourg. Formulaire de contact, informations pratiques, prise de rendez-vous et plan d'accès."
+        description="Passez nous voir au 24 rue du Faubourg de Pierre à Strasbourg. Prise de rendez-vous, horaires et plan d'accès."
         canonicalPath="/contact"
       />
       <Layout>

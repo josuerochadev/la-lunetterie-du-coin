@@ -31,7 +31,7 @@ export default function AboutPage() {
     <>
       <Seo
         title="À propos - La Lunetterie du Coin"
-        description="Découvrez l'histoire de La Lunetterie du Coin, opticien indépendant engagé depuis 2016 dans le recyclage de lunettes à Strasbourg."
+        description="L'expert des ex paires. Depuis 2016, on donne une seconde vie aux montures au cœur de Strasbourg."
         canonicalPath="/a-propos"
       />
       <Layout>

@@ -21,7 +21,7 @@ export default function HomePage() {
     <>
       <Seo
         title="La Lunetterie du Coin - Opticien indépendant à Strasbourg"
-        description="Opticien indépendant depuis 2016. Lunettes neuves et d'occasion, lentilles de contact, examens de vue. Engagement écologique et recyclage."
+        description="Opticien indépendant à Strasbourg depuis 2016. Lunettes neuves et d'occasion, examens de vue, lentilles. Du style, du conseil, zéro gâchis."
         canonicalPath="/"
       />
       <LocalBusinessJsonLd />

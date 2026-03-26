@@ -13,7 +13,7 @@ export default function ServicesPage() {
     <>
       <Seo
         title="Nos Services - La Lunetterie du Coin"
-        description="Découvrez tous nos services : lunettes neuves et d'occasion, examens de vue, lentilles de contact, réparations. Expertise et recyclage à Strasbourg."
+        description="Lunettes neuves et d'occasion, examens de vue, lentilles, réparations. Vos yeux méritent le meilleur — on s'en occupe."
         canonicalPath="/services"
       />
       <Layout>
