@@ -1,5 +1,6 @@
 import type React from 'react';
 
+import { TIMING } from '@/config/design';
 import { FORMSPREE_ENDPOINT } from '@/config/endpoints';
 import { fetchWithRetry } from '@/lib/retryLogic';
 import {
@@ -37,7 +38,7 @@ export function useFormSubmission(): UseFormSubmissionReturn {
 
     // Create abort controller for timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), TIMING.formTimeout);
 
     let retryCount = 0;
 

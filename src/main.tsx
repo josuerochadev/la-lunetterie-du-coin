@@ -8,6 +8,7 @@ import { LazyMotion } from 'framer-motion';
 import { Analytics } from '@vercel/analytics/react';
 
 import App from './App';
+import { TIMING } from './config/design';
 
 import { MotionProvider } from '@/a11y/MotionProvider';
 import ScrollToTop from '@/components/routing/ScrollToTop';
@@ -86,9 +87,9 @@ const initSentry = async () => {
 // Initialize Sentry after a delay to not block initial page load
 // Use requestIdleCallback for better back/forward cache compatibility
 if ('requestIdleCallback' in window) {
-  requestIdleCallback(() => setTimeout(initSentry, 1000));
+  requestIdleCallback(() => setTimeout(initSentry, TIMING.sentryInit));
 } else {
-  setTimeout(initSentry, 2000);
+  setTimeout(initSentry, TIMING.sentryInitFallback);
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);

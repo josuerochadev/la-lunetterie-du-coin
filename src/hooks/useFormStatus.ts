@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { FormErrors, SubmissionResult } from './useFormSubmission';
 
+import { TIMING } from '@/config/design';
 import type { NetworkError } from '@/lib/networkErrors';
 
 type FormSubmissionStatus = 'idle' | 'sending' | 'success' | 'error';
@@ -63,7 +64,7 @@ export function useFormStatus(): UseFormStatusReturn {
         setStatus('success');
         scheduleTimeout(() => {
           setStatus('idle');
-        }, 5000);
+        }, TIMING.formSuccessReset);
       } else {
         setStatus('error');
         setError(result.error || 'Une erreur est survenue');
@@ -74,13 +75,13 @@ export function useFormStatus(): UseFormStatusReturn {
         scheduleTimeout(() => {
           setStatus('idle');
           setNetworkError(null);
-        }, 8000);
+        }, TIMING.formErrorReset);
       }
 
       // Focus message for accessibility
       scheduleTimeout(() => {
         messageRef.current?.focus();
-      }, 100);
+      }, TIMING.formFocusDelay);
     },
     [scheduleTimeout],
   );

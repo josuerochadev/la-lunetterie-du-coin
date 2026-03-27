@@ -1,5 +1,6 @@
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
+import { Z_INDEX } from '@/config/design';
 import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
@@ -41,27 +42,27 @@ export default function HomePage() {
           <HomeHero />
 
           {/* Hero → Story : gradient integrated into Story section */}
-          <StickySection zIndex={12}>
+          <StickySection zIndex={Z_INDEX.story}>
             <HomeStory />
           </StickySection>
 
           {/* Story → Offers */}
-          <StickySection zIndex={13}>
+          <StickySection zIndex={Z_INDEX.offers}>
             <HomeOffers />
           </StickySection>
 
           {/* Offers → Services */}
-          <StickySection zIndex={14}>
+          <StickySection zIndex={Z_INDEX.services}>
             <HomeServices />
           </StickySection>
 
           {/* Services → Testimonials */}
-          <StickySection zIndex={15}>
+          <StickySection zIndex={Z_INDEX.testimonials}>
             <HomeTestimonials />
           </StickySection>
 
           {/* Testimonials → Contact — hold supplémentaire pour retarder le footer */}
-          <StickySection zIndex={16} enableSticky wrapperMinHeight="200vh">
+          <StickySection zIndex={Z_INDEX.contact} enableSticky wrapperMinHeight="200vh">
             <HomeContact />
           </StickySection>
         </Layout>

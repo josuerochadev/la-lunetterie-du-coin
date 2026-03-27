@@ -6,9 +6,8 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
+import { ACCENT_HEX } from '@/config/design';
 import { SPRING_CONFIG } from '@/lib/motion';
-
-const ACCENT_HEX = '#FEEB09';
 const OFFER_COUNT = OFFERS_DATA.length;
 
 // Per-offer scroll windows (normalised 0–1)

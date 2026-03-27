@@ -10,8 +10,7 @@ import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SPRING_CONFIG } from '@/lib/motion';
-
-const ACCENT_HEX = '#FEEB09'; // --color-yellow-rgb, single source of truth
+import { ACCENT_HEX } from '@/config/design';
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;

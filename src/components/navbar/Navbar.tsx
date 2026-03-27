@@ -8,6 +8,7 @@ import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { MENU_ANIMATION_DURATION } from '@/config/menu';
 import { BOOKING_URL } from '@/config/endpoints';
+import { TIMING } from '@/config/design';
 import { cn } from '@/lib/cn';
 
 /**
@@ -36,7 +37,7 @@ const Navbar: React.FC = () => {
 
   // Auto-reveal navbar shortly after page load, then hide on scroll down
   useEffect(() => {
-    const timer = setTimeout(() => setHiddenByScroll(false), 1500);
+    const timer = setTimeout(() => setHiddenByScroll(false), TIMING.navbarReshow);
     return () => clearTimeout(timer);
   }, [location.pathname]);
 

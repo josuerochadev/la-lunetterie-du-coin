@@ -8,9 +8,8 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { BOOKING_URL } from '@/config/endpoints';
+import { ACCENT_HEX } from '@/config/design';
 import { SPRING_CONFIG } from '@/lib/motion';
-
-const ACCENT_HEX = '#FEEB09';
 const SERVICE_COUNT = SERVICES_DATA.length;
 
 // Scroll budget
