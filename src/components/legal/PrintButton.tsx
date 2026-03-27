@@ -10,7 +10,7 @@ export default function PrintButton() {
   };
 
   return (
-    <div className="flex justify-center border-t border-black/10 pt-12 print:hidden">
+    <div className="flex justify-center pt-12 print:hidden">
       <Button type="button" onClick={handlePrint} aria-label="Imprimer cette page">
         <Printer className="h-4 w-4" aria-hidden="true" />
         Imprimer cette page

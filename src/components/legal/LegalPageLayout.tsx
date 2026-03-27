@@ -30,7 +30,7 @@ export default function LegalPageLayout({
         {/* Hero — compact, fond noir */}
         <StickySection zIndex={11} enableSticky>
           <section
-            className="relative flex min-h-[40vh] w-full items-end bg-black pb-section"
+            className="relative flex min-h-[50vh] w-full items-end bg-black pb-section pt-32"
             data-navbar-theme="light"
           >
             <EyePattern variant="blanc" opacity={0.03} />
@@ -39,7 +39,7 @@ export default function LegalPageLayout({
               <SimpleAnimation type="fade" delay={0}>
                 <Link
                   to="/"
-                  className="mb-8 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white/40 transition-colors hover:text-white/70"
+                  className="mb-10 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white/40 transition-colors hover:text-white/70"
                   aria-label="Revenir à la page d'accueil"
                 >
                   ← Accueil
@@ -56,7 +56,7 @@ export default function LegalPageLayout({
 
               {lastUpdated && (
                 <SimpleAnimation type="fade" delay={150}>
-                  <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-white/30">
+                  <p className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30">
                     Mise à jour : {lastUpdated}
                   </p>
                 </SimpleAnimation>
@@ -65,18 +65,12 @@ export default function LegalPageLayout({
           </section>
         </StickySection>
 
-        {/* Content — fond blanc, convex curve */}
+        {/* Content — fond blanc */}
         <StickySection zIndex={12}>
           <section className="relative bg-background" data-navbar-theme="dark">
-            <div
-              className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-background"
-              data-navbar-theme="dark"
-              aria-hidden="true"
-            />
-
             <EyePattern variant="blanc" opacity={0.03} />
 
-            <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+            <div className="relative z-10 mx-auto max-w-container px-container-x pb-[16vw] pt-section">
               <article className="mx-auto max-w-content-readable space-y-16">{children}</article>
             </div>
           </section>

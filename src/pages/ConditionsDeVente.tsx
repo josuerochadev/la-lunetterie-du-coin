@@ -34,7 +34,7 @@ export default function ConditionsDeVente() {
             matériaux nobles. Il est important de traiter vos lunettes avec délicatesse.
           </p>
 
-          <div className="border-t border-black/10 pt-6">
+          <div className="mt-4">
             <h3 className="heading-subsection mb-3">Services gratuits inclus</h3>
             <ul className="space-y-2 text-body text-black/70">
               <li>• Ajustages personnalisés</li>
@@ -103,12 +103,12 @@ export default function ConditionsDeVente() {
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="rounded-sm border border-black/10 p-6 text-center">
-              <p className="mb-1 text-title-md font-medium text-accent">90€</p>
+              <p className="mb-1 text-title-md font-medium text-secondary-orange">90€</p>
               <p className="font-medium text-text">Verres progressifs</p>
               <p className="text-body-sm text-black/50">Frais de montage</p>
             </div>
             <div className="rounded-sm border border-black/10 p-6 text-center">
-              <p className="mb-1 text-title-md font-medium text-accent">45€</p>
+              <p className="mb-1 text-title-md font-medium text-secondary-orange">45€</p>
               <p className="font-medium text-text">Verres unifocaux</p>
               <p className="text-body-sm text-black/50">Frais de montage</p>
             </div>

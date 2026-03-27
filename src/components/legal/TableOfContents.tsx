@@ -21,7 +21,7 @@ export default function TableOfContents({ sections }: TableOfContentsProps) {
 
   return (
     <SimpleAnimation type="fade" delay={0}>
-      <nav aria-label="Table des matières" className="border-b border-black/10 pb-12">
+      <nav aria-label="Table des matières" className="pb-12">
         <h2 className="text-subtitle mb-6 text-body-sm text-black/40">Sommaire</h2>
         <ul className="grid gap-3 sm:grid-cols-2">
           {sections.map((section, index) => (
@@ -31,7 +31,7 @@ export default function TableOfContents({ sections }: TableOfContentsProps) {
                 onClick={(e) => handleClick(e, section.id)}
                 className="group inline-flex items-baseline gap-3 text-body text-black/70 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <span className="text-body-sm text-black/30 transition-colors group-hover:text-accent">
+                <span className="text-body-sm text-black/30 transition-colors group-hover:text-secondary-orange">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="transition-colors">{section.title}</span>

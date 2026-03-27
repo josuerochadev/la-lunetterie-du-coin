@@ -149,7 +149,7 @@ export default function MentionsLegales() {
             un médiateur de la consommation gratuitement.
           </p>
 
-          <div className="mt-6 border-t border-black/10 pt-6">
+          <div className="mt-4">
             <h3 className="heading-subsection mb-3">Médiateur compétent</h3>
             <div className="space-y-1 text-body text-black/70">
               <p className="font-medium text-text">{MEDIATOR_NAME}</p>
