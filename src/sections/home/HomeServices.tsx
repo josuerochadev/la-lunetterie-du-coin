@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
@@ -225,7 +226,14 @@ function PhotoReveal({
 
   return (
     <m.div className="absolute inset-0" style={{ clipPath }}>
-      <img src={src} alt={alt} className="h-full w-full object-cover" loading="lazy" />
+      <ResponsiveImage
+        src={src}
+        alt={alt}
+        className="h-full w-full object-cover"
+        loading="lazy"
+        widths={[640, 1024]}
+        sizes="(min-width: 1024px) 36vw, 100vw"
+      />
     </m.div>
   );
 }
