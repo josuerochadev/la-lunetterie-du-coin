@@ -7,10 +7,9 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { CALENDLY_URL } from '@/config/endpoints';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const ACCENT_HEX = '#FEEB09';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const SERVICE_COUNT = SERVICES_DATA.length;
 
 // Scroll budget
@@ -373,7 +372,7 @@ function ServiceCard({
 
 function MobileServiceList() {
   return (
-    <div className="space-y-24">
+    <div className="space-y-16 sm:space-y-20">
       {SERVICES_DATA.map((service, index) => {
         const isExamens = service.id === 'examens';
         return (
@@ -405,7 +404,7 @@ function MobileServiceList() {
                   {service.details.map((detail, i) => (
                     <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
                       <span
-                        className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent"
+                        className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                         aria-hidden="true"
                       />
                       <span>{detail}</span>
@@ -497,7 +496,7 @@ export default function ServicesContent() {
             <SimpleAnimation type="slide-up" delay={0}>
               <h2
                 id={prefersReducedMotion ? 'services-content-title' : undefined}
-                className="heading-section mb-16 text-white"
+                className="heading-section mb-12 text-white lg:mb-16"
               >
                 Chaque service mérite son moment
               </h2>

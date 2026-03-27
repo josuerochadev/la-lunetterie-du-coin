@@ -5,8 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 
 // ---------------------------------------------------------------------------
 // Desktop — scroll-driven entrance matching AboutCTA pattern exactly
@@ -70,7 +69,7 @@ function CTADesktop() {
 
           {/* Subtitle — staggered entrance */}
           <m.p
-            className="mt-6 text-body-lg text-black/50"
+            className="mt-6 text-body-lg text-black/60"
             style={{ opacity: subtitleOpacity, y: subtitleY }}
           >
             Passez nous voir, le reste suivra.
@@ -128,7 +127,7 @@ export default function OffersCTA() {
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={100}>
-                <p className="mt-6 text-body-lg text-black/50">
+                <p className="mt-6 text-body-lg text-black/60">
                   Passez nous voir, le reste suivra.
                 </p>
               </SimpleAnimation>

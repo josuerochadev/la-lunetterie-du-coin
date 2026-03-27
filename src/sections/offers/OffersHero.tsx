@@ -4,8 +4,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-const SPRING_TRANSITION = { type: 'spring' as const, stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_TRANSITION } from '@/lib/motion';
 
 function HeroDesktop() {
   const { scrollY } = useScroll();
@@ -15,7 +14,7 @@ function HeroDesktop() {
   return (
     <div className="hidden lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <EyePattern variant="noir" opacity={0.06} />
+        <EyePattern variant="noir" opacity={0.03} />
 
         <m.div
           className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
@@ -30,7 +29,7 @@ function HeroDesktop() {
           </TextReveal>
 
           <m.p
-            className="mt-8 max-w-3xl text-center text-body-xl text-black/50"
+            className="mt-8 max-w-3xl text-center text-body-xl text-black/60"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
@@ -52,7 +51,7 @@ export default function OffersHero() {
 
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
         <div className="relative flex min-h-[70vh] items-center py-section">
-          <EyePattern variant="noir" opacity={0.06} />
+          <EyePattern variant="noir" opacity={0.03} />
           <div className="relative z-10 mx-auto max-w-container px-container-x">
             <div className="flex flex-col items-center justify-center text-center">
               <TextReveal
@@ -64,7 +63,7 @@ export default function OffersHero() {
               </TextReveal>
 
               <SimpleAnimation type="slide-up" delay={150}>
-                <p className="mt-6 max-w-2xl text-body-lg text-black/50">
+                <p className="mt-6 max-w-2xl text-body-lg text-black/60">
                   Bien vu pour vos yeux. Bien vu pour votre portefeuille.
                 </p>
               </SimpleAnimation>

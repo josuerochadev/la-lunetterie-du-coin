@@ -8,8 +8,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import motifJauneUrl from '@/assets/patterns/motif-jaune.svg';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 
 // ---------------------------------------------------------------------------

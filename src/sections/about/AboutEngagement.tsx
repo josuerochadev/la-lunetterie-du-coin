@@ -5,8 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { STATS_DATA } from '@/data/about';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
 const ENGAGEMENT_BODY =
@@ -96,7 +95,7 @@ function StatCard({
         >
           {stat.number}
         </div>
-        <div className="mt-2 text-body-sm text-black/50">{stat.label}</div>
+        <div className="mt-2 text-body-sm text-black/60">{stat.label}</div>
       </div>
     </m.div>
   );
@@ -214,20 +213,20 @@ export default function AboutEngagement() {
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={100}>
-              <div className="mb-8 grid grid-cols-3 gap-4 border-y border-black/10 py-6">
+              <div className="mb-8 grid grid-cols-1 gap-4 border-y border-black/10 py-6 sm:grid-cols-3">
                 {STATS_DATA.map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="mb-1 text-title-sm font-bold text-secondary-orange sm:text-title-md">
                       {stat.number}
                     </div>
-                    <div className="text-body-xs text-black/50 sm:text-body-sm">{stat.label}</div>
+                    <div className="text-body-xs text-black/60 sm:text-body-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={150}>
-              <div className="space-y-6 text-body text-black/50">
+              <div className="space-y-6 text-body text-black/60">
                 <p className="text-text">{ENGAGEMENT_BODY}</p>
                 <p className="text-body-sm italic text-secondary-orange">{ENGAGEMENT_HIGHLIGHT}</p>
               </div>

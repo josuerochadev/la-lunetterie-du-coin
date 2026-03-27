@@ -5,11 +5,10 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const TEAM_BIO =
   "Opticien depuis plus de 15 ans, Romain a lancé la boutique en 2016 avec une idée fixe : de bonnes lunettes, un vrai conseil, et moins de gâchis. Spécialiste des verres progressifs et des fortes corrections, il aime surtout trouver la paire à laquelle vous n'auriez pas pensé.";
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
 // ---------------------------------------------------------------------------
 // Desktop animated — portrait with contained aspect ratio + bio word reveal

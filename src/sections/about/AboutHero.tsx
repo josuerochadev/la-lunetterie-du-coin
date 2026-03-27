@@ -4,8 +4,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-const SPRING_TRANSITION = { type: 'spring', stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_TRANSITION } from '@/lib/motion';
 
 function HeroDesktop() {
   const { scrollY } = useScroll();

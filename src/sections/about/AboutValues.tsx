@@ -9,14 +9,13 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const iconMap = {
   heart: Heart,
   leaf: Leaf,
   award: Award,
 } as const;
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 
 // ---------------------------------------------------------------------------
 // Animated value card — hooks at component level (not inside .map())
@@ -62,7 +61,7 @@ function ValueCard({
       <div className="space-y-5">
         <Icon className="h-10 w-10 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
         <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-        <p className="text-body text-black/50">{value.description}</p>
+        <p className="text-body text-black/60">{value.description}</p>
       </div>
     </m.div>
   );
@@ -158,12 +157,12 @@ export default function AboutValues() {
       <div className={prefersReducedMotion ? 'relative z-10' : 'relative z-10 lg:hidden'}>
         <div className="mx-auto max-w-container px-container-x py-section">
           <SimpleAnimation type="slide-up" delay={0}>
-            <div className="mb-12 text-center">
+            <div className="mb-12 text-center lg:mb-16">
               <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
             </div>
           </SimpleAnimation>
 
-          <div className="grid gap-10 md:grid-cols-3 md:gap-12">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
             {VALUES_DATA.map((value, i) => {
               const Icon = iconMap[value.iconName];
               return (
@@ -175,7 +174,7 @@ export default function AboutValues() {
                       aria-hidden="true"
                     />
                     <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-                    <p className="text-body text-black/50">{value.description}</p>
+                    <p className="text-body text-black/60">{value.description}</p>
                   </div>
                 </SimpleAnimation>
               );

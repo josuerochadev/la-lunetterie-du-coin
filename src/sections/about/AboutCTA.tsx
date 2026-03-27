@@ -5,8 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 
 // ---------------------------------------------------------------------------
 // Desktop animated — scroll-driven entrance as section scrolls into view
@@ -68,7 +67,7 @@ function CTADesktop() {
           </m.div>
 
           <m.p
-            className="mt-6 text-body-lg text-black/50"
+            className="mt-6 text-body-lg text-black/60"
             style={{ opacity: subtitleOpacity, y: subtitleY }}
           >
             Venez voir par vous-même.
@@ -127,7 +126,7 @@ export default function AboutCTA() {
               </SimpleAnimation>
 
               <SimpleAnimation type="slide-up" delay={100}>
-                <p className="mt-6 text-body-lg text-black/50">Venez voir par vous-même.</p>
+                <p className="mt-6 text-body-lg text-black/60">Venez voir par vous-même.</p>
               </SimpleAnimation>
 
               <SimpleAnimation type="fade" delay={200}>

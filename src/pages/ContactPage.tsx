@@ -19,27 +19,27 @@ export default function ContactPage() {
         canonicalPath="/contact"
       />
       <Layout>
-        {/* Hero — fond jaune, "PASSEZ NOUS VOIR" zoom */}
+        {/* Hero — sticky, Info monte par-dessus */}
         <StickySection zIndex={11} enableSticky>
           <ContactHero />
         </StickySection>
 
-        {/* Infos pratiques — fond noir, cascade */}
+        {/* Infos — scroll normal, gradient dissolve vers le formulaire */}
         <StickySection zIndex={12}>
           <ContactInfo />
         </StickySection>
 
-        {/* Formulaire — fond blanc */}
+        {/* Formulaire — scroll normal, contenu dépasse le viewport */}
         <StickySection zIndex={13}>
           <ContactFormSection />
         </StickySection>
 
-        {/* Localisation — photo plein écran */}
+        {/* Localisation — photo plein écran, scroll normal pour voir tout le contenu */}
         <StickySection zIndex={14}>
           <ContactLocation />
         </StickySection>
 
-        {/* RDV Calendly — fond jaune */}
+        {/* RDV Calendly — sticky avec wrapper pour footer */}
         <StickySection zIndex={15} enableSticky wrapperMinHeight="200vh">
           <ContactAppointment />
         </StickySection>

@@ -9,9 +9,9 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
 import { useIsLg } from '@/hooks/useIsLg';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const ACCENT_HEX = '#FEEB09'; // --color-yellow-rgb, single source of truth
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const FEATURED = TESTIMONIALS[0];
 const OTHERS = TESTIMONIALS.slice(1);
 const OTHER_COUNT = OTHERS.length;

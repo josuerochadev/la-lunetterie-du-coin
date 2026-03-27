@@ -7,8 +7,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 
 /**
  * Inline SVG feTurbulence grain overlay — gives photos an artisanal/film texture.
@@ -278,7 +277,7 @@ function ServiceText({
 
       <h3 className="text-subtitle mb-5 text-title-sm text-black">{service.title}</h3>
 
-      <p className="mb-8 max-w-lg text-body-lg text-black/50">{service.description}</p>
+      <p className="mb-8 max-w-lg text-body-lg text-black/60">{service.description}</p>
 
       <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
         En savoir plus
@@ -585,7 +584,7 @@ function StaticServiceList() {
               {String(i + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
             </span>
             <h3 className="text-subtitle mb-3 text-title-sm text-black">{service.title}</h3>
-            <p className="text-body text-black/50">{service.description}</p>
+            <p className="text-body text-black/60">{service.description}</p>
             <LinkCTA
               to={service.link}
               theme="light"
@@ -654,7 +653,7 @@ function HomeServices() {
       <div className="pointer-events-auto px-container-x py-section lg:hidden">
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="heading-section mb-12 text-black">
+            <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
               {HOMEPAGE_SECTIONS.services.title}
             </h2>
           </SimpleAnimation>
@@ -674,7 +673,7 @@ function HomeServices() {
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body text-black/50">{service.description}</p>
+                    <p className="text-body text-black/60">{service.description}</p>
                     <LinkCTA
                       to={service.link}
                       theme="light"

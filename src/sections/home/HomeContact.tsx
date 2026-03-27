@@ -5,8 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 const ZOOM_SPRING = { stiffness: 60, damping: 30, mass: 0.5 };
 
 // ── Desktop ─────────────────────────────────────────────────────────────────

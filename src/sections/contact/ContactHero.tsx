@@ -1,8 +1,10 @@
 import { m, useScroll, useTransform } from 'framer-motion';
 
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_TRANSITION } from '@/lib/motion';
 
 function HeroDesktop() {
   const { scrollY } = useScroll();
@@ -25,6 +27,15 @@ function HeroDesktop() {
           >
             PASSEZ NOUS VOIR
           </TextReveal>
+
+          <m.p
+            className="mt-8 max-w-3xl text-center text-body-xl text-black/60"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
+          >
+            On est là pour vous. Passez, appelez, écrivez.
+          </m.p>
         </m.div>
       </div>
     </div>
@@ -50,6 +61,12 @@ export default function ContactHero() {
               >
                 PASSEZ NOUS VOIR
               </TextReveal>
+
+              <SimpleAnimation type="slide-up" delay={150}>
+                <p className="mt-6 max-w-2xl text-body-lg text-black/60">
+                  On est là pour vous. Passez, appelez, écrivez.
+                </p>
+              </SimpleAnimation>
             </div>
           </div>
         </div>

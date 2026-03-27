@@ -3,8 +3,7 @@ import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
-
-const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG } from '@/lib/motion';
 
 export default function ServicesCTA() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -64,7 +63,7 @@ export default function ServicesCTA() {
           </m.div>
 
           {/* Subtitle — staggered entrance */}
-          <m.p className="mt-8 text-body-lg text-black/50" style={{ opacity: subOpacity, y: subY }}>
+          <m.p className="mt-8 text-body-lg text-black/60" style={{ opacity: subOpacity, y: subY }}>
             Passez nous voir, le reste suivra.
           </m.p>
 
