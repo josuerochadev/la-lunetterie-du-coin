@@ -5,18 +5,20 @@ import { cn } from '@/lib/cn';
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   /** Thème du fond — light = texte noir, dark = texte blanc, accent = texte noir (fond jaune) */
-  theme?: 'light' | 'dark' | 'accent';
+  theme?: ButtonTheme;
   /** Icône à afficher (défaut: ArrowRight) */
   icon?: React.ElementType;
 };
 
-const textColorMap: Record<string, string> = {
+type ButtonTheme = 'light' | 'dark' | 'accent';
+
+const textColorMap: Record<ButtonTheme, string> = {
   light: 'text-black',
   dark: 'text-white',
   accent: 'text-black',
 };
 
-const underlineColorMap: Record<string, string> = {
+const underlineColorMap: Record<ButtonTheme, string> = {
   light: 'bg-secondary-orange',
   dark: 'bg-secondary-orange',
   accent: 'bg-black',

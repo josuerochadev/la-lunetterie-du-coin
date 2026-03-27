@@ -41,8 +41,8 @@ const initSentry = async () => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const isSlowConnection =
       'connection' in navigator &&
-      // @ts-ignore - NetworkInformation not in standard types
-      navigator.connection?.effectiveType === 'slow-2g';
+      (navigator as Navigator & { connection?: { effectiveType?: string } }).connection
+        ?.effectiveType === 'slow-2g';
 
     if (isMobile || isSlowConnection) {
       // Sentry disabled for performance reasons (mobile/slow connection)

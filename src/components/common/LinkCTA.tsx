@@ -10,7 +10,7 @@ type LinkCTAProps = {
   /** URL externe (anchor) */
   href?: string;
   /** Thème du fond — light = texte noir, dark = texte blanc, accent = texte noir (fond jaune) */
-  theme?: 'light' | 'dark' | 'accent';
+  theme?: LinkCTATheme;
   /** Icône à afficher (défaut: ArrowRight) */
   icon?: React.ElementType;
   children: React.ReactNode;
@@ -21,13 +21,15 @@ type LinkCTAProps = {
   onClick?: React.MouseEventHandler;
 };
 
-const textColorMap: Record<string, string> = {
+type LinkCTATheme = 'light' | 'dark' | 'accent';
+
+const textColorMap: Record<LinkCTATheme, string> = {
   light: 'text-black',
   dark: 'text-white',
   accent: 'text-black',
 };
 
-const underlineColorMap: Record<string, string> = {
+const underlineColorMap: Record<LinkCTATheme, string> = {
   light: 'bg-secondary-orange',
   dark: 'bg-secondary-orange',
   accent: 'bg-secondary-orange',
