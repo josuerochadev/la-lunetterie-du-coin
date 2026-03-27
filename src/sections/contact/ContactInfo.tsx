@@ -1,5 +1,5 @@
 import { type ReactNode, useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -9,9 +9,9 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { OPENING_HOURS } from '@/data/contact';
-import { SPRING_CONFIG } from '@/lib/motion';
 
 // ---------------------------------------------------------------------------
 // Info item — icon + text, no card wrapper
@@ -50,25 +50,20 @@ function InfoDesktop() {
     offset: ['start end', 'end end'],
   });
 
-  const titleOpacity = useTransform(scrollYProgress, [0.15, 0.3], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.15, 0.3], [40, 0]);
-  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
-
-  const contentOpacity = useTransform(scrollYProgress, [0.25, 0.45], [0, 1]);
-  const contentYRaw = useTransform(scrollYProgress, [0.25, 0.45], [40, 0]);
-  const contentY = useSpring(contentYRaw, SPRING_CONFIG);
+  const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
+  const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
 
   return (
     <div ref={sectionRef} className="hidden lg:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
-          <m.div style={{ opacity: titleOpacity, y: titleY }}>
+          <m.div style={{ opacity: title.opacity, y: title.y }}>
             <h2 className="heading-section mb-16 text-center text-white">Les infos utiles</h2>
           </m.div>
 
           <m.div
             className="grid gap-12 md:grid-cols-2"
-            style={{ opacity: contentOpacity, y: contentY }}
+            style={{ opacity: content.opacity, y: content.y }}
           >
             <InfoItem icon={MapPin} title="Adresse">
               <address className="mb-3 text-body not-italic text-white/50">

@@ -5,6 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { STATS_DATA } from '@/data/about';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
@@ -81,13 +82,14 @@ function StatCard({
 }) {
   const start = 0.1 + index * 0.06;
   const end = start + 0.1;
-  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-  const yRaw = useTransform(scrollYProgress, [start, end], [60, 0]);
-  const y = useSpring(yRaw, SPRING_CONFIG);
+  const entrance = useScrollEntrance(scrollYProgress, start, end, 60);
   const scale = useTransform(scrollYProgress, [start, end], [0.85, 1]);
 
   return (
-    <m.div className="text-center will-change-transform" style={{ opacity, y, scale }}>
+    <m.div
+      className="text-center will-change-transform"
+      style={{ opacity: entrance.opacity, y: entrance.y, scale }}
+    >
       <div className="border-t-2 border-black/10 pt-6">
         <div
           className="text-heading text-secondary-orange"
@@ -118,9 +120,7 @@ function EngagementDesktop() {
   const bodyOpacity = useTransform(scrollYProgress, [0.25, 0.32], [0, 1]);
 
   // Highlight
-  const highlightOpacity = useTransform(scrollYProgress, [0.4, 0.5], [0, 1]);
-  const highlightYRaw = useTransform(scrollYProgress, [0.4, 0.5], [20, 0]);
-  const highlightY = useSpring(highlightYRaw, SPRING_CONFIG);
+  const highlight = useScrollEntrance(scrollYProgress, 0.4, 0.5, 20);
 
   // Exit — fade out content (counter already fades at 0.7–0.8)
   const exitOpacity = useTransform(scrollYProgress, [0.7, 0.85], [1, 0]);
@@ -172,8 +172,8 @@ function EngagementDesktop() {
           <m.p
             className="mt-8 max-w-2xl text-center text-body italic text-secondary-orange"
             style={{
-              opacity: highlightOpacity,
-              y: highlightY,
+              opacity: highlight.opacity,
+              y: highlight.y,
               filter: 'drop-shadow(0 1px 3px rgba(0,0,0,0.1))',
             }}
           >

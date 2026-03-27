@@ -1,12 +1,12 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { BOOKING_URL } from '@/config/endpoints';
-import { SPRING_CONFIG } from '@/lib/motion';
 
 export default function ContactAppointment() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -21,19 +21,13 @@ export default function ContactAppointment() {
   const motifOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 0.2]);
 
   // Title — entrance in first half
-  const titleOpacity = useTransform(scrollYProgress, [0.25, 0.4], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.25, 0.4], [40, 0]);
-  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+  const title = useScrollEntrance(scrollYProgress, 0.25, 0.4);
 
   // Subtitle
-  const subOpacity = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-  const subYRaw = useTransform(scrollYProgress, [0.3, 0.45], [25, 0]);
-  const subY = useSpring(subYRaw, SPRING_CONFIG);
+  const sub = useScrollEntrance(scrollYProgress, 0.3, 0.45, 25);
 
   // CTA
-  const ctaOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
-  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const cta = useScrollEntrance(scrollYProgress, 0.35, 0.5, 20);
 
   return (
     <div ref={wrapperRef} className="relative bg-accent" style={{ minHeight: '200vh' }}>
@@ -95,7 +89,7 @@ export default function ContactAppointment() {
             ) : (
               <>
                 {/* Title — ScrollWordReveal word-by-word */}
-                <m.div style={{ opacity: titleOpacity, y: titleY }}>
+                <m.div style={{ opacity: title.opacity, y: title.y }}>
                   <ScrollWordReveal
                     as="h2"
                     scrollYProgress={scrollYProgress}
@@ -111,7 +105,7 @@ export default function ContactAppointment() {
                 {/* Subtitle — staggered entrance */}
                 <m.p
                   className="mt-8 text-body-lg text-black/60"
-                  style={{ opacity: subOpacity, y: subY }}
+                  style={{ opacity: sub.opacity, y: sub.y }}
                 >
                   Examen de vue, essayage ou juste un conseil.
                 </m.p>
@@ -119,7 +113,7 @@ export default function ContactAppointment() {
                 {/* CTA — staggered entrance */}
                 <m.div
                   className="mt-10 flex justify-center"
-                  style={{ opacity: ctaOpacity, y: ctaY }}
+                  style={{ opacity: cta.opacity, y: cta.y }}
                 >
                   <LinkCTA
                     href={BOOKING_URL}

@@ -1,5 +1,5 @@
 import { type ReactNode, useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Car from 'lucide-react/dist/esm/icons/car';
 import Train from 'lucide-react/dist/esm/icons/train';
@@ -9,7 +9,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
-import { SPRING_CONFIG } from '@/lib/motion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 
 // ---------------------------------------------------------------------------
 // Location item — icon + text, no card wrapper (same pattern as ContactInfo)
@@ -58,17 +58,9 @@ function LocationDesktop() {
     offset: ['start end', 'end end'],
   });
 
-  const titleOpacity = useTransform(contentScroll.scrollYProgress, [0.15, 0.3], [0, 1]);
-  const titleYRaw = useTransform(contentScroll.scrollYProgress, [0.15, 0.3], [40, 0]);
-  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
-
-  const contentOpacity = useTransform(contentScroll.scrollYProgress, [0.25, 0.45], [0, 1]);
-  const contentYRaw = useTransform(contentScroll.scrollYProgress, [0.25, 0.45], [40, 0]);
-  const contentY = useSpring(contentYRaw, SPRING_CONFIG);
-
-  const footerOpacity = useTransform(contentScroll.scrollYProgress, [0.3, 0.48], [0, 1]);
-  const footerYRaw = useTransform(contentScroll.scrollYProgress, [0.3, 0.48], [30, 0]);
-  const footerY = useSpring(footerYRaw, SPRING_CONFIG);
+  const title = useScrollEntrance(contentScroll.scrollYProgress, 0.15, 0.3);
+  const content = useScrollEntrance(contentScroll.scrollYProgress, 0.25, 0.45);
+  const footer = useScrollEntrance(contentScroll.scrollYProgress, 0.3, 0.48, 30);
 
   return (
     <div ref={sectionRef} className="relative hidden min-h-screen w-full lg:block">
@@ -90,13 +82,13 @@ function LocationDesktop() {
 
       <div className="relative z-10 flex min-h-screen items-center">
         <div className="mx-auto max-w-container px-container-x py-section">
-          <m.div style={{ opacity: titleOpacity, y: titleY }}>
+          <m.div style={{ opacity: title.opacity, y: title.y }}>
             <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
           </m.div>
 
           <m.div
             className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2"
-            style={{ opacity: contentOpacity, y: contentY }}
+            style={{ opacity: content.opacity, y: content.y }}
           >
             <LocationItem icon={Car} title="En voiture">
               <div className="space-y-2 text-body text-white/50">
@@ -135,7 +127,7 @@ function LocationDesktop() {
           {/* Accessibility + Maps CTA */}
           <m.div
             className="mx-auto mt-12 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
-            style={{ opacity: footerOpacity, y: footerY }}
+            style={{ opacity: footer.opacity, y: footer.y }}
           >
             <p className="text-body text-white/80">
               <span className="font-medium text-white">Accessibilité :</span> Le magasin est

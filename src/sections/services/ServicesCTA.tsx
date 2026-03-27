@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { SPRING_CONFIG } from '@/lib/motion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 
 export default function ServicesCTA() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -20,19 +20,13 @@ export default function ServicesCTA() {
   const motifOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 0.2]);
 
   // Title
-  const titleOpacity = useTransform(scrollYProgress, [0.25, 0.4], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.25, 0.4], [40, 0]);
-  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+  const title = useScrollEntrance(scrollYProgress, 0.25, 0.4);
 
   // Subtitle
-  const subOpacity = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-  const subYRaw = useTransform(scrollYProgress, [0.3, 0.45], [25, 0]);
-  const subY = useSpring(subYRaw, SPRING_CONFIG);
+  const sub = useScrollEntrance(scrollYProgress, 0.3, 0.45, 25);
 
   // CTAs
-  const ctaOpacity = useTransform(scrollYProgress, [0.38, 0.5], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.38, 0.5], [20, 0]);
-  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const cta = useScrollEntrance(scrollYProgress, 0.38, 0.5, 20);
 
   return (
     <div ref={wrapperRef} className="relative bg-accent" style={{ minHeight: '200vh' }}>
@@ -92,7 +86,7 @@ export default function ServicesCTA() {
               </>
             ) : (
               <>
-                <m.div style={{ opacity: titleOpacity, y: titleY }}>
+                <m.div style={{ opacity: title.opacity, y: title.y }}>
                   <ScrollWordReveal
                     as="h2"
                     scrollYProgress={scrollYProgress}
@@ -107,14 +101,14 @@ export default function ServicesCTA() {
 
                 <m.p
                   className="mt-8 text-body-lg text-black/60"
-                  style={{ opacity: subOpacity, y: subY }}
+                  style={{ opacity: sub.opacity, y: sub.y }}
                 >
                   Passez nous voir, le reste suivra.
                 </m.p>
 
                 <m.div
                   className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row"
-                  style={{ opacity: ctaOpacity, y: ctaY }}
+                  style={{ opacity: cta.opacity, y: cta.y }}
                 >
                   <LinkCTA to="/offres" theme="accent">
                     Voir nos offres

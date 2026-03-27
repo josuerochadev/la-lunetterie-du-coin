@@ -9,6 +9,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const iconMap = {
@@ -33,9 +34,7 @@ function ValueCard({
   const start = 0.1 + index * 0.1;
   const end = start + 0.12;
 
-  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
-  const yRaw = useTransform(scrollYProgress, [start, end], [100, 0]);
-  const y = useSpring(yRaw, SPRING_CONFIG);
+  const entrance = useScrollEntrance(scrollYProgress, start, end, 100);
 
   const tiltDir = index === 0 ? 6 : index === 2 ? -6 : 0;
   const rotateYRaw = useTransform(scrollYProgress, [start, end], [tiltDir, 0]);
@@ -50,8 +49,8 @@ function ValueCard({
     <m.div
       className="will-change-transform"
       style={{
-        opacity,
-        y,
+        opacity: entrance.opacity,
+        y: entrance.y,
         rotateY,
         rotateX,
         scale,

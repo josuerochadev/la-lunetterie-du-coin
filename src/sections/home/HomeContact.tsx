@@ -4,8 +4,8 @@ import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'fram
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useIsLg } from '@/hooks/useIsLg';
-import { SPRING_CONFIG } from '@/lib/motion';
 const ZOOM_SPRING = { stiffness: 60, damping: 30, mass: 0.5 };
 
 // ── Desktop ─────────────────────────────────────────────────────────────────
@@ -43,14 +43,10 @@ function ContactDesktop() {
   const voirScale = useSpring(voirScaleRaw, ZOOM_SPRING);
 
   // ── "PASSEZ NOUS" — line 1 ────────────────────────────────────────────
-  const passezOpacity = useTransform(scrollYProgress, [0.14, 0.22], [0, 1]);
-  const passezYRaw = useTransform(scrollYProgress, [0.14, 0.22], [40, 0]);
-  const passezY = useSpring(passezYRaw, SPRING_CONFIG);
+  const passez = useScrollEntrance(scrollYProgress, 0.14, 0.22);
 
   // ── CTA ──────────────────────────────────────────────────────────────────
-  const ctaOpacity = useTransform(scrollYProgress, [0.26, 0.34], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.26, 0.34], [30, 0]);
-  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
 
   // Navbar theme strip — starts "light" (black bg) then removes when yellow reveals
   const contactStripRef = useRef<HTMLDivElement>(null);
@@ -89,7 +85,7 @@ function ContactDesktop() {
             className="text-heading text-center text-black"
             style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
           >
-            <m.span className="block" style={{ opacity: passezOpacity, y: passezY }}>
+            <m.span className="block" style={{ opacity: passez.opacity, y: passez.y }}>
               PASSEZ NOUS
             </m.span>
             <m.span className="block origin-center" style={{ scale: voirScale }}>
@@ -97,7 +93,7 @@ function ContactDesktop() {
             </m.span>
           </h2>
 
-          <m.div style={{ opacity: ctaOpacity, y: ctaY }}>
+          <m.div style={{ opacity: cta.opacity, y: cta.y }}>
             <LinkCTA to="/contact" theme="accent">
               Nous contacter
             </LinkCTA>

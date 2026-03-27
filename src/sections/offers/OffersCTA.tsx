@@ -5,6 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 export default function OffersCTA() {
@@ -23,9 +24,7 @@ export default function OffersCTA() {
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // Subtitle
-  const subtitleOpacity = useTransform(scrollYProgress, [0.3, 0.45], [0, 1]);
-  const subtitleYRaw = useTransform(scrollYProgress, [0.3, 0.45], [30, 0]);
-  const subtitleY = useSpring(subtitleYRaw, SPRING_CONFIG);
+  const subtitle = useScrollEntrance(scrollYProgress, 0.3, 0.45, 30);
 
   // Buttons
   const buttonsOpacity = useTransform(scrollYProgress, [0.38, 0.5], [0, 1]);
@@ -93,7 +92,7 @@ export default function OffersCTA() {
 
                 <m.p
                   className="mt-6 text-body-lg text-black/60"
-                  style={{ opacity: subtitleOpacity, y: subtitleY }}
+                  style={{ opacity: subtitle.opacity, y: subtitle.y }}
                 >
                   Passez nous voir, le reste suivra.
                 </m.p>
