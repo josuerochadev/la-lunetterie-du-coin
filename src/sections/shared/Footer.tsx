@@ -68,9 +68,9 @@ export default function Footer({
         <FooterLogo />
       </div>
 
-      <SectionContainer className="relative px-container-x pb-12 pt-[14vw] lg:pb-16">
+      <SectionContainer className="relative px-container-x pb-8 pt-[10vw] lg:pb-10">
         {/* Grille 3 colonnes avec largeurs adaptées au contenu */}
-        <div className="mx-auto flex max-w-7xl flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:justify-between lg:gap-10">
           <FooterNavigation onLinkClick={onLinkClick} />
           <FooterContact />
           <FooterSocial />

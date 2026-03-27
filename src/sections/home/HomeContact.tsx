@@ -35,19 +35,17 @@ function ContactDesktop() {
   // ── Yellow bg — instant reveal ─────────────────────────────────────────
   const yellowBg = useTransform(scrollYProgress, [0.0, 0.02], [0, 1]);
 
+  // ── Motif — scale grows through the hold phase ──────────────────────
+  const motifScale = useTransform(scrollYProgress, [0.2, 1], [1, 1.4]);
+
   // ── "VOIR" zoom — scale 12→1, Story-matching pace & spring ────────────
   const voirScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
   const voirScale = useSpring(voirScaleRaw, ZOOM_SPRING);
 
-  // ── "PASSEZ" — word 1 ─────────────────────────────────────────────────
+  // ── "PASSEZ NOUS" — line 1 ────────────────────────────────────────────
   const passezOpacity = useTransform(scrollYProgress, [0.14, 0.22], [0, 1]);
   const passezYRaw = useTransform(scrollYProgress, [0.14, 0.22], [40, 0]);
   const passezY = useSpring(passezYRaw, SPRING_CONFIG);
-
-  // ── "NOUS" — word 2, staggered ────────────────────────────────────────
-  const nousOpacity = useTransform(scrollYProgress, [0.19, 0.27], [0, 1]);
-  const nousYRaw = useTransform(scrollYProgress, [0.19, 0.27], [40, 0]);
-  const nousY = useSpring(nousYRaw, SPRING_CONFIG);
 
   // ── CTA ──────────────────────────────────────────────────────────────────
   const ctaOpacity = useTransform(scrollYProgress, [0.26, 0.34], [0, 1]);
@@ -75,18 +73,24 @@ function ContactDesktop() {
           aria-hidden="true"
         />
 
-        {/* Content — stacked column, centered */}
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-10 px-8">
+        {/* Circle motif — scale grows through hold phase */}
+        <m.img
+          src="/images/motif-cercle.png"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-10 h-full w-full object-cover opacity-20 mix-blend-multiply"
+          style={{ scale: motifScale }}
+        />
+
+        {/* Content — stacked column, shifted up to clear footer dome */}
+        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-10 px-8 pb-[15vh]">
           <h2
             id="contact-title"
             className="text-heading text-center text-black"
             style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
           >
             <m.span className="block" style={{ opacity: passezOpacity, y: passezY }}>
-              PASSEZ
-            </m.span>
-            <m.span className="block" style={{ opacity: nousOpacity, y: nousY }}>
-              NOUS
+              PASSEZ NOUS
             </m.span>
             <m.span className="block origin-center" style={{ scale: voirScale }}>
               VOIR

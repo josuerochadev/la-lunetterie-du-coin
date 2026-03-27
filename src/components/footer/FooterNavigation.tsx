@@ -18,7 +18,7 @@ export default function FooterNavigation({ onLinkClick }: FooterNavigationProps)
           <li key={link.href}>
             <Link
               to={link.href}
-              className="focus-style text-body-sm text-white transition-colors duration-300 hover:text-accent"
+              className="focus-style text-body-sm text-white transition-colors duration-300 hover:text-secondary-orange"
               onClick={onLinkClick}
             >
               {link.label}

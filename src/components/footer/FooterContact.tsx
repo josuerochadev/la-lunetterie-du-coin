@@ -5,7 +5,7 @@ import Mail from 'lucide-react/dist/esm/icons/mail';
 
 import { STORE_INFO } from '@/config/store';
 import { COMPANY_EMAIL } from '@/config/legal';
-import { CALENDLY_URL } from '@/config/menu';
+import { BOOKING_URL } from '@/config/endpoints';
 
 /**
  * FooterContact - Coordonnées de contact du footer
@@ -55,7 +55,7 @@ export default function FooterContact() {
       </div>
 
       {/* Horaires */}
-      <div className="mt-6">
+      <div className="mt-4">
         <h3 className="text-subtitle mb-4 text-body-sm text-accent">Horaires</h3>
         <div className="text-body-sm text-white">
           <p className="font-semibold">{STORE_INFO.hours.weekdays}</p>
@@ -65,7 +65,7 @@ export default function FooterContact() {
 
       {/* CTA Prendre RDV */}
       <a
-        href={CALENDLY_URL}
+        href={BOOKING_URL}
         target="_blank"
         rel="noopener noreferrer"
         className="group/cta focus-style text-subtitle relative mt-6 inline-flex items-center gap-2 text-body-sm text-accent transition-[font-weight] duration-300 hover:font-semibold"
