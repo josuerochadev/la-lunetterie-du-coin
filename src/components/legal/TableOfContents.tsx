@@ -7,57 +7,36 @@ type TableOfContentsProps = {
     id: string;
     title: string;
   }>;
-  className?: string;
 };
 
-/**
- * Table des matières interactive pour les pages légales
- *
- * Génère une navigation interne avec ancres vers les sections
- * du document pour améliorer l'accessibilité et l'expérience utilisateur.
- *
- * @component
- * @param {TableOfContentsProps} props - Les propriétés du composant
- * @returns {JSX.Element} Navigation sous forme de table des matières
- */
-export default function TableOfContents({ sections, className = '' }: TableOfContentsProps) {
+export default function TableOfContents({ sections }: TableOfContentsProps) {
   const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
-      // Focus management for accessibility
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       element.focus({ preventScroll: true });
     }
   };
 
   return (
-    <SimpleAnimation type="slide-up" delay={160}>
-      <nav aria-label="Table des matières" className={`mb-20 ${className}`}>
-        <SimpleAnimation type="slide-up" immediate={true}>
-          <h2 className="mb-8 font-serif text-title-lg font-bold text-primary">Sommaire</h2>
-        </SimpleAnimation>
-        <ul className="space-y-6">
+    <SimpleAnimation type="fade" delay={0}>
+      <nav aria-label="Table des matières" className="border-b border-black/10 pb-12">
+        <h2 className="text-subtitle mb-6 text-body-sm text-black/40">Sommaire</h2>
+        <ul className="grid gap-3 sm:grid-cols-2">
           {sections.map((section, index) => (
-            <SimpleAnimation key={section.id} type="slide-up" delay={index * 80}>
-              <li>
-                <a
-                  href={`#${section.id}`}
-                  onClick={(e) => handleClick(e, section.id)}
-                  className="focus-style group flex items-baseline gap-sm text-primary transition-all duration-200 focus:outline-none"
-                >
-                  <span className="min-w-[2rem] text-title-sm font-thin">{index + 1}.</span>
-                  <span className="flex flex-wrap gap-x-1">
-                    <span className="font-serif text-title-sm font-bold tracking-wider transition-all duration-200 group-hover:tracking-widest">
-                      {section.title}
-                    </span>
-                  </span>
-                </a>
-              </li>
-            </SimpleAnimation>
+            <li key={section.id}>
+              <a
+                href={`#${section.id}`}
+                onClick={(e) => handleClick(e, section.id)}
+                className="group inline-flex items-baseline gap-3 text-body text-black/70 transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
+                <span className="text-body-sm text-black/30 transition-colors group-hover:text-accent">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+                <span className="transition-colors">{section.title}</span>
+              </a>
+            </li>
           ))}
         </ul>
       </nav>

@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react';
-import { m } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import EyePattern from '@/components/common/EyePattern';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import TextReveal from '@/components/motion/TextReveal';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Seo } from '@/seo/Seo';
 
 type LegalPageLayoutProps = {
@@ -17,37 +16,6 @@ type LegalPageLayoutProps = {
   lastUpdated?: string;
 };
 
-function HeroDesktop({ title, lastUpdated }: { title: string; lastUpdated?: string }) {
-  return (
-    <div className="hidden lg:block">
-      <div className="sticky top-0 h-screen overflow-hidden">
-        <EyePattern variant="blanc" opacity={0.03} />
-
-        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x">
-          <TextReveal
-            as="h1"
-            className="text-heading text-center text-accent"
-            style={{ fontSize: 'clamp(3rem, 10vw, 10rem)', lineHeight: '0.95' }}
-          >
-            {title.toUpperCase()}
-          </TextReveal>
-
-          {lastUpdated && (
-            <m.p
-              className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              Dernière mise à jour : {lastUpdated}
-            </m.p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function LegalPageLayout({
   title,
   seoDescription,
@@ -55,48 +23,51 @@ export default function LegalPageLayout({
   children,
   lastUpdated,
 }: LegalPageLayoutProps) {
-  const prefersReducedMotion = usePrefersReducedMotion();
-
   return (
     <>
       <Seo title={title} description={seoDescription} canonicalPath={canonicalPath} />
       <Layout>
-        {/* Hero — fond noir, titre accent */}
+        {/* Hero — compact, fond noir */}
         <StickySection zIndex={11} enableSticky>
-          <section className="relative w-full bg-black" data-navbar-theme="light">
-            {!prefersReducedMotion && <HeroDesktop title={title} lastUpdated={lastUpdated} />}
+          <section
+            className="relative flex min-h-[40vh] w-full items-end bg-black pb-section"
+            data-navbar-theme="light"
+          >
+            <EyePattern variant="blanc" opacity={0.03} />
 
-            <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-              <div className="relative flex min-h-[50vh] items-center py-section">
-                <EyePattern variant="blanc" opacity={0.03} />
-                <div className="relative z-10 mx-auto max-w-container px-container-x">
-                  <div className="flex flex-col items-center justify-center text-center">
-                    <TextReveal
-                      as="h1"
-                      className="text-heading text-accent"
-                      style={{ fontSize: 'clamp(2rem, 8vw, 4rem)', lineHeight: '0.95' }}
-                    >
-                      {title.toUpperCase()}
-                    </TextReveal>
+            <div className="relative z-10 mx-auto w-full max-w-container px-container-x">
+              <SimpleAnimation type="fade" delay={0}>
+                <Link
+                  to="/"
+                  className="mb-8 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white/40 transition-colors hover:text-white/70"
+                  aria-label="Revenir à la page d'accueil"
+                >
+                  ← Accueil
+                </Link>
+              </SimpleAnimation>
 
-                    {lastUpdated && (
-                      <SimpleAnimation type="fade" delay={150}>
-                        <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-white/30">
-                          Dernière mise à jour : {lastUpdated}
-                        </p>
-                      </SimpleAnimation>
-                    )}
-                  </div>
-                </div>
-              </div>
+              <TextReveal
+                as="h1"
+                className="text-heading text-accent"
+                style={{ fontSize: 'clamp(2rem, 6vw, 6rem)', lineHeight: '0.95' }}
+              >
+                {title.toUpperCase()}
+              </TextReveal>
+
+              {lastUpdated && (
+                <SimpleAnimation type="fade" delay={150}>
+                  <p className="mt-4 text-body-sm font-medium uppercase tracking-widest text-white/30">
+                    Mise à jour : {lastUpdated}
+                  </p>
+                </SimpleAnimation>
+              )}
             </div>
           </section>
         </StickySection>
 
-        {/* Content — fond blanc, convex curve, EyePattern */}
+        {/* Content — fond blanc, convex curve */}
         <StickySection zIndex={12}>
           <section className="relative bg-background" data-navbar-theme="dark">
-            {/* Convex curve transition */}
             <div
               className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-background"
               data-navbar-theme="dark"
