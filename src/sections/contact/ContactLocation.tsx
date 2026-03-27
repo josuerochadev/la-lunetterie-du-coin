@@ -73,16 +73,18 @@ function LocationDesktop() {
           <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
             {/* En voiture */}
             <m.div style={{ opacity: card1Opacity, y: card1Y }}>
-              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-white/[0.07] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.1]">
+              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl transition-all duration-300 hover:bg-black/60">
                 <div
                   className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 group-hover/loc:w-2.5"
                   aria-hidden="true"
                 />
-                <div className="py-6 pl-7 pr-6">
-                  <div className="mb-4 flex items-center gap-2.5">
-                    <Car className="h-5 w-5 text-secondary-green" aria-hidden="true" />
-                    <h3 className="text-subtitle text-title-sm text-white">En voiture</h3>
-                  </div>
+                <Car
+                  className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15 transition-transform duration-500 group-hover/loc:rotate-0 group-hover/loc:scale-110"
+                  aria-hidden="true"
+                  strokeWidth={1}
+                />
+                <div className="relative z-10 py-6 pl-7 pr-6">
+                  <h3 className="text-subtitle mb-4 text-title-sm text-white">En voiture</h3>
                   <div className="space-y-2 text-body text-white/60">
                     <p>
                       <span className="font-medium text-white/80">Parking payant</span> : Parking
@@ -95,16 +97,18 @@ function LocationDesktop() {
 
             {/* En transports */}
             <m.div style={{ opacity: card2Opacity, y: card2Y }}>
-              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-white/[0.07] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.1]">
+              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl transition-all duration-300 hover:bg-black/60">
                 <div
                   className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 group-hover/loc:w-2.5"
                   aria-hidden="true"
                 />
-                <div className="py-6 pl-7 pr-6">
-                  <div className="mb-4 flex items-center gap-2.5">
-                    <Train className="h-5 w-5 text-secondary-green" aria-hidden="true" />
-                    <h3 className="text-subtitle text-title-sm text-white">En transports</h3>
-                  </div>
+                <Train
+                  className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15 transition-transform duration-500 group-hover/loc:rotate-0 group-hover/loc:scale-110"
+                  aria-hidden="true"
+                  strokeWidth={1}
+                />
+                <div className="relative z-10 py-6 pl-7 pr-6">
+                  <h3 className="text-subtitle mb-4 text-title-sm text-white">En transports</h3>
                   <div className="space-y-2 text-body text-white/60">
                     <p>
                       <span className="font-medium text-white/80">Tram B, C, F</span> : arrêt
@@ -136,8 +140,8 @@ function LocationDesktop() {
             className="mx-auto mt-8 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
             style={{ opacity: footerOpacity, y: footerY }}
           >
-            <p className="text-body text-white/50">
-              <span className="font-medium text-white/70">Accessibilité :</span> Le magasin est
+            <p className="text-body text-white/80">
+              <span className="font-medium text-white">Accessibilité :</span> Le magasin est
               accessible aux personnes à mobilité réduite
             </p>
             <LinkCTA
@@ -190,16 +194,18 @@ export default function ContactLocation() {
 
               <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
                 <SimpleAnimation type="slide-up" delay={100}>
-                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-white/[0.07] backdrop-blur-sm">
+                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl">
                     <div
                       className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
                       aria-hidden="true"
                     />
-                    <div className="py-6 pl-7 pr-6">
-                      <div className="mb-4 flex items-center gap-2.5">
-                        <Car className="h-5 w-5 text-secondary-green" aria-hidden="true" />
-                        <h3 className="text-subtitle text-title-sm text-white">En voiture</h3>
-                      </div>
+                    <Car
+                      className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15"
+                      aria-hidden="true"
+                      strokeWidth={1}
+                    />
+                    <div className="relative z-10 py-6 pl-7 pr-6">
+                      <h3 className="text-subtitle mb-4 text-title-sm text-white">En voiture</h3>
                       <div className="space-y-2 text-body text-white/60">
                         <p>
                           <span className="font-medium text-white/80">Parking payant</span> :
@@ -211,16 +217,18 @@ export default function ContactLocation() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={150}>
-                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-white/[0.07] backdrop-blur-sm">
+                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl">
                     <div
                       className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
                       aria-hidden="true"
                     />
-                    <div className="py-6 pl-7 pr-6">
-                      <div className="mb-4 flex items-center gap-2.5">
-                        <Train className="h-5 w-5 text-secondary-green" aria-hidden="true" />
-                        <h3 className="text-subtitle text-title-sm text-white">En transports</h3>
-                      </div>
+                    <Train
+                      className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15"
+                      aria-hidden="true"
+                      strokeWidth={1}
+                    />
+                    <div className="relative z-10 py-6 pl-7 pr-6">
+                      <h3 className="text-subtitle mb-4 text-title-sm text-white">En transports</h3>
                       <div className="space-y-2 text-body text-white/60">
                         <p>
                           <span className="font-medium text-white/80">Tram B, C, F</span> : arrêt

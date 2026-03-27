@@ -7,6 +7,7 @@ import Mail from 'lucide-react/dist/esm/icons/mail';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
@@ -57,17 +58,20 @@ function InfoCard({
   children: ReactNode;
 }) {
   return (
-    <div className="group/info relative overflow-hidden rounded-r-2xl bg-white/[0.07] backdrop-blur-sm transition-all duration-300 hover:bg-white/[0.1]">
+    <div className="group/info relative overflow-hidden rounded-r-2xl bg-white shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Accent left bar */}
       <div
         className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 group-hover/info:w-2.5"
         aria-hidden="true"
       />
-      <div className="py-6 pl-7 pr-6">
-        <div className="mb-3 flex items-center gap-2.5">
-          <Icon className="h-5 w-5 text-secondary-green" aria-hidden="true" />
-          <h3 className="text-subtitle text-title-sm text-white">{title}</h3>
-        </div>
+      {/* Background icon — large, top-left, decorative */}
+      <Icon
+        className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-secondary-green/15 transition-transform duration-500 group-hover/info:rotate-0 group-hover/info:scale-110"
+        aria-hidden="true"
+        strokeWidth={1}
+      />
+      <div className="relative z-10 py-6 pl-7 pr-6">
+        <h3 className="text-subtitle mb-3 text-title-sm text-black">{title}</h3>
         {children}
       </div>
     </div>
@@ -104,17 +108,18 @@ function InfoDesktop() {
             {/* Adresse */}
             <StaggerCard scrollYProgress={scrollYProgress} index={0}>
               <InfoCard icon={MapPin} title="Adresse">
-                <address className="mb-3 text-body not-italic text-white/50">
+                <address className="mb-3 text-body not-italic text-black/50">
                   {COMPANY_ADDRESS}
                 </address>
-                <a
+                <LinkCTA
                   href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block text-body-sm font-medium text-accent transition-colors hover:text-white"
+                  icon={MapPin}
+                  theme="light"
                 >
-                  Voir sur Google Maps →
-                </a>
+                  Voir sur Google Maps
+                </LinkCTA>
               </InfoCard>
             </StaggerCard>
 
@@ -123,7 +128,7 @@ function InfoDesktop() {
               <InfoCard icon={Phone} title="Téléphone">
                 <a
                   href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                  className="text-body text-white/50 transition-colors hover:text-accent"
+                  className="text-body text-black/50 transition-colors hover:text-secondary-orange"
                 >
                   {COMPANY_PHONE}
                 </a>
@@ -135,7 +140,7 @@ function InfoDesktop() {
               <InfoCard icon={Mail} title="Email">
                 <a
                   href={`mailto:${COMPANY_EMAIL}`}
-                  className="text-body text-white/50 transition-colors hover:text-accent"
+                  className="text-body text-black/50 transition-colors hover:text-secondary-orange"
                 >
                   {COMPANY_EMAIL}
                 </a>
@@ -148,8 +153,8 @@ function InfoDesktop() {
                 <dl className="space-y-1.5">
                   {OPENING_HOURS.map((schedule) => (
                     <div key={schedule.day} className="flex justify-between text-body-sm">
-                      <dt className="font-medium text-white/70">{schedule.day}</dt>
-                      <dd className="text-white/50">{schedule.hours}</dd>
+                      <dt className="font-medium text-black/70">{schedule.day}</dt>
+                      <dd className="text-black/50">{schedule.hours}</dd>
                     </div>
                   ))}
                 </dl>
@@ -204,14 +209,14 @@ export default function ContactInfo() {
             <div className="grid gap-6 md:grid-cols-2">
               <SimpleAnimation type="slide-up" delay={0}>
                 <InfoCard icon={MapPin} title="Adresse">
-                  <address className="mb-3 text-body not-italic text-white/50">
+                  <address className="mb-3 text-body not-italic text-black/50">
                     {COMPANY_ADDRESS}
                   </address>
                   <a
                     href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block text-body-sm font-medium text-accent transition-colors hover:text-white"
+                    className="inline-block text-body-sm font-medium text-black transition-colors hover:text-secondary-orange"
                   >
                     Voir sur Google Maps →
                   </a>
@@ -222,7 +227,7 @@ export default function ContactInfo() {
                 <InfoCard icon={Phone} title="Téléphone">
                   <a
                     href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-white/50 transition-colors hover:text-accent"
+                    className="text-body text-black/50 transition-colors hover:text-secondary-orange"
                   >
                     {COMPANY_PHONE}
                   </a>
@@ -233,7 +238,7 @@ export default function ContactInfo() {
                 <InfoCard icon={Mail} title="Email">
                   <a
                     href={`mailto:${COMPANY_EMAIL}`}
-                    className="text-body text-white/50 transition-colors hover:text-accent"
+                    className="text-body text-black/50 transition-colors hover:text-secondary-orange"
                   >
                     {COMPANY_EMAIL}
                   </a>
@@ -245,8 +250,8 @@ export default function ContactInfo() {
                   <dl className="space-y-1.5">
                     {OPENING_HOURS.map((schedule) => (
                       <div key={schedule.day} className="flex justify-between text-body-sm">
-                        <dt className="font-medium text-white/70">{schedule.day}</dt>
-                        <dd className="text-white/50">{schedule.hours}</dd>
+                        <dt className="font-medium text-black/70">{schedule.day}</dt>
+                        <dd className="text-black/50">{schedule.hours}</dd>
                       </div>
                     ))}
                   </dl>

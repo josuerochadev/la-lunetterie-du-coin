@@ -39,8 +39,8 @@ export default function ContactPage() {
           <ContactLocation />
         </StickySection>
 
-        {/* RDV Calendly — sticky avec wrapper pour footer */}
-        <StickySection zIndex={15} enableSticky wrapperMinHeight="200vh">
+        {/* Prise de rendez-vous — gère son propre sticky + 200vh en interne */}
+        <StickySection zIndex={15}>
           <ContactAppointment />
         </StickySection>
       </Layout>

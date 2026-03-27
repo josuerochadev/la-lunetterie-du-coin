@@ -1,14 +1,15 @@
 /* ====== FORMULAIRES ====== */
 @layer components {
-  /* Formulaire de contact - Style éditorial avec bordure fine */
+  /* Formulaire de contact — bordure complète fine, vert → orange au focus */
   .form-input {
     @apply w-full px-4 py-3 font-sans text-body tracking-normal transition-all duration-300;
 
     /* Fond transparent */
     background: transparent;
 
-    /* Bordure fine noire tout autour */
-    border: 1px solid rgb(var(--color-black-rgb));
+    /* Bordure fine verte tout autour */
+    border: 1px solid rgb(var(--color-green-rgb));
+    border-radius: 0;
 
     /* Texte noir */
     color: rgb(var(--color-black-rgb));
@@ -16,29 +17,29 @@
   }
 
   .form-input::placeholder {
-    color: rgba(var(--color-black-rgb), 0.4);
+    color: rgba(var(--color-black-rgb), 0.35);
     font-style: normal;
   }
 
   .form-input:focus {
     outline: none;
-    /* Bordure accent (jaune) au focus */
-    border-color: rgb(var(--color-yellow-rgb));
+    /* Bordure orange au focus */
+    border-color: rgb(var(--color-orange-rgb));
   }
 
   .form-input:focus::placeholder {
-    color: rgba(var(--color-black-rgb), 0.25);
+    color: rgba(var(--color-black-rgb), 0.2);
   }
 
   /* État d'erreur */
   .form-input--error {
     border-color: rgb(239 68 68); /* red-500 */
-    background: rgb(254 242 242); /* red-50 */
+    background: transparent;
   }
 
   .form-input--error:focus {
     border-color: rgb(239 68 68);
-    background: rgb(254 242 242);
+    background: transparent;
   }
 
   /* Labels - style éditorial */
