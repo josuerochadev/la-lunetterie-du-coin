@@ -53,7 +53,10 @@ export default function Footer({
     <footer
       id="footer"
       {...rest}
-      className={clsx('relative z-20 -mt-[8vw] w-full bg-primary text-accent', className)}
+      className={clsx(
+        'relative z-20 -mt-[8vw] w-full bg-primary text-accent [overflow-x:clip]',
+        className,
+      )}
     >
       {/* Convex eyelid curve — same style as HomeStory.
           data-navbar-theme makes IO detect this as footer → hides navbar early */}

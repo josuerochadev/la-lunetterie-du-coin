@@ -35,40 +35,6 @@ function HeroMobileContent({ titleId }: { titleId?: string }) {
 
   return (
     <>
-      {/* Photo top-right — slides in from right with scale */}
-      <m.div
-        className="absolute -right-[3%] top-[6%] z-[5] h-[30%] w-[44%] overflow-hidden sm:w-[36%] md:h-[34%] md:w-[30%] lg:hidden"
-        initial={{ x: '60%', opacity: 0, scale: 1.08 }}
-        animate={{ x: 0, opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease, delay: 0.3 }}
-      >
-        <ResponsiveImage
-          src="/images/hero-eyeglasses-right.jpg"
-          alt="Collection de montures"
-          className="h-full w-full object-cover"
-          loading="eager"
-          sizes="44vw"
-          widths={[384, 640]}
-        />
-      </m.div>
-
-      {/* Photo bottom-left — slides in from left with scale */}
-      <m.div
-        className="absolute -left-[3%] bottom-[18%] z-[5] h-[30%] w-[44%] overflow-hidden sm:w-[36%] md:h-[34%] md:w-[30%] lg:hidden"
-        initial={{ x: '-60%', opacity: 0, scale: 1.08 }}
-        animate={{ x: 0, opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease, delay: 0.5 }}
-      >
-        <ResponsiveImage
-          src="/images/hero-eyeglasses-left.jpg"
-          alt="Lunettes elegantes"
-          className="h-full w-full object-cover"
-          loading="eager"
-          sizes="44vw"
-          widths={[384, 640]}
-        />
-      </m.div>
-
       {/* Title — centred, slides up with fade */}
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x lg:hidden">
         <m.h1

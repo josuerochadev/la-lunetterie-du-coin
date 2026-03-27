@@ -243,7 +243,7 @@ function HomeStory() {
   return (
     <section
       id="story"
-      className="relative w-full bg-black pt-[35vh]"
+      className="relative w-full bg-black pt-[35vh] [overflow-x:clip]"
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >

@@ -631,7 +631,7 @@ function HomeServices() {
       id="services"
       aria-labelledby="services-title"
       data-navbar-theme="dark"
-      className="pointer-events-none relative bg-white"
+      className="pointer-events-none relative bg-white [overflow-x:clip]"
     >
       {/* Subtle noise texture over white background */}
       <div
