@@ -2,10 +2,12 @@
 import Layout from '@/components/common/Layout';
 import SectionContainer from '@/components/common/SectionContainer';
 import PageHeader from '@/components/legal/PageHeader';
+import { Seo } from '@/seo/Seo';
 
 export default function NotFound() {
   return (
     <>
+      <Seo title="Page non trouvée" noIndex />
       <div className="relative z-base">
         <Layout>
           <SectionContainer className="pb-section pt-section-sm">
