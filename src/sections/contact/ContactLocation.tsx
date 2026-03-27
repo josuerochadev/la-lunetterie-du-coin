@@ -6,6 +6,7 @@ import Train from 'lucide-react/dist/esm/icons/train';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SPRING_CONFIG } from '@/lib/motion';
@@ -74,11 +75,13 @@ function LocationDesktop() {
       {/* Parallax background image */}
       <div className="absolute inset-0 overflow-hidden">
         <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
-          <img
+          <ResponsiveImage
             src="/images/contact-informations-boutique-outside.jpg"
             alt="Façade de La Lunetterie du Coin"
             className="h-full w-full object-cover"
             loading="lazy"
+            widths={[640, 1024, 1440]}
+            sizes="100vw"
           />
         </m.div>
         {/* Dark overlay for readability */}
@@ -122,7 +125,7 @@ function LocationDesktop() {
                   <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal (5 min
                   à pied)
                 </p>
-                <p className="pt-2 text-white/40">
+                <p className="pt-2 text-white/60">
                   À 15 minutes à pied de la gare centrale de Strasbourg
                 </p>
               </div>
@@ -170,11 +173,13 @@ export default function ContactLocation() {
       {/* Mobile / reduced-motion fallback */}
       <div className={!prefersReducedMotion && isLg ? 'hidden' : ''}>
         <div className="relative w-full">
-          <img
+          <ResponsiveImage
             src="/images/contact-informations-boutique-outside.jpg"
             alt="Façade de La Lunetterie du Coin"
             className="absolute inset-0 h-full w-full object-cover"
             loading="lazy"
+            widths={[640, 768, 1024]}
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
 
@@ -217,7 +222,7 @@ export default function ContactLocation() {
                         <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal
                         (5 min à pied)
                       </p>
-                      <p className="pt-2 text-white/40">
+                      <p className="pt-2 text-white/60">
                         À 15 minutes à pied de la gare centrale de Strasbourg
                       </p>
                     </div>

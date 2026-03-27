@@ -354,7 +354,7 @@ function HomeTestimonials() {
                 >
                   4.9
                 </span>
-                <span className="text-body text-white/40">/5</span>
+                <span className="text-body text-white/60">/5</span>
               </div>
             </SimpleAnimation>
           </div>

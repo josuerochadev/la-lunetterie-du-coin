@@ -89,6 +89,7 @@ function InfoDesktop() {
               <a
                 href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
                 className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                aria-label={`Appeler le ${COMPANY_PHONE}`}
               >
                 {COMPANY_PHONE}
               </a>
@@ -98,6 +99,7 @@ function InfoDesktop() {
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
                 className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
               >
                 {COMPANY_EMAIL}
               </a>
@@ -108,7 +110,7 @@ function InfoDesktop() {
                 {OPENING_HOURS.map((schedule) => (
                   <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
                     <dt className="font-medium text-white/60">{schedule.day}</dt>
-                    <dd className="text-white/40">{schedule.hours}</dd>
+                    <dd className="text-white/60">{schedule.hours}</dd>
                   </div>
                 ))}
               </dl>
@@ -181,6 +183,7 @@ export default function ContactInfo() {
                   <a
                     href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
                     className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    aria-label={`Appeler le ${COMPANY_PHONE}`}
                   >
                     {COMPANY_PHONE}
                   </a>
@@ -192,6 +195,7 @@ export default function ContactInfo() {
                   <a
                     href={`mailto:${COMPANY_EMAIL}`}
                     className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
                   >
                     {COMPANY_EMAIL}
                   </a>
@@ -204,7 +208,7 @@ export default function ContactInfo() {
                     {OPENING_HOURS.map((schedule) => (
                       <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
                         <dt className="font-medium text-white/60">{schedule.day}</dt>
-                        <dd className="text-white/40">{schedule.hours}</dd>
+                        <dd className="text-white/60">{schedule.hours}</dd>
                       </div>
                     ))}
                   </dl>
