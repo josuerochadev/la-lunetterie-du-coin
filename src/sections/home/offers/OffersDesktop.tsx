@@ -334,5 +334,3 @@ export function OffersDesktop() {
     </div>
   );
 }
-
-export { OffersDesktop };
