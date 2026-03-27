@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
@@ -27,50 +27,155 @@ function InfoAccent({
 }
 
 // ---------------------------------------------------------------------------
-// Mobile content — choreographed entrance mirroring desktop energy
+// Mobile content — bold maximalist stacked words with word-by-word reveal
 // ---------------------------------------------------------------------------
 
+/** Words config — fillWidth: true means the word stretches to viewport width */
+const HERO_WORDS = [
+  { text: 'POUR', fillWidth: true },
+  { text: "L'AMOUR", fillWidth: true },
+  { text: 'DES', fillWidth: false },
+  { text: 'YEUX', fillWidth: true },
+];
+
+/** Base font size used for measurement */
+const BASE_FONT_SIZE = 100;
+
+/**
+ * Calculates the exact font-size (in px) so that the text fills the target width.
+ * Renders a hidden span at a known size, measures, then scales proportionally.
+ */
+function useFitFontSize(fillWidth: boolean) {
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [fontSize, setFontSize] = useState<number>(0);
+
+  const measure = useCallback(() => {
+    const el = measureRef.current;
+    if (!el) return;
+    const targetWidth = fillWidth ? window.innerWidth : window.innerWidth * 0.4;
+    const naturalWidth = el.offsetWidth;
+    if (naturalWidth > 0) {
+      setFontSize((targetWidth / naturalWidth) * BASE_FONT_SIZE);
+    }
+  }, [fillWidth]);
+
+  useEffect(() => {
+    // Wait for fonts + layout
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(measure);
+    } else {
+      requestAnimationFrame(() => requestAnimationFrame(measure));
+    }
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [measure]);
+
+  return { measureRef, fontSize };
+}
+
+/** Single word — measures itself, scroll-driven reveal with TextReveal easing */
+function FitWord({
+  word,
+  index,
+  scrollY,
+  revealStart,
+}: {
+  word: (typeof HERO_WORDS)[number];
+  index: number;
+  scrollY: ReturnType<typeof useScroll>['scrollY'];
+  revealStart: number;
+}) {
+  const { measureRef, fontSize } = useFitFontSize(word.fillWidth);
+
+  // Each word reveals over 150px of scroll, staggered by 60px per word
+  const wordStart = revealStart + index * 60;
+  const wordEnd = wordStart + 150;
+  const y = useTransform(scrollY, [wordStart, wordEnd], ['110%', '0%']);
+  const opacity = useTransform(scrollY, [wordStart, wordEnd], [0, 1]);
+
+  return (
+    <div className="relative w-full">
+      {/* Hidden measurement span */}
+      <span
+        ref={measureRef}
+        className="pointer-events-none absolute left-0 top-0 whitespace-nowrap font-display font-black uppercase opacity-0"
+        style={{ fontSize: BASE_FONT_SIZE }}
+        aria-hidden="true"
+      >
+        {word.text}
+      </span>
+
+      {/* Visible word — scroll-driven clip reveal */}
+      <div className="overflow-hidden">
+        <m.span className="block" style={{ y, opacity }}>
+          <span
+            className="block whitespace-nowrap font-display font-black uppercase leading-[0.82] text-black"
+            style={{ fontSize: fontSize || undefined }}
+            aria-hidden="true"
+          >
+            {word.text}
+          </span>
+        </m.span>
+      </div>
+    </div>
+  );
+}
+
+/** Info accents stacked and centred below the title, scroll-driven */
+function HeroMobileAccents({
+  scrollY,
+  revealStart,
+}: {
+  scrollY: ReturnType<typeof useScroll>['scrollY'];
+  revealStart: number;
+}) {
+  // Accents appear after all 4 words have revealed
+  const accentsStart = revealStart + HERO_WORDS.length * 60 + 100;
+
+  const accent1Y = useTransform(scrollY, [accentsStart, accentsStart + 150], [40, 0]);
+  const accent1Opacity = useTransform(scrollY, [accentsStart, accentsStart + 150], [0, 1]);
+  const accent2Y = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [40, 0]);
+  const accent2Opacity = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [0, 1]);
+
+  return (
+    <div className="mx-auto mt-10 flex flex-col items-start gap-4 lg:hidden">
+      <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
+        <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
+      </m.div>
+      <m.div style={{ y: accent2Y, opacity: accent2Opacity }}>
+        <InfoAccent color="orange" keyword="Neuf & Occasion" detail="Du neuf, du vécu, du style." />
+      </m.div>
+    </div>
+  );
+}
+
 function HeroMobileContent({ titleId }: { titleId?: string }) {
-  const ease = [0.25, 0.1, 0.25, 1] as const;
+  const { scrollY } = useScroll();
+  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+
+  // Hero section starts after the 200vh spacer.
+  // Words start revealing when the hero section is near the viewport center.
+  const revealStart = vh * 1.4;
 
   return (
     <>
-      {/* Title — centred, slides up with fade */}
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x lg:hidden">
-        <m.h1
-          id={titleId}
-          className="text-heading text-center text-black drop-shadow-[0_2px_8px_rgba(0,0,0,0.06)]"
-          style={{ fontSize: 'clamp(2.4rem, 9vw, 4.5rem)' }}
-          initial={{ y: 40, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, ease, delay: 0.15 }}
-        >
-          POUR L&apos;AMOUR
-          <br />
-          DES YEUX
-        </m.h1>
-      </div>
-
-      {/* Info accents — staggered cascade at the bottom */}
-      <div className="absolute bottom-[6%] left-0 z-10 flex w-full justify-center gap-10 px-container-x lg:hidden">
-        <m.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease, delay: 0.7 }}
-        >
-          <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
-        </m.div>
-        <m.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.7, ease, delay: 0.85 }}
-        >
-          <InfoAccent
-            color="orange"
-            keyword="Neuf & Occasion"
-            detail="Du neuf, du vécu, du style."
+      {/* Title — stacked words pinned to top, each fills viewport width */}
+      <div className="absolute inset-x-0 top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
+        <h1 id={titleId} className="sr-only">
+          POUR L&apos;AMOUR DES YEUX
+        </h1>
+        {HERO_WORDS.map((word, i) => (
+          <FitWord
+            key={word.text}
+            word={word}
+            index={i}
+            scrollY={scrollY}
+            revealStart={revealStart}
           />
-        </m.div>
+        ))}
+
+        {/* Info accents — right-aligned, stacked below title words */}
+        <HeroMobileAccents scrollY={scrollY} revealStart={revealStart} />
       </div>
     </>
   );
