@@ -3,4 +3,4 @@
  */
 
 export const FORMSPREE_ENDPOINT = 'https://formspree.io/f/xanbvzql';
-export const CALENDLY_URL = 'https://calendly.com/lalunetterieducoin';
+export const BOOKING_URL = 'https://calendly.com/lalunetterieducoin'; // TODO: remplacer par le vrai lien de prise de RDV

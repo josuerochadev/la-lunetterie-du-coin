@@ -27,8 +27,8 @@ export default function ServicesPage() {
           <ServicesContent />
         </StickySection>
 
-        {/* CTA final — fond jaune, sticky */}
-        <StickySection zIndex={13} enableSticky wrapperMinHeight="200vh">
+        {/* CTA — gère son propre sticky + 200vh en interne */}
+        <StickySection zIndex={13}>
           <ServicesCTA />
         </StickySection>
       </Layout>

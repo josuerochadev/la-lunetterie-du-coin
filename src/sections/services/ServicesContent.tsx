@@ -6,7 +6,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
-import { CALENDLY_URL } from '@/config/endpoints';
+import { BOOKING_URL } from '@/config/endpoints';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const ACCENT_HEX = '#FEEB09';
@@ -348,7 +348,7 @@ function ServiceCard({
       >
         {isExamens ? (
           <LinkCTA
-            href={CALENDLY_URL}
+            href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             theme="dark"
@@ -429,7 +429,7 @@ function MobileServiceList() {
 
                 {isExamens ? (
                   <LinkCTA
-                    href={CALENDLY_URL}
+                    href={BOOKING_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     theme="dark"

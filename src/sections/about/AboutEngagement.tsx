@@ -127,8 +127,8 @@ function EngagementDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[280vh] lg:block">
-      <div className="sticky top-0 h-screen overflow-hidden">
+    <div ref={sectionRef} className="hidden h-[280vh] bg-background lg:block">
+      <div className="sticky top-0 h-screen overflow-hidden bg-background">
         <GiantCounter scrollYProgress={scrollYProgress} />
 
         <m.div

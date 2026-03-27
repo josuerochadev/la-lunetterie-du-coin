@@ -6,7 +6,8 @@ import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
 import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
 import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
-import { MENU_ANIMATION_DURATION, CALENDLY_URL } from '@/config/menu';
+import { MENU_ANIMATION_DURATION } from '@/config/menu';
+import { BOOKING_URL } from '@/config/endpoints';
 import { cn } from '@/lib/cn';
 
 /**
@@ -241,7 +242,7 @@ const Navbar: React.FC = () => {
 
           {/* CTA Prendre RDV — text + arrow, same underline pattern */}
           <a
-            href={CALENDLY_URL}
+            href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={cn(
