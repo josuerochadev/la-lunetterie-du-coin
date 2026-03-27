@@ -15,7 +15,7 @@ function HeroDesktop() {
   return (
     <div className="hidden lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <EyePattern variant="blanc" opacity={0.03} />
+        <EyePattern variant="noir" opacity={0.06} />
 
         <m.div
           className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
@@ -23,14 +23,14 @@ function HeroDesktop() {
         >
           <TextReveal
             as="h1"
-            className="text-heading text-center text-accent"
+            className="text-heading text-center text-black"
             style={{ fontSize: 'clamp(3rem, 12vw, 14rem)', lineHeight: '0.95' }}
           >
             NOS OFFRES
           </TextReveal>
 
           <m.p
-            className="mt-8 max-w-3xl text-center text-body-xl text-white/80"
+            className="mt-8 max-w-3xl text-center text-body-xl text-black/50"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ ...SPRING_TRANSITION, delay: 0.4 }}
@@ -47,24 +47,24 @@ export default function OffersHero() {
   const prefersReducedMotion = usePrefersReducedMotion();
 
   return (
-    <section id="hero" className="relative w-full bg-black" data-navbar-theme="light">
+    <section id="hero" className="relative w-full bg-accent" data-navbar-theme="dark">
       {!prefersReducedMotion && <HeroDesktop />}
 
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
         <div className="relative flex min-h-[70vh] items-center py-section">
-          <EyePattern variant="blanc" opacity={0.03} />
+          <EyePattern variant="noir" opacity={0.06} />
           <div className="relative z-10 mx-auto max-w-container px-container-x">
             <div className="flex flex-col items-center justify-center text-center">
               <TextReveal
                 as="h1"
-                className="text-heading text-accent"
+                className="text-heading text-black"
                 style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
               >
                 NOS OFFRES
               </TextReveal>
 
               <SimpleAnimation type="slide-up" delay={150}>
-                <p className="mt-6 max-w-2xl text-body-lg text-white/80">
+                <p className="mt-6 max-w-2xl text-body-lg text-black/50">
                   Bien vu pour vos yeux. Bien vu pour votre portefeuille.
                 </p>
               </SimpleAnimation>

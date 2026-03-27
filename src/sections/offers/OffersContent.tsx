@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, type ReactNode } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -7,32 +7,70 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 
+const ACCENT_HEX = '#FEEB09';
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
 const OFFER_COUNT = OFFERS_DATA.length;
 
 // Per-offer scroll windows (normalised 0–1)
+// Phase layout:  photo1 + card1  →  photo2 + card2  →  fade-to-black
 const OFFERS_TIMELINE = [
   {
-    imgIn: [0.02, 0.12],
-    hold: [0.12, 0.4],
-    imgOut: [0.4, 0.5],
-    cardIn: [0.1, 0.2],
-    cardOut: [0.4, 0.48],
+    imgIn: [0.0, 0.08],
+    hold: [0.08, 0.38],
+    imgOut: [0.38, 0.48],
+    cardIn: [0.06, 0.16],
+    cardOut: [0.38, 0.46],
   },
   {
-    imgIn: [0.5, 0.6],
-    hold: [0.6, 0.85],
-    imgOut: [0.85, 0.95],
-    cardIn: [0.56, 0.66],
-    cardOut: [0.85, 0.93],
+    imgIn: [0.46, 0.54],
+    hold: [0.54, 0.76],
+    imgOut: [0.76, 0.86],
+    cardIn: [0.5, 0.6],
+    cardOut: [0.76, 0.84],
   },
 ] as const;
 
-// 3D tilt: alternating left/right
-const IMAGE_LAYOUT = [
-  { x: '-15%', rotateZ: -6, rotateY: 10, rotateX: 6 },
-  { x: '15%', rotateZ: 5, rotateY: -10, rotateX: 6 },
-] as const;
+// Fade-to-black after second offer (transition to gradient → CTA)
+const BLACK_FADE_START = 0.84;
+const BLACK_FADE_END = 0.96;
+
+// ---------------------------------------------------------------------------
+// StaggerChild — micro-delayed entrance for each element within a card
+// ---------------------------------------------------------------------------
+
+function StaggerChild({
+  children,
+  scrollYProgress,
+  enterStart,
+  enterEnd,
+  exitStart,
+  exitEnd,
+  staggerIndex,
+}: {
+  children: ReactNode;
+  scrollYProgress: MotionValue<number>;
+  enterStart: number;
+  enterEnd: number;
+  exitStart: number;
+  exitEnd: number;
+  staggerIndex: number;
+}) {
+  const STAGGER_OFFSET = 0.012;
+  const offset = staggerIndex * STAGGER_OFFSET;
+
+  const fadeIn = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [0, 1]);
+  const fadeOut = useTransform(scrollYProgress, [exitStart - offset, exitEnd], [1, 0]);
+  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+
+  const yRaw = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [25, 0]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
+
+  return (
+    <m.div style={{ opacity, y }} className="will-change-transform">
+      {children}
+    </m.div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Offer card sub-component (extracted to avoid hooks in map)
@@ -77,9 +115,15 @@ function OfferCard({
   );
   const cardPointer = useTransform(cardOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
+  // Stagger timing
+  const stEnter = tl.cardIn[0];
+  const stEnterEnd = tl.cardIn[1];
+  const stExitStart = tl.cardOut[0];
+  const stExitEnd = tl.cardOut[1];
+
   return (
     <m.div
-      className="absolute w-full max-w-2xl px-container-x"
+      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-xl xl:max-w-2xl"
       style={{
         opacity: cardOpacity,
         y: cardY,
@@ -87,40 +131,97 @@ function OfferCard({
         rotate: cardRotate,
         scale: cardScale,
         pointerEvents: cardPointer,
+        translateY: '-50%',
       }}
     >
       <div className="group/card relative overflow-hidden rounded-r-3xl bg-white/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)]">
-        {/* Accent bar */}
+        {/* Blue pierre accent bar */}
         <div
-          className="absolute bottom-0 left-0 top-0 w-2.5 bg-accent transition-all duration-300 ease-out group-hover/card:w-3.5"
+          className="absolute bottom-0 left-0 top-0 w-2.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-3.5"
           aria-hidden="true"
         />
 
-        <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12">
-          <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
-
-          <p className="mt-5 max-w-md text-body-lg text-black/50">{offer.description}</p>
-
-          {/* Key highlights — first 3 details only */}
-          <ul className="mt-6 space-y-2">
-            {offer.details.slice(0, 3).map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body-sm text-black/40">
-                <span className="text-black" aria-hidden="true">
-                  •
-                </span>
-                <span>{detail}</span>
-              </li>
-            ))}
-          </ul>
-
-          <LinkCTA
-            to="/contact"
-            theme="light"
-            className="mt-8"
-            aria-label={`Profiter de ${offer.title}`}
+        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10">
+          {/* Counter */}
+          <StaggerChild
+            scrollYProgress={scrollYProgress}
+            enterStart={stEnter}
+            enterEnd={stEnterEnd}
+            exitStart={stExitStart}
+            exitEnd={stExitEnd}
+            staggerIndex={0}
           >
-            En profiter
-          </LinkCTA>
+            <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-black/30">
+              {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
+            </span>
+          </StaggerChild>
+
+          {/* Title — black */}
+          <StaggerChild
+            scrollYProgress={scrollYProgress}
+            enterStart={stEnter}
+            enterEnd={stEnterEnd}
+            exitStart={stExitStart}
+            exitEnd={stExitEnd}
+            staggerIndex={1}
+          >
+            <h3
+              className="text-heading mb-4 text-black"
+              style={{ fontSize: 'clamp(1.4rem, 2.2vw, 2.4rem)', lineHeight: '1.1' }}
+            >
+              {offer.catchphrase}
+            </h3>
+          </StaggerChild>
+
+          {/* Description */}
+          <StaggerChild
+            scrollYProgress={scrollYProgress}
+            enterStart={stEnter}
+            enterEnd={stEnterEnd}
+            exitStart={stExitStart}
+            exitEnd={stExitEnd}
+            staggerIndex={2}
+          >
+            <p className="mb-6 max-w-md text-body leading-relaxed text-black/50">
+              {offer.description}
+            </p>
+          </StaggerChild>
+
+          {/* Details — 2 columns grid with orange bullets */}
+          <StaggerChild
+            scrollYProgress={scrollYProgress}
+            enterStart={stEnter}
+            enterEnd={stEnterEnd}
+            exitStart={stExitStart}
+            exitEnd={stExitEnd}
+            staggerIndex={3}
+          >
+            <ul className="mb-6 grid max-w-lg grid-cols-2 gap-x-5 gap-y-2">
+              {offer.details.slice(0, 6).map((detail, i) => (
+                <li key={i} className="flex gap-2 text-body-sm text-black/40">
+                  <span
+                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                    aria-hidden="true"
+                  />
+                  <span>{detail}</span>
+                </li>
+              ))}
+            </ul>
+          </StaggerChild>
+
+          {/* CTA */}
+          <StaggerChild
+            scrollYProgress={scrollYProgress}
+            enterStart={stEnter}
+            enterEnd={stEnterEnd}
+            exitStart={stExitStart}
+            exitEnd={stExitEnd}
+            staggerIndex={4}
+          >
+            <LinkCTA to="/contact" theme="light" aria-label={`Profiter de ${offer.title}`}>
+              En profiter
+            </LinkCTA>
+          </StaggerChild>
         </div>
       </div>
     </m.div>
@@ -128,68 +229,71 @@ function OfferCard({
 }
 
 // ---------------------------------------------------------------------------
-// Offer image sub-component (extracted to avoid hooks in map)
+// Full-bleed background photo with crossfade (clipPath volet like Services)
 // ---------------------------------------------------------------------------
 
-function OfferImage({
-  offer,
-  index,
-  scrollYProgress,
-}: {
-  offer: OfferData;
-  index: number;
-  scrollYProgress: MotionValue<number>;
-}) {
-  const tl = OFFERS_TIMELINE[index];
-  const layout = IMAGE_LAYOUT[index];
+function BackgroundPhotos({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const tl0 = OFFERS_TIMELINE[0];
+  const tl1 = OFFERS_TIMELINE[1];
 
-  const imgOpacity = useTransform(
+  // First photo: fade in at start, stays visible until second reveals on top
+  const photo1Opacity = useTransform(
     scrollYProgress,
-    [tl.imgIn[0], tl.imgIn[1], tl.imgOut[0], tl.imgOut[1]],
+    [tl0.imgIn[0], tl0.imgIn[1], tl1.imgOut[0], tl1.imgOut[1]],
     [0, 1, 1, 0],
   );
-  const imgRotateYRaw = useTransform(
+  const photo1Scale = useTransform(
     scrollYProgress,
-    [tl.imgIn[0], tl.hold[0]],
-    [layout.rotateY + (index === 0 ? 10 : -10), layout.rotateY],
-  );
-  const imgRotateY = useSpring(imgRotateYRaw, SPRING_CONFIG);
-  const imgRotateXRaw = useTransform(
-    scrollYProgress,
-    [tl.imgIn[0], tl.hold[0]],
-    [layout.rotateX + 8, layout.rotateX],
-  );
-  const imgRotateX = useSpring(imgRotateXRaw, SPRING_CONFIG);
-  const imgYRaw = useTransform(scrollYProgress, [tl.imgIn[0], tl.imgOut[1]], [300, -300]);
-  const imgY = useSpring(imgYRaw, SPRING_CONFIG);
-  const imgScale = useTransform(
-    scrollYProgress,
-    [tl.imgIn[0], tl.hold[0], tl.imgOut[1]],
-    [0.85, 1, 1.04],
+    [tl0.imgIn[0], tl0.hold[1], tl0.imgOut[1]],
+    [1.05, 1, 0.98],
   );
 
+  // Second photo: clipPath volet reveal from bottom (like Services PhotoReveal)
+  const clipRaw = useTransform(scrollYProgress, [tl1.imgIn[0], tl1.imgIn[1]], [100, 0]);
+  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
+  const clipPath = useTransform(clipSmooth, (v: number) => `inset(${v}% 0 0 0)`);
+  const photo2Scale = useTransform(
+    scrollYProgress,
+    [tl1.imgIn[0], tl1.hold[1], tl1.imgOut[1]],
+    [1.05, 1, 0.98],
+  );
+
+  // Fade to black after second offer
+  const blackOpacity = useTransform(scrollYProgress, [BLACK_FADE_START, BLACK_FADE_END], [0, 1]);
+
   return (
-    <m.div
-      className="absolute inset-0 flex items-center justify-center"
-      style={{
-        opacity: imgOpacity,
-        rotateX: imgRotateX,
-        rotateY: imgRotateY,
-        y: imgY,
-        scale: imgScale,
-        rotate: layout.rotateZ,
-        x: layout.x,
-        transformOrigin: 'center center',
-        transformStyle: 'preserve-3d',
-      }}
-    >
-      <img
-        src={offer.image}
-        alt={offer.title}
-        className="h-[200vh] w-auto max-w-none object-contain drop-shadow-2xl"
-        loading={index === 0 ? 'eager' : 'lazy'}
+    <>
+      {/* Photo 1 — base layer */}
+      <m.div className="absolute inset-0" style={{ opacity: photo1Opacity, scale: photo1Scale }}>
+        <img
+          src={OFFERS_DATA[0].image}
+          alt={OFFERS_DATA[0].title}
+          className="h-full w-full object-cover"
+          loading="eager"
+        />
+        {/* Dark overlay for card legibility */}
+        <div className="absolute inset-0 bg-black/40" />
+      </m.div>
+
+      {/* Photo 2 — clipPath volet reveal on top */}
+      <m.div className="absolute inset-0" style={{ clipPath, scale: photo2Scale }}>
+        <img
+          src={OFFERS_DATA[1].image}
+          alt={OFFERS_DATA[1].title}
+          className="h-full w-full object-cover"
+          loading="lazy"
+        />
+        {/* Dark overlay for card legibility */}
+        <div className="absolute inset-0 bg-black/40" />
+      </m.div>
+
+      {/* Fade-to-black layer — covers everything after second offer */}
+      <m.div
+        className="absolute inset-0 bg-black"
+        style={{ opacity: blackOpacity }}
+        aria-hidden="true"
       />
-    </m.div>
+    </>
   );
 }
 
@@ -205,20 +309,20 @@ function OffersDesktop() {
   });
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: '550vh' }}>
-      <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
-        {/* Image layer */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
-          {OFFERS_DATA.map((offer, i) => (
-            <OfferImage key={offer.id} offer={offer} index={i} scrollYProgress={scrollYProgress} />
-          ))}
+    <div ref={sectionRef} className="hidden lg:block" style={{ height: '500vh' }}>
+      <div className="sticky top-0 h-screen overflow-hidden">
+        {/* Full-bleed photo layer */}
+        <div className="absolute inset-0 z-0">
+          <BackgroundPhotos scrollYProgress={scrollYProgress} />
         </div>
 
-        {/* Card layer */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center pt-24">
-          {OFFERS_DATA.map((offer, i) => (
-            <OfferCard key={offer.id} offer={offer} index={i} scrollYProgress={scrollYProgress} />
-          ))}
+        {/* Card layer — centered */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center">
+          <div className="relative w-full">
+            {OFFERS_DATA.map((offer, i) => (
+              <OfferCard key={offer.id} offer={offer} index={i} scrollYProgress={scrollYProgress} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
@@ -297,12 +401,11 @@ export default function OffersContent() {
       id="offers-content"
       className="relative"
       style={{
-        background:
-          'linear-gradient(to bottom, transparent 12vw, rgb(var(--color-yellow-rgb)) 12vw)',
+        background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)',
       }}
-      data-navbar-theme="dark"
+      data-navbar-theme="light"
     >
-      {/* Convex dome — accent dome with transparent corners revealing the hero behind */}
+      {/* Convex dome — black dome with transparent corners revealing the hero behind */}
       <svg
         className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
         style={{ height: '12vw' }}
@@ -310,7 +413,7 @@ export default function OffersContent() {
         preserveAspectRatio="none"
         aria-hidden="true"
       >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
 
       {/* Desktop */}
@@ -324,6 +427,26 @@ export default function OffersContent() {
           ))}
         </div>
       </div>
+
+      {/* Bottom gradient dissolve — black → accent for CTA transition */}
+      <div
+        className="pointer-events-none relative z-[1] h-[65vh]"
+        style={{
+          background: [
+            'linear-gradient(to bottom,',
+            'black 0%,',
+            `color-mix(in srgb, ${ACCENT_HEX} 5%, black) 14%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 14%, black) 28%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 28%, black) 42%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 45%, black) 56%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 65%, black) 70%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 80%, black) 82%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 92%, black) 92%,`,
+            `${ACCENT_HEX} 100%)`,
+          ].join(' '),
+        }}
+        aria-hidden="true"
+      />
     </section>
   );
 }

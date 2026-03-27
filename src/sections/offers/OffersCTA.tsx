@@ -2,59 +2,85 @@ import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
 
 const SPRING_CONFIG = { stiffness: 80, damping: 30, mass: 0.5 };
-const ZOOM_SPRING = { stiffness: 60, damping: 30, mass: 0.5 };
+
+// ---------------------------------------------------------------------------
+// Desktop — scroll-driven entrance matching AboutCTA pattern exactly
+//
+//  0.40 – 1.00  Motif scale grows (opacity-20 static like AboutCTA)
+//  0.55 – 0.80  Title ScrollWordReveal + Y slide
+//  0.70 – 0.88  Subtitle fades in + Y slide
+//  0.80 – 0.95  Buttons fade in
+// ---------------------------------------------------------------------------
 
 function CTADesktop() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ['start start', 'end end'],
+    offset: ['start end', 'start start'],
   });
 
-  // "ATTEND" zooms: scale 12 → 1
-  const attendScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
-  const attendScale = useSpring(attendScaleRaw, ZOOM_SPRING);
+  // Motif — scale on scroll (opacity-20 static, matching AboutCTA)
+  const motifScale = useTransform(scrollYProgress, [0.4, 1], [1, 1.4]);
 
-  // "ON" slides up
-  const w1Opacity = useTransform(scrollYProgress, [0.14, 0.22], [0, 1]);
-  const w1YRaw = useTransform(scrollYProgress, [0.14, 0.22], [40, 0]);
-  const w1Y = useSpring(w1YRaw, SPRING_CONFIG);
+  // Title — ScrollWordReveal container Y slide
+  const titleYRaw = useTransform(scrollYProgress, [0.55, 0.8], [60, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
-  // "VOUS" slides up
-  const w2Opacity = useTransform(scrollYProgress, [0.19, 0.27], [0, 1]);
-  const w2YRaw = useTransform(scrollYProgress, [0.19, 0.27], [40, 0]);
-  const w2Y = useSpring(w2YRaw, SPRING_CONFIG);
+  // Subtitle
+  const subtitleOpacity = useTransform(scrollYProgress, [0.7, 0.88], [0, 1]);
+  const subtitleYRaw = useTransform(scrollYProgress, [0.7, 0.88], [30, 0]);
+  const subtitleY = useSpring(subtitleYRaw, SPRING_CONFIG);
 
-  // CTA
-  const ctaOpacity = useTransform(scrollYProgress, [0.26, 0.34], [0, 1]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.26, 0.34], [30, 0]);
-  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  // Buttons
+  const buttonsOpacity = useTransform(scrollYProgress, [0.8, 0.95], [0, 1]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
-      <div className="sticky top-0 h-screen overflow-hidden bg-accent">
-        <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-10 px-8">
-          <h2
-            className="text-heading text-center text-black"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
-          >
-            <m.span className="block" style={{ opacity: w1Opacity, y: w1Y }}>
-              ON
-            </m.span>
-            <m.span className="block" style={{ opacity: w2Opacity, y: w2Y }}>
-              VOUS
-            </m.span>
-            <m.span className="block origin-center" style={{ scale: attendScale }}>
-              ATTEND
-            </m.span>
-          </h2>
+    <div
+      ref={sectionRef}
+      className="relative hidden min-h-screen w-full items-center overflow-hidden lg:flex"
+    >
+      {/* Circle motif — opacity-20 static + scale on scroll (same as AboutCTA) */}
+      <m.img
+        src="/images/motif-cercle.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
+        style={{ scale: motifScale }}
+      />
 
-          <m.div style={{ opacity: ctaOpacity, y: ctaY }}>
+      <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+        <div className="mx-auto max-w-4xl text-center">
+          {/* Title — ScrollWordReveal word-by-word */}
+          <m.div style={{ y: titleY }}>
+            <ScrollWordReveal
+              as="h2"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.55}
+              revealEnd={0.75}
+              className="heading-section text-black"
+            >
+              ON VOUS ATTEND
+            </ScrollWordReveal>
+          </m.div>
+
+          {/* Subtitle — staggered entrance */}
+          <m.p
+            className="mt-6 text-body-lg text-black/50"
+            style={{ opacity: subtitleOpacity, y: subtitleY }}
+          >
+            Passez nous voir, le reste suivra.
+          </m.p>
+
+          {/* CTAs — staggered entrance */}
+          <m.div
+            className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row"
+            style={{ opacity: buttonsOpacity }}
+          >
             <LinkCTA to="/contact" theme="accent">
               Nous contacter
             </LinkCTA>
@@ -65,42 +91,56 @@ function CTADesktop() {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Main component
+// ---------------------------------------------------------------------------
+
 export default function OffersCTA() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
 
   return (
-    <section className="relative w-full bg-accent" data-navbar-theme="dark">
-      {/* Convex curve transition from black offers section */}
-      <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-accent"
-        data-navbar-theme="dark"
-        aria-hidden="true"
-      />
+    <section
+      aria-label="Nous contacter"
+      className="relative w-full bg-accent"
+      data-navbar-theme="dark"
+    >
+      {/* Desktop — scroll-driven */}
+      {!prefersReducedMotion && <CTADesktop />}
 
-      {/* Desktop */}
-      {!prefersReducedMotion && isLg && <CTADesktop />}
-
-      {/* Mobile / reduced-motion */}
+      {/* Mobile / reduced-motion fallback */}
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <div className="mx-auto max-w-5xl text-center">
-            <SimpleAnimation type="slide-up" delay={0}>
-              <h2
-                className="text-heading mb-10 text-black"
-                style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
-              >
-                On vous
-                <br />
-                attend
-              </h2>
-            </SimpleAnimation>
+        <div className="relative flex min-h-screen w-full items-center overflow-hidden">
+          <img
+            src="/images/motif-cercle.png"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
+          />
 
-            <SimpleAnimation type="fade" delay={100}>
-              <LinkCTA to="/contact" theme="accent">
-                Nous contacter
-              </LinkCTA>
-            </SimpleAnimation>
+          <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+            <div className="mx-auto max-w-4xl text-center">
+              <SimpleAnimation type="slide-up" delay={0}>
+                <h2 className="heading-section text-black">
+                  ON VOUS
+                  <br />
+                  ATTEND
+                </h2>
+              </SimpleAnimation>
+
+              <SimpleAnimation type="slide-up" delay={100}>
+                <p className="mt-6 text-body-lg text-black/50">
+                  Passez nous voir, le reste suivra.
+                </p>
+              </SimpleAnimation>
+
+              <SimpleAnimation type="fade" delay={200}>
+                <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row">
+                  <LinkCTA to="/contact" theme="accent">
+                    Nous contacter
+                  </LinkCTA>
+                </div>
+              </SimpleAnimation>
+            </div>
           </div>
         </div>
       </div>

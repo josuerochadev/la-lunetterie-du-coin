@@ -27,7 +27,7 @@ export default function OffersPage() {
           <OffersContent />
         </StickySection>
 
-        {/* CTA — fond jaune, mot zoom */}
+        {/* CTA — plein écran sticky, hold 200vh pour retarder le footer */}
         <StickySection zIndex={13} enableSticky wrapperMinHeight="200vh">
           <OffersCTA />
         </StickySection>
