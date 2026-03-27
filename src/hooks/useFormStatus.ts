@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import type { FormErrors, SubmissionResult } from './useFormSubmission';
 
@@ -28,45 +28,66 @@ export function useFormStatus(): UseFormStatusReturn {
   const [networkError, setNetworkError] = useState<NetworkError | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const messageRef = useRef<HTMLDivElement>(null);
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
-  const handleSubmissionStart = () => {
+  // Clear all pending timers on unmount
+  useEffect(() => {
+    return () => {
+      timersRef.current.forEach(clearTimeout);
+    };
+  }, []);
+
+  const scheduleTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      timersRef.current = timersRef.current.filter((t) => t !== id);
+      fn();
+    }, ms);
+    timersRef.current.push(id);
+  }, []);
+
+  const handleSubmissionStart = useCallback(() => {
+    // Clear any pending reset timers from a previous submission
+    timersRef.current.forEach(clearTimeout);
+    timersRef.current = [];
+
     setStatus('sending');
     setError('');
     setFieldErrors({});
     setNetworkError(null);
     setRetryCount(0);
-  };
+  }, []);
 
-  const handleSubmissionResult = (result: SubmissionResult) => {
-    if (result.success) {
-      setStatus('success');
-      // Reset status after showing success message for 5 seconds
-      setTimeout(() => {
-        setStatus('idle');
-      }, 5000);
-    } else {
-      setStatus('error');
-      setError(result.error || 'Une erreur est survenue');
-      setFieldErrors(result.fieldErrors || {});
-      setNetworkError(result.networkError || null);
-      setRetryCount(result.retryCount || 0);
+  const handleSubmissionResult = useCallback(
+    (result: SubmissionResult) => {
+      if (result.success) {
+        setStatus('success');
+        scheduleTimeout(() => {
+          setStatus('idle');
+        }, 5000);
+      } else {
+        setStatus('error');
+        setError(result.error || 'Une erreur est survenue');
+        setFieldErrors(result.fieldErrors || {});
+        setNetworkError(result.networkError || null);
+        setRetryCount(result.retryCount || 0);
 
-      // Reset status after showing error for 8 seconds
-      setTimeout(() => {
-        setStatus('idle');
-        setNetworkError(null);
-      }, 8000);
-    }
+        scheduleTimeout(() => {
+          setStatus('idle');
+          setNetworkError(null);
+        }, 8000);
+      }
 
-    // Focus message for accessibility
-    setTimeout(() => {
-      messageRef.current?.focus();
-    }, 100);
-  };
+      // Focus message for accessibility
+      scheduleTimeout(() => {
+        messageRef.current?.focus();
+      }, 100);
+    },
+    [scheduleTimeout],
+  );
 
-  const clearFieldError = (field: keyof FormErrors) => {
+  const clearFieldError = useCallback((field: keyof FormErrors) => {
     setFieldErrors((prev) => ({ ...prev, [field]: undefined }));
-  };
+  }, []);
 
   return {
     status,
