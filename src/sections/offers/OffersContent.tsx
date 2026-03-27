@@ -134,10 +134,10 @@ function OfferCard({
         translateY: '-50%',
       }}
     >
-      <div className="group/card relative overflow-hidden rounded-r-3xl bg-white/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)]">
+      <div className="group/card relative overflow-hidden rounded-r-2xl bg-white/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.2)]">
         {/* Blue pierre accent bar */}
         <div
-          className="absolute bottom-0 left-0 top-0 w-2.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-3.5"
+          className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-2.5"
           aria-hidden="true"
         />
 
@@ -165,12 +165,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={1}
           >
-            <h3
-              className="text-heading mb-4 text-black"
-              style={{ fontSize: 'clamp(1.6rem, 2.6vw, 2.8rem)', lineHeight: '1.1' }}
-            >
-              {offer.catchphrase}
-            </h3>
+            <h3 className="text-subtitle mb-4 text-title-sm text-black">{offer.catchphrase}</h3>
           </StaggerChild>
 
           {/* Description */}

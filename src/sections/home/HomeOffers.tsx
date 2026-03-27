@@ -7,7 +7,6 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
-import motifJauneUrl from '@/assets/patterns/motif-jaune.svg';
 import { SPRING_CONFIG } from '@/lib/motion';
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 
@@ -335,10 +334,10 @@ function OffersDesktop() {
               }}
             >
               {/* Card — editorial cutout with accent bar */}
-              <div className="group/card relative overflow-hidden rounded-r-3xl bg-black/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.5)]">
+              <div className="group/card relative overflow-hidden rounded-r-2xl bg-black/90 shadow-2xl backdrop-blur-md transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-[0_25px_60px_-12px_rgba(0,0,0,0.5)]">
                 {/* Accent bar — left edge, expands on hover */}
                 <div
-                  className="absolute bottom-0 left-0 top-0 w-2.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-3.5"
+                  className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-2.5"
                   aria-hidden="true"
                 />
 
@@ -423,14 +422,13 @@ function OfferMobileBlock({
 
       <div className="mt-6 px-container-x">
         <SimpleAnimation type="slide-up" delay={150}>
-          <div className="relative overflow-hidden rounded-2xl bg-black px-6 py-8">
-            <img
-              src={motifJauneUrl}
-              alt=""
+          <div className="group/card relative overflow-hidden rounded-r-2xl bg-black">
+            {/* Accent bar */}
+            <div
+              className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.07]"
             />
-            <div className="relative z-10">
+            <div className="relative z-10 px-6 py-8">
               <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/30">
                 {number} / {String(OFFER_COUNT).padStart(2, '0')}
               </span>

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { type ReactNode, useRef } from 'react';
 import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Car from 'lucide-react/dist/esm/icons/car';
@@ -9,6 +9,32 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { SPRING_CONFIG } from '@/lib/motion';
+
+// ---------------------------------------------------------------------------
+// Location item — icon + text, no card wrapper (same pattern as ContactInfo)
+// ---------------------------------------------------------------------------
+
+function LocationItem({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: typeof Car;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex gap-5">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
+        <Icon className="h-5 w-5 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+      </div>
+      <div>
+        <h3 className="text-subtitle mb-2 text-title-sm text-white">{title}</h3>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Desktop — scroll-driven parallax image + staggered content
@@ -35,14 +61,9 @@ function LocationDesktop() {
   const titleYRaw = useTransform(contentScroll.scrollYProgress, [0.15, 0.3], [40, 0]);
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
-  // Staggered cards
-  const card1Opacity = useTransform(contentScroll.scrollYProgress, [0.2, 0.38], [0, 1]);
-  const card1YRaw = useTransform(contentScroll.scrollYProgress, [0.2, 0.38], [50, 0]);
-  const card1Y = useSpring(card1YRaw, SPRING_CONFIG);
-
-  const card2Opacity = useTransform(contentScroll.scrollYProgress, [0.25, 0.43], [0, 1]);
-  const card2YRaw = useTransform(contentScroll.scrollYProgress, [0.25, 0.43], [50, 0]);
-  const card2Y = useSpring(card2YRaw, SPRING_CONFIG);
+  const contentOpacity = useTransform(contentScroll.scrollYProgress, [0.25, 0.45], [0, 1]);
+  const contentYRaw = useTransform(contentScroll.scrollYProgress, [0.25, 0.45], [40, 0]);
+  const contentY = useSpring(contentYRaw, SPRING_CONFIG);
 
   const footerOpacity = useTransform(contentScroll.scrollYProgress, [0.3, 0.48], [0, 1]);
   const footerYRaw = useTransform(contentScroll.scrollYProgress, [0.3, 0.48], [30, 0]);
@@ -67,77 +88,50 @@ function LocationDesktop() {
       <div className="relative z-10 flex min-h-screen items-center">
         <div className="mx-auto max-w-container px-container-x py-section">
           <m.div style={{ opacity: titleOpacity, y: titleY }}>
-            <h2 className="heading-section mb-12 text-center text-white lg:mb-16">Comment venir</h2>
+            <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
           </m.div>
 
-          <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
-            {/* En voiture */}
-            <m.div style={{ opacity: card1Opacity, y: card1Y }}>
-              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl transition-all duration-300 hover:bg-black/60">
-                <div
-                  className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 group-hover/loc:w-2.5"
-                  aria-hidden="true"
-                />
-                <Car
-                  className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15 transition-transform duration-500 group-hover/loc:rotate-0 group-hover/loc:scale-110"
-                  aria-hidden="true"
-                  strokeWidth={1}
-                />
-                <div className="relative z-10 py-6 pl-7 pr-6">
-                  <h3 className="text-subtitle mb-4 text-title-sm text-white">En voiture</h3>
-                  <div className="space-y-2 text-body text-white/60">
-                    <p>
-                      <span className="font-medium text-white/80">Parking payant</span> : Parking
-                      Halles et Opéra Broglie (environ 10 min à pied)
-                    </p>
-                  </div>
-                </div>
+          <m.div
+            className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2"
+            style={{ opacity: contentOpacity, y: contentY }}
+          >
+            <LocationItem icon={Car} title="En voiture">
+              <div className="space-y-2 text-body text-white/50">
+                <p>
+                  <span className="font-medium text-white/70">Parking payant</span> : Parking Halles
+                  et Opéra Broglie (environ 10 min à pied)
+                </p>
               </div>
-            </m.div>
+            </LocationItem>
 
-            {/* En transports */}
-            <m.div style={{ opacity: card2Opacity, y: card2Y }}>
-              <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl transition-all duration-300 hover:bg-black/60">
-                <div
-                  className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 group-hover/loc:w-2.5"
-                  aria-hidden="true"
-                />
-                <Train
-                  className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15 transition-transform duration-500 group-hover/loc:rotate-0 group-hover/loc:scale-110"
-                  aria-hidden="true"
-                  strokeWidth={1}
-                />
-                <div className="relative z-10 py-6 pl-7 pr-6">
-                  <h3 className="text-subtitle mb-4 text-title-sm text-white">En transports</h3>
-                  <div className="space-y-2 text-body text-white/60">
-                    <p>
-                      <span className="font-medium text-white/80">Tram B, C, F</span> : arrêt
-                      Broglie (7 min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-white/80">Tram A, D</span> : arrêt Ancienne
-                      Synagogue / Les Halles (7 min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-white/80">Bus C3</span> : arrêt Faubourg de
-                      Pierre (2 min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-white/80">Bus C6</span> : arrêt Tribunal (5
-                      min à pied)
-                    </p>
-                    <p className="pt-2 text-white/40">
-                      À 15 minutes à pied de la gare centrale de Strasbourg
-                    </p>
-                  </div>
-                </div>
+            <LocationItem icon={Train} title="En transports">
+              <div className="space-y-2 text-body text-white/50">
+                <p>
+                  <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt Broglie (7
+                  min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Tram A, D</span> : arrêt Ancienne
+                  Synagogue / Les Halles (7 min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg de
+                  Pierre (2 min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal (5 min
+                  à pied)
+                </p>
+                <p className="pt-2 text-white/40">
+                  À 15 minutes à pied de la gare centrale de Strasbourg
+                </p>
               </div>
-            </m.div>
-          </div>
+            </LocationItem>
+          </m.div>
 
           {/* Accessibility + Maps CTA */}
           <m.div
-            className="mx-auto mt-8 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
+            className="mx-auto mt-12 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
             style={{ opacity: footerOpacity, y: footerY }}
           >
             <p className="text-body text-white/80">
@@ -192,70 +186,46 @@ export default function ContactLocation() {
                 </h2>
               </SimpleAnimation>
 
-              <div className="mx-auto grid max-w-4xl gap-6 md:grid-cols-2">
+              <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
                 <SimpleAnimation type="slide-up" delay={100}>
-                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl">
-                    <div
-                      className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
-                      aria-hidden="true"
-                    />
-                    <Car
-                      className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15"
-                      aria-hidden="true"
-                      strokeWidth={1}
-                    />
-                    <div className="relative z-10 py-6 pl-7 pr-6">
-                      <h3 className="text-subtitle mb-4 text-title-sm text-white">En voiture</h3>
-                      <div className="space-y-2 text-body text-white/60">
-                        <p>
-                          <span className="font-medium text-white/80">Parking payant</span> :
-                          Parking Halles et Opéra Broglie (environ 10 min à pied)
-                        </p>
-                      </div>
+                  <LocationItem icon={Car} title="En voiture">
+                    <div className="space-y-2 text-body text-white/50">
+                      <p>
+                        <span className="font-medium text-white/70">Parking payant</span> : Parking
+                        Halles et Opéra Broglie (environ 10 min à pied)
+                      </p>
                     </div>
-                  </div>
+                  </LocationItem>
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={150}>
-                  <div className="group/loc relative overflow-hidden rounded-r-2xl bg-black/50 backdrop-blur-xl">
-                    <div
-                      className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
-                      aria-hidden="true"
-                    />
-                    <Train
-                      className="pointer-events-none absolute -bottom-4 -right-4 h-32 w-32 -rotate-12 text-white/15"
-                      aria-hidden="true"
-                      strokeWidth={1}
-                    />
-                    <div className="relative z-10 py-6 pl-7 pr-6">
-                      <h3 className="text-subtitle mb-4 text-title-sm text-white">En transports</h3>
-                      <div className="space-y-2 text-body text-white/60">
-                        <p>
-                          <span className="font-medium text-white/80">Tram B, C, F</span> : arrêt
-                          Broglie (7 min à pied)
-                        </p>
-                        <p>
-                          <span className="font-medium text-white/80">Tram A, D</span> : arrêt
-                          Ancienne Synagogue / Les Halles (7 min à pied)
-                        </p>
-                        <p>
-                          <span className="font-medium text-white/80">Bus C3</span> : arrêt Faubourg
-                          de Pierre (2 min à pied)
-                        </p>
-                        <p>
-                          <span className="font-medium text-white/80">Bus C6</span> : arrêt Tribunal
-                          (5 min à pied)
-                        </p>
-                        <p className="pt-2 text-white/40">
-                          À 15 minutes à pied de la gare centrale de Strasbourg
-                        </p>
-                      </div>
+                  <LocationItem icon={Train} title="En transports">
+                    <div className="space-y-2 text-body text-white/50">
+                      <p>
+                        <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt
+                        Broglie (7 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Tram A, D</span> : arrêt
+                        Ancienne Synagogue / Les Halles (7 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg
+                        de Pierre (2 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal
+                        (5 min à pied)
+                      </p>
+                      <p className="pt-2 text-white/40">
+                        À 15 minutes à pied de la gare centrale de Strasbourg
+                      </p>
                     </div>
-                  </div>
+                  </LocationItem>
                 </SimpleAnimation>
               </div>
 
-              <div className="mx-auto mt-8 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
+              <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
                 <SimpleAnimation type="fade" delay={200}>
                   <p className="text-body text-white/50">
                     <span className="font-medium text-white/70">Accessibilité :</span> Le magasin
