@@ -1,52 +1,30 @@
-# 📚 Documentation
+# Documentation
 
-Cette section contient la documentation technique détaillée du projet La Lunetterie du Coin.
+Documentation technique du projet La Lunetterie du Coin.
 
-## 🏛️ Architecture Decision Records (ADR)
+## Architecture Decision Records (ADR)
 
-Les ADR documentent les décisions architecturales importantes prises lors du développement.
+Les ADR documentent les decisions architecturales importantes. Voir [docs/adr/README.md](./adr/README.md) pour l'index complet.
 
-### ADR Disponibles
+| ADR                                                   | Titre                                     | Statut  |
+| ----------------------------------------------------- | ----------------------------------------- | ------- |
+| [001](./adr/001-frontend-tech-stack.md)               | Choix de la stack technique frontend      | Accepte |
+| [002](./adr/002-motion-accessibility-first.md)        | Approche Motion & Accessibilite           | Accepte |
+| [003](./adr/003-performance-optimization-strategy.md) | Strategie d'optimisation des performances | Accepte |
+| [004](./adr/004-testing-strategy.md)                  | Strategie de tests multicouche            | Accepte |
+| [005](./adr/005-solid-principles-implementation.md)   | Implementation des principes SOLID        | Accepte |
 
-- [ADR-001: Choix du Stack Technique](./adr/001-tech-stack.md)
-- [ADR-002: Architecture des Composants](./adr/002-component-architecture.md)
-- [ADR-003: Gestion des Animations](./adr/003-animation-system.md)
-- [ADR-004: Stratégie d'Accessibilité](./adr/004-accessibility-strategy.md)
+## Autres documents
 
-## 📋 Autres Documents
+- [Configuration environnement](./environment-setup.md) - Variables d'environnement par plateforme
+- [Strategie de tests](./testing-suite.md) - Tests unitaires, E2E, visuels
+- [Tests visuels](./visual-testing.md) - Tests de regression visuelle
+- [Standards icones](./standards/icons.md) - Patterns d'import Lucide
+- [Audits qualite](./audits/) - Resultats et historique des audits
 
-- [Stratégie de Tests](./testing-suite.md)
-- [Tests Visuels](./visual-testing.md)
+## Ajouter une ADR
 
-## 🔄 Maintenance
-
-Pour ajouter une nouvelle ADR :
-
-1. Créer un fichier `adr/XXX-titre.md`
-2. Utiliser le template ADR standard
-3. Mettre à jour cette liste
-4. Créer une PR avec les changements
-
-## 📖 Format ADR
-
-Chaque ADR suit la structure :
-
-```markdown
-# ADR-XXX: Titre de la Décision
-
-## Statut
-
-[Proposed | Accepted | Deprecated | Superseded]
-
-## Contexte
-
-Description du problème et des contraintes
-
-## Décision
-
-Décision prise et justification
-
-## Conséquences
-
-Impact positif et négatif de la décision
-```
+1. Creer un fichier `adr/XXX-titre.md`
+2. Suivre le template (Statut, Contexte, Decision, Consequences)
+3. Mettre a jour `adr/README.md`
+4. Creer une PR

@@ -9,27 +9,35 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 ### Added
 
-- Migration vers Vite 7.1.5 pour des performances améliorées
-- Mise à jour vers @vitejs/plugin-react 5.0.2 pour une meilleure intégration React 19
-- Tests de régression résolus avec 529 tests qui passent
+- Extraction de hooks reutilisables (`useScrollEntrance`, `useFadeInOut`, `usePointerEvents`)
+- Composant `GiantCounter` reutilisable pour les animations de compteur
+- Indicateur de progression scroll-driven pour le scrollytelling desktop des services
+- Animations word-by-word TextReveal sur tous les titres de pages
+- Parallax, grain textures et CTA etendu sur HomeServices
 
 ### Changed
 
-- Suppression des dépendances deprecated (@studio-freight/lenis)
-- Mise à jour des dépendances de sécurité (Sentry, ESLint, TypeScript)
-- Amélioration de la gestion d'erreur dans usePrefersReducedMotion hook
+- Redesign mobile hero avec typographie bold maximalist empilee
+- Redesign complet des pages Services, Offres et Contact avec design system unifie
+- Reecriture du copy pour le nouveau ton de marque (Home, About, Services, Offres, Contact)
+- Decomposition de HomeStory, HomeServices, HomeOffers en sous-composants modulaires
+- Centralisation des constantes dans `config/design.ts`
+- Centralisation des types formulaire dans `types/forms.ts`
+- Remplacement de Calendly par lien de reservation generique
+- Migration vers Vite 7.1, React 19.1, Framer Motion 12.23
 
 ### Fixed
 
-- Correction des échecs de tests dans usePrefersReducedMotion
-- Amélioration de la compatibilité navigateur pour les API MediaQuery
-- Résolution des problèmes de tests d'intersection observer
-- Correction des alertes de sécurité CodeQL
+- Correction des fuites memoire liees aux setTimeout non nettoyes au demontage
+- Amelioration du contraste, aria-labels et images responsives (a11y)
+- Amelioration SEO, securite et couverture sitemap
+- Prevention de l'export duplique dans OffersDesktop
+- Remplacement de `elementFromPoint` par `IntersectionObserver` pour le theme navbar
 
-### Security
+### Removed
 
-- Audit de sécurité complet avec corrections des vulnérabilités low-severity
-- Mise à jour des dépendances vers les dernières versions sécurisées
+- Nettoyage analytics et suppression du monitoring de performance inutilise
+- Suppression des dependances deprecated (@studio-freight/lenis)
 
 ## [1.0.0] - 2024-12-09
 
