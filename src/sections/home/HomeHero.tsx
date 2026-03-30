@@ -129,16 +129,16 @@ function HeroMobileAccents({
   scrollY: ReturnType<typeof useScroll>['scrollY'];
   revealStart: number;
 }) {
-  // Accents appear after all 4 words have revealed
-  const accentsStart = revealStart + HERO_WORDS.length * 60 + 100;
+  // Accents appear well after all 4 words have revealed — generous delay + stagger
+  const accentsStart = revealStart + HERO_WORDS.length * 60 + 250;
 
-  const accent1Y = useTransform(scrollY, [accentsStart, accentsStart + 150], [40, 0]);
-  const accent1Opacity = useTransform(scrollY, [accentsStart, accentsStart + 150], [0, 1]);
-  const accent2Y = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [40, 0]);
-  const accent2Opacity = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [0, 1]);
+  const accent1Y = useTransform(scrollY, [accentsStart, accentsStart + 180], [40, 0]);
+  const accent1Opacity = useTransform(scrollY, [accentsStart, accentsStart + 180], [0, 1]);
+  const accent2Y = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [40, 0]);
+  const accent2Opacity = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [0, 1]);
 
   return (
-    <div className="mx-auto mt-10 flex flex-col items-start gap-4 lg:hidden">
+    <div className="mx-auto flex flex-1 flex-col items-start justify-center gap-4 lg:hidden">
       <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
         <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
       </m.div>
@@ -160,7 +160,7 @@ function HeroMobileContent({ titleId }: { titleId?: string }) {
   return (
     <>
       {/* Title — stacked words pinned to top, each fills viewport width */}
-      <div className="absolute inset-x-0 top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
+      <div className="absolute inset-x-0 bottom-[calc(11vw+0.75rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
         </h1>
@@ -299,7 +299,7 @@ function HeroAnimated() {
   return (
     <m.section
       id="hero"
-      className="relative h-screen w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10]"
+      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10]"
       style={isLg ? { clipPath: heroClip } : undefined}
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
@@ -381,7 +381,7 @@ function HeroStatic() {
   return (
     <section
       id="hero"
-      className="relative h-screen w-full overflow-hidden bg-accent"
+      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:h-screen"
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
     >
