@@ -179,6 +179,22 @@
    UTILITIES POUR DÉVELOPPEMENT RAPIDE
    ======================================== */
 
+/* Toast slide-in animation */
+@keyframes slide-in-up-toast {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in-up {
+  animation: slide-in-up-toast 0.3s ease-out;
+}
+
 /* Classes pour appliquer rapidement */
 .animate-on-scroll {
   opacity: 0;

@@ -46,9 +46,11 @@ function HomeOffers() {
           </SimpleAnimation>
         </div>
 
-        {HOMEPAGE_OFFERS.map((offer, index) => (
-          <OfferMobileBlock key={offer.id} offer={offer} index={index} />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          {HOMEPAGE_OFFERS.map((offer, index) => (
+            <OfferMobileBlock key={offer.id} offer={offer} index={index} />
+          ))}
+        </div>
 
         <div className="mx-auto max-w-container px-container-x pb-section pt-8 text-center">
           <SimpleAnimation type="slide-up" delay={200}>

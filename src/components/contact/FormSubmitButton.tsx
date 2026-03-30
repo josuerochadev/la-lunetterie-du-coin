@@ -28,7 +28,7 @@ export default function FormSubmitButton({
   };
 
   return (
-    <SimpleAnimation type="slide-up" delay={animationIndex * 80} className="lg:col-span-2">
+    <SimpleAnimation type="slide-up" delay={animationIndex * 80} className="md:col-span-2">
       <div className="flex justify-center pt-4">
         <Button
           type="submit"

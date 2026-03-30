@@ -66,7 +66,7 @@ function HomeServices() {
             </h2>
           </SimpleAnimation>
 
-          <div className="space-y-16">
+          <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-10">
             {HOMEPAGE_SERVICES.map((service, index) => (
               <article key={service.title}>
                 <SimpleAnimation type="fade" delay={index * 100}>

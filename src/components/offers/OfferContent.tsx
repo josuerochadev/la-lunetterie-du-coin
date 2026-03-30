@@ -31,7 +31,7 @@ export function OfferContent({
         <h3 className="heading-subsection-lg">{title}</h3>
 
         {/* Phrase d'accroche */}
-        <p className="text-body-lg font-medium italic text-accent">{catchphrase}</p>
+        <p className="text-body-lg font-medium italic text-secondary-orange">{catchphrase}</p>
 
         {/* Résumé */}
         <p className="text-body-lg font-medium text-text">{summary}</p>
@@ -44,7 +44,7 @@ export function OfferContent({
         {/* CTA */}
         <a
           href={link}
-          className="group inline-flex items-center gap-2 text-body font-medium text-accent transition-colors hover:text-text focus-visible:text-text"
+          className="group inline-flex items-center gap-2 text-body font-medium text-text transition-colors hover:text-secondary-orange focus-visible:text-secondary-orange"
           aria-label={`En savoir plus sur l'offre ${title}`}
         >
           Découvrir l'offre

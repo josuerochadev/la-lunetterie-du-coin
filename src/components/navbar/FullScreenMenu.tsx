@@ -1,6 +1,6 @@
 import type React from 'react';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
@@ -30,6 +30,7 @@ type FullScreenMenuProps = {
  */
 const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
 
   useClickOutside(menuRef, () => onClose(), isOpen);
   useMenuAnimation(isOpen, onClose, menuRef);
@@ -77,17 +78,26 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
             {/* Colonne gauche : Navigation principale */}
             <div className="space-y-16 lg:text-right">
               <nav aria-label="Navigation principale" className="space-y-6 lg:text-right">
-                {FOOTER_NAV_LINKS.map((link, i) => (
-                  <SimpleAnimation key={link.href} type="slide-up" delay={i * 80} immediate={true}>
-                    <Link
-                      to={link.href}
-                      onClick={onClose}
-                      className="text-heading inline-block text-title-lg text-white transition-colors duration-300 hover:text-secondary-orange"
+                {FOOTER_NAV_LINKS.map((link, i) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <SimpleAnimation
+                      key={link.href}
+                      type="slide-up"
+                      delay={i * 80}
+                      immediate={true}
                     >
-                      {link.label}
-                    </Link>
-                  </SimpleAnimation>
-                ))}
+                      <Link
+                        to={link.href}
+                        onClick={onClose}
+                        className={`text-heading inline-block text-title-lg transition-colors duration-300 hover:text-secondary-orange ${isActive ? 'text-accent' : 'text-white'}`}
+                        aria-current={isActive ? 'page' : undefined}
+                      >
+                        {link.label}
+                      </Link>
+                    </SimpleAnimation>
+                  );
+                })}
               </nav>
 
               {/* Pages légales */}

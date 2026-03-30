@@ -9,23 +9,6 @@ import { useFormSubmission } from '@/hooks/useFormSubmission';
 import { useFormStatus } from '@/hooks/useFormStatus';
 import { useFormValidation } from '@/hooks/useFormValidation';
 
-/**
- * Formulaire de contact permettant aux utilisateurs d'envoyer un message via un endpoint Formspree.
- *
- * Ce composant gère l'état du formulaire (envoi, succès, erreur), affiche des messages d'état accessibles,
- * et propose une validation personnalisée pour les champs nom, email et message.
- *
- * Fonctionnalités principales :
- * - Affichage de messages de succès ou d'erreur après soumission.
- * - Validation côté client avec messages personnalisés en français.
- * - Accessibilité améliorée grâce à l'utilisation de `aria-live` et du focus automatique sur les messages.
- * - Désactivation du bouton d'envoi pendant la soumission.
- *
- * @component
- * @example
- * <ContactForm />
- */
-
 export default function ContactForm() {
   const { submitForm } = useFormSubmission();
   const {
@@ -60,7 +43,7 @@ export default function ContactForm() {
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-1 gap-sm sm:gap-md lg:grid-cols-2"
+        className="grid grid-cols-1 gap-sm sm:gap-md md:grid-cols-2"
         aria-busy={status === 'sending'}
       >
         <FormField
@@ -111,7 +94,7 @@ export default function ContactForm() {
           errorMessage={fieldErrors.message}
           onInvalid={handleInvalidInput}
           onInput={(e) => handleInputChange(e, 'message', clearFieldError)}
-          className="lg:col-span-2"
+          className="md:col-span-2"
         />
 
         {/* Honeypot field - hidden from users, visible to bots */}
@@ -125,23 +108,9 @@ export default function ContactForm() {
           />
         </div>
 
-        {/* Avertissement de confidentialité */}
-        <div className="lg:col-span-2">
-          <div
-            className="border-l-4 border-secondary-green/30 bg-secondary-green/5 p-6"
-            role="note"
-          >
-            <p className="text-body text-black/70">
-              <span className="font-medium text-text">Important :</span> Ne transmettez pas
-              d'informations confidentielles ou sensibles via ce formulaire. Pour une communication
-              sécurisée, contactez-nous directement par téléphone ou prenez rendez-vous.
-            </p>
-          </div>
-        </div>
-
-        {/* Case à cocher RGPD */}
-        <div className="lg:col-span-2">
-          <label className="flex items-start gap-3 text-body-sm text-black/50">
+        {/* Case à cocher RGPD — placée avant l'avertissement pour visibilité */}
+        <div className="md:col-span-2">
+          <label className="flex cursor-pointer items-start gap-3 text-body-sm text-black/70">
             <input
               type="checkbox"
               name="consent"
@@ -156,6 +125,20 @@ export default function ContactForm() {
               seront pas transmises à des tiers. <span className="font-medium text-text">*</span>
             </span>
           </label>
+        </div>
+
+        {/* Avertissement de confidentialité */}
+        <div className="md:col-span-2">
+          <div
+            className="border-l-4 border-secondary-green/30 bg-secondary-green/5 p-6"
+            role="note"
+          >
+            <p className="text-body-sm text-black/60">
+              <span className="font-medium text-black/80">Important :</span> Ne transmettez pas
+              d'informations confidentielles ou sensibles via ce formulaire. Pour une communication
+              sécurisée, contactez-nous directement par téléphone ou prenez rendez-vous.
+            </p>
+          </div>
         </div>
 
         <FormSubmitButton status={status} animationIndex={3} disabled={!consentChecked} />

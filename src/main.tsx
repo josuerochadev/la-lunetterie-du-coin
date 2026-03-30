@@ -13,6 +13,7 @@ import { MotionProvider } from '@/a11y/MotionProvider';
 import ScrollToTop from '@/components/routing/ScrollToTop';
 import { loadFeatures } from '@/lib/loadMotionFeatures';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { ToastProvider } from '@/components/common/Toast';
 import { validateEnvironment, env } from '@/lib/env';
 import { initPlausible } from '@/lib/analytics';
 
@@ -94,8 +95,10 @@ root.render(
         <HelmetProvider>
           <MotionProvider>
             <LazyMotion features={loadFeatures} strict>
-              <ScrollToTop />
-              <App />
+              <ToastProvider>
+                <ScrollToTop />
+                <App />
+              </ToastProvider>
             </LazyMotion>
           </MotionProvider>
         </HelmetProvider>

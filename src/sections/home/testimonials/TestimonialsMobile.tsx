@@ -30,7 +30,7 @@ export function TestimonialsMobile() {
             >
               4.9
             </span>
-            <span className="text-body text-white/60">/5</span>
+            <span className="text-body text-white/70">/5</span>
           </div>
         </SimpleAnimation>
       </div>
@@ -58,7 +58,7 @@ export function TestimonialsMobile() {
             <footer>
               <cite className="not-italic">
                 <div className="mb-1 text-body-lg font-medium text-white">{FEATURED.name}</div>
-                <div className="flex items-center gap-2 text-body-sm text-white/50">
+                <div className="flex items-center gap-2 text-body-sm text-white/70">
                   <span>{FEATURED.role}</span>
                   {FEATURED.date && (
                     <>
@@ -74,7 +74,7 @@ export function TestimonialsMobile() {
       </article>
 
       {/* Other testimonials */}
-      <div className="space-y-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {OTHERS.map((testimonial, i) => (
           <SimpleAnimation key={testimonial.id} type="slide-up" delay={200 + i * 80}>
             <article className="rounded-sm bg-white/[0.04] p-6 sm:p-8">
@@ -87,7 +87,7 @@ export function TestimonialsMobile() {
               <footer>
                 <cite className="not-italic">
                   <div className="mb-1 text-body-sm font-medium text-white">{testimonial.name}</div>
-                  <div className="flex items-center gap-2 text-body-xs text-white/50">
+                  <div className="flex items-center gap-2 text-body-xs text-white/70">
                     <span>{testimonial.role}</span>
                     {testimonial.date && (
                       <>

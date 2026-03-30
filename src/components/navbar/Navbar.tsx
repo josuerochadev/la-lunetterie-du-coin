@@ -1,7 +1,7 @@
 import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
 import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
@@ -241,11 +241,12 @@ const Navbar: React.FC = () => {
             />
           </button>
 
-          {/* CTA Prendre RDV — text + arrow, same underline pattern */}
+          {/* CTA Prendre RDV — lien externe vers Calendly */}
           <a
             href={BOOKING_URL}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Prendre rendez-vous (s'ouvre dans un nouvel onglet)"
             className={cn(
               'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold sm:inline-flex',
               textColor,
@@ -253,8 +254,8 @@ const Navbar: React.FC = () => {
             )}
           >
             Prendre RDV
-            <ArrowRight
-              className="h-3.5 w-3.5 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-1"
+            <ExternalLink
+              className="h-3 w-3 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-0.5"
               aria-hidden="true"
             />
             {/* Invisible bold duplicate to reserve width */}
@@ -263,7 +264,7 @@ const Navbar: React.FC = () => {
               aria-hidden="true"
             >
               <span>Prendre RDV</span>
-              <span className="h-3.5 w-3.5 shrink-0" />
+              <span className="h-3 w-3 shrink-0" />
             </span>
             <span
               className={cn(

@@ -71,7 +71,7 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
         <m.footer className="mt-8" style={{ opacity: authorOpacity, y: authorY }}>
           <cite className="not-italic">
             <div className="text-body-lg font-medium text-white">{FEATURED.name}</div>
-            <div className="mt-1 flex items-center justify-center gap-2 text-body-sm text-white/50">
+            <div className="mt-1 flex items-center justify-center gap-2 text-body-sm text-white/70">
               <span>{FEATURED.role}</span>
               {FEATURED.date && (
                 <>
@@ -134,7 +134,7 @@ function TestimonialSlide({
         <footer>
           <cite className="not-italic">
             <div className="text-body-sm font-medium text-white">{testimonial.name}</div>
-            <div className="mt-1 flex items-center justify-center gap-2 text-body-xs text-white/50">
+            <div className="mt-1 flex items-center justify-center gap-2 text-body-xs text-white/70">
               <span>{testimonial.role}</span>
               {testimonial.date && (
                 <>

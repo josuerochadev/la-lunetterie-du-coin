@@ -31,6 +31,11 @@
     color: rgba(var(--color-black-rgb), 0.2);
   }
 
+  /* État valide */
+  .form-input--valid {
+    border-color: rgb(var(--color-green-rgb));
+  }
+
   /* État d'erreur */
   .form-input--error {
     border-color: rgb(239 68 68); /* red-500 */
