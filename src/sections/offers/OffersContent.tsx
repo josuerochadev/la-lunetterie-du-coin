@@ -7,6 +7,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 import { ACCENT_HEX } from '@/config/design';
+import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { SPRING_CONFIG } from '@/lib/motion';
 const OFFER_COUNT = OFFERS_DATA.length;
 
@@ -57,9 +58,13 @@ function StaggerChild({
   const STAGGER_OFFSET = 0.012;
   const offset = staggerIndex * STAGGER_OFFSET;
 
-  const fadeIn = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [exitStart - offset, exitEnd], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(
+    scrollYProgress,
+    enterStart + offset,
+    enterEnd + offset,
+    exitStart - offset,
+    exitEnd,
+  );
 
   const yRaw = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [25, 0]);
   const y = useSpring(yRaw, SPRING_CONFIG);

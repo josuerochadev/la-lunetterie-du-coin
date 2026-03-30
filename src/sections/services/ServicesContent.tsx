@@ -9,6 +9,7 @@ import { useIsLg } from '@/hooks/useIsLg';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { BOOKING_URL } from '@/config/endpoints';
 import { ACCENT_HEX } from '@/config/design';
+import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { SPRING_CONFIG } from '@/lib/motion';
 const SERVICE_COUNT = SERVICES_DATA.length;
 
@@ -21,9 +22,13 @@ const SERVICES_END = 0.94;
 // ---------------------------------------------------------------------------
 
 function ServiceProgressIndicator({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const fadeIn = useTransform(scrollYProgress, [SERVICES_START, SERVICES_START + 0.03], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [SERVICES_END - 0.03, SERVICES_END], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(
+    scrollYProgress,
+    SERVICES_START,
+    SERVICES_START + 0.03,
+    SERVICES_END - 0.03,
+    SERVICES_END,
+  );
 
   const progressRaw = useTransform(
     scrollYProgress,
@@ -189,9 +194,13 @@ function StaggerChild({
   const STAGGER_OFFSET = 0.008;
   const offset = staggerIndex * STAGGER_OFFSET;
 
-  const fadeIn = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [exitStart - offset, exitEnd], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(
+    scrollYProgress,
+    enterStart + offset,
+    enterEnd + offset,
+    exitStart - offset,
+    exitEnd,
+  );
 
   const yRaw = useTransform(scrollYProgress, [enterStart + offset, enterEnd + offset], [20, 0]);
   const y = useSpring(yRaw, SPRING_CONFIG);
@@ -234,9 +243,7 @@ function ServiceCard({
   const y = useSpring(yRaw, SPRING_CONFIG);
 
   // Container opacity: fade in / fade out
-  const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.08], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [exitStart, end], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.08, exitStart, end);
   const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
   const isExamens = service.id === 'examens';

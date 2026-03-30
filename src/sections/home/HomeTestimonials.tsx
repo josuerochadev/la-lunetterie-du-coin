@@ -1,11 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { GiantCounter } from '@/components/motion/GiantCounter';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { RatingStars } from '@/components/common/RatingStars';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
 import { useIsLg } from '@/hooks/useIsLg';
@@ -28,56 +30,12 @@ const SCROLL_HEIGHT_VH = 180;
 // ── Desktop sub-components ──────────────────────────────────────────────────
 
 /**
- * Giant background rating counter — counts from 0.0 to 4.9 on scroll.
- * Replaces both the decorative guillemet and the small rating display.
- * DOM text updated directly via ref (no re-renders).
- */
-function GiantRating({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const countRef = useRef<HTMLSpanElement>(null);
-
-  // Counter: 0.0 → 4.9 during title/intro phase, then holds
-  const count = useTransform(scrollYProgress, [0.02, 0.12], [0, 4.9]);
-
-  useEffect(() => {
-    const unsubscribe = count.on('change', (v) => {
-      if (countRef.current) {
-        countRef.current.textContent = v.toFixed(1);
-      }
-    });
-    return unsubscribe;
-  }, [count]);
-
-  const scaleRaw = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.1, 0.9]);
-  const scale = useSpring(scaleRaw, SPRING_CONFIG);
-  const opacity = useTransform(scrollYProgress, [0.01, 0.06, 0.76, 0.8], [0, 0.18, 0.18, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], ['5%', '-15%']);
-
-  return (
-    <m.div
-      className="text-heading pointer-events-none absolute right-[5%] top-1/2 z-0 -translate-y-1/2 select-none text-accent"
-      style={{
-        fontSize: 'clamp(18rem, 35vw, 45rem)',
-        lineHeight: 1,
-        scale,
-        opacity,
-        y,
-      }}
-      aria-hidden="true"
-    >
-      <span ref={countRef}>0.0</span>
-    </m.div>
-  );
-}
-
-/**
  * Section title — word-by-word reveal, rises from center to top, then fades.
  */
 function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '6vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
-  const fadeIn = useTransform(scrollYProgress, [0, 0.03], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [0.76, 0.8], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(scrollYProgress, 0, 0.03, 0.76, 0.8);
 
   return (
     <m.div
@@ -178,9 +136,7 @@ function TestimonialSlide({
   const yRaw = useTransform(scrollYProgress, [start, enterEnd, exitStart, end], [80, 0, 0, -80]);
   const y = useSpring(yRaw, SPRING_CONFIG);
 
-  const fadeIn = useTransform(scrollYProgress, [start, start + segmentSize * 0.15], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [exitStart, end], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.15, exitStart, end);
   const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
 
   const rotation = index % 2 === 0 ? -1 : 1;
@@ -239,7 +195,12 @@ function TestimonialsDesktop() {
   return (
     <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
-        <GiantRating scrollYProgress={scrollYProgress} />
+        <GiantCounter
+          scrollYProgress={scrollYProgress}
+          countRange={[0.02, 0.12]}
+          countValues={[0, 4.9]}
+          opacityRange={[0.01, 0.06, 0.76, 0.8]}
+        />
         <SectionTitle scrollYProgress={scrollYProgress} />
         <FeaturedQuote scrollYProgress={scrollYProgress} />
 

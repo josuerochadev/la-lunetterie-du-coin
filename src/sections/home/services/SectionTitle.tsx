@@ -1,8 +1,9 @@
-import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useSpring, useTransform, type MotionValue } from 'framer-motion';
 
 import { TITLE_END, ZOOM_END } from './constants';
 
 import { HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 /**
@@ -12,9 +13,7 @@ export function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue
   const yRaw = useTransform(scrollYProgress, [0, TITLE_END], ['40vh', '6vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
 
-  const fadeIn = useTransform(scrollYProgress, [0, 0.02], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [ZOOM_END, ZOOM_END + 0.04], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(scrollYProgress, 0, 0.02, ZOOM_END, ZOOM_END + 0.04);
 
   return (
     <m.div

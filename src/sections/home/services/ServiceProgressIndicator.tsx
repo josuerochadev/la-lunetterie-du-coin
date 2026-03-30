@@ -2,6 +2,7 @@ import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 
+import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 function ProgressDot({ index, progress }: { index: number; progress: MotionValue<number> }) {
@@ -29,9 +30,13 @@ export function ServiceProgressIndicator({
 }: {
   scrollYProgress: MotionValue<number>;
 }) {
-  const fadeIn = useTransform(scrollYProgress, [SERVICES_START, SERVICES_START + 0.03], [0, 1]);
-  const fadeOut = useTransform(scrollYProgress, [SERVICES_END - 0.03, SERVICES_END], [1, 0]);
-  const opacity = useTransform([fadeIn, fadeOut] as const, ([a, b]: number[]) => Math.min(a, b));
+  const opacity = useFadeInOut(
+    scrollYProgress,
+    SERVICES_START,
+    SERVICES_START + 0.03,
+    SERVICES_END - 0.03,
+    SERVICES_END,
+  );
 
   const progressRaw = useTransform(
     scrollYProgress,
