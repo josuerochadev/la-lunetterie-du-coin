@@ -24,7 +24,7 @@ export default function ComingSoon() {
 
       <div className="fixed inset-0 z-[9999] flex select-none flex-col overflow-hidden bg-black text-white">
         {/* Main content */}
-        <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6">
+        <main className="relative z-10 flex flex-1 flex-col items-center justify-center px-6">
           {/* Logo */}
           <div className="anim-reveal" style={{ animationDelay: '0.1s' }}>
             <LogoFull
@@ -55,10 +55,10 @@ export default function ComingSoon() {
               </span>
             </p>
           </div>
-        </div>
+        </main>
 
         {/* Footer */}
-        <div
+        <footer
           className="anim-reveal relative z-10 px-6 pb-8 text-center sm:pb-10"
           style={{ animationDelay: '0.8s' }}
         >
@@ -78,7 +78,7 @@ export default function ComingSoon() {
             />
             <p>En attendant, retrouvez-nous en boutique</p>
           </div>
-        </div>
+        </footer>
       </div>
     </>
   );
