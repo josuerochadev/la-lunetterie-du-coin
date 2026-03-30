@@ -2,6 +2,7 @@ import { useRef, type ReactNode } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { ProgressDots } from '@/components/motion/ProgressDots';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -17,54 +18,6 @@ const SERVICE_COUNT = SERVICES_DATA.length;
 // Scroll budget
 const SERVICES_START = 0.06;
 const SERVICES_END = 0.94;
-
-// ---------------------------------------------------------------------------
-// Progress indicator — vertical dots showing active service
-// ---------------------------------------------------------------------------
-
-function ServiceProgressIndicator({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const opacity = useFadeInOut(
-    scrollYProgress,
-    SERVICES_START,
-    SERVICES_START + 0.03,
-    SERVICES_END - 0.03,
-    SERVICES_END,
-  );
-
-  const progressRaw = useTransform(
-    scrollYProgress,
-    [SERVICES_START, SERVICES_END],
-    [0, SERVICE_COUNT],
-  );
-  const progress = useSpring(progressRaw, SPRING_CONFIG);
-
-  return (
-    <m.div
-      className="flex shrink-0 flex-col items-center gap-3"
-      style={{ opacity }}
-      aria-hidden="true"
-    >
-      {Array.from({ length: SERVICE_COUNT }, (_, i) => (
-        <ProgressDot key={i} index={i} progress={progress} />
-      ))}
-    </m.div>
-  );
-}
-
-function ProgressDot({ index, progress }: { index: number; progress: MotionValue<number> }) {
-  const dotOpacity = useTransform(progress, (v: number) => (v >= index && v < index + 1 ? 1 : 0));
-  const bgOpacity = useTransform(dotOpacity, (v: number) => (v === 1 ? 0 : 1));
-
-  return (
-    <span className="relative h-2.5 w-2.5 rounded-full">
-      <m.span
-        className="absolute inset-0 rounded-full bg-orange/20"
-        style={{ opacity: bgOpacity }}
-      />
-      <m.span className="absolute inset-0 rounded-full bg-orange" style={{ opacity: dotOpacity }} />
-    </span>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Desktop sub-components — PhotoStack pattern from HomeServices
@@ -541,7 +494,12 @@ export default function ServicesContent() {
                       <PhotoStack scrollYProgress={scrollYProgress} />
 
                       {/* Progress indicator — vertical dots */}
-                      <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
+                      <ProgressDots
+                        scrollYProgress={scrollYProgress}
+                        count={SERVICE_COUNT}
+                        start={SERVICES_START}
+                        end={SERVICES_END}
+                      />
 
                       {/* Text — each service scrolls independently */}
                       <div className="relative flex w-[45%] flex-col justify-center">
