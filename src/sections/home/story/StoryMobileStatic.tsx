@@ -7,11 +7,7 @@ export function StoryMobileStatic() {
     <div className="lg:hidden">
       {/* Text content first */}
       <div className="px-container-x pb-16 sm:pb-20">
-        <h2
-          id="story-title"
-          className="text-heading text-white"
-          style={{ fontSize: 'clamp(2.5rem, 10vw, 5rem)' }}
-        >
+        <h2 id="story-title" className="text-heading text-fluid-story text-white">
           {STORY_TITLE}
         </h2>
         <p className="mt-8 text-body-xl text-white/80">{STORY_BODY}</p>

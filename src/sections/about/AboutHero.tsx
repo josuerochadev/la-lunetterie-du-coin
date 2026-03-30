@@ -20,11 +20,7 @@ function HeroDesktop() {
           className="absolute inset-0 z-10 flex flex-col items-center justify-center px-container-x"
           style={{ opacity: exitOpacity, y: exitY }}
         >
-          <TextReveal
-            as="h1"
-            className="text-heading text-center text-accent"
-            style={{ fontSize: 'clamp(3rem, 12vw, 14rem)', lineHeight: '0.95' }}
-          >
+          <TextReveal as="h1" className="text-heading text-fluid-hero text-center text-accent">
             L'EXPERT DES EX PAIRES
           </TextReveal>
 
@@ -65,11 +61,7 @@ export default function AboutHero() {
           <EyePattern variant="blanc" opacity={0.03} />
           <div className="relative z-10 mx-auto max-w-container px-container-x">
             <div className="flex flex-col items-center justify-center text-center">
-              <TextReveal
-                as="h1"
-                className="text-heading text-accent"
-                style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
-              >
+              <TextReveal as="h1" className="text-heading text-fluid-hero-sub text-accent">
                 L'EXPERT DES EX PAIRES
               </TextReveal>
 

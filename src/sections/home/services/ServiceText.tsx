@@ -5,6 +5,7 @@ import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_SERVICES } from '@/data/homepage';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 /**
@@ -37,7 +38,7 @@ export function ServiceText({
   const y = useSpring(yRaw, SPRING_CONFIG);
 
   const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.08, exitStart, end);
-  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const pointerEvents = usePointerEvents(opacity);
 
   return (
     <m.div

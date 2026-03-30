@@ -12,6 +12,7 @@ import {
 
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 /**
@@ -118,7 +119,7 @@ export function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue
   const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.96, 0.98], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
-  const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const ctaPointer = usePointerEvents(ctaOpacity);
 
   // Play/pause video based on visibility
   useEffect(() => {

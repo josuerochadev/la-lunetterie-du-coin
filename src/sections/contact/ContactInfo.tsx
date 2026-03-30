@@ -11,6 +11,7 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
+import { STORE_INFO } from '@/config/store';
 import { OPENING_HOURS } from '@/data/contact';
 
 // ---------------------------------------------------------------------------
@@ -70,7 +71,7 @@ function InfoDesktop() {
                 {COMPANY_ADDRESS}
               </address>
               <LinkCTA
-                href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
+                href={STORE_INFO.address.googleMapsSearchUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 icon={MapPin}
@@ -163,7 +164,7 @@ export default function ContactInfo() {
                     {COMPANY_ADDRESS}
                   </address>
                   <a
-                    href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
+                    href={STORE_INFO.address.googleMapsSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block text-body-sm font-medium text-white/70 transition-colors hover:text-secondary-orange"

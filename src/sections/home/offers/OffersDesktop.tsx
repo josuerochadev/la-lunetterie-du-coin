@@ -6,6 +6,7 @@ import { SCROLL_HEIGHT_VH, OFFERS_TIMELINE, IMAGE_LAYOUT } from './constants';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 export function OffersDesktop() {
@@ -174,15 +175,15 @@ export function OffersDesktop() {
     [0.92, 1, 1, 0.9],
   );
 
-  const card0Pointer = useTransform(card0Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
-  const card1Pointer = useTransform(card1Opacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const card0Pointer = usePointerEvents(card0Opacity);
+  const card1Pointer = usePointerEvents(card1Opacity);
 
   // --- Outro ---
   const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.95, 0.98], [0, 1, 1, 0]);
   const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.95, 0.98], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
-  const ctaPointer = useTransform(ctaOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const ctaPointer = usePointerEvents(ctaOpacity);
 
   const imgTransforms = [
     {

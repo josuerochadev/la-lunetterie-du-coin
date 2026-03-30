@@ -9,6 +9,7 @@ export const STORE_INFO = {
     postalCode: '67000',
     full: '24 Rue du Faubourg-de-Pierre, 67000 Strasbourg',
     googleMapsUrl: 'https://maps.app.goo.gl/wNiTx6KzzzcVE8MCA',
+    googleMapsSearchUrl: 'https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg',
   },
   phone: {
     display: '03 88 51 24 40',

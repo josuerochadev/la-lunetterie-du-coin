@@ -85,10 +85,6 @@ export default defineConfig(({ mode }) => {
               return 'framer-motion';
             }
 
-            if (id.includes('split-type')) {
-              return 'split-type';
-            }
-
             // Forms (lazy-loaded sur page contact)
             if (id.includes('react-hook-form')) {
               return 'forms';
@@ -106,11 +102,6 @@ export default defineConfig(({ mode }) => {
             // Icons Lucide (lazy-loaded)
             if (id.includes('lucide-react')) {
               return 'icons';
-            }
-
-            // Vercel Analytics séparé
-            if (id.includes('@vercel/analytics')) {
-              return 'analytics';
             }
 
             // Node modules dans vendor par défaut

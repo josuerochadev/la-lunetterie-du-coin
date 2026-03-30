@@ -57,3 +57,29 @@
 .heading-subsection {
   @apply text-subtitle text-title-sm text-text;
 }
+
+/* ===== FLUID HERO SIZES ===== */
+/* Used in hero banners and large display text — more aggressive scaling than title-* tokens. */
+
+/* Hero main: e.g. page hero titles (About, Services, Contact, Offers) */
+.text-fluid-hero {
+  font-size: clamp(3rem, 12vw, 14rem);
+  line-height: 0.95;
+}
+
+/* Hero sub: e.g. mobile hero fallback titles */
+.text-fluid-hero-sub {
+  font-size: clamp(3rem, 10vw, 5rem);
+  line-height: 0.95;
+}
+
+/* CTA hero: e.g. ServicesCTA, ContactAppointment display text */
+.text-fluid-cta {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+}
+
+/* Story mobile title */
+.text-fluid-story {
+  font-size: clamp(2.5rem, 10vw, 5rem);
+}

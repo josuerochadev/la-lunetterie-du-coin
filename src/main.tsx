@@ -5,7 +5,6 @@ import './styles/globals.css';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import { LazyMotion } from 'framer-motion';
-import { Analytics } from '@vercel/analytics/react';
 
 import App from './App';
 import { TIMING } from './config/design';
@@ -97,7 +96,6 @@ root.render(
             <LazyMotion features={loadFeatures} strict>
               <ScrollToTop />
               <App />
-              <Analytics />
             </LazyMotion>
           </MotionProvider>
         </HelmetProvider>

@@ -11,6 +11,7 @@ import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { TESTIMONIALS, type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
 import { useIsLg } from '@/hooks/useIsLg';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 import { ACCENT_HEX } from '@/config/design';
 const FEATURED = TESTIMONIALS[0];
@@ -137,7 +138,7 @@ function TestimonialSlide({
   const y = useSpring(yRaw, SPRING_CONFIG);
 
   const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.15, exitStart, end);
-  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const pointerEvents = usePointerEvents(opacity);
 
   const rotation = index % 2 === 0 ? -1 : 1;
 
@@ -190,7 +191,7 @@ function TestimonialsDesktop() {
   const ctaOpacity = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [20, 0, 0, -30]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
-  const ctaPointer = useTransform(ctaOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const ctaPointer = usePointerEvents(ctaOpacity);
 
   return (
     <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>

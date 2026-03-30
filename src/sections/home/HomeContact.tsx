@@ -6,7 +6,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useIsLg } from '@/hooks/useIsLg';
-const ZOOM_SPRING = { stiffness: 60, damping: 30, mass: 0.5 };
+import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 
 // ── Desktop ─────────────────────────────────────────────────────────────────
 //
@@ -40,7 +40,7 @@ function ContactDesktop() {
 
   // ── "VOIR" zoom — scale 12→1, Story-matching pace & spring ────────────
   const voirScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
-  const voirScale = useSpring(voirScaleRaw, ZOOM_SPRING);
+  const voirScale = useSpring(voirScaleRaw, SPRING_CONFIG_SLOW);
 
   // ── "PASSEZ NOUS" — line 1 ────────────────────────────────────────────
   const passez = useScrollEntrance(scrollYProgress, 0.14, 0.22);
@@ -142,8 +142,7 @@ export default function HomeContact() {
             <SimpleAnimation type="slide-up" delay={0}>
               <h2
                 id={prefersReducedMotion ? 'contact-title' : undefined}
-                className="text-heading mb-10 text-black"
-                style={{ fontSize: 'clamp(3rem, 10vw, 5rem)', lineHeight: '0.95' }}
+                className="text-heading text-fluid-hero-sub mb-10 text-black"
               >
                 Passez
                 <br />

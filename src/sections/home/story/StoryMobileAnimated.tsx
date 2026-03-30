@@ -37,9 +37,8 @@ export function StoryMobileAnimated() {
       <div ref={textRef} className="px-container-x pb-16 sm:pb-20">
         <m.h2
           id="story-title"
-          className="text-heading text-white"
+          className="text-heading text-fluid-story text-white"
           style={{
-            fontSize: 'clamp(2.5rem, 10vw, 5rem)',
             opacity: titleEntrance.opacity,
             y: titleEntrance.y,
           }}

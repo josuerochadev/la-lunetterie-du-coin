@@ -6,11 +6,11 @@ import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constan
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { SPRING_CONFIG, SPRING_CONFIG_SLOW } from '@/lib/motion';
 
 export function StoryDesktopAnimated() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
-
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start end', 'end start'],
@@ -23,7 +23,7 @@ export function StoryDesktopAnimated() {
 
   // Phase 2: title & text enter
   const titleYRaw = useTransform(scrollYProgress, [0.17, 0.28], [150, 0]);
-  const titleY = useSpring(titleYRaw, springConfig);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // End sequence: photo expands fullscreen
   const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['28%', '0%']);
@@ -34,11 +34,11 @@ export function StoryDesktopAnimated() {
   // Transition phrase — appears, then "GRAND" zooms to fill screen
   const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.66], [0, 1]);
   const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
-  const phraseYSpring = useSpring(phraseY, springConfig);
+  const phraseYSpring = useSpring(phraseY, SPRING_CONFIG);
 
   // "GRAND" zoom-out phase
   const grandScale = useTransform(scrollYProgress, [0.76, 0.88], [1, 50]);
-  const grandScaleSpring = useSpring(grandScale, { stiffness: 60, damping: 30, mass: 0.5 });
+  const grandScaleSpring = useSpring(grandScale, SPRING_CONFIG_SLOW);
   const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
   const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
 
@@ -54,7 +54,7 @@ export function StoryDesktopAnimated() {
   });
 
   // Pointer events — disable outro overlay when not visible
-  const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const phrasePointer = usePointerEvents(phraseOpacity);
 
   // Combined opacities — fade in with text entrance, fade out before expand
   const titleCombinedOpacity = useFadeInOut(scrollYProgress, 0.15, 0.25, 0.45, 0.5);

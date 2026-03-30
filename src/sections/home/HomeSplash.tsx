@@ -5,6 +5,7 @@ import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 type VideoFormat = 'portrait' | 'square' | 'landscape';
 
@@ -43,7 +44,6 @@ export default function HomeSplash() {
 
   const { scrollY } = useScroll();
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
   // ── Desktop: video fades out on scroll ──
   const videoOpacity = useTransform(scrollY, [vh * 0.08, vh * 0.3], [1, 0]);
@@ -51,29 +51,29 @@ export default function HomeSplash() {
   // ── Mobile: logo — centred → lifts to top half ──
   // Height: 100% → 55% (logo area shrinks to top half)
   const logoHeightRaw = useTransform(scrollY, [0, vh * 0.25], ['100%', '55%']);
-  const logoHeight = useSpring(logoHeightRaw, springConfig);
+  const logoHeight = useSpring(logoHeightRaw, SPRING_CONFIG);
   // Scale: starts smaller, grows as it lifts to compensate height shrink
   const logoScaleRaw = useTransform(scrollY, [0, vh * 0.25], [1, 1.6]);
-  const logoScale = useSpring(logoScaleRaw, springConfig);
+  const logoScale = useSpring(logoScaleRaw, SPRING_CONFIG);
   // Logo fades out later as photos pass over it
   const mobileLogoOpacity = useTransform(scrollY, [vh * 0.4, vh * 0.7], [1, 0]);
 
   // ── Mobile: photos — scroll-driven entrance + parallax to top ──
   // Photos appear after logo starts lifting
   const photoOpacityRaw = useTransform(scrollY, [vh * 0.1, vh * 0.3], [0, 1]);
-  const photoOpacity = useSpring(photoOpacityRaw, springConfig);
+  const photoOpacity = useSpring(photoOpacityRaw, SPRING_CONFIG);
 
   // Photos travel from bottom to top of page
   const photoLeftYRaw = useTransform(scrollY, [vh * 0.1, vh * 1.2], ['20%', '-180%']);
   const photoRightYRaw = useTransform(scrollY, [vh * 0.1, vh * 1.2], ['30%', '-150%']);
-  const photoLeftY = useSpring(photoLeftYRaw, springConfig);
-  const photoRightY = useSpring(photoRightYRaw, springConfig);
+  const photoLeftY = useSpring(photoLeftYRaw, SPRING_CONFIG);
+  const photoRightY = useSpring(photoRightYRaw, SPRING_CONFIG);
 
   // Scale landing — start slightly zoomed, settle to 1
   const photoLeftScaleRaw = useTransform(scrollY, [vh * 0.1, vh * 0.35], [1.08, 1]);
   const photoRightScaleRaw = useTransform(scrollY, [vh * 0.15, vh * 0.4], [1.08, 1]);
-  const photoLeftScale = useSpring(photoLeftScaleRaw, springConfig);
-  const photoRightScale = useSpring(photoRightScaleRaw, springConfig);
+  const photoLeftScale = useSpring(photoLeftScaleRaw, SPRING_CONFIG);
+  const photoRightScale = useSpring(photoRightScaleRaw, SPRING_CONFIG);
 
   // Ken Burns — subtle internal parallax on the images
   const kenBurnsLeftScale = useTransform(scrollY, [0, vh * 0.8], [1.15, 1]);

@@ -10,6 +10,7 @@ import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { BOOKING_URL } from '@/config/endpoints';
 import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 const SERVICE_COUNT = SERVICES_DATA.length;
 
@@ -244,7 +245,7 @@ function ServiceCard({
 
   // Container opacity: fade in / fade out
   const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.08, exitStart, end);
-  const pointerEvents = useTransform(opacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const pointerEvents = usePointerEvents(opacity);
 
   const isExamens = service.id === 'examens';
 

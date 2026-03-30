@@ -3,6 +3,7 @@ import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 /** Typographic info accent — keyword in display font with colored underline */
 function InfoAccent({
@@ -202,7 +203,6 @@ function HeroAnimated() {
   }, []);
 
   const { scrollY } = useScroll();
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
   const stickyStart = vh * 0.5;
   const stickyEnd = vh * 3.5;
@@ -221,12 +221,12 @@ function HeroAnimated() {
 
   // ClipPath reveal
   const clipRaw = useTransform(scrollY, [vh * 0.05, vh * 0.5], [100, 0]);
-  const clipSmooth = useSpring(clipRaw, springConfig);
+  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
   const heroClip = useTransform(clipSmooth, (v: number) => `inset(0 ${v}% 0 0)`);
 
   // Title
   const titleXRaw = useTransform(scrollY, [stickyStart, stickyEnd], ['130vw', '-150vw']);
-  const titleX = useSpring(titleXRaw, springConfig);
+  const titleX = useSpring(titleXRaw, SPRING_CONFIG);
 
   // Left photo
   const photoLeftXRaw = useTransform(
@@ -234,7 +234,7 @@ function HeroAnimated() {
     [stickyStart, stickyStart + scrollRange * 0.35, stickyMid, stickyEnd],
     ['-30vw', '5vw', '20vw', '100vw'],
   );
-  const photoLeftX = useSpring(photoLeftXRaw, springConfig);
+  const photoLeftX = useSpring(photoLeftXRaw, SPRING_CONFIG);
   const photoLeftScale = useTransform(
     scrollY,
     [stickyStart, stickyStart + scrollRange * 0.4],
@@ -247,7 +247,7 @@ function HeroAnimated() {
     [stickyStart + scrollRange * 0.08, stickyStart + scrollRange * 0.4, stickyMid, stickyEnd],
     ['-40vw', '40vw', '55vw', '130vw'],
   );
-  const photoRightX = useSpring(photoRightXRaw, springConfig);
+  const photoRightX = useSpring(photoRightXRaw, SPRING_CONFIG);
   const photoRightScale = useTransform(
     scrollY,
     [stickyStart, stickyStart + scrollRange * 0.3],

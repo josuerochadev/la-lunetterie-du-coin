@@ -8,6 +8,7 @@ import { useIsLg } from '@/hooks/useIsLg';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 const OFFER_COUNT = OFFERS_DATA.length;
 
@@ -117,7 +118,7 @@ function OfferCard({
     [tl.cardIn[0], tl.cardIn[1], tl.cardOut[0], tl.cardOut[1]],
     [0.92, 1, 1, 0.9],
   );
-  const cardPointer = useTransform(cardOpacity, (v: number) => (v > 0.1 ? 'auto' : 'none'));
+  const cardPointer = usePointerEvents(cardOpacity);
 
   // Stagger timing
   const stEnter = tl.cardIn[0];

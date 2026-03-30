@@ -6,6 +6,8 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
@@ -31,7 +33,6 @@ const STORY_BODY_2 =
 
 function HistoryDesktop() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const springConfig = { stiffness: 80, damping: 30, mass: 0.5 };
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -51,7 +52,7 @@ function HistoryDesktop() {
   // Phase 2: Title + text
   const textOpacity = useTransform(scrollYProgress, [0.12, 0.18], [0, 1]);
   const titleYRaw = useTransform(scrollYProgress, [0.12, 0.2], [100, 0]);
-  const titleY = useSpring(titleYRaw, springConfig);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
   const contentFadeOut = useTransform(scrollYProgress, [0.36, 0.42], [1, 0]);
 
   // Combined opacities
@@ -73,9 +74,9 @@ function HistoryDesktop() {
   // Phase 4: Transition phrase
   const phraseOpacity = useTransform(scrollYProgress, [0.54, 0.62], [0, 1]);
   const phraseYRaw = useTransform(scrollYProgress, [0.54, 0.62], [40, 0]);
-  const phraseY = useSpring(phraseYRaw, springConfig);
+  const phraseY = useSpring(phraseYRaw, SPRING_CONFIG);
   const phraseFadeOut = useTransform(scrollYProgress, [0.72, 0.78], [1, 0]);
-  const phrasePointer = useTransform(phraseOpacity, (v) => (v > 0.1 ? 'auto' : 'none'));
+  const phrasePointer = usePointerEvents(phraseOpacity);
 
   // Phase 5: Yellow overlay — starts right as phrase fades out
   const yellowOverlay = useTransform(scrollYProgress, [0.69, 0.8], [0, 1]);

@@ -57,10 +57,7 @@ export default function ServicesCTA() {
             {prefersReducedMotion ? (
               <>
                 <SimpleAnimation type="slide-up" delay={0}>
-                  <h2
-                    className="text-heading text-black"
-                    style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', lineHeight: '0.95' }}
-                  >
+                  <h2 className="text-heading text-fluid-cta text-black">
                     VOYEZ LA
                     <br />
                     DIFFÉRENCE
@@ -92,8 +89,7 @@ export default function ServicesCTA() {
                     scrollYProgress={scrollYProgress}
                     revealStart={0.25}
                     revealEnd={0.4}
-                    className="text-heading text-black"
-                    style={{ fontSize: 'clamp(2.5rem, 8vw, 5rem)', lineHeight: '0.95' }}
+                    className="text-heading text-fluid-cta text-black"
                   >
                     VOYEZ LA DIFFÉRENCE
                   </ScrollWordReveal>
