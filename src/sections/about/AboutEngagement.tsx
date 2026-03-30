@@ -1,7 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { GiantCounter } from '@/components/motion/GiantCounter';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { STATS_DATA } from '@/data/about';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -13,45 +14,6 @@ const ENGAGEMENT_BODY =
   "Des montures restaurées avec soin plutôt que jetées. Ici, l'occasion c'est pas du bas de gamme — c'est du bon sens.";
 const ENGAGEMENT_HIGHLIGHT =
   "Ramenez vos anciennes lunettes : jusqu'à 70€ de remise sur votre prochain achat. Bon pour vous, bon pour la planète.";
-
-// ---------------------------------------------------------------------------
-// Giant background counter — counts from 0 to 2000+ (recycled pairs)
-// ---------------------------------------------------------------------------
-
-function GiantCounter({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const countRef = useRef<HTMLSpanElement>(null);
-  const count = useTransform(scrollYProgress, [0.02, 0.2], [0, 2000]);
-
-  useEffect(() => {
-    const unsubscribe = count.on('change', (v) => {
-      if (countRef.current) {
-        countRef.current.textContent = Math.round(v).toLocaleString('fr-FR');
-      }
-    });
-    return unsubscribe;
-  }, [count]);
-
-  const scaleRaw = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1.1, 0.9]);
-  const scale = useSpring(scaleRaw, SPRING_CONFIG);
-  const opacity = useTransform(scrollYProgress, [0.01, 0.08, 0.7, 0.8], [0, 0.08, 0.08, 0]);
-  const y = useTransform(scrollYProgress, [0, 1], ['5%', '-15%']);
-
-  return (
-    <m.div
-      className="text-heading pointer-events-none absolute right-[5%] top-1/2 z-0 -translate-y-1/2 select-none text-black/[0.06]"
-      style={{
-        fontSize: 'clamp(12rem, 30vw, 40rem)',
-        lineHeight: 1,
-        scale,
-        opacity,
-        y,
-      }}
-      aria-hidden="true"
-    >
-      <span ref={countRef}>0</span>
-    </m.div>
-  );
-}
 
 // ---------------------------------------------------------------------------
 // Desktop animated — giant counter bg + stats cascade + text
@@ -129,7 +91,16 @@ function EngagementDesktop() {
   return (
     <div ref={sectionRef} className="hidden h-[280vh] bg-background lg:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-background">
-        <GiantCounter scrollYProgress={scrollYProgress} />
+        <GiantCounter
+          scrollYProgress={scrollYProgress}
+          countRange={[0.02, 0.2]}
+          countValues={[0, 2000]}
+          formatValue={(v) => Math.round(v).toLocaleString('fr-FR')}
+          opacityRange={[0.01, 0.08, 0.7, 0.8]}
+          peakOpacity={0.08}
+          fontSize="clamp(12rem, 30vw, 40rem)"
+          className="text-black/[0.06]"
+        />
 
         <m.div
           className="relative z-10 flex h-full flex-col items-center justify-center px-container-x"
