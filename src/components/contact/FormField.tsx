@@ -1,7 +1,7 @@
 import type React from 'react';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import type { FormErrors } from '@/hooks/useFormSubmission';
+import type { FormErrors } from '@/types/forms';
 
 interface BaseFieldProps {
   name: keyof FormErrors;

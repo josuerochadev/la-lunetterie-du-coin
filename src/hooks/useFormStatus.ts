@@ -1,10 +1,9 @@
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import type { FormErrors, SubmissionResult } from './useFormSubmission';
-
 import { TIMING } from '@/config/design';
 import type { NetworkError } from '@/lib/networkErrors';
+import type { FormErrors, SubmissionResult } from '@/types/forms';
 
 type FormSubmissionStatus = 'idle' | 'sending' | 'success' | 'error';
 

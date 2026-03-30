@@ -3,13 +3,12 @@ import type React from 'react';
 import { TIMING } from '@/config/design';
 import { FORMSPREE_ENDPOINT } from '@/config/endpoints';
 import { fetchWithRetry } from '@/lib/retryLogic';
+import type { SubmissionResult } from '@/types/forms';
 import {
   validateHoneypot,
   createFormRequest,
   handleResponse,
   handleError,
-  type SubmissionResult,
-  type FormErrors,
 } from '@/lib/formSubmissionHelpers';
 
 interface UseFormSubmissionReturn {
@@ -81,4 +80,4 @@ export function useFormSubmission(): UseFormSubmissionReturn {
   return { submitForm };
 }
 
-export type { FormErrors, SubmissionResult };
+export type { FormErrors, SubmissionResult } from '@/types/forms';

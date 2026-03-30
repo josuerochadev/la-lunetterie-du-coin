@@ -1,20 +1,9 @@
 // src/lib/formSubmissionHelpers.ts
 
-import { analyzeNetworkError, vibrateError, type NetworkError } from '@/lib/networkErrors';
+import { analyzeNetworkError, vibrateError } from '@/lib/networkErrors';
+import type { FormErrors, SubmissionResult } from '@/types/forms';
 
-export type FormErrors = {
-  name?: string;
-  email?: string;
-  message?: string;
-};
-
-export interface SubmissionResult {
-  success: boolean;
-  error?: string;
-  fieldErrors?: FormErrors;
-  networkError?: NetworkError;
-  retryCount?: number;
-}
+export type { FormErrors, SubmissionResult };
 
 /**
  * Validates honeypot field to detect bots
