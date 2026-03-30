@@ -535,7 +535,7 @@ jobs:
         uses: browser-actions/setup-firefox@latest
         
       - name: ♿ Run accessibility tests
-        run: pnpm a11y
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'pnpm run axe'
         
       - name: 📊 Upload accessibility reports
         if: always()

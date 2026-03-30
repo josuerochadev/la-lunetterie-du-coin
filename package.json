@@ -27,7 +27,7 @@
     "lighthouse:mobile": "pnpm run lighthouse",
     "lighthouse:desktop": "pnpm run build && start-server-and-test preview http://localhost:4173 'lhci autorun --config=lighthouserc.desktop.cjs'",
     "axe": "MOZ_HEADLESS=1 axe --exit --browser firefox http://localhost:4173",
-    "a11y": "vite build && start-server-and-test preview http://localhost:4173 axe",
+    "a11y": "vite build && start-server-and-test preview http://localhost:4173 'pnpm run axe'",
     "lint": "eslint . --ext ts,tsx --max-warnings=0",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\"",
