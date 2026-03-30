@@ -31,6 +31,12 @@ type ResponsiveImageProps = {
   /** Loading strategy */
   loading?: 'eager' | 'lazy';
 
+  /** Intrinsic width for CLS prevention */
+  width?: number;
+
+  /** Intrinsic height for CLS prevention */
+  height?: number;
+
   /** Additional props for img element */
   imgProps?: ImgHTMLAttributes<HTMLImageElement>;
 };
@@ -56,6 +62,8 @@ export default function ResponsiveImage({
   sizes = '100vw',
   className = '',
   loading = 'lazy',
+  width,
+  height,
   imgProps = {},
 }: ResponsiveImageProps) {
   // Extract base filename without extension and directory
@@ -77,7 +85,10 @@ export default function ResponsiveImage({
         src={`/images-optimized/${baseName}-1920w.jpg`}
         alt={alt}
         loading={loading}
+        decoding="async"
         className={className}
+        {...(width ? { width } : {})}
+        {...(height ? { height } : {})}
         {...imgProps}
       />
     </picture>

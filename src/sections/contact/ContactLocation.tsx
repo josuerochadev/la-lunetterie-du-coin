@@ -72,7 +72,7 @@ function LocationDesktop() {
             alt="Façade de La Lunetterie du Coin"
             className="h-full w-full object-cover"
             loading="lazy"
-            widths={[640, 1024, 1440]}
+            widths={[640, 1024, 1280, 1920]}
             sizes="100vw"
           />
         </m.div>
