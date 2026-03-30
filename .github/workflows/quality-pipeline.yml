@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [dev, main]
 
+# Cancel in-progress runs for the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 # Permissions nécessaires pour les actions
 permissions:
   contents: read
@@ -33,16 +38,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -70,16 +76,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -129,16 +136,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -163,16 +171,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -230,16 +239,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -249,15 +259,15 @@ jobs:
           name: unit-test-results
           path: ./
         
-      - name: 🚪 Coverage Quality Gate (>= 10%)
+      - name: 🚪 Coverage Quality Gate (>= 30%)
         run: |
           COVERAGE=$(node test-coverage-script.cjs)
           echo "📊 Coverage: ${COVERAGE}%"
-          if [ $COVERAGE -lt 10 ]; then
-            echo "❌ Coverage ${COVERAGE}% est inférieur au seuil requis de 10%"
+          if [ $COVERAGE -lt 30 ]; then
+            echo "❌ Coverage ${COVERAGE}% est inférieur au seuil requis de 30%"
             exit 1
           else
-            echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 10%"
+            echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 30%"
           fi
           
       - name: 🚪 Bundle Size Quality Gate (<= 10MB)
@@ -310,16 +320,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -452,16 +463,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -499,16 +511,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -544,16 +557,17 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -608,27 +622,5 @@ jobs:
               body: report
             });
 
-  # 🚀 Déploiement des previews (si configuré)
-  deploy-preview:
-    name: 🚀 Deploy Preview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [quality-report]
-    if: github.event_name == 'pull_request' && success()
-    
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
-        
-      - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-files
-          path: dist/
-          
-      - name: 🚀 Deploy to Netlify Preview
-        # Configuration à adapter selon votre plateforme de déploiement
-        run: |
-          echo "🚀 Ready to deploy preview"
-          echo "📁 Build files available in dist/"
-          echo "🔗 Configure your deployment platform here"
+  # 🚀 Deployment is handled by Vercel (auto-deploys on push/PR)
+  # No CI deploy job needed — Vercel watches the repo directly
