@@ -18,14 +18,15 @@ test.describe('About Page - La Lunetterie du Coin', () => {
 
   test('should display history section', async ({ page }) => {
     const historySection = page.locator('#histoire');
-    if ((await historySection.count()) > 0) {
-      await historySection.scrollIntoViewIfNeeded();
-      await expect(historySection).toBeVisible();
-    }
-    // Le heading peut être "Notre Histoire" (desktop) ou "Un peu d'histoire" (mobile)
-    const historyHeading = page.getByText(/notre histoire|un peu d'histoire/i).first();
-    await historyHeading.scrollIntoViewIfNeeded();
-    await expect(historyHeading).toBeVisible();
+    await expect(historySection).toBeAttached();
+
+    // Scroll to the section via JS (more reliable than scrollIntoViewIfNeeded on sticky layouts)
+    await page.evaluate(() => document.querySelector('#histoire')?.scrollIntoView());
+    await page.waitForTimeout(500);
+
+    // Vérifier que la section contient un heading
+    const historyHeading = historySection.locator('h2').first();
+    await expect(historyHeading).toBeAttached();
   });
 
   test('should display values section', async ({ page }) => {

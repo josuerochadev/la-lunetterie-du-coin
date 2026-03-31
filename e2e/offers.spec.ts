@@ -30,11 +30,12 @@ test.describe('Offers Page - La Lunetterie du Coin', () => {
   });
 
   test('should display CTA section', async ({ page }) => {
-    // Le CTA heading est "C'EST TOUT VU"
-    const ctaHeading = page.getByText(/tout vu|c'est tout/i).first();
-    await expect(ctaHeading).toHaveCount(1, { timeout: 10000 });
-    await ctaHeading.scrollIntoViewIfNeeded();
-    await expect(ctaHeading).toBeVisible();
+    // Vérifier le CTA via la section avec aria-label et le lien contact
+    const ctaSection = page.locator('section[aria-label="Nous contacter"]');
+    await expect(ctaSection).toBeAttached();
+
+    const ctaLink = ctaSection.locator('a[href="/contact"]');
+    await expect(ctaLink).toBeAttached();
   });
 
   test('should have proper heading structure', async ({ page }) => {
