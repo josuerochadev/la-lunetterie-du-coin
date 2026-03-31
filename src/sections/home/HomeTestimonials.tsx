@@ -1,5 +1,6 @@
 import { TestimonialsDesktop } from './testimonials/TestimonialsDesktop';
 import { TestimonialsMobile } from './testimonials/TestimonialsMobile';
+import { TestimonialsMobileAnimated } from './testimonials/TestimonialsMobileAnimated';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
@@ -9,7 +10,8 @@ import { ACCENT_HEX } from '@/config/design';
  * Section HomeTestimonials — Scrollytelling Quote Wall
  *
  * Desktop: Full-screen sticky viewport with scroll-linked animations.
- * Mobile/reduced-motion: Stacked layout with SimpleAnimation wrappers.
+ * Mobile animated: Scroll-driven counter, word reveals, card stagger.
+ * Reduced-motion: Static stacked layout.
  */
 function HomeTestimonials() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -52,11 +54,17 @@ function HomeTestimonials() {
 
       {!prefersReducedMotion && isLg && <TestimonialsDesktop />}
 
-      <div
-        className={prefersReducedMotion ? 'pointer-events-auto' : 'pointer-events-auto lg:hidden'}
-      >
-        <TestimonialsMobile />
-      </div>
+      {!prefersReducedMotion && !isLg && (
+        <div className="pointer-events-auto lg:hidden">
+          <TestimonialsMobileAnimated />
+        </div>
+      )}
+
+      {prefersReducedMotion && (
+        <div className="pointer-events-auto">
+          <TestimonialsMobile />
+        </div>
+      )}
     </section>
   );
 }
