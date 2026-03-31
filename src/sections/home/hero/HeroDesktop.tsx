@@ -118,7 +118,7 @@ export function HeroAnimated() {
   return (
     <m.section
       id="hero"
-      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10]"
+      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10] lg:h-screen"
       style={isLg ? { clipPath: heroClip } : undefined}
       aria-labelledby="hero-title"
       data-navbar-theme="dark"

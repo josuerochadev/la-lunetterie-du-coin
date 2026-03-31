@@ -1,4 +1,4 @@
-import { type ReactNode, useRef } from 'react';
+import { type ReactNode, useRef, useCallback } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Car from 'lucide-react/dist/esm/icons/car';
@@ -10,6 +10,7 @@ import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 
 // ---------------------------------------------------------------------------
 // Location item — icon + text, no card wrapper (same pattern as ContactInfo)
@@ -53,17 +54,24 @@ function LocationDesktop() {
   const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.02]);
 
   // Content entrance — triggered when section scrolls in
-  const contentScroll = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref: contentRef, scrollYProgress: contentProgress } =
+    useManualScrollProgress('start-end');
 
-  const title = useScrollEntrance(contentScroll.scrollYProgress, 0.15, 0.3);
-  const content = useScrollEntrance(contentScroll.scrollYProgress, 0.25, 0.45);
-  const footer = useScrollEntrance(contentScroll.scrollYProgress, 0.3, 0.48, 30);
+  // Combine parallax ref + content ref on the same element
+  const combinedRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      (sectionRef as { current: HTMLDivElement | null }).current = node;
+      (contentRef as { current: HTMLDivElement | null }).current = node;
+    },
+    [sectionRef, contentRef],
+  );
+
+  const title = useScrollEntrance(contentProgress, 0.15, 0.3);
+  const content = useScrollEntrance(contentProgress, 0.25, 0.45);
+  const footer = useScrollEntrance(contentProgress, 0.3, 0.48, 30);
 
   return (
-    <div ref={sectionRef} className="relative hidden min-h-screen w-full lg:block">
+    <div ref={combinedRef} className="relative hidden min-h-screen w-full lg:block">
       {/* Parallax background image */}
       <div className="absolute inset-0 overflow-hidden">
         <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
@@ -91,33 +99,33 @@ function LocationDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <LocationItem icon={Car} title="En voiture">
-              <div className="space-y-2 text-body text-white/50">
+              <div className="space-y-2 text-body text-secondary-blue">
                 <p>
-                  <span className="font-medium text-white/70">Parking payant</span> : Parking Halles
-                  et Opéra Broglie (environ 10 min à pied)
+                  <span className="font-medium text-white">Parking payant</span> : Parking Halles et
+                  Opéra Broglie (environ 10 min à pied)
                 </p>
               </div>
             </LocationItem>
 
             <LocationItem icon={Train} title="En transports">
-              <div className="space-y-2 text-body text-white/50">
+              <div className="space-y-2 text-body text-secondary-blue">
                 <p>
-                  <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt Broglie (7
+                  <span className="font-medium text-white">Tram B, C, F</span> : arrêt Broglie (7
                   min à pied)
                 </p>
                 <p>
-                  <span className="font-medium text-white/70">Tram A, D</span> : arrêt Ancienne
+                  <span className="font-medium text-white">Tram A, D</span> : arrêt Ancienne
                   Synagogue / Les Halles (7 min à pied)
                 </p>
                 <p>
-                  <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg de
-                  Pierre (2 min à pied)
+                  <span className="font-medium text-white">Bus C3</span> : arrêt Faubourg de Pierre
+                  (2 min à pied)
                 </p>
                 <p>
-                  <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal (5 min
-                  à pied)
+                  <span className="font-medium text-white">Bus C6</span> : arrêt Tribunal (5 min à
+                  pied)
                 </p>
-                <p className="pt-2 text-white/60">
+                <p className="pt-2 text-white">
                   À 15 minutes à pied de la gare centrale de Strasbourg
                 </p>
               </div>
@@ -129,7 +137,7 @@ function LocationDesktop() {
             className="mx-auto mt-12 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
             style={{ opacity: footer.opacity, y: footer.y }}
           >
-            <p className="text-body text-white/80">
+            <p className="text-body text-white">
               <span className="font-medium text-white">Accessibilité :</span> Le magasin est
               accessible aux personnes à mobilité réduite
             </p>
@@ -186,9 +194,9 @@ export default function ContactLocation() {
               <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
                 <SimpleAnimation type="slide-up" delay={100}>
                   <LocationItem icon={Car} title="En voiture">
-                    <div className="space-y-2 text-body text-white/50">
+                    <div className="space-y-2 text-body text-secondary-blue">
                       <p>
-                        <span className="font-medium text-white/70">Parking payant</span> : Parking
+                        <span className="font-medium text-white">Parking payant</span> : Parking
                         Halles et Opéra Broglie (environ 10 min à pied)
                       </p>
                     </div>
@@ -197,24 +205,24 @@ export default function ContactLocation() {
 
                 <SimpleAnimation type="slide-up" delay={150}>
                   <LocationItem icon={Train} title="En transports">
-                    <div className="space-y-2 text-body text-white/50">
+                    <div className="space-y-2 text-body text-secondary-blue">
                       <p>
-                        <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt
-                        Broglie (7 min à pied)
+                        <span className="font-medium text-white">Tram B, C, F</span> : arrêt Broglie
+                        (7 min à pied)
                       </p>
                       <p>
-                        <span className="font-medium text-white/70">Tram A, D</span> : arrêt
-                        Ancienne Synagogue / Les Halles (7 min à pied)
+                        <span className="font-medium text-white">Tram A, D</span> : arrêt Ancienne
+                        Synagogue / Les Halles (7 min à pied)
                       </p>
                       <p>
-                        <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg
-                        de Pierre (2 min à pied)
+                        <span className="font-medium text-white">Bus C3</span> : arrêt Faubourg de
+                        Pierre (2 min à pied)
                       </p>
                       <p>
-                        <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal
-                        (5 min à pied)
+                        <span className="font-medium text-white">Bus C6</span> : arrêt Tribunal (5
+                        min à pied)
                       </p>
-                      <p className="pt-2 text-white/60">
+                      <p className="pt-2 text-white">
                         À 15 minutes à pied de la gare centrale de Strasbourg
                       </p>
                     </div>
@@ -224,9 +232,9 @@ export default function ContactLocation() {
 
               <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
                 <SimpleAnimation type="fade" delay={200}>
-                  <p className="text-body text-white/50">
-                    <span className="font-medium text-white/70">Accessibilité :</span> Le magasin
-                    est accessible aux personnes à mobilité réduite
+                  <p className="text-body text-white">
+                    <span className="font-medium text-white">Accessibilité :</span> Le magasin est
+                    accessible aux personnes à mobilité réduite
                   </p>
                 </SimpleAnimation>
 

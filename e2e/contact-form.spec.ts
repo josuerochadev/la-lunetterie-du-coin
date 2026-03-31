@@ -38,8 +38,10 @@ test.describe('Contact Form - E2E Tests', () => {
     await expect(submitButton).toBeDisabled();
 
     // Cocher la checkbox RGPD pour activer le bouton
+    // Use click() instead of check() — WebKit with React controlled checkboxes
+    // sometimes fails check()'s post-click state verification
     const consentCheckbox = form.locator('input[name="consent"]');
-    await consentCheckbox.check();
+    await consentCheckbox.click({ force: true });
 
     // Maintenant le bouton est activé, on peut cliquer
     await submitButton.click();
@@ -84,7 +86,7 @@ test.describe('Contact Form - E2E Tests', () => {
       );
 
     // Cocher la checkbox RGPD (obligatoire)
-    await form.locator('input[name="consent"]').check();
+    await form.locator('input[name="consent"]').click({ force: true });
 
     // Intercepter la requête Formspree
     await page.route('https://formspree.io/**', async (route) => {
@@ -119,7 +121,7 @@ test.describe('Contact Form - E2E Tests', () => {
     await form.locator('input[name="name"]').fill('Test User');
     await form.locator('input[name="email"]').fill('test@example.com');
     await form.locator('textarea[name="message"]').fill('Test message');
-    await form.locator('input[name="consent"]').check();
+    await form.locator('input[name="consent"]').click({ force: true });
 
     const submitButton = form.locator('button[type="submit"]');
     await submitButton.click();
@@ -155,7 +157,7 @@ test.describe('Contact Form - E2E Tests', () => {
     await form.locator('input[name="name"]').fill('Test User');
     await form.locator('input[name="email"]').fill('test@example.com');
     await form.locator('textarea[name="message"]').fill('Test message');
-    await form.locator('input[name="consent"]').check();
+    await form.locator('input[name="consent"]').click({ force: true });
 
     const submitButton = form.locator('button[type="submit"]');
     await submitButton.click();

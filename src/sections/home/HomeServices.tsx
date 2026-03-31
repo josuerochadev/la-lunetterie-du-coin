@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT } from './services/constants';
 import { GrainOverlay } from './services/GrainOverlay';
@@ -14,6 +15,8 @@ import { StaticServiceList } from './services/StaticServiceList';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { ACCENT_HEX } from '@/config/design';
+import { BOOKING_URL } from '@/config/endpoints';
 import LinkCTA from '@/components/common/LinkCTA';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
@@ -34,12 +37,15 @@ function HomeServices() {
     offset: ['start start', 'end end'],
   });
 
+  // Sticky viewport bg: white during carousel, yellow for outro + exit
+  const stickyBg = useTransform(scrollYProgress, [0.86, 0.92], ['#ffffff', ACCENT_HEX]);
+
   return (
     <section
       id="services"
       aria-labelledby="services-title"
       data-navbar-theme="dark"
-      className="pointer-events-none relative bg-white [overflow-x:clip]"
+      className="pointer-events-none relative bg-accent [overflow-x:clip]"
     >
       {/* Subtle noise texture over white background */}
       <div
@@ -58,7 +64,7 @@ function HomeServices() {
       />
 
       {/* ── Mobile ── */}
-      <div className="pointer-events-auto px-container-x py-section lg:hidden">
+      <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
@@ -81,14 +87,28 @@ function HomeServices() {
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body text-black/60">{service.description}</p>
-                    <LinkCTA
-                      to={service.link}
-                      theme="light"
-                      aria-label={`En savoir plus sur ${service.title}`}
-                    >
-                      En savoir plus
-                    </LinkCTA>
+                    <p className="text-body text-black">{service.description}</p>
+                    <div className="flex flex-col items-start gap-3">
+                      <LinkCTA
+                        to={service.link}
+                        theme="light"
+                        aria-label={`En savoir plus sur ${service.title}`}
+                      >
+                        En savoir plus
+                      </LinkCTA>
+                      {service.title === 'Examens de vue' && (
+                        <LinkCTA
+                          href={BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          theme="light"
+                          icon={ExternalLink}
+                          aria-label="Prendre rendez-vous pour un examen de vue"
+                        >
+                          Prendre RDV
+                        </LinkCTA>
+                      )}
+                    </div>
                   </div>
                 </SimpleAnimation>
               </article>
@@ -112,8 +132,11 @@ function HomeServices() {
       {/* ── Desktop: Scrollytelling ── */}
       {isLg && (
         <div ref={sectionRef} className="relative">
-          <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
-            <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
+            <m.div
+              className="sticky top-0 h-screen overflow-hidden"
+              style={{ backgroundColor: stickyBg }}
+            >
               {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
 
               {shouldAnimate ? (
@@ -152,7 +175,7 @@ function HomeServices() {
                   <SectionOutro scrollYProgress={scrollYProgress} />
                 </>
               )}
-            </div>
+            </m.div>
           </div>
         </div>
       )}

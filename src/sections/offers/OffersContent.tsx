@@ -1,5 +1,5 @@
-import { useRef, type ReactNode } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -10,6 +10,7 @@ import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 const OFFER_COUNT = OFFERS_DATA.length;
 
 // Per-offer scroll windows (normalised 0–1)
@@ -156,7 +157,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={0}
           >
-            <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-black/30">
+            <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-black">
               {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
             </span>
           </StaggerChild>
@@ -182,7 +183,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={2}
           >
-            <p className="mb-6 max-w-md text-body leading-relaxed text-black/60">
+            <p className="mb-6 max-w-md text-body leading-relaxed text-black">
               {offer.description}
             </p>
           </StaggerChild>
@@ -198,7 +199,7 @@ function OfferCard({
           >
             <ul className="mb-6 grid max-w-lg grid-cols-2 gap-x-5 gap-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
-                <li key={i} className="flex gap-2 text-body-sm text-black/40">
+                <li key={i} className="flex gap-2 text-body-sm text-black">
                   <span
                     className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
                     aria-hidden="true"
@@ -302,14 +303,10 @@ function BackgroundPhotos({ scrollYProgress }: { scrollYProgress: MotionValue<nu
 // ---------------------------------------------------------------------------
 
 function OffersDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden lg:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
@@ -349,15 +346,15 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
 
       <SimpleAnimation type="slide-up" delay={150}>
         <div className="mt-6 space-y-4">
-          <span className="text-body-sm font-medium uppercase tracking-widest text-black/30">
+          <span className="text-body-sm font-medium uppercase tracking-widest text-black">
             {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
           </span>
           <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
-          <p className="text-body-lg text-black/60">{offer.description}</p>
+          <p className="text-body-lg text-black">{offer.description}</p>
 
           <ul className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
             {offer.details.map((detail, i) => (
-              <li key={i} className="flex gap-2.5 text-body-sm text-black/40">
+              <li key={i} className="flex gap-2.5 text-body-sm text-black">
                 <span
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -373,10 +370,10 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
               aria-hidden="true"
             />
             <div className="py-4 pl-6 pr-5">
-              <h4 className="mb-2 text-body-sm font-medium text-black/60">Conditions</h4>
+              <h4 className="mb-2 text-body-sm font-medium text-black">Conditions</h4>
               <ul className="space-y-1">
                 {offer.conditions.map((condition, i) => (
-                  <li key={i} className="text-body-sm text-black/30">
+                  <li key={i} className="text-body-sm text-black">
                     {condition}
                   </li>
                 ))}

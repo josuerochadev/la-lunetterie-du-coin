@@ -1,5 +1,5 @@
-import { type ReactNode, useRef } from 'react';
-import { m, useScroll } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -10,6 +10,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { STORE_INFO } from '@/config/store';
 import { OPENING_HOURS } from '@/data/contact';
@@ -45,17 +46,13 @@ function InfoItem({
 // ---------------------------------------------------------------------------
 
 function InfoDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
 
   const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
   const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
 
   return (
-    <div ref={sectionRef} className="hidden lg:block">
+    <div ref={ref} className="hidden lg:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
@@ -67,7 +64,7 @@ function InfoDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <InfoItem icon={MapPin} title="Adresse">
-              <address className="mb-3 text-body not-italic text-white/50">
+              <address className="mb-3 text-body not-italic text-secondary-blue">
                 {COMPANY_ADDRESS}
               </address>
               <LinkCTA
@@ -84,7 +81,7 @@ function InfoDesktop() {
             <InfoItem icon={Phone} title="Téléphone">
               <a
                 href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Appeler le ${COMPANY_PHONE}`}
               >
                 {COMPANY_PHONE}
@@ -94,7 +91,7 @@ function InfoDesktop() {
             <InfoItem icon={Mail} title="Email">
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
               >
                 {COMPANY_EMAIL}
@@ -105,8 +102,8 @@ function InfoDesktop() {
               <dl className="space-y-1.5">
                 {OPENING_HOURS.map((schedule) => (
                   <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                    <dt className="font-medium text-white/60">{schedule.day}</dt>
-                    <dd className="text-white/60">{schedule.hours}</dd>
+                    <dt className="font-medium text-white">{schedule.day}</dt>
+                    <dd className="text-secondary-blue">{schedule.hours}</dd>
                   </div>
                 ))}
               </dl>
@@ -160,14 +157,14 @@ export default function ContactInfo() {
             <div className="grid gap-10 md:grid-cols-2">
               <SimpleAnimation type="slide-up" delay={0}>
                 <InfoItem icon={MapPin} title="Adresse">
-                  <address className="mb-3 text-body not-italic text-white/50">
+                  <address className="mb-3 text-body not-italic text-secondary-blue">
                     {COMPANY_ADDRESS}
                   </address>
                   <a
                     href={STORE_INFO.address.googleMapsSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block text-body-sm font-medium text-white/70 transition-colors hover:text-secondary-orange"
+                    className="inline-block text-body-sm font-medium text-white transition-colors hover:text-secondary-orange"
                   >
                     Voir sur Google Maps →
                   </a>
@@ -178,7 +175,7 @@ export default function ContactInfo() {
                 <InfoItem icon={Phone} title="Téléphone">
                   <a
                     href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
                     aria-label={`Appeler le ${COMPANY_PHONE}`}
                   >
                     {COMPANY_PHONE}
@@ -190,7 +187,7 @@ export default function ContactInfo() {
                 <InfoItem icon={Mail} title="Email">
                   <a
                     href={`mailto:${COMPANY_EMAIL}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
                     aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
                   >
                     {COMPANY_EMAIL}
@@ -203,8 +200,8 @@ export default function ContactInfo() {
                   <dl className="space-y-1.5">
                     {OPENING_HOURS.map((schedule) => (
                       <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                        <dt className="font-medium text-white/60">{schedule.day}</dt>
-                        <dd className="text-white/60">{schedule.hours}</dd>
+                        <dt className="font-medium text-white">{schedule.day}</dt>
+                        <dd className="text-secondary-blue">{schedule.hours}</dd>
                       </div>
                     ))}
                   </dl>

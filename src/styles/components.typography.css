@@ -28,13 +28,13 @@
 
 /* ===== H1 - TITRES DE PAGES ===== */
 .heading-page {
-  @apply text-heading tracking-wide text-text;
+  @apply text-heading tracking-wide;
   font-size: clamp(2.5rem, 4vw, 5rem);
 }
 
 /* ===== H2 - TITRES DE SECTIONS ===== */
 .heading-section {
-  @apply text-heading text-title-lg text-text;
+  @apply text-heading text-title-lg;
 }
 
 @screen sm {
@@ -45,7 +45,7 @@
 
 /* ===== H3 - SOUS-TITRES ===== */
 .heading-subsection-lg {
-  @apply text-subtitle text-title-sm text-text;
+  @apply text-subtitle text-title-sm;
 }
 
 @screen sm {
@@ -55,7 +55,7 @@
 }
 
 .heading-subsection {
-  @apply text-subtitle text-title-sm text-text;
+  @apply text-subtitle text-title-sm;
 }
 
 /* ===== FLUID HERO SIZES ===== */

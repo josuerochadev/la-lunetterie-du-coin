@@ -19,8 +19,8 @@ type FooterProps = ComponentPropsWithoutRef<'footer'> & {
  *
  * Structure moderne en 3 colonnes :
  * - Navigation : Liens principaux du site
- * - Contact : Coordonnées complètes
- * - Suivez-nous : Réseaux sociaux
+ * - Contact + Horaires : Coordonnées et horaires d'ouverture
+ * - Prendre RDV + Suivez-nous : Lien externe + réseaux sociaux
  *
  * Barre inférieure avec liens légaux et signature développeur
  */
@@ -72,8 +72,8 @@ export default function Footer({
       </div>
 
       <SectionContainer className="relative px-container-x pb-8 pt-[10vw] lg:pb-10">
-        {/* Grille 3 colonnes avec largeurs adaptées au contenu */}
-        <div className="mx-auto flex max-w-7xl flex-col gap-8 lg:flex-row lg:justify-between lg:gap-10">
+        {/* Grille 3 colonnes : Navigation | Contact+Horaires | RDV+Réseaux */}
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:justify-items-center">
           <FooterNavigation onLinkClick={onLinkClick} />
           <FooterContact />
           <FooterSocial />

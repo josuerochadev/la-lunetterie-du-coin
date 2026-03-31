@@ -46,28 +46,28 @@ export default function MentionsLegales() {
           </h2>
           <dl className="grid gap-x-8 gap-y-3 text-body sm:grid-cols-[auto_1fr]">
             <dt className="font-medium text-text">Nom</dt>
-            <dd className="text-black/70">{COMPANY_NAME}</dd>
+            <dd className="text-black">{COMPANY_NAME}</dd>
 
             <dt className="font-medium text-text">Forme juridique</dt>
-            <dd className="text-black/70">
+            <dd className="text-black">
               {COMPANY_LEGAL_FORM}
               {COMPANY_SHARE_CAPITAL ? ` — capital social : ${COMPANY_SHARE_CAPITAL}` : ''}
             </dd>
 
             <dt className="font-medium text-text">Siège social</dt>
-            <dd className="text-black/70">{COMPANY_ADDRESS}</dd>
+            <dd className="text-black">{COMPANY_ADDRESS}</dd>
 
             <dt className="font-medium text-text">SIRET</dt>
-            <dd className="text-black/70">{COMPANY_SIRET}</dd>
+            <dd className="text-black">{COMPANY_SIRET}</dd>
 
             <dt className="font-medium text-text">RCS</dt>
-            <dd className="text-black/70">{COMPANY_RCS}</dd>
+            <dd className="text-black">{COMPANY_RCS}</dd>
 
             <dt className="font-medium text-text">TVA intracommunautaire</dt>
-            <dd className="text-black/70">{COMPANY_VAT || 'N/A'}</dd>
+            <dd className="text-black">{COMPANY_VAT || 'N/A'}</dd>
 
             <dt className="font-medium text-text">Directeur de la publication</dt>
-            <dd className="text-black/70">{PUBLICATION_DIRECTOR}</dd>
+            <dd className="text-black">{PUBLICATION_DIRECTOR}</dd>
           </dl>
         </section>
       </SimpleAnimation>
@@ -82,7 +82,7 @@ export default function MentionsLegales() {
             <dd>
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
-                className="text-black/70 underline underline-offset-4 transition-colors hover:text-text"
+                className="text-black underline underline-offset-4 transition-colors hover:text-secondary-orange"
               >
                 {COMPANY_EMAIL}
               </a>
@@ -92,7 +92,7 @@ export default function MentionsLegales() {
             <dd>
               <a
                 href={`tel:${COMPANY_PHONE}`}
-                className="text-black/70 underline underline-offset-4 transition-colors hover:text-text"
+                className="text-black underline underline-offset-4 transition-colors hover:text-secondary-orange"
               >
                 {COMPANY_PHONE}
               </a>
@@ -106,7 +106,7 @@ export default function MentionsLegales() {
           <h2 id="hebergeur" className="heading-section">
             Hébergeur
           </h2>
-          <div className="text-body text-black/70">
+          <div className="text-body text-black">
             <p className="font-medium text-text">{HOST_NAME}</p>
             <p>{HOST_ADDRESS}</p>
           </div>
@@ -118,7 +118,7 @@ export default function MentionsLegales() {
           <h2 id="propriete" className="heading-section">
             Propriété intellectuelle
           </h2>
-          <p className="text-body text-black/70">
+          <p className="text-body text-black">
             Le site et l'ensemble de ses contenus (textes, images, logos, éléments graphiques) sont
             protégés par le droit d'auteur. Toute reproduction ou représentation, totale ou
             partielle, sans autorisation préalable, est interdite.
@@ -131,7 +131,7 @@ export default function MentionsLegales() {
           <h2 id="donnees" className="heading-section">
             Données personnelles & cookies
           </h2>
-          <p className="text-body text-black/70">
+          <p className="text-body text-black">
             Pour toute demande relative à la protection des données, contactez l'éditeur aux
             coordonnées ci-dessus. Si des traceurs/cookies tiers sont utilisés, une politique de
             confidentialité et une bannière cookies doivent être mises en place.
@@ -144,14 +144,14 @@ export default function MentionsLegales() {
           <h2 id="mediation" className="heading-section">
             Médiation de la consommation
           </h2>
-          <p className="text-body text-black/70">
+          <p className="text-body text-black">
             Conformément à l'article L.612-1 du Code de la consommation, le client peut recourir à
             un médiateur de la consommation gratuitement.
           </p>
 
           <div className="mt-4">
             <h3 className="heading-subsection mb-3">Médiateur compétent</h3>
-            <div className="space-y-1 text-body text-black/70">
+            <div className="space-y-1 text-body text-black">
               <p className="font-medium text-text">{MEDIATOR_NAME}</p>
               <p>{MEDIATOR_ADDRESS}</p>
               <p className="mt-3">
@@ -159,7 +159,7 @@ export default function MentionsLegales() {
                   href={MEDIATOR_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 transition-colors hover:text-text"
+                  className="underline underline-offset-4 transition-colors hover:text-secondary-orange"
                 >
                   Plus d'informations sur la médiation →
                 </a>

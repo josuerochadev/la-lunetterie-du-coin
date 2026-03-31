@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
 import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
@@ -122,7 +123,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Colonne droite : Informations pratiques */}
-            <aside className="space-y-8 border-t border-white/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+            <aside className="space-y-8 border-t border-secondary-blue/20 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
               {/* Logo du magasin */}
               <SimpleAnimation type="slide-right" delay={150} immediate={true}>
                 <Link
@@ -142,8 +143,8 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
 
                   {/* Horaires */}
                   <div className="space-y-1">
-                    <p className="text-body-sm text-white">{STORE_INFO.hours.weekdays}</p>
-                    <p className="text-body-sm text-white">{STORE_INFO.hours.weekend}</p>
+                    <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekdays}</p>
+                    <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekend}</p>
                   </div>
 
                   {/* Téléphone */}
@@ -151,7 +152,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     href={`tel:${STORE_INFO.phone.tel}`}
                     className="focus-style group/link flex items-center gap-2 text-body-sm text-white"
                   >
-                    <Phone className="h-4 w-4 text-secondary-green" aria-hidden="true" />
+                    <Phone className="h-4 w-4 text-secondary-blue" aria-hidden="true" />
                     <span className="relative font-medium">
                       {STORE_INFO.phone.display}
                       <span
@@ -169,7 +170,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     className="focus-style group/link flex items-start gap-2 text-body-sm text-white"
                   >
                     <MapPin
-                      className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-green"
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-blue"
                       aria-hidden="true"
                     />
                     <span className="relative font-medium">
@@ -190,7 +191,8 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     rel="noopener noreferrer"
                     onClick={onClose}
                     theme="dark"
-                    className="mt-4 text-body-sm text-secondary-blue"
+                    icon={ExternalLink}
+                    className="mt-4 text-body-sm"
                   >
                     {MENU_CTA.label}
                   </LinkCTA>
@@ -208,7 +210,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-secondary-green transition-all duration-300 hover:scale-110 hover:bg-secondary-orange/15 hover:text-secondary-orange"
+                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-secondary-blue transition-all duration-300 hover:scale-110 hover:bg-secondary-orange/15 hover:text-secondary-orange"
                         aria-label={social.label}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />

@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
@@ -10,6 +9,7 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import EyePattern from '@/components/common/EyePattern';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const iconMap = {
@@ -60,7 +60,7 @@ function ValueCard({
       <div className="space-y-5">
         <Icon className="h-10 w-10 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
         <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-        <p className="text-body text-black/60">{value.description}</p>
+        <p className="text-body text-black">{value.description}</p>
       </div>
     </m.div>
   );
@@ -80,12 +80,7 @@ function ValueCard({
 // ---------------------------------------------------------------------------
 
 function ValuesDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.05], [0, 1]);
@@ -97,7 +92,7 @@ function ValuesDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={ref} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
         <m.div
           className="flex h-full flex-col items-center justify-center px-container-x"
@@ -173,7 +168,7 @@ export default function AboutValues() {
                       aria-hidden="true"
                     />
                     <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-                    <p className="text-body text-black/60">{value.description}</p>
+                    <p className="text-body text-black">{value.description}</p>
                   </div>
                 </SimpleAnimation>
               );

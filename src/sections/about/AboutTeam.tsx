@@ -1,10 +1,10 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const TEAM_BIO =
@@ -23,12 +23,7 @@ const TEAM_BIO =
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
@@ -51,7 +46,7 @@ function TeamDesktop() {
   const exitY = useTransform(scrollYProgress, [0.65, 0.8], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={ref} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <m.div
           className="flex h-full items-center px-16 xl:px-20"
@@ -95,7 +90,7 @@ function TeamDesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.2}
                 revealEnd={0.38}
-                className="text-body-lg text-white/70"
+                className="text-body-lg text-white"
               >
                 {TEAM_BIO}
               </ScrollWordReveal>
@@ -160,7 +155,7 @@ export default function AboutTeam() {
                 />
               </div>
               <div>
-                <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
+                <p className="text-body-lg text-white">{TEAM_BIO}</p>
               </div>
             </div>
           </SimpleAnimation>

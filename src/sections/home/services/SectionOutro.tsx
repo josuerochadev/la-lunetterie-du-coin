@@ -112,12 +112,13 @@ export function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue
   const logoRotateRaw = useTransform(scrollYProgress, [0.95, LOGO_FLOAT_END], [0, Math.PI * 2]);
   const logoRotate = useTransform(logoRotateRaw, (v: number) => Math.sin(v) * 4);
 
-  // ── Background white → yellow ──
-  const bgOpacity = useTransform(scrollYProgress, [0.9, 0.94], [0, 1]);
-
   // ── CTA ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.96, 0.98], [0, 1, 1, 0]);
-  const ctaYRaw = useTransform(scrollYProgress, [0.89, 0.91], [20, 0]);
+  const ctaOpacity = useTransform(
+    scrollYProgress,
+    [0.89, EXIT_START, EXIT_START + 0.005, EXIT_START + 0.02],
+    [0, 1, 1, 0],
+  );
+  const ctaYRaw = useTransform(scrollYProgress, [0.89, EXIT_START], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = usePointerEvents(ctaOpacity);
 
@@ -143,13 +144,6 @@ export function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue
 
   return (
     <>
-      {/* Yellow background overlay */}
-      <m.div
-        className="pointer-events-none absolute inset-0 z-10 bg-accent"
-        style={{ opacity: bgOpacity }}
-        aria-hidden="true"
-      />
-
       <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 px-8">
         {/* Phrase — word-by-word entrance + staggered exit */}
         <h3 className="text-heading text-center text-title-xl text-black">

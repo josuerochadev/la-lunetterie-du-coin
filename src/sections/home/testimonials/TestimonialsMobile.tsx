@@ -30,7 +30,7 @@ export function TestimonialsMobile() {
             >
               4.9
             </span>
-            <span className="text-body text-white/70">/5</span>
+            <span className="text-body text-white">/5</span>
           </div>
         </SimpleAnimation>
       </div>
@@ -50,7 +50,7 @@ export function TestimonialsMobile() {
 
           <SimpleAnimation type="slide-up" delay={150}>
             <blockquote className="mb-8">
-              <p className="text-white/90" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>
+              <p className="text-white" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>
                 &ldquo;{FEATURED.quote}&rdquo;
               </p>
             </blockquote>
@@ -58,7 +58,7 @@ export function TestimonialsMobile() {
             <footer>
               <cite className="not-italic">
                 <div className="mb-1 text-body-lg font-medium text-white">{FEATURED.name}</div>
-                <div className="flex items-center gap-2 text-body-sm text-white/70">
+                <div className="flex items-center gap-2 text-body-sm text-secondary-blue">
                   <span>{FEATURED.role}</span>
                   {FEATURED.date && (
                     <>
@@ -81,13 +81,13 @@ export function TestimonialsMobile() {
               <RatingStars rating={testimonial.rating} className="mb-4" />
 
               <blockquote className="mb-5">
-                <p className="text-body text-white/70">&ldquo;{testimonial.quote}&rdquo;</p>
+                <p className="text-body text-white">&ldquo;{testimonial.quote}&rdquo;</p>
               </blockquote>
 
               <footer>
                 <cite className="not-italic">
                   <div className="mb-1 text-body-sm font-medium text-white">{testimonial.name}</div>
-                  <div className="flex items-center gap-2 text-body-xs text-white/70">
+                  <div className="flex items-center gap-2 text-body-xs text-secondary-blue">
                     <span>{testimonial.role}</span>
                     {testimonial.date && (
                       <>

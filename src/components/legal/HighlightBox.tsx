@@ -20,14 +20,14 @@ export default function HighlightBox({
       className={cn(
         'border-l-4 p-6 sm:p-8',
         variant === 'accent'
-          ? 'border-secondary-green/30 bg-secondary-green/5'
+          ? 'border-secondary-blue/30 bg-secondary-blue/5'
           : 'border-black/10 bg-black/[0.02]',
         className,
       )}
       role="note"
     >
       {title && <h3 className="heading-subsection mb-4">{title}</h3>}
-      <div className="space-y-3 text-body text-black/70">{children}</div>
+      <div className="space-y-3 text-body text-black">{children}</div>
     </div>
   );
 }

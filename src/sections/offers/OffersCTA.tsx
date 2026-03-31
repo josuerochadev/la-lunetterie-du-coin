@@ -1,20 +1,16 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 export default function OffersCTA() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref: wrapperRef, scrollYProgress } = useManualScrollProgress('start-end');
 
   // Motif — scale grows throughout the full scroll range
   const motifScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
@@ -63,9 +59,7 @@ export default function OffersCTA() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={100}>
-                  <p className="mt-6 text-body-lg text-black/60">
-                    Passez nous voir, le reste suivra.
-                  </p>
+                  <p className="mt-6 text-body-lg text-black">Passez nous voir, le reste suivra.</p>
                 </SimpleAnimation>
 
                 <SimpleAnimation type="fade" delay={200}>
@@ -91,7 +85,7 @@ export default function OffersCTA() {
                 </m.div>
 
                 <m.p
-                  className="mt-6 text-body-lg text-black/60"
+                  className="mt-6 text-body-lg text-black"
                   style={{ opacity: subtitle.opacity, y: subtitle.y }}
                 >
                   Passez nous voir, le reste suivra.

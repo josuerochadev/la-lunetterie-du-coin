@@ -1,3 +1,5 @@
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+
 import { SERVICE_COUNT } from './constants';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -22,7 +24,7 @@ export function MobileServiceList() {
                 />
               </div>
               <div className="mt-8">
-                <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-white/30">
+                <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-white">
                   {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
                 </span>
                 <h3
@@ -31,13 +33,13 @@ export function MobileServiceList() {
                 >
                   {service.title}
                 </h3>
-                <p className="mb-6 text-body-lg leading-relaxed text-white/60">
+                <p className="mb-6 text-body-lg leading-relaxed text-secondary-blue">
                   {service.description}
                 </p>
 
                 <ul className="mb-6 grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
                   {service.details.map((detail, i) => (
-                    <li key={i} className="flex gap-2.5 text-body-sm text-white/40">
+                    <li key={i} className="flex gap-2.5 text-body-sm text-white">
                       <span
                         className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                         aria-hidden="true"
@@ -49,10 +51,10 @@ export function MobileServiceList() {
 
                 {isExamens && (
                   <div className="mb-6 border-l-2 border-accent/30 pl-4">
-                    <h4 className="mb-2 text-body-sm font-medium text-white/50">
+                    <h4 className="mb-2 text-body-sm font-medium text-white">
                       Conditions pour un examen en magasin
                     </h4>
-                    <ul className="space-y-1 text-body-sm text-white/35">
+                    <ul className="space-y-1 text-body-sm text-white">
                       <li>
                         Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
                       </li>
@@ -68,6 +70,7 @@ export function MobileServiceList() {
                     target="_blank"
                     rel="noopener noreferrer"
                     theme="dark"
+                    icon={ExternalLink}
                     aria-label="Prendre rendez-vous pour un examen de vue"
                   >
                     Prendre rendez-vous

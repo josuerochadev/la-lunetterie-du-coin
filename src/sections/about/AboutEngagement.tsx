@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { GiantCounter } from '@/components/motion/GiantCounter';
@@ -7,6 +6,7 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { STATS_DATA } from '@/data/about';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
@@ -59,19 +59,14 @@ function StatCard({
         >
           {stat.number}
         </div>
-        <div className="mt-2 text-body-sm text-black/60">{stat.label}</div>
+        <div className="mt-2 text-body-sm text-black">{stat.label}</div>
       </div>
     </m.div>
   );
 }
 
 function EngagementDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.04], [0, 1]);
@@ -89,7 +84,7 @@ function EngagementDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[280vh] bg-background lg:block">
+    <div ref={ref} className="hidden h-[280vh] bg-background lg:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-background">
         <GiantCounter
           scrollYProgress={scrollYProgress}
@@ -133,7 +128,7 @@ function EngagementDesktop() {
               scrollYProgress={scrollYProgress}
               revealStart={0.26}
               revealEnd={0.4}
-              className="text-body-lg text-black/60"
+              className="text-body-lg text-black"
             >
               {ENGAGEMENT_BODY}
             </ScrollWordReveal>
@@ -190,14 +185,14 @@ export default function AboutEngagement() {
                     <div className="mb-1 text-title-sm font-bold text-secondary-orange sm:text-title-md">
                       {stat.number}
                     </div>
-                    <div className="text-body-xs text-black/60 sm:text-body-sm">{stat.label}</div>
+                    <div className="text-body-xs text-black sm:text-body-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={150}>
-              <div className="space-y-6 text-body text-black/60">
+              <div className="space-y-6 text-body text-black">
                 <p className="text-text">{ENGAGEMENT_BODY}</p>
                 <p className="text-body-sm italic text-secondary-orange">{ENGAGEMENT_HIGHLIGHT}</p>
               </div>
