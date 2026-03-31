@@ -11,14 +11,14 @@
   height: auto !important;
   width: auto !important;
   padding: 0 !important;
-  color: rgb(var(--color-charcoal-rgb)) !important;
+  color: rgb(var(--color-black-rgb)) !important;
   transition: color 200ms ease !important;
   cursor: pointer !important;
   -webkit-tap-highlight-color: transparent;
 }
 
 .menu-toggle-button:hover {
-  color: rgb(var(--color-orange-rgb)) !important;
+  color: rgb(var(--color-yellow-rgb)) !important;
 }
 
 .menu-toggle-button:focus {
@@ -26,7 +26,7 @@
 }
 
 .menu-toggle-button:focus-visible {
-  outline: 2px solid rgb(var(--color-accent-rgb)) !important;
+  outline: 2px solid rgb(var(--color-yellow-rgb)) !important;
   outline-offset: 2px !important;
 }
 

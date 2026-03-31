@@ -2,14 +2,14 @@
  * Configuration du menu de navigation
  */
 
-export const CALENDLY_URL = 'https://calendly.com/lalunetterieducoin';
+import { BOOKING_URL } from '@/config/endpoints';
 
 export const MENU_ANIMATION_DURATION = 300;
 
 // CTA principal du menu
 export const MENU_CTA = {
   label: 'Prendre rendez-vous',
-  href: CALENDLY_URL,
+  href: BOOKING_URL,
   featured: true,
 };
 

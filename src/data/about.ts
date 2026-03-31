@@ -39,19 +39,19 @@ export const VALUES_DATA: ValueData[] = [
   {
     title: 'Authenticité',
     description:
-      'Des conseils sincères, sans pression commerciale. Nous prenons le temps de vous connaître pour trouver LA paire qui vous correspond.',
+      'On vous dit ce qu\'on pense, pas ce qui arrange la caisse. Ici, le conseil est sincère — même si c\'est "revenez demain".',
     iconName: 'heart',
   },
   {
     title: 'Engagement écologique',
     description:
-      "Le recyclage au cœur de notre modèle. Chaque monture d'occasion sauvée, c'est un déchet en moins et une nouvelle vie pour un objet de qualité.",
+      "Une monture jetée, c'est du gâchis. Nous, on préfère leur offrir une deuxième vie. La planète approuve.",
     iconName: 'leaf',
   },
   {
     title: 'Expertise',
     description:
-      "10 ans d'expérience en optique. Romain maîtrise tous les aspects du métier, des examens de vue aux ajustements les plus délicats.",
+      'Plus de 15 ans à voir la vie à travers des verres. Examens, ajustements, conseils — on connaît la chanson par cœur.',
     iconName: 'award',
   },
 ];

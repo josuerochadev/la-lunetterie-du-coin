@@ -1,14 +1,14 @@
 import type React from 'react';
 
+import { TIMING } from '@/config/design';
 import { FORMSPREE_ENDPOINT } from '@/config/endpoints';
 import { fetchWithRetry } from '@/lib/retryLogic';
+import type { SubmissionResult } from '@/types/forms';
 import {
   validateHoneypot,
   createFormRequest,
   handleResponse,
   handleError,
-  type SubmissionResult,
-  type FormErrors,
 } from '@/lib/formSubmissionHelpers';
 
 interface UseFormSubmissionReturn {
@@ -37,7 +37,7 @@ export function useFormSubmission(): UseFormSubmissionReturn {
 
     // Create abort controller for timeout
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    const timeoutId = setTimeout(() => controller.abort(), TIMING.formTimeout);
 
     let retryCount = 0;
 
@@ -80,4 +80,4 @@ export function useFormSubmission(): UseFormSubmissionReturn {
   return { submitForm };
 }
 
-export type { FormErrors, SubmissionResult };
+export type { FormErrors, SubmissionResult } from '@/types/forms';

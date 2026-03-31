@@ -8,6 +8,7 @@ import type { SocialIconName } from '@/lib/iconRegistry';
  * Liens de navigation du footer
  */
 export const FOOTER_NAV_LINKS = [
+  { label: 'Accueil', href: '/' },
   { label: 'À propos', href: '/a-propos' },
   { label: 'Nos services', href: '/services' },
   { label: 'Nos offres', href: '/offres' },

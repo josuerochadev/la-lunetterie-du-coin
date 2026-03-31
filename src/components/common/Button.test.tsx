@@ -13,21 +13,32 @@ describe('Button', () => {
     expect(button.tagName).toBe('BUTTON');
   });
 
-  it('should apply default classes', () => {
+  it('should apply default type button', () => {
     render(<Button>Test</Button>);
 
     const button = screen.getByText('Test');
-    expect(button).toHaveClass('button-primary');
-    expect(button).toHaveClass('font-semibold');
+    expect(button).toHaveAttribute('type', 'button');
   });
 
-  it('should merge custom className with default classes', () => {
+  it('should apply light theme text color by default', () => {
+    render(<Button>Test</Button>);
+
+    const button = screen.getByText('Test');
+    expect(button.className).toContain('text-black');
+  });
+
+  it('should apply dark theme text color', () => {
+    render(<Button theme="dark">Test</Button>);
+
+    const button = screen.getByText('Test');
+    expect(button.className).toContain('text-white');
+  });
+
+  it('should merge custom className', () => {
     render(<Button className="custom-class">Test</Button>);
 
     const button = screen.getByText('Test');
-    expect(button).toHaveClass('button-primary');
-    expect(button).toHaveClass('font-semibold');
-    expect(button).toHaveClass('custom-class');
+    expect(button.className).toContain('custom-class');
   });
 
   it('should handle click events', () => {
@@ -40,7 +51,7 @@ describe('Button', () => {
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
-  it('should support different button types', () => {
+  it('should support submit type', () => {
     render(<Button type="submit">Submit</Button>);
 
     const button = screen.getByText('Submit');
@@ -52,6 +63,13 @@ describe('Button', () => {
 
     const button = screen.getByText('Disabled');
     expect(button).toBeDisabled();
+  });
+
+  it('should render underline element', () => {
+    const { container } = render(<Button>Test</Button>);
+
+    const underline = container.querySelector('[aria-hidden="true"]');
+    expect(underline).toBeInTheDocument();
   });
 
   it('should forward all HTML button attributes', () => {

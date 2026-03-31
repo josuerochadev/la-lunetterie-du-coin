@@ -1,11 +1,34 @@
-<!-- public/sitemap.xml (NEW) -->
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://www.lalunetterieducoin.fr/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <lastmod>2025-08-14</lastmod>
+    <lastmod>2026-03-27</lastmod>
+  </url>
+  <url>
+    <loc>https://www.lalunetterieducoin.fr/services</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <lastmod>2026-03-27</lastmod>
+  </url>
+  <url>
+    <loc>https://www.lalunetterieducoin.fr/offres</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <lastmod>2026-03-27</lastmod>
+  </url>
+  <url>
+    <loc>https://www.lalunetterieducoin.fr/a-propos</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-03-27</lastmod>
+  </url>
+  <url>
+    <loc>https://www.lalunetterieducoin.fr/contact</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <lastmod>2026-03-27</lastmod>
   </url>
   <url>
     <loc>https://www.lalunetterieducoin.fr/mentions-legales</loc>

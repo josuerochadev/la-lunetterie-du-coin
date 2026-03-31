@@ -59,9 +59,9 @@ L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 
 | Métrique                   | Valeur Actuelle | Objectif |
 | -------------------------- | --------------- | -------- |
-| **Test Coverage**          | 95.49%          | ≥ 85%    |
+| **Test Coverage**          | 95.49%          | ≥ 10%    |
 | **Lighthouse Performance** | 90+             | ≥ 90     |
-| **Bundle Size**            | ~300kb          | ≤ 500kb  |
+| **Bundle Size**            | ~300kb          | ≤ 10MB   |
 | **A11y Violations**        | 0               | 0        |
 | **ESLint Warnings**        | 0               | 0        |
 
@@ -142,14 +142,16 @@ Nous accueillons les contributions ! Consultez notre [Guide de Contribution](./C
 
 ## 📚 Documentation
 
-- [🏛️ Architecture Decision Records](./docs/adr/) - Décisions architecturales
-- [🧪 Tests Strategy](./docs/testing-suite.md) - Stratégie de tests
-- [🎨 Visual Testing](./docs/visual-testing.md) - Tests de régression visuelle
-- [⚙️ Configuration Guide](./CLAUDE.md) - Guide technique détaillé
+- [Guide de contribution](./CONTRIBUTING.md) - Installation, workflow, standards de code
+- [Architecture Decision Records](./docs/adr/) - Decisions techniques documentees
+- [Configuration environnement](./docs/environment-setup.md) - Variables d'environnement
+- [Standards icones](./docs/standards/icons.md) - Patterns d'import Lucide
+- [Audits qualite](./docs/audits/) - Resultats des audits (KISS, SOLID, lisibilite, architecture)
+- [Strategie de tests](./docs/testing-suite.md) - Tests unitaires, E2E, visuels
 
 ## 📝 Licence
 
-Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus de détails.
+Projet prive.
 
 ## 👥 Équipe
 
@@ -157,4 +159,4 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus d
 
 ---
 
-**Développé avec ❤️ pour La Lunetterie du Coin**# Build trigger Mer 10 sep 2025 11:26:07 CEST
+**Developpe avec soin pour La Lunetterie du Coin**

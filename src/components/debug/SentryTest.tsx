@@ -32,7 +32,7 @@ export default function SentryTest() {
         </button>
         <button
           onClick={triggerCustomEvent}
-          className="rounded bg-blue-500 px-3 py-2 text-body-sm font-medium text-white hover:bg-blue-600"
+          className="bg-blue-500 hover:bg-blue-600 rounded px-3 py-2 text-body-sm font-medium text-white"
         >
           Message Custom
         </button>

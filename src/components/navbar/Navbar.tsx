@@ -1,44 +1,162 @@
 import type React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import Phone from 'lucide-react/dist/esm/icons/phone';
-import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import { useLocation, Link } from 'react-router-dom';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
-import MenuButton from '@/components/navbar/MenuButton';
+import LogoSymboleNoir from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
+import LogoSymboleJaune from '@/assets/logo/Logo_LLDC_Symbole_Jaune.svg?react';
 import FullScreenMenu from '@/components/navbar/FullScreenMenu';
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { MENU_ANIMATION_DURATION } from '@/config/menu';
-import { CALENDLY_URL } from '@/config/endpoints';
-import { STORE_INFO } from '@/config/store';
-import { useMotionPreference } from '@/a11y/useMotionPreference';
+import { BOOKING_URL } from '@/config/endpoints';
+import { TIMING } from '@/config/design';
+import { cn } from '@/lib/cn';
 
 /**
- * Composant Navbar
+ * Composant Navbar — Barre horizontale complète
  *
- * Barre de navigation horizontale moderne inspirée de La Pima et Kinfolk.
+ * Adapts colors based on `data-navbar-theme` attribute on sections:
+ *   - data-navbar-theme="light" → light text/icons (for dark backgrounds)
+ *   - default → dark text/icons (for light backgrounds)
  *
- * Structure :
- * - Gauche : Logo + Wordmark
- * - Centre : Icônes utilitaires (téléphone, localisation)
- * - Droite : CTA "Prendre RDV" + Bouton menu hamburger
- *
- * Fonctionnalités :
- * - Menu plein écran avec animation
- * - Gestion d'état menuActive/menuRendered pour éviter les doubles toggles
- * - Restauration du focus après fermeture
- * - Accessibilité complète (ARIA, focus management)
- * - Responsive avec breakpoints optimisés
- *
- * @component
+ * Uses IntersectionObserver to detect which section is at the top of the viewport.
  */
+const HOVER_ZONE_HEIGHT = 80;
+
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
+  const [hovered, setHovered] = useState(false);
+  const [hiddenByScroll, setHiddenByScroll] = useState(true);
+  const [hiddenByFooter, setHiddenByFooter] = useState(false);
+  const lastScrollY = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
-  const prm = useMotionPreference();
 
-  // Contrôle le rendu du menu (pour éviter toggle duplo)
+  const isLight = theme === 'light';
+
+  // Auto-reveal navbar shortly after page load, then hide on scroll down
+  useEffect(() => {
+    const timer = setTimeout(() => setHiddenByScroll(false), TIMING.navbarReshow);
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      if (currentY > lastScrollY.current && currentY > 50) {
+        setHiddenByScroll(true);
+      }
+      lastScrollY.current = currentY;
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Desktop: show navbar when mouse enters top zone
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setHovered(e.clientY <= HOVER_ZONE_HEIGHT);
+    };
+    const handleMouseLeave = () => setHovered(false);
+
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    document.documentElement.addEventListener('mouseleave', handleMouseLeave);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, []);
+
+  const isVisible = !hiddenByFooter && (!hiddenByScroll || hovered || menuActive);
+
+  // Detect navbar theme via IntersectionObserver on a thin band at the top
+  // of the viewport. Unlike elementFromPoint, IO detects elements regardless
+  // of pointer-events, so decorative curves and overlays are properly handled.
+  useEffect(() => {
+    const BAND_TOP = 40;
+    const BAND_BOTTOM = 80;
+
+    const intersecting = new Set<Element>();
+
+    const resolveTheme = () => {
+      // Check if footer is in the detection band
+      for (const el of intersecting) {
+        if (el.closest('#footer')) {
+          setHiddenByFooter(true);
+          return;
+        }
+      }
+      setHiddenByFooter(false);
+
+      // Collect themed elements with their current attribute value
+      const themed: { el: Element; theme: string }[] = [];
+      for (const el of intersecting) {
+        const t = (el as HTMLElement).dataset.navbarTheme;
+        if (t) themed.push({ el, theme: t });
+      }
+
+      if (themed.length === 0) {
+        setTheme('dark');
+        return;
+      }
+
+      // Last in document order = visually on top (StickySection z-index pattern)
+      // Descendants also come after their ancestors, so nested overrides win.
+      themed.sort((a, b) => {
+        const pos = a.el.compareDocumentPosition(b.el);
+        return pos & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+      });
+
+      setTheme(themed[themed.length - 1].theme === 'light' ? 'light' : 'dark');
+    };
+
+    const createObserver = () => {
+      const bottomMargin = Math.max(0, window.innerHeight - BAND_BOTTOM);
+      return new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) intersecting.add(entry.target);
+            else intersecting.delete(entry.target);
+          }
+          resolveTheme();
+        },
+        { rootMargin: `-${BAND_TOP}px 0px -${bottomMargin}px 0px` },
+      );
+    };
+
+    let observer = createObserver();
+
+    const observeAll = () => {
+      observer.disconnect();
+      intersecting.clear();
+      observer = createObserver();
+      document
+        .querySelectorAll('[data-navbar-theme], [data-navbar-theme-dynamic], #footer')
+        .forEach((el) => {
+          observer.observe(el);
+        });
+    };
+
+    // Small delay to ensure DOM is ready after route change
+    const timer = setTimeout(observeAll, 50);
+
+    // Re-read attributes on scroll (handles dynamic data-navbar-theme changes)
+    window.addEventListener('scroll', resolveTheme, { passive: true });
+
+    // Recreate observer on resize (rootMargin depends on viewport height)
+    const onResize = () => observeAll();
+    window.addEventListener('resize', onResize, { passive: true });
+
+    return () => {
+      clearTimeout(timer);
+      observer.disconnect();
+      window.removeEventListener('scroll', resolveTheme);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [location.pathname]);
+
   useEffect(() => {
     if (menuActive) {
       setMenuRendered(true);
@@ -48,7 +166,6 @@ const Navbar: React.FC = () => {
     }
   }, [menuActive]);
 
-  // Empêche le double toggle lors de la fermeture
   function shouldBlockToggle(menuActive: boolean, menuRendered: boolean): boolean {
     return !menuActive && menuRendered;
   }
@@ -63,87 +180,101 @@ const Navbar: React.FC = () => {
     buttonRef.current?.focus();
   };
 
-  // Gère le clic sur le logo : scroll to top si déjà sur la page d'accueil
-  const handleLogoClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (location.pathname === '/') {
-      e.preventDefault();
-      window.scrollTo({
-        top: 0,
-        left: 0,
-        behavior: prm ? 'auto' : 'smooth',
-      });
-    }
-  };
+  // Color classes based on theme
+  const textColor = isLight ? 'text-accent' : 'text-black';
+  const underlineColor = 'bg-secondary-orange';
+  const outlineColor = isLight ? 'focus-visible:outline-accent' : 'focus-visible:outline-black';
+  const LogoSymbole = isLight ? LogoSymboleJaune : LogoSymboleNoir;
 
   return (
     <>
-      {/* Navbar horizontale fixe */}
-      <header className="fixed left-0 right-0 top-0 z-navbar border-b border-charcoal shadow-[0_1px_3px_0_rgba(0,0,0,0.05)] backdrop-blur-2xl">
-        <div
-          className="absolute inset-0 bg-gradient-to-b from-cream/40 via-cream/25 via-50% to-cream/10"
-          aria-hidden="true"
-        ></div>
-        <SimpleAnimation type="fade" immediate={true}>
-          <nav
-            className="relative mx-auto flex min-h-[60px] max-w-container items-center justify-between gap-2 px-4 py-3 sm:min-h-[72px] sm:gap-4 sm:px-6 sm:py-4"
-            aria-label="Navigation principale"
+      {/* Navbar horizontale — fixe en haut */}
+      <header
+        className={cn(
+          'fixed left-0 right-0 top-0 z-navbar flex items-center px-4 pt-4 sm:px-6 sm:pt-6',
+          'transition-all duration-500 ease-out',
+          isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-5 opacity-0',
+        )}
+      >
+        <nav
+          className="flex w-full items-center justify-center gap-3 sm:gap-4"
+          aria-label="Navigation principale"
+        >
+          {/* Logo symbole */}
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Accueil — La Lunetterie du Coin"
+            className={cn(
+              'rounded-full p-1.5 transition-transform duration-300 hover:scale-110',
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
           >
-            {/* Gauche : Wordmark */}
-            <div className="flex items-center">
-              <Link to="/" aria-label="Retour à l'accueil" onClick={handleLogoClick}>
-                <span className="cursor-pointer text-body-sm font-bold uppercase leading-tight tracking-tight transition-all duration-300 hover:scale-105 hover:text-orange sm:text-title-sm">
-                  <span className="font-thin">LA</span>LUNETTERIE
-                  <span className="font-thin">DU</span>COIN
-                </span>
-              </Link>
-            </div>
+            <LogoSymbole className="h-6 w-auto sm:h-7 lg:h-8" aria-hidden="true" />
+          </Link>
 
-            {/* Droite : CTA + Icônes utilitaires + Menu button */}
-            <div className="flex items-center gap-4 sm:gap-6">
-              {/* CTA Prendre RDV - toujours visible */}
-              <Link
-                to={CALENDLY_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-4 py-2 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream sm:px-6 sm:py-3"
-                aria-label="Prendre rendez-vous"
-              >
-                <span className="hidden lg:inline">Prendre RDV</span>
-                <span className="lg:hidden">RDV</span>
-              </Link>
+          {/* "Menu" — ouvre le FullScreenMenu */}
+          <button
+            ref={buttonRef}
+            type="button"
+            onClick={handleToggle}
+            aria-label={menuActive ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-expanded={menuActive}
+            aria-controls="main-menu"
+            className={cn(
+              'group/nav relative cursor-pointer text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold',
+              textColor,
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            {/* Invisible bold duplicate to reserve width and prevent layout shift */}
+            <span className="invisible block h-0 font-semibold" aria-hidden="true">
+              Menu
+            </span>
+            Menu
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
+          </button>
 
-              {/* Icônes utilitaires (cachés sur mobile) */}
-              <a
-                href={`tel:${STORE_INFO.phone.tel}`}
-                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
-                aria-label={`Appeler ${STORE_INFO.phone.display}`}
-              >
-                <Phone
-                  className="h-4 w-4 transition-transform group-hover:scale-110"
-                  aria-hidden="true"
-                />
-                <span className="hidden font-medium lg:inline">{STORE_INFO.phone.display}</span>
-              </a>
-
-              <a
-                href={STORE_INFO.address.googleMapsUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="focus-style group hidden items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange md:flex"
-                aria-label="Voir l'itinéraire sur Google Maps"
-              >
-                <MapPin
-                  className="h-4 w-4 transition-transform group-hover:scale-110"
-                  aria-hidden="true"
-                />
-                <span className="hidden font-medium lg:inline">{STORE_INFO.address.city}</span>
-              </a>
-
-              {/* Bouton menu */}
-              <MenuButton isOpen={menuActive} onClick={handleToggle} ref={buttonRef} />
-            </div>
-          </nav>
-        </SimpleAnimation>
+          {/* CTA Prendre RDV — lien externe vers Calendly */}
+          <a
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Prendre rendez-vous (s'ouvre dans un nouvel onglet)"
+            className={cn(
+              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold sm:inline-flex',
+              textColor,
+              `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
+            )}
+          >
+            Prendre RDV
+            <ExternalLink
+              className="h-3 w-3 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-0.5"
+              aria-hidden="true"
+            />
+            {/* Invisible bold duplicate to reserve width */}
+            <span
+              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
+              aria-hidden="true"
+            >
+              <span>Prendre RDV</span>
+              <span className="h-3 w-3 shrink-0" />
+            </span>
+            <span
+              className={cn(
+                'absolute -bottom-0.5 left-0 h-[1.5px] w-0 transition-all duration-300 group-hover/nav:w-full',
+                underlineColor,
+              )}
+              aria-hidden="true"
+            />
+          </a>
+        </nav>
       </header>
 
       {/* Menu plein écran */}

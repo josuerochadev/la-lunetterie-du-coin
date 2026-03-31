@@ -1,45 +1,51 @@
 /* ====== TYPOGRAPHIE - CLASSES RÉUTILISABLES ====== */
 
-/**
- * Classes standardisées pour h1, h2, h3
- * Utilisées pour maintenir une cohérence typographique sur tout le site
- */
+/* ===== CLASSES UTILITAIRES REBRANDING ===== */
+
+/* Titres principaux - Please Heavy Caps */
+.text-heading {
+  font-family: 'Please', system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 0.9;
+}
+
+/* Sous-titres - Satoshi Black Caps */
+.text-subtitle {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.3;
+  letter-spacing: 0.2em;
+}
+
+/* Corps de texte - Satoshi Regular */
+.text-body-base {
+  font-family: 'Satoshi', system-ui, sans-serif;
+  font-weight: 400;
+  line-height: 1.3;
+}
 
 /* ===== H1 - TITRES DE PAGES ===== */
-/**
- * .heading-page
- * Utilisé pour tous les h1 de pages (About, Services, Offers, Contact, etc.)
- * Style : uppercase, font-light, responsive
- */
 .heading-page {
-  @apply font-light uppercase leading-tight tracking-wide text-text;
+  @apply text-heading tracking-wide text-text;
   font-size: clamp(2.5rem, 4vw, 5rem);
 }
 
 /* ===== H2 - TITRES DE SECTIONS ===== */
-/**
- * .heading-section
- * Utilisé pour tous les h2 de sections (homepage, pages internes)
- * Style : font-medium, responsive (md -> lg)
- */
 .heading-section {
-  @apply text-title-md font-medium text-text;
+  @apply text-heading text-title-lg text-text;
 }
 
 @screen sm {
   .heading-section {
-    @apply text-title-lg;
+    @apply text-title-xl;
   }
 }
 
 /* ===== H3 - SOUS-TITRES ===== */
-/**
- * .heading-subsection-lg
- * Utilisé pour les h3 importants (titres d'offres, de services dans cards)
- * Style : font-medium, responsive (sm -> md)
- */
 .heading-subsection-lg {
-  @apply text-title-sm font-medium text-text;
+  @apply text-subtitle text-title-sm text-text;
 }
 
 @screen sm {
@@ -48,11 +54,32 @@
   }
 }
 
-/**
- * .heading-subsection
- * Utilisé pour les h3 standards (labels, infos pratiques)
- * Style : font-medium, taille fixe
- */
 .heading-subsection {
-  @apply text-title-sm font-medium text-text;
+  @apply text-subtitle text-title-sm text-text;
+}
+
+/* ===== FLUID HERO SIZES ===== */
+/* Used in hero banners and large display text — more aggressive scaling than title-* tokens. */
+
+/* Hero main: e.g. page hero titles (About, Services, Contact, Offers) */
+.text-fluid-hero {
+  font-size: clamp(3rem, 12vw, 14rem);
+  line-height: 0.95;
+}
+
+/* Hero sub: e.g. mobile hero fallback titles */
+.text-fluid-hero-sub {
+  font-size: clamp(3rem, 10vw, 5rem);
+  line-height: 0.95;
+}
+
+/* CTA hero: e.g. ServicesCTA, ContactAppointment display text */
+.text-fluid-cta {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+}
+
+/* Story mobile title */
+.text-fluid-story {
+  font-size: clamp(2.5rem, 10vw, 5rem);
 }

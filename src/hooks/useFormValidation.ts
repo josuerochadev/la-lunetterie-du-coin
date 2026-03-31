@@ -1,6 +1,6 @@
 import type React from 'react';
 
-import type { FormErrors } from './useFormSubmission';
+import type { FormErrors } from '@/types/forms';
 
 interface ValidationMessages {
   name: string;

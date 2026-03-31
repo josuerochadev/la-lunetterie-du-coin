@@ -1,9 +1,12 @@
 import type React from 'react';
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 
+import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
+import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
+import LinkCTA from '@/components/common/LinkCTA';
 import { getSocialIcon } from '@/lib/iconRegistry';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
@@ -18,31 +21,18 @@ type FullScreenMenuProps = {
 };
 
 /**
- * Composant `FullScreenMenu`
+ * Composant `FullScreenMenu` — Rebranding 2026
  *
- * Menu plein écran moderne et éditorial inspiré de Kinfolk.
- *
- * Structure :
- * - Grid de catégories de navigation (DÉCOUVRIR, OFFRES, CONTACT)
- * - Sidebar avec informations pratiques (horaires, contact, USP)
- * - Footer avec social links
- *
- * Fonctionnalités :
- * - Fermeture au clic extérieur et touche ESC
- * - Blocage du scroll du body
- * - Gestion du focus pour l'accessibilité
- * - Animations stagger sur les catégories
+ * Menu plein écran immersif avec motif cercle en arrière-plan.
  *
  * @param isOpen - Indique si le menu est ouvert
  * @param onClose - Fonction appelée pour fermer le menu
  */
 const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const { pathname } = useLocation();
 
-  // Gère la fermeture au clic hors du menu
   useClickOutside(menuRef, () => onClose(), isOpen);
-
-  // Gère les animations et comportements du menu (Escape, scroll, focus)
   useMenuAnimation(isOpen, onClose, menuRef);
 
   if (!isOpen) return null;
@@ -52,18 +42,32 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
       id="main-menu"
       aria-label="Menu de navigation principal"
       tabIndex={-1}
-      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-surface"
+      className="fixed inset-0 z-menu flex min-h-dvh touch-pan-y flex-col overflow-y-auto bg-black"
     >
+      {/* Motif cercle arrière-plan */}
+      <SimpleAnimation type="fade" delay={200} immediate={true}>
+        <div
+          className="pointer-events-none fixed inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `url(${motifCercleUrl})`,
+            backgroundSize: '600px',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'repeat',
+          }}
+          aria-hidden="true"
+        />
+      </SimpleAnimation>
+
       <div ref={menuRef} className="relative flex w-full flex-1 flex-col">
         {/* Bouton de fermeture */}
         <div className="fixed right-0 top-0 z-10 px-4 pt-6 sm:px-6">
-          <SimpleAnimation type="fade" delay={100} immediate={true}>
+          <SimpleAnimation type="slide-down" delay={50} immediate={true}>
             <button
               onClick={onClose}
-              className="focus-style group flex h-12 w-12 items-center justify-center text-charcoal transition-all duration-300 hover:scale-110 hover:text-orange"
+              className="focus-style group flex h-12 w-12 items-center justify-center text-white transition-all duration-300 hover:scale-110 hover:text-secondary-orange"
               aria-label="Fermer le menu"
             >
-              <span className="text-[2rem] font-light leading-none">×</span>
+              <span className="text-[2rem] font-light leading-none">&times;</span>
             </button>
           </SimpleAnimation>
         </div>
@@ -71,75 +75,90 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         {/* Contenu principal du menu */}
         <div className="flex min-h-screen w-full items-center justify-center px-4 sm:px-6">
           <div className="grid w-full max-w-5xl grid-cols-1 gap-16 lg:grid-cols-2 lg:gap-20">
-            {/* Colonne gauche : Navigation principale - alignée à droite */}
+            {/* Colonne gauche : Navigation principale */}
             <div className="space-y-16 lg:text-right">
-              <SimpleAnimation type="slide-up" delay={0} immediate={true}>
-                <nav aria-label="Navigation principale" className="space-y-6 lg:text-right">
-                  {FOOTER_NAV_LINKS.map((link) => (
-                    <div key={link.href}>
+              <nav aria-label="Navigation principale" className="space-y-6 lg:text-right">
+                {FOOTER_NAV_LINKS.map((link, i) => {
+                  const isActive = pathname === link.href;
+                  return (
+                    <SimpleAnimation
+                      key={link.href}
+                      type="slide-up"
+                      delay={i * 80}
+                      immediate={true}
+                    >
                       <Link
                         to={link.href}
                         onClick={onClose}
-                        className="inline-block text-title-lg font-light text-charcoal transition-colors hover:text-orange"
+                        className={`text-heading inline-block text-title-lg transition-colors duration-300 hover:text-secondary-orange ${isActive ? 'text-accent' : 'text-white'}`}
+                        aria-current={isActive ? 'page' : undefined}
                       >
                         {link.label}
                       </Link>
-                    </div>
-                  ))}
-                </nav>
-              </SimpleAnimation>
+                    </SimpleAnimation>
+                  );
+                })}
+              </nav>
 
               {/* Pages légales */}
-              <SimpleAnimation type="slide-up" delay={200} immediate={true}>
-                <nav aria-label="Pages légales" className="space-y-3 lg:text-right">
-                  {MENU_LEGAL_LINKS.map((link) => (
-                    <div key={link.href}>
-                      <Link
-                        to={link.href}
-                        onClick={onClose}
-                        className="inline-block text-body-sm text-stone transition-colors hover:text-orange"
-                      >
-                        {link.label}
-                      </Link>
-                    </div>
-                  ))}
-                </nav>
-              </SimpleAnimation>
+              <nav aria-label="Pages légales" className="space-y-3 lg:text-right">
+                {MENU_LEGAL_LINKS.map((link, i) => (
+                  <SimpleAnimation
+                    key={link.href}
+                    type="fade"
+                    delay={FOOTER_NAV_LINKS.length * 80 + 100 + i * 60}
+                    immediate={true}
+                  >
+                    <Link
+                      to={link.href}
+                      onClick={onClose}
+                      className="inline-block text-body-sm text-secondary-blue transition-colors duration-300 hover:text-secondary-orange"
+                    >
+                      {link.label}
+                    </Link>
+                  </SimpleAnimation>
+                ))}
+              </nav>
             </div>
 
-            {/* Colonne droite : Informations pratiques - alignée à gauche */}
-            <aside className="space-y-8 border-t border-charcoal/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
-              {/* Nom du magasin */}
-              <SimpleAnimation type="fade" delay={300} immediate={true}>
-                <div className="space-y-0">
-                  <p className="text-body font-bold uppercase leading-tight tracking-tight text-charcoal">
-                    <span className="font-thin">LA</span>LUNETTERIE
-                    <span className="font-thin">DU</span>COIN
-                  </p>
-                  <p className="text-body-xs font-medium text-stone">Neuf & Occasion</p>
-                </div>
+            {/* Colonne droite : Informations pratiques */}
+            <aside className="space-y-8 border-t border-white/10 pt-8 lg:border-l lg:border-t-0 lg:pl-12 lg:pt-0">
+              {/* Logo du magasin */}
+              <SimpleAnimation type="slide-right" delay={150} immediate={true}>
+                <Link
+                  to="/"
+                  onClick={onClose}
+                  className="inline-block transition-opacity duration-200 hover:opacity-80"
+                  aria-label="Retour à l'accueil - La Lunetterie Du Coin"
+                >
+                  <LogoNO className="h-24 w-auto fill-accent sm:h-28" aria-hidden="true" />
+                </Link>
               </SimpleAnimation>
 
               {/* Section Nous rendre visite */}
-              <SimpleAnimation type="fade" delay={350} immediate={true}>
+              <SimpleAnimation type="slide-right" delay={400} immediate={true}>
                 <div className="space-y-4">
-                  <h3 className="text-body-sm font-semibold uppercase tracking-wide text-stone">
-                    Nous rendre visite
-                  </h3>
+                  <h3 className="text-subtitle text-body-sm text-accent">Nous rendre visite</h3>
 
                   {/* Horaires */}
                   <div className="space-y-1">
-                    <p className="text-body-sm text-charcoal">{STORE_INFO.hours.weekdays}</p>
-                    <p className="text-body-sm text-charcoal">{STORE_INFO.hours.weekend}</p>
+                    <p className="text-body-sm text-white">{STORE_INFO.hours.weekdays}</p>
+                    <p className="text-body-sm text-white">{STORE_INFO.hours.weekend}</p>
                   </div>
 
                   {/* Téléphone */}
                   <a
                     href={`tel:${STORE_INFO.phone.tel}`}
-                    className="focus-style group flex items-center gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                    className="focus-style group/link flex items-center gap-2 text-body-sm text-white"
                   >
-                    <Phone className="h-4 w-4" aria-hidden="true" />
-                    <span className="font-medium">{STORE_INFO.phone.display}</span>
+                    <Phone className="h-4 w-4 text-secondary-green" aria-hidden="true" />
+                    <span className="relative font-medium">
+                      {STORE_INFO.phone.display}
+                      <span
+                        className="absolute -bottom-0.5 left-0 h-[1px] w-0 bg-secondary-orange transition-all duration-300 group-hover/link:w-full"
+                        aria-hidden="true"
+                      />
+                    </span>
                   </a>
 
                   {/* Adresse */}
@@ -147,31 +166,39 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     href={STORE_INFO.address.googleMapsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="focus-style group flex items-start gap-2 text-body-sm text-charcoal transition-colors hover:text-orange"
+                    className="focus-style group/link flex items-start gap-2 text-body-sm text-white"
                   >
-                    <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0" aria-hidden="true" />
-                    <span className="font-medium leading-relaxed">
+                    <MapPin
+                      className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-green"
+                      aria-hidden="true"
+                    />
+                    <span className="relative font-medium">
                       {STORE_INFO.address.street}
                       <br />
                       {STORE_INFO.address.postalCode} {STORE_INFO.address.city}
+                      <span
+                        className="absolute -bottom-0.5 left-0 h-[1px] w-0 bg-secondary-orange transition-all duration-300 group-hover/link:w-full"
+                        aria-hidden="true"
+                      />
                     </span>
                   </a>
 
                   {/* CTA Prendre RDV */}
-                  <a
+                  <LinkCTA
                     href={MENU_CTA.href}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={onClose}
-                    className="mt-4 inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body-sm font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                    theme="dark"
+                    className="mt-4 text-body-sm text-secondary-blue"
                   >
                     {MENU_CTA.label}
-                  </a>
+                  </LinkCTA>
                 </div>
               </SimpleAnimation>
 
               {/* Social Media */}
-              <SimpleAnimation type="fade" delay={450} immediate={true}>
+              <SimpleAnimation type="slide-up" delay={500} immediate={true}>
                 <div className="flex items-center gap-6">
                   {FOOTER_SOCIALS.map((social) => {
                     const Icon = getSocialIcon(social.iconName);
@@ -181,7 +208,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-charcoal transition-all duration-300 hover:scale-110 hover:bg-orange/10 hover:text-orange"
+                        className="focus-style group flex h-10 w-10 items-center justify-center rounded-full text-secondary-green transition-all duration-300 hover:scale-110 hover:bg-secondary-orange/15 hover:text-secondary-orange"
                         aria-label={social.label}
                       >
                         <Icon className="h-5 w-5" aria-hidden="true" />

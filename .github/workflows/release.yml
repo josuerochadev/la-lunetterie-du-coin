@@ -1,0 +1,33 @@
+# .github/workflows/release.yml
+name: 🏷️ Release
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    name: 🏷️ Release Please
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🏷️ Run Release Please
+        uses: googleapis/release-please-action@v4
+        with:
+          release-type: node
+          changelog-types: >
+            [
+              {"type":"feat","section":"Nouvelles fonctionnalités","hidden":false},
+              {"type":"fix","section":"Corrections","hidden":false},
+              {"type":"perf","section":"Performance","hidden":false},
+              {"type":"refactor","section":"Refactoring","hidden":false},
+              {"type":"style","section":"Style","hidden":false},
+              {"type":"docs","section":"Documentation","hidden":false},
+              {"type":"test","section":"Tests","hidden":false},
+              {"type":"ci","section":"CI/CD","hidden":false},
+              {"type":"chore","section":"Maintenance","hidden":true}
+            ]

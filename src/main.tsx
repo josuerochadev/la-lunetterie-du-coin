@@ -5,24 +5,20 @@ import './styles/globals.css';
 import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import { LazyMotion } from 'framer-motion';
-import { Analytics } from '@vercel/analytics/react';
 
 import App from './App';
+import { TIMING } from './config/design';
 
 import { MotionProvider } from '@/a11y/MotionProvider';
 import ScrollToTop from '@/components/routing/ScrollToTop';
 import { loadFeatures } from '@/lib/loadMotionFeatures';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
+import { ToastProvider } from '@/components/common/Toast';
 import { validateEnvironment, env } from '@/lib/env';
-import { initPerformanceMonitoring, logNavigationTiming } from '@/lib/performance';
 import { initPlausible } from '@/lib/analytics';
 
 // Validate environment variables
 validateEnvironment();
-
-// Initialize performance monitoring (dev only)
-initPerformanceMonitoring();
-logNavigationTiming();
 
 // Initialize analytics (production only)
 if (env.VITE_ANALYTICS_DOMAIN) {
@@ -41,8 +37,8 @@ const initSentry = async () => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
     const isSlowConnection =
       'connection' in navigator &&
-      // @ts-ignore - NetworkInformation not in standard types
-      navigator.connection?.effectiveType === 'slow-2g';
+      (navigator as Navigator & { connection?: { effectiveType?: string } }).connection
+        ?.effectiveType === 'slow-2g';
 
     if (isMobile || isSlowConnection) {
       // Sentry disabled for performance reasons (mobile/slow connection)
@@ -86,9 +82,9 @@ const initSentry = async () => {
 // Initialize Sentry after a delay to not block initial page load
 // Use requestIdleCallback for better back/forward cache compatibility
 if ('requestIdleCallback' in window) {
-  requestIdleCallback(() => setTimeout(initSentry, 1000));
+  requestIdleCallback(() => setTimeout(initSentry, TIMING.sentryInit));
 } else {
-  setTimeout(initSentry, 2000);
+  setTimeout(initSentry, TIMING.sentryInitFallback);
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
@@ -99,9 +95,10 @@ root.render(
         <HelmetProvider>
           <MotionProvider>
             <LazyMotion features={loadFeatures} strict>
-              <ScrollToTop />
-              <App />
-              <Analytics />
+              <ToastProvider>
+                <ScrollToTop />
+                <App />
+              </ToastProvider>
             </LazyMotion>
           </MotionProvider>
         </HelmetProvider>

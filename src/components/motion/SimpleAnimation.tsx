@@ -38,14 +38,16 @@ export function SimpleAnimation({
       return;
     }
 
+    let timerId: ReturnType<typeof setTimeout> | undefined;
+
     if (immediate) {
       // For immediate animations, apply delay directly
       if (delay > 0) {
-        setTimeout(() => setIsVisible(true), delay);
+        timerId = setTimeout(() => setIsVisible(true), delay);
       } else {
         setIsVisible(true);
       }
-      return;
+      return () => clearTimeout(timerId);
     }
 
     // For non-immediate animations, use intersection observer
@@ -56,7 +58,7 @@ export function SimpleAnimation({
       ([entry]) => {
         if (entry.isIntersecting) {
           if (delay > 0) {
-            setTimeout(() => setIsVisible(true), delay);
+            timerId = setTimeout(() => setIsVisible(true), delay);
           } else {
             setIsVisible(true);
           }
@@ -67,7 +69,10 @@ export function SimpleAnimation({
     );
 
     observer.observe(element);
-    return () => observer.unobserve(element);
+    return () => {
+      clearTimeout(timerId);
+      observer.unobserve(element);
+    };
   }, [delay, immediate, prefersReducedMotion, threshold]);
 
   const animationClass =

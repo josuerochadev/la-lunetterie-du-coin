@@ -1,22 +1,11 @@
 import Layout from '@/components/common/Layout';
+import StickySection from '@/components/common/StickySection';
 import OffersHero from '@/sections/offers/OffersHero';
 import OffersContent from '@/sections/offers/OffersContent';
 import OffersCTA from '@/sections/offers/OffersCTA';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 
-/**
- * Page Offres détaillée
- *
- * Page complète présentant nos deux offres principales :
- * - Programme de recyclage (jusqu'à 70€ de réduction)
- * - Deuxième paire (à partir de 59€)
- *
- * Style minimaliste cohérent avec ServicesPage
- *
- * @component
- * @returns {JSX.Element} Page Offres complète
- */
 export default function OffersPage() {
   useNativeScroll();
 
@@ -24,13 +13,24 @@ export default function OffersPage() {
     <>
       <Seo
         title="Nos Offres - La Lunetterie du Coin"
-        description="Découvrez nos offres exclusives : jusqu'à 70€ de réduction avec le recyclage, deuxième paire à partir de 59€. Économisez en faisant un geste pour la planète."
+        description="Jusqu'à 70€ de remise en ramenant vos anciennes paires. Deuxième paire dès 59€. Bien vu pour vos yeux, bien vu pour votre portefeuille."
         canonicalPath="/offres"
       />
       <Layout>
-        <OffersHero />
-        <OffersContent />
-        <OffersCTA />
+        {/* Hero — fond noir, titre accent */}
+        <StickySection zIndex={11} enableSticky>
+          <OffersHero />
+        </StickySection>
+
+        {/* Offres — carrousel sticky 3D */}
+        <StickySection zIndex={12}>
+          <OffersContent />
+        </StickySection>
+
+        {/* CTA — gère son propre sticky + 200vh en interne */}
+        <StickySection zIndex={13}>
+          <OffersCTA />
+        </StickySection>
       </Layout>
     </>
   );

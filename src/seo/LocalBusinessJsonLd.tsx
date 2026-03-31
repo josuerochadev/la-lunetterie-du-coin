@@ -2,6 +2,7 @@
 import { Helmet } from '@dr.pogodin/react-helmet';
 
 import { SITE_URL, DEFAULT_OG_IMAGE, BRAND } from '@/config/seo';
+import { COMPANY_EMAIL } from '@/config/legal';
 
 // Données fournies
 export const COMPANY_NAME = 'La Lunetterie Du Coin Neuf & Occasion';
@@ -22,11 +23,12 @@ export function LocalBusinessJsonLd() {
 
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Optician',
+    '@type': ['Optician', 'LocalBusiness'],
     name: COMPANY_NAME,
     url: SITE_URL,
     image: DEFAULT_OG_IMAGE,
     telephone: TELEPHONE || undefined,
+    email: COMPANY_EMAIL,
     address: {
       '@type': 'PostalAddress',
       streetAddress,

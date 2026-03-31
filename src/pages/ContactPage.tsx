@@ -1,29 +1,13 @@
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import Layout from '@/components/common/Layout';
-import SectionContainer from '@/components/common/SectionContainer';
-import ContactForm from '@/components/contact/ContactForm';
+import StickySection from '@/components/common/StickySection';
 import ContactHero from '@/sections/contact/ContactHero';
 import ContactInfo from '@/sections/contact/ContactInfo';
-import ContactAppointment from '@/sections/contact/ContactAppointment';
+import ContactFormSection from '@/sections/contact/ContactFormSection';
 import ContactLocation from '@/sections/contact/ContactLocation';
+import ContactAppointment from '@/sections/contact/ContactAppointment';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
 
-/**
- * Page Contact complète
- *
- * Sections :
- * - Hero avec titre et intro
- * - Formulaire de contact
- * - Informations pratiques (adresse, téléphone, email, horaires)
- * - Prise de rendez-vous Calendly
- * - Plan d'accès Google Maps + Comment nous rejoindre
- *
- * Style éditorial minimal cohérent avec le redesign
- *
- * @component
- * @returns {JSX.Element} Page Contact complète
- */
 export default function ContactPage() {
   useNativeScroll();
 
@@ -31,38 +15,34 @@ export default function ContactPage() {
     <>
       <Seo
         title="Nous contacter - La Lunetterie du Coin"
-        description="Contactez La Lunetterie du Coin à Strasbourg. Formulaire de contact, informations pratiques, prise de rendez-vous et plan d'accès."
+        description="Passez nous voir au 24 rue du Faubourg de Pierre à Strasbourg. Prise de rendez-vous, horaires et plan d'accès."
         canonicalPath="/contact"
       />
       <Layout>
-        {/* Hero */}
-        <ContactHero />
+        {/* Hero — sticky, Info monte par-dessus */}
+        <StickySection zIndex={11} enableSticky>
+          <ContactHero />
+        </StickySection>
 
-        {/* Formulaire de contact */}
-        <SectionContainer className="bg-background py-section" aria-labelledby="formulaire">
-          <div className="mx-auto max-w-container px-container-x">
-            <div className="mx-auto max-w-3xl">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h2 id="formulaire" className="heading-section mb-8 text-center">
-                  Envoyez-nous un message
-                </h2>
-              </SimpleAnimation>
+        {/* Infos — scroll normal, gradient dissolve vers le formulaire */}
+        <StickySection zIndex={12}>
+          <ContactInfo />
+        </StickySection>
 
-              <SimpleAnimation type="fade" delay={100}>
-                <ContactForm />
-              </SimpleAnimation>
-            </div>
-          </div>
-        </SectionContainer>
+        {/* Formulaire — scroll normal, contenu dépasse le viewport */}
+        <StickySection zIndex={13}>
+          <ContactFormSection />
+        </StickySection>
 
-        {/* Informations pratiques */}
-        <ContactInfo />
+        {/* Localisation — photo plein écran, scroll normal pour voir tout le contenu */}
+        <StickySection zIndex={14}>
+          <ContactLocation />
+        </StickySection>
 
-        {/* Prise de rendez-vous Calendly */}
-        <ContactAppointment />
-
-        {/* Plan d'accès + Comment nous rejoindre */}
-        <ContactLocation />
+        {/* Prise de rendez-vous — gère son propre sticky + 200vh en interne */}
+        <StickySection zIndex={15}>
+          <ContactAppointment />
+        </StickySection>
       </Layout>
     </>
   );
