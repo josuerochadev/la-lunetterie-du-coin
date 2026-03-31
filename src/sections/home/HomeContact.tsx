@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -11,13 +11,11 @@ import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 // ── Desktop ─────────────────────────────────────────────────────────────────
 //
 //  300vh container. VOIR IS the transition between sections.
-//  Starts black (seamless with Testimonials), yellow reveals instantly,
-//  VOIR zooms fast (Story rhythm). Footer (z-20) covers Contact (z-16)
-//  while it stays sticky.
+//  Yellow bg throughout. VOIR zooms fast (Story rhythm).
+//  Footer (z-20) covers Contact (z-16) while it stays sticky.
 //
 //  scroll distance = 200vh
 //
-//  0.00 – 0.02  Yellow bg instant reveal
 //  0.00 – 0.20  "VOIR" zooms scale 12 → 1 (fast, Story rhythm)
 //  0.14 – 0.22  "PASSEZ" slides up
 //  0.19 – 0.27  "NOUS" slides up
@@ -32,9 +30,6 @@ function ContactDesktop() {
     offset: ['start start', 'end end'],
   });
 
-  // ── Yellow bg — instant reveal ─────────────────────────────────────────
-  const yellowBg = useTransform(scrollYProgress, [0.0, 0.02], [0, 1]);
-
   // ── Motif — scale grows through the hold phase ──────────────────────
   const motifScale = useTransform(scrollYProgress, [0.2, 1], [1, 1.4]);
 
@@ -48,27 +43,9 @@ function ContactDesktop() {
   // ── CTA ──────────────────────────────────────────────────────────────────
   const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
 
-  // Navbar theme strip — starts "light" (black bg) then removes when yellow reveals
-  const contactStripRef = useRef<HTMLDivElement>(null);
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
-    if (!contactStripRef.current) return;
-    if (v < 0.03) {
-      contactStripRef.current.setAttribute('data-navbar-theme', 'light');
-    } else {
-      contactStripRef.current.removeAttribute('data-navbar-theme');
-    }
-  });
-
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
-      <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        {/* Yellow bg — instant reveal behind VOIR */}
-        <m.div
-          className="absolute inset-0 bg-accent"
-          style={{ opacity: yellowBg }}
-          aria-hidden="true"
-        />
-
+      <div className="sticky top-0 h-screen overflow-hidden bg-accent">
         {/* Circle motif — scale grows through hold phase */}
         <m.img
           src="/images/motif-cercle.png"
@@ -99,13 +76,6 @@ function ContactDesktop() {
             </LinkCTA>
           </m.div>
         </div>
-        {/* Navbar theme override — light on initial black bg, removed when yellow reveals */}
-        <div
-          ref={contactStripRef}
-          className="pointer-events-none absolute inset-x-0 top-0 z-40 h-20"
-          data-navbar-theme-dynamic=""
-          data-navbar-theme="light"
-        />
       </div>
     </div>
   );
