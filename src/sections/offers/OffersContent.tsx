@@ -1,5 +1,5 @@
-import { useRef, type ReactNode } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -10,6 +10,7 @@ import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 const OFFER_COUNT = OFFERS_DATA.length;
 
 // Per-offer scroll windows (normalised 0–1)
@@ -302,14 +303,10 @@ function BackgroundPhotos({ scrollYProgress }: { scrollYProgress: MotionValue<nu
 // ---------------------------------------------------------------------------
 
 function OffersDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden lg:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
