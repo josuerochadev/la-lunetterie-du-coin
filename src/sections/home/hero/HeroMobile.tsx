@@ -18,7 +18,7 @@ export function InfoAccent({
         {keyword}
       </span>
       <div className={`h-[3px] w-8 ${barColor}`} />
-      <span className="text-body-sm text-black/70">{detail}</span>
+      <span className="text-body-sm text-black">{detail}</span>
     </div>
   );
 }
@@ -118,7 +118,7 @@ function HeroMobileAccents({
   const accent2Opacity = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [0, 1]);
 
   return (
-    <div className="mx-auto flex flex-1 flex-col items-start justify-center gap-4 lg:hidden">
+    <div className="mx-auto mt-6 flex flex-col items-start gap-4 px-4 lg:hidden">
       <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
         <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
       </m.div>
@@ -136,7 +136,7 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
 
   return (
     <>
-      <div className="absolute inset-x-0 bottom-[calc(11vw+0.75rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
+      <div className="absolute inset-x-0 bottom-[calc(24vw+1rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
         </h1>
