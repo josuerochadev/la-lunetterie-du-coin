@@ -49,12 +49,11 @@ test.describe('Services Page - La Lunetterie du Coin', () => {
     const contactLinks = page.locator('a[href="/contact"]');
 
     // Vérifier que les liens existent dans la page
-    expect(await offersLinks.count()).toBeGreaterThan(0);
-    expect(await contactLinks.count()).toBeGreaterThan(0);
+    await expect(offersLinks.first()).toBeAttached();
+    await expect(contactLinks.first()).toBeAttached();
 
-    // Scroll vers le premier lien contact et vérifier sa visibilité
-    await contactLinks.first().scrollIntoViewIfNeeded();
-    await expect(contactLinks.first()).toBeVisible();
+    // Vérifier la visibilité d'un lien contact (avec attente)
+    await expect(contactLinks.first()).toBeVisible({ timeout: 10000 });
   });
 
   test('should have proper heading structure', async ({ page }) => {

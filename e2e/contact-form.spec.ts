@@ -7,8 +7,11 @@ test.describe('Contact Form - E2E Tests', () => {
     await page.goto('/contact');
     await page.waitForLoadState('networkidle');
 
-    // Scroll vers le formulaire
-    const form = page.locator('#formulaire').or(page.locator('form').first());
+    // Scroll vers le formulaire (scope à #formulaire pour éviter strict mode)
+    const formulaireSection = page.locator('#formulaire');
+    const form = (await formulaireSection.count())
+      ? formulaireSection.locator('form').first()
+      : page.locator('form').first();
     await form.scrollIntoViewIfNeeded();
   });
 

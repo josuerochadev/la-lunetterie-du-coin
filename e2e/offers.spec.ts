@@ -32,6 +32,7 @@ test.describe('Offers Page - La Lunetterie du Coin', () => {
   test('should display CTA section', async ({ page }) => {
     // Le CTA heading est "C'EST TOUT VU"
     const ctaHeading = page.getByText(/tout vu|c'est tout/i).first();
+    await expect(ctaHeading).toHaveCount(1, { timeout: 10000 });
     await ctaHeading.scrollIntoViewIfNeeded();
     await expect(ctaHeading).toBeVisible();
   });
