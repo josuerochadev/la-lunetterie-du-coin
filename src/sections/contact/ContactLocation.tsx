@@ -99,7 +99,7 @@ function LocationDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <LocationItem icon={Car} title="En voiture">
-              <div className="space-y-2 text-body text-white">
+              <div className="space-y-2 text-body text-secondary-blue">
                 <p>
                   <span className="font-medium text-white">Parking payant</span> : Parking Halles et
                   Opéra Broglie (environ 10 min à pied)
@@ -108,7 +108,7 @@ function LocationDesktop() {
             </LocationItem>
 
             <LocationItem icon={Train} title="En transports">
-              <div className="space-y-2 text-body text-white">
+              <div className="space-y-2 text-body text-secondary-blue">
                 <p>
                   <span className="font-medium text-white">Tram B, C, F</span> : arrêt Broglie (7
                   min à pied)
@@ -194,7 +194,7 @@ export default function ContactLocation() {
               <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
                 <SimpleAnimation type="slide-up" delay={100}>
                   <LocationItem icon={Car} title="En voiture">
-                    <div className="space-y-2 text-body text-white">
+                    <div className="space-y-2 text-body text-secondary-blue">
                       <p>
                         <span className="font-medium text-white">Parking payant</span> : Parking
                         Halles et Opéra Broglie (environ 10 min à pied)
@@ -205,7 +205,7 @@ export default function ContactLocation() {
 
                 <SimpleAnimation type="slide-up" delay={150}>
                   <LocationItem icon={Train} title="En transports">
-                    <div className="space-y-2 text-body text-white">
+                    <div className="space-y-2 text-body text-secondary-blue">
                       <p>
                         <span className="font-medium text-white">Tram B, C, F</span> : arrêt Broglie
                         (7 min à pied)

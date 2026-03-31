@@ -33,7 +33,7 @@ export function MobileServiceList() {
                 >
                   {service.title}
                 </h3>
-                <p className="mb-6 text-body-lg leading-relaxed text-white">
+                <p className="mb-6 text-body-lg leading-relaxed text-secondary-blue">
                   {service.description}
                 </p>
 

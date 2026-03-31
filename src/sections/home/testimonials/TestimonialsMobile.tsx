@@ -58,7 +58,7 @@ export function TestimonialsMobile() {
             <footer>
               <cite className="not-italic">
                 <div className="mb-1 text-body-lg font-medium text-white">{FEATURED.name}</div>
-                <div className="flex items-center gap-2 text-body-sm text-white">
+                <div className="flex items-center gap-2 text-body-sm text-secondary-blue">
                   <span>{FEATURED.role}</span>
                   {FEATURED.date && (
                     <>
@@ -87,7 +87,7 @@ export function TestimonialsMobile() {
               <footer>
                 <cite className="not-italic">
                   <div className="mb-1 text-body-sm font-medium text-white">{testimonial.name}</div>
-                  <div className="flex items-center gap-2 text-body-xs text-white">
+                  <div className="flex items-center gap-2 text-body-xs text-secondary-blue">
                     <span>{testimonial.role}</span>
                     {testimonial.date && (
                       <>

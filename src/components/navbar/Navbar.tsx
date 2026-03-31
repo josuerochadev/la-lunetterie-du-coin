@@ -255,7 +255,7 @@ const Navbar: React.FC = () => {
           >
             Prendre RDV
             <ExternalLink
-              className="h-3 w-3 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-0.5"
+              className="h-3 w-3 text-secondary-orange transition-transform duration-300 group-hover/nav:translate-x-0.5"
               aria-hidden="true"
             />
             {/* Invisible bold duplicate to reserve width */}

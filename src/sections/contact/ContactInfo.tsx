@@ -64,7 +64,9 @@ function InfoDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <InfoItem icon={MapPin} title="Adresse">
-              <address className="mb-3 text-body not-italic text-white">{COMPANY_ADDRESS}</address>
+              <address className="mb-3 text-body not-italic text-secondary-blue">
+                {COMPANY_ADDRESS}
+              </address>
               <LinkCTA
                 href={STORE_INFO.address.googleMapsSearchUrl}
                 target="_blank"
@@ -101,7 +103,7 @@ function InfoDesktop() {
                 {OPENING_HOURS.map((schedule) => (
                   <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
                     <dt className="font-medium text-white">{schedule.day}</dt>
-                    <dd className="text-white">{schedule.hours}</dd>
+                    <dd className="text-secondary-blue">{schedule.hours}</dd>
                   </div>
                 ))}
               </dl>
@@ -155,7 +157,7 @@ export default function ContactInfo() {
             <div className="grid gap-10 md:grid-cols-2">
               <SimpleAnimation type="slide-up" delay={0}>
                 <InfoItem icon={MapPin} title="Adresse">
-                  <address className="mb-3 text-body not-italic text-white">
+                  <address className="mb-3 text-body not-italic text-secondary-blue">
                     {COMPANY_ADDRESS}
                   </address>
                   <a
@@ -199,7 +201,7 @@ export default function ContactInfo() {
                     {OPENING_HOURS.map((schedule) => (
                       <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
                         <dt className="font-medium text-white">{schedule.day}</dt>
-                        <dd className="text-white">{schedule.hours}</dd>
+                        <dd className="text-secondary-blue">{schedule.hours}</dd>
                       </div>
                     ))}
                   </dl>

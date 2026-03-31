@@ -108,7 +108,7 @@ export function StoryDesktopAnimated() {
               scrollYProgress={scrollYProgress}
               revealStart={0.17}
               revealEnd={0.32}
-              className="text-body-xl text-white"
+              className="text-body-xl text-secondary-blue"
             >
               {STORY_BODY}
             </ScrollWordReveal>

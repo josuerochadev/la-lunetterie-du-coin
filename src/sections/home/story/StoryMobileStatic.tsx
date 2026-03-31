@@ -10,7 +10,7 @@ export function StoryMobileStatic() {
         <h2 id="story-title" className="text-heading text-fluid-story text-white">
           {STORY_TITLE}
         </h2>
-        <p className="mt-8 text-body-xl text-white">{STORY_BODY}</p>
+        <p className="mt-8 text-body-xl text-secondary-blue">{STORY_BODY}</p>
         <LinkCTA to="/a-propos" theme="dark" className="mt-10 text-body-sm">
           Nous découvrir
         </LinkCTA>

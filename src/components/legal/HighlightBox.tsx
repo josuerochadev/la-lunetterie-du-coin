@@ -20,7 +20,7 @@ export default function HighlightBox({
       className={cn(
         'border-l-4 p-6 sm:p-8',
         variant === 'accent'
-          ? 'border-secondary-green/30 bg-secondary-green/5'
+          ? 'border-secondary-blue/30 bg-secondary-blue/5'
           : 'border-black/10 bg-black/[0.02]',
         className,
       )}

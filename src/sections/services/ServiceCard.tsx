@@ -130,7 +130,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={2}
       >
-        <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-white">
+        <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-secondary-blue">
           {service.description}
         </p>
       </StaggerChild>
