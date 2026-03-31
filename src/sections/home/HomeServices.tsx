@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SERVICE_COUNT } from './services/constants';
 import { GrainOverlay } from './services/GrainOverlay';
@@ -14,6 +14,7 @@ import { StaticServiceList } from './services/StaticServiceList';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { ACCENT_HEX } from '@/config/design';
 import LinkCTA from '@/components/common/LinkCTA';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
@@ -33,6 +34,9 @@ function HomeServices() {
     target: shouldAnimate ? sectionRef : undefined,
     offset: ['start start', 'end end'],
   });
+
+  // Sticky viewport bg: white during carousel, yellow for outro + exit
+  const stickyBg = useTransform(scrollYProgress, [0.86, 0.92], ['#ffffff', ACCENT_HEX]);
 
   return (
     <section
@@ -113,7 +117,10 @@ function HomeServices() {
       {isLg && (
         <div ref={sectionRef} className="relative">
           <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
-            <div className="sticky top-0 h-screen overflow-hidden bg-white">
+            <m.div
+              className="sticky top-0 h-screen overflow-hidden"
+              style={{ backgroundColor: stickyBg }}
+            >
               {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
 
               {shouldAnimate ? (
@@ -152,7 +159,7 @@ function HomeServices() {
                   <SectionOutro scrollYProgress={scrollYProgress} />
                 </>
               )}
-            </div>
+            </m.div>
           </div>
         </div>
       )}
