@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
+
 /** Typographic info accent — keyword in display font with colored underline */
 export function InfoAccent({
   color,
@@ -134,8 +136,42 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
   const revealStart = vh * 1.4;
 
+  // ── Photo circle reveal — "opening the eye" ──
+  const revealEnd = revealStart + HERO_WORDS.length * 60 + 400;
+  const circleRadius = useTransform(scrollY, [revealStart, revealEnd], [0, 85]);
+  const photoClip = useTransform(circleRadius, (r) => `circle(${r}% at 50% 60%)`);
+
+  // Ken Burns — slow zoom-out as circle opens (creates depth)
+  const photoScale = useTransform(scrollY, [revealStart, revealEnd + 300], [1.15, 1]);
+
+  // Yellow overlay fades to reveal photo underneath
+  const overlayOpacity = useTransform(scrollY, [revealStart, revealEnd], [0.85, 0.25]);
+
   return (
     <>
+      {/* Photo background with circle reveal */}
+      <m.div
+        className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path] lg:hidden"
+        style={{ clipPath: photoClip }}
+      >
+        <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
+          <ResponsiveImage
+            src="/images/hero-eyeglasses-left.jpg"
+            alt=""
+            className="h-full w-full object-cover"
+            loading="eager"
+            sizes="100vw"
+            widths={[640, 768, 1024]}
+          />
+        </m.div>
+        <m.div
+          className="absolute inset-0 bg-accent"
+          style={{ opacity: overlayOpacity }}
+          aria-hidden="true"
+        />
+      </m.div>
+
+      {/* Text content */}
       <div className="absolute inset-x-0 bottom-[calc(24vw+1rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
