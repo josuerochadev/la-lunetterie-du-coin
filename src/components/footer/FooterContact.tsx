@@ -1,4 +1,4 @@
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -71,8 +71,8 @@ export default function FooterContact() {
         className="group/cta focus-style text-subtitle relative mt-6 inline-flex items-center gap-2 text-body-sm text-accent transition-[font-weight] duration-300 hover:font-semibold"
       >
         Prendre RDV
-        <ArrowRight
-          className="h-4 w-4 flex-shrink-0 text-secondary-green transition-transform duration-300 group-hover/cta:translate-x-1"
+        <ExternalLink
+          className="h-3.5 w-3.5 flex-shrink-0 text-secondary-green transition-transform duration-300 group-hover/cta:translate-x-1"
           aria-hidden="true"
         />
         <span

@@ -3,6 +3,7 @@ import { useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
 import motifCercleUrl from '@/assets/patterns/motif-cercle-jaune.svg';
@@ -190,6 +191,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     rel="noopener noreferrer"
                     onClick={onClose}
                     theme="dark"
+                    icon={ExternalLink}
                     className="mt-4 text-body-sm text-secondary-blue"
                   >
                     {MENU_CTA.label}

@@ -1,3 +1,5 @@
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
+
 import { SERVICE_COUNT } from './constants';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
@@ -68,6 +70,7 @@ export function MobileServiceList() {
                     target="_blank"
                     rel="noopener noreferrer"
                     theme="dark"
+                    icon={ExternalLink}
                     aria-label="Prendre rendez-vous pour un examen de vue"
                   >
                     Prendre rendez-vous

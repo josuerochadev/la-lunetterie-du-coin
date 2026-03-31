@@ -1,4 +1,5 @@
 import { m, useTransform } from 'framer-motion';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -74,6 +75,7 @@ export default function ContactAppointment() {
                     target="_blank"
                     rel="noopener noreferrer"
                     theme="accent"
+                    icon={ExternalLink}
                   >
                     Prendre rendez-vous
                   </LinkCTA>
@@ -112,6 +114,7 @@ export default function ContactAppointment() {
                     target="_blank"
                     rel="noopener noreferrer"
                     theme="accent"
+                    icon={ExternalLink}
                   >
                     Prendre rendez-vous
                   </LinkCTA>

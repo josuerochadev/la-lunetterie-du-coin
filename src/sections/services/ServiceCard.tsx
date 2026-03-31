@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 
@@ -193,6 +194,7 @@ export function ServiceCard({
             target="_blank"
             rel="noopener noreferrer"
             theme="dark"
+            icon={ExternalLink}
             aria-label="Prendre rendez-vous pour un examen de vue"
           >
             Prendre rendez-vous

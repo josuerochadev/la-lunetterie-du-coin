@@ -1,9 +1,11 @@
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_SERVICES } from '@/data/homepage';
+import { BOOKING_URL } from '@/config/endpoints';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
@@ -53,9 +55,23 @@ export function ServiceText({
 
       <p className="mb-8 max-w-lg text-body-lg text-black">{service.description}</p>
 
-      <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
-        En savoir plus
-      </LinkCTA>
+      <div className="flex flex-col items-start gap-4">
+        <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
+          En savoir plus
+        </LinkCTA>
+        {service.title === 'Examens de vue' && (
+          <LinkCTA
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            theme="light"
+            icon={ExternalLink}
+            aria-label="Prendre rendez-vous pour un examen de vue"
+          >
+            Prendre RDV
+          </LinkCTA>
+        )}
+      </div>
     </m.div>
   );
 }

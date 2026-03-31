@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
+import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT } from './services/constants';
 import { GrainOverlay } from './services/GrainOverlay';
@@ -15,6 +16,7 @@ import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ACCENT_HEX } from '@/config/design';
+import { BOOKING_URL } from '@/config/endpoints';
 import LinkCTA from '@/components/common/LinkCTA';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
@@ -86,13 +88,27 @@ function HomeServices() {
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
                     <p className="text-body text-black">{service.description}</p>
-                    <LinkCTA
-                      to={service.link}
-                      theme="light"
-                      aria-label={`En savoir plus sur ${service.title}`}
-                    >
-                      En savoir plus
-                    </LinkCTA>
+                    <div className="flex flex-col items-start gap-3">
+                      <LinkCTA
+                        to={service.link}
+                        theme="light"
+                        aria-label={`En savoir plus sur ${service.title}`}
+                      >
+                        En savoir plus
+                      </LinkCTA>
+                      {service.title === 'Examens de vue' && (
+                        <LinkCTA
+                          href={BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          theme="light"
+                          icon={ExternalLink}
+                          aria-label="Prendre rendez-vous pour un examen de vue"
+                        >
+                          Prendre RDV
+                        </LinkCTA>
+                      )}
+                    </div>
                   </div>
                 </SimpleAnimation>
               </article>
