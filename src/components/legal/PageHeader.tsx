@@ -1,24 +1,43 @@
 // src/components/common/PageHeader.tsx
 import { Link } from 'react-router-dom';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import TextReveal from '@/components/motion/TextReveal';
 
-type Props = { title: string; backTo?: string };
+type Props = { title: string; backTo?: string; backLabel?: string };
 
-export default function PageHeader({ title, backTo = '/' }: Props) {
+export default function PageHeader({ title, backTo = '/', backLabel = 'Accueil' }: Props) {
   return (
     <header className="mb-title-gap text-center">
-      <SimpleAnimation type="slide-down">
-        <h1 className="heading-page mb-title-gap pt-lg">{title}</h1>
-      </SimpleAnimation>
+      <TextReveal as="h1" className="heading-page mb-title-gap pt-lg">
+        {title}
+      </TextReveal>
       <nav aria-label="Fil d'Ariane" className="mt-8">
-        <Link
-          to={backTo}
-          className="focus-style inline-flex items-center underline-offset-8 transition-all duration-300 hover:underline"
-          aria-label="Revenir à la page d'accueil"
-        >
-          ← Retour à l'accueil
-        </Link>
+        <ol className="inline-flex items-center gap-2 text-body-sm text-black/60">
+          <li>
+            <Link to="/" className="focus-style transition-colors duration-300 hover:text-black">
+              Accueil
+            </Link>
+          </li>
+          {backTo !== '/' && (
+            <>
+              <li aria-hidden="true">/</li>
+              <li>
+                <Link
+                  to={backTo}
+                  className="focus-style transition-colors duration-300 hover:text-black"
+                >
+                  {backLabel}
+                </Link>
+              </li>
+            </>
+          )}
+          <li aria-hidden="true">/</li>
+          <li>
+            <span className="font-medium text-black" aria-current="page">
+              {title}
+            </span>
+          </li>
+        </ol>
       </nav>
     </header>
   );

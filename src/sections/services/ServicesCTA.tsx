@@ -1,47 +1,123 @@
+import { useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
+
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import LinkCTA from '@/components/common/LinkCTA';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 
-/**
- * Section ServicesCTA - Call-to-Action final de la page Services
- *
- * Section finale invitant à découvrir les offres ou contacter la boutique.
- * Style cohérent avec les autres pages.
- *
- * @component
- * @returns {JSX.Element} Section CTA de la page Services
- */
 export default function ServicesCTA() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef,
+    offset: ['start end', 'end end'],
+  });
+
+  // Motif — scale grows throughout the full scroll range
+  const motifScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
+  const motifOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 0.2]);
+
+  // Title
+  const title = useScrollEntrance(scrollYProgress, 0.25, 0.4);
+
+  // Subtitle
+  const sub = useScrollEntrance(scrollYProgress, 0.3, 0.45, 25);
+
+  // CTAs
+  const cta = useScrollEntrance(scrollYProgress, 0.38, 0.5, 20);
+
   return (
-    <section className="relative w-full bg-background py-section">
-      <div className="mx-auto max-w-container px-container-x">
-        <div className="mx-auto max-w-4xl text-center">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <h2 className="heading-section mb-6">Prêt à trouver la paire parfaite ?</h2>
-          </SimpleAnimation>
+    <div ref={wrapperRef} className="relative bg-accent" style={{ minHeight: '200vh' }}>
+      <section
+        className="sticky top-0 flex min-h-screen w-full items-center bg-accent"
+        data-navbar-theme="dark"
+      >
+        {/* Circle motif — scale grows through full scroll */}
+        {prefersReducedMotion ? (
+          <img
+            src="/images/motif-cercle.png"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
+          />
+        ) : (
+          <m.img
+            src="/images/motif-cercle.png"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 h-full w-full object-cover mix-blend-multiply"
+            style={{ scale: motifScale, opacity: motifOpacity }}
+          />
+        )}
 
-          <SimpleAnimation type="slide-up" delay={100}>
-            <p className="mb-8 text-body-lg text-stone">
-              Découvrez nos offres ou venez nous rencontrer en boutique
-            </p>
-          </SimpleAnimation>
+        <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+          <div className="mx-auto max-w-4xl text-center">
+            {prefersReducedMotion ? (
+              <>
+                <SimpleAnimation type="slide-up" delay={0}>
+                  <h2 className="text-heading text-fluid-cta text-black">
+                    VOYEZ LA
+                    <br />
+                    DIFFÉRENCE
+                  </h2>
+                </SimpleAnimation>
 
-          <SimpleAnimation type="slide-up" delay={200}>
-            <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <a
-                href="/offres"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              >
-                Connaître nos offres
-              </a>
-              <a
-                href="/contact"
-                className="inline-flex items-center gap-2 border border-accent bg-accent px-6 py-3 text-body font-medium text-cream transition-all hover:bg-accent/90 focus-visible:bg-accent/90"
-              >
-                Nous contacter
-              </a>
-            </div>
-          </SimpleAnimation>
+                <SimpleAnimation type="slide-up" delay={100}>
+                  <p className="mt-8 text-body-lg text-black/60">
+                    Passez nous voir, le reste suivra.
+                  </p>
+                </SimpleAnimation>
+
+                <SimpleAnimation type="fade" delay={200}>
+                  <div className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row">
+                    <LinkCTA to="/offres" theme="accent">
+                      Voir nos offres
+                    </LinkCTA>
+                    <LinkCTA to="/contact" theme="accent">
+                      Nous contacter
+                    </LinkCTA>
+                  </div>
+                </SimpleAnimation>
+              </>
+            ) : (
+              <>
+                <m.div style={{ opacity: title.opacity, y: title.y }}>
+                  <ScrollWordReveal
+                    as="h2"
+                    scrollYProgress={scrollYProgress}
+                    revealStart={0.25}
+                    revealEnd={0.4}
+                    className="text-heading text-fluid-cta text-black"
+                  >
+                    VOYEZ LA DIFFÉRENCE
+                  </ScrollWordReveal>
+                </m.div>
+
+                <m.p
+                  className="mt-8 text-body-lg text-black/60"
+                  style={{ opacity: sub.opacity, y: sub.y }}
+                >
+                  Passez nous voir, le reste suivra.
+                </m.p>
+
+                <m.div
+                  className="mt-10 flex flex-col items-center justify-center gap-6 sm:flex-row"
+                  style={{ opacity: cta.opacity, y: cta.y }}
+                >
+                  <LinkCTA to="/offres" theme="accent">
+                    Voir nos offres
+                  </LinkCTA>
+                  <LinkCTA to="/contact" theme="accent">
+                    Nous contacter
+                  </LinkCTA>
+                </m.div>
+              </>
+            )}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }

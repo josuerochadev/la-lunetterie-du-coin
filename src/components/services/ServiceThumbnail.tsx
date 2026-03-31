@@ -1,4 +1,6 @@
 // src/components/services/ServiceThumbnail.tsx
+import type React from 'react';
+import { useRef, useEffect } from 'react';
 import clsx from 'clsx';
 
 import Picture from '../common/Picture';
@@ -9,7 +11,10 @@ interface ServiceThumbnailProps {
   title: string;
   isActive: boolean;
   index: number;
+  totalCount: number;
   onClick: () => void;
+  // eslint-disable-next-line no-unused-vars
+  onNavigate: (index: number) => void;
 }
 
 /**
@@ -29,10 +34,38 @@ export default function ServiceThumbnail({
   title,
   isActive,
   index,
+  totalCount,
   onClick,
+  onNavigate,
 }: ServiceThumbnailProps) {
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isActive && buttonRef.current && document.activeElement?.role === 'tab') {
+      buttonRef.current.focus();
+    }
+  }, [isActive]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    let nextIndex: number | null = null;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      nextIndex = (index + 1) % totalCount;
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      nextIndex = (index - 1 + totalCount) % totalCount;
+    } else if (e.key === 'Home') {
+      nextIndex = 0;
+    } else if (e.key === 'End') {
+      nextIndex = totalCount - 1;
+    }
+    if (nextIndex !== null) {
+      e.preventDefault();
+      onNavigate(nextIndex);
+    }
+  };
+
   return (
     <button
+      ref={buttonRef}
       type="button"
       role="tab"
       id={`tab-${index}`}
@@ -41,6 +74,7 @@ export default function ServiceThumbnail({
       aria-selected={isActive ? 'true' : 'false'}
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
+      onKeyDown={handleKeyDown}
       className={clsx(
         'focus-style cursor-pointer transition-all duration-300 hover:scale-105',
         isActive ? 'scale-110 opacity-100' : 'opacity-70 hover:opacity-90',

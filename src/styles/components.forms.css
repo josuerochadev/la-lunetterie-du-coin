@@ -1,45 +1,50 @@
 /* ====== FORMULAIRES ====== */
 @layer components {
-  /* Formulaire de contact - Style éditorial avec bordure fine */
+  /* Formulaire de contact — bordure complète fine, vert → orange au focus */
   .form-input {
     @apply w-full px-4 py-3 font-sans text-body tracking-normal transition-all duration-300;
 
     /* Fond transparent */
     background: transparent;
 
-    /* Bordure fine charcoal tout autour */
-    border: 1px solid rgb(var(--color-charcoal-rgb));
+    /* Bordure fine verte tout autour */
+    border: 1px solid rgb(var(--color-green-rgb));
+    border-radius: 0;
 
-    /* Texte charcoal */
-    color: rgb(var(--color-text-rgb));
+    /* Texte noir */
+    color: rgb(var(--color-black-rgb));
     font-weight: 400;
   }
 
   .form-input::placeholder {
-    color: rgb(var(--color-stone-rgb) / 0.6);
+    color: rgba(var(--color-black-rgb), 0.35);
     font-style: normal;
   }
 
   .form-input:focus {
     outline: none;
-    /* Bordure accent au focus */
-    border-color: rgb(var(--color-accent-rgb));
-    /* Pas de shadow ni de ring */
+    /* Bordure orange au focus */
+    border-color: rgb(var(--color-orange-rgb));
   }
 
   .form-input:focus::placeholder {
-    color: rgb(var(--color-stone-rgb) / 0.4);
+    color: rgba(var(--color-black-rgb), 0.2);
+  }
+
+  /* État valide */
+  .form-input--valid {
+    border-color: rgb(var(--color-green-rgb));
   }
 
   /* État d'erreur */
   .form-input--error {
     border-color: rgb(239 68 68); /* red-500 */
-    background: rgb(254 242 242); /* red-50 */
+    background: transparent;
   }
 
   .form-input--error:focus {
     border-color: rgb(239 68 68);
-    background: rgb(254 242 242);
+    background: transparent;
   }
 
   /* Labels - style éditorial */
@@ -49,7 +54,7 @@
 
   /* Messages d'aide et d'erreur */
   .form-hint {
-    @apply mt-2 text-body-sm text-stone;
+    @apply mt-2 text-body-sm text-black/50;
   }
 
   .form-error {
@@ -58,7 +63,7 @@
 
   /* Messages de statut */
   .form-message--success {
-    @apply font-medium text-accent;
+    @apply font-medium text-secondary-green;
   }
 
   .form-message--error {
@@ -66,6 +71,6 @@
   }
 
   .form-message--info {
-    @apply font-medium text-stone;
+    @apply font-medium text-black/50;
   }
 }

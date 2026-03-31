@@ -1,0 +1,30 @@
+# .github/workflows/uptime-monitor.yml
+name: 📡 Uptime Monitor
+
+on:
+  schedule:
+    # Every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  uptime-check:
+    name: 📡 Check Site Status
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: 🌐 Check production site
+        run: |
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 10 https://www.lalunetterieducoin.fr || echo "000")
+          RESPONSE_TIME=$(curl -s -o /dev/null -w "%{time_total}" --max-time 10 https://www.lalunetterieducoin.fr || echo "0")
+
+          echo "📡 Status: $HTTP_STATUS"
+          echo "⏱️ Response time: ${RESPONSE_TIME}s"
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "❌ Site is DOWN (HTTP $HTTP_STATUS)"
+            exit 1
+          fi
+
+          echo "✅ Site is UP"

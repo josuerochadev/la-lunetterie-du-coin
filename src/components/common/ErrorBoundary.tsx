@@ -79,7 +79,7 @@ export default class ErrorBoundary extends Component<Props, State> {
 
             <div className="space-y-3">
               <Button
-                variant="primary"
+                theme="accent"
                 onClick={this.handleReload}
                 className="w-full"
                 aria-label="Recharger la page"
@@ -88,7 +88,7 @@ export default class ErrorBoundary extends Component<Props, State> {
               </Button>
 
               <Button
-                variant="secondary"
+                theme="accent"
                 onClick={this.handleGoHome}
                 className="w-full"
                 aria-label="Retourner à l'accueil"

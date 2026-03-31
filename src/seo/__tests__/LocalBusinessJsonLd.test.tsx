@@ -59,7 +59,7 @@ describe('LocalBusinessJsonLd', () => {
 
       const parsedJson = JSON.parse(jsonContent);
       expect(parsedJson['@context']).toBe('https://schema.org');
-      expect(parsedJson['@type']).toBe('Optician');
+      expect(parsedJson['@type']).toEqual(['Optician', 'LocalBusiness']);
     });
   });
 
@@ -97,7 +97,7 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should have correct schema context and type', () => {
       expect(parsedJsonLd['@context']).toBe('https://schema.org');
-      expect(parsedJsonLd['@type']).toBe('Optician');
+      expect(parsedJsonLd['@type']).toEqual(['Optician', 'LocalBusiness']);
     });
 
     it('should include basic business information', () => {
@@ -256,7 +256,7 @@ describe('LocalBusinessJsonLd', () => {
       const jsonContent = scriptElement.props.children;
       const parsedJsonLd = JSON.parse(jsonContent);
 
-      expect(parsedJsonLd['@type']).toBe('Optician');
+      expect(parsedJsonLd['@type']).toEqual(['Optician', 'LocalBusiness']);
     });
 
     it('should include all required LocalBusiness properties', () => {

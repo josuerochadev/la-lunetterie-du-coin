@@ -32,7 +32,7 @@ const MenuButton = forwardRef<HTMLButtonElement, MenuButtonProps>(
         aria-label={isOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
         aria-expanded={isOpen}
         aria-controls="main-menu"
-        className="inline-flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-body-sm text-charcoal transition-colors hover:text-orange focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+        className="inline-flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-body-sm text-black transition-colors hover:text-accent focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
       >
         <div className="relative block h-4 w-5 flex-shrink-0">
           <span

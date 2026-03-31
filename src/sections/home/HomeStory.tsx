@@ -1,74 +1,45 @@
-import { forwardRef } from 'react';
+import { StoryDesktopAnimated } from './story/StoryDesktopAnimated';
+import { StoryDesktopStatic } from './story/StoryDesktopStatic';
+import { StoryMobileAnimated } from './story/StoryMobileAnimated';
+import { StoryMobileStatic } from './story/StoryMobileStatic';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 
 /**
- * Section HomeStory - Section "Notre Histoire" de la page d'accueil
+ * Section HomeStory — 3-column editorial with scroll-driven parallax
  *
- * Design éditorial Kinfolk :
- * - Image de fond pleine hauteur (60-70% de la section)
- * - Texte en bas sur fond cream (30-40%)
- * - Transition nette entre image et texte
- *
- * @component
- * @returns {JSX.Element} La section Notre Histoire avec image pleine et texte en bas
+ * Desktop: scroll-driven parallax with photo expanding fullscreen at end.
+ * Mobile: scroll-driven text-first layout with word reveal and decorative photo.
+ * Reduced motion: static layouts, no scroll hooks mounted.
  */
-const HomeStory = forwardRef<HTMLElement>(() => {
+function HomeStory() {
+  const variant = useResponsiveMotion();
+
   return (
     <section
       id="story"
-      className="relative w-full overflow-hidden bg-background"
+      className="relative -mt-[8vw] w-full bg-black pt-[36vw] [overflow-x:clip] lg:-mt-0 lg:pt-[35vh]"
       aria-labelledby="story-title"
+      data-navbar-theme="light"
     >
-      {/* Image pleine largeur à hauteur naturelle */}
-      <div className="relative min-h-screen w-full bg-background">
-        <SimpleAnimation type="fade" delay={0} immediate={true}>
-          <img
-            src="/images/our-story-eyeglasses.jpg"
-            alt="Lunettes élégantes sur un fond ensoleillé"
-            className="max-h-[120vh] min-h-screen w-full object-cover"
-            loading="lazy"
-          />
-        </SimpleAnimation>
+      {/* Convex eyelid dome — top half of ellipse only, flat bottom edge */}
+      <div
+        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[22.5vw] w-[140vw] -translate-x-1/2 bg-black"
+        aria-hidden="true"
+        data-navbar-theme="light"
+        style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+      />
 
-        {/* Rectangle de texte superposé en bas de l'image */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12 lg:px-12 lg:pb-16">
-          <SimpleAnimation type="slide-up" delay={200}>
-            <div className="w-full max-w-6xl space-y-4 bg-background px-container-x py-container-y sm:space-y-6">
-              <span className="text-body-sm font-medium uppercase tracking-wider text-stone">
-                Depuis 2016
-              </span>
-
-              <h2 id="story-title" className="heading-section">
-                Une lunetterie différente
-              </h2>
-
-              <p className="text-body-lg leading-relaxed text-text">
-                Romain a ouvert La Lunetterie du Coin avec une conviction : proposer des lunettes de
-                qualité tout en donnant une seconde vie aux montures.
-              </p>
-
-              <p className="text-body leading-relaxed text-stone">
-                Au cœur du Faubourg de Pierre à Strasbourg, notre boutique indépendante allie
-                expertise optique, style contemporain et engagement écologique. Chaque paire est
-                sélectionnée avec soin, qu'elle soit neuve ou d'occasion.
-              </p>
-
-              <a
-                href="/a-propos"
-                className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-                aria-label="Découvrir notre histoire"
-              >
-                Nous découvrir
-              </a>
-            </div>
-          </SimpleAnimation>
-        </div>
-      </div>
+      {variant === 'desktop-animated' && <StoryDesktopAnimated />}
+      {variant === 'mobile-animated' && <StoryMobileAnimated />}
+      {variant === 'static' && (
+        <>
+          <StoryDesktopStatic />
+          <StoryMobileStatic />
+        </>
+      )}
     </section>
   );
-});
-
-HomeStory.displayName = 'HomeStory';
+}
 
 export default HomeStory;

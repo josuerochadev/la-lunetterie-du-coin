@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 
 import SectionContainer from '../common/SectionContainer';
 
+import Logo from '@/components/common/Logo';
 import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS, FOOTER_LINKS } from '@/config/footer';
 import { STORE_INFO } from '@/config/store';
@@ -12,23 +13,18 @@ type FooterMenuProps = {
 
 /**
  * FooterMenu - Variante compacte du footer pour le menu mobile
- *
- * Utilise getSocialIcon pour gérer automatiquement les icônes manquantes avec un fallback.
  */
 export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
   return (
     <SectionContainer noSpacing>
-      <h2 className="mx-auto mb-3 text-center text-title-md font-extrabold">
-        <span className="font-thin">LA</span>
-        LUNETTERIE
-        <span className="font-thin">DU</span>
-        COIN
-      </h2>
+      <div className="mx-auto mb-3 flex justify-center">
+        <Logo variant="full" color="noir" size="sm" />
+      </div>
 
       <div className="mx-auto flex w-fit flex-col items-center space-y-xs">
         <address
           aria-label="Adresse et horaires de la boutique"
-          className="space-y-1 text-center text-body-sm not-italic leading-relaxed"
+          className="space-y-1 text-center text-body-sm not-italic"
         >
           <p>
             {STORE_INFO.address.street} {STORE_INFO.address.postalCode} {STORE_INFO.address.city}
@@ -36,7 +32,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
           <p>
             <a
               href={`tel:${STORE_INFO.phone.tel}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-orange"
+              className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
             >
               {STORE_INFO.phone.display}
             </a>
@@ -56,7 +52,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
                 <a
                   key={social.href}
                   href={social.href}
-                  className="focus-style text-primary transition-colors duration-300 hover:text-orange"
+                  className="focus-style text-secondary-green transition-colors duration-300 hover:text-secondary-orange"
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
@@ -72,7 +68,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
             {FOOTER_LINKS.map((link) => (
               <Link
                 key={link.href}
-                className="focus-style text-body-sm font-semibold text-primary transition-colors duration-300 hover:text-orange"
+                className="focus-style text-body-sm font-semibold text-black transition-colors duration-300 hover:text-accent"
                 to={link.href}
                 onClick={onLinkClick}
               >

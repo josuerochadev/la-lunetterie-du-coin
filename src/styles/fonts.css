@@ -1,10 +1,57 @@
-/* ========= Jost (Alternative moderne à Futura) ========= */
-/* Import depuis Google Fonts pour performance optimale */
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;700&display=swap');
+/* ========= Please Heavy (Titres) ========= */
+@font-face {
+  font-family: 'Please';
+  src: url('@/assets/fonts/Please-Heavy.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
 
-/* Note: Jost est une alternative open-source géométrique à Futura
- * - 9 poids disponibles + italiques
- * - Variable font pour performance
- * - Caractères géométriques similaires à Futura
- * - Points aigus et largeurs étroites typiques
- */
+/* ========= Satoshi (Corps de texte) ========= */
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-MediumItalic.woff2') format('woff2');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: url('@/assets/fonts/Satoshi-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}

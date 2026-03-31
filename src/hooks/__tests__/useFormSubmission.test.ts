@@ -3,9 +3,9 @@ import { renderHook, act } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
 import { useFormSubmission } from '../useFormSubmission';
-import type { FormErrors } from '../useFormSubmission';
 
 import { analyzeNetworkError, vibrateError } from '@/lib/networkErrors';
+import type { FormErrors } from '@/types/forms';
 import { fetchWithRetry } from '@/lib/retryLogic';
 import type { NetworkError } from '@/lib/networkErrors';
 

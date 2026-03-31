@@ -7,6 +7,11 @@ on:
   pull_request:
     branches: [dev, main]
 
+# Cancel in-progress runs for the same branch/PR
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 # Permissions nécessaires pour les actions
 permissions:
   contents: read
@@ -31,18 +36,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -54,7 +60,7 @@ jobs:
         
       - name: 📊 Upload lint results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: lint-results
           path: eslint-results.xml
@@ -68,18 +74,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -110,7 +117,7 @@ jobs:
           
       - name: 📊 Upload test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: unit-test-results
           path: |
@@ -127,26 +134,29 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
       - name: 🏗️ Build for production
         run: pnpm build
+        env:
+          VITE_SITE_LIVE: 'true'
         
       - name: 📦 Upload build artifacts
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: dist-files
           path: dist/
@@ -161,18 +171,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -199,19 +210,19 @@ jobs:
           echo "✅ Dependency security scan completed"
           
       - name: 🔒 Initialize CodeQL
-        uses: github/codeql-action/init@v4
+        uses: github/codeql-action/init@v3
         with:
           languages: typescript, javascript
           queries: security-extended,security-and-quality
           
       - name: 🔍 Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
+        uses: github/codeql-action/analyze@v3
         with:
           category: "/language:typescript"
           
       - name: 📊 Upload security scan results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: security-results
           path: |
@@ -228,18 +239,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -249,15 +261,15 @@ jobs:
           name: unit-test-results
           path: ./
         
-      - name: 🚪 Coverage Quality Gate (>= 10%)
+      - name: 🚪 Coverage Quality Gate (>= 30%)
         run: |
           COVERAGE=$(node test-coverage-script.cjs)
           echo "📊 Coverage: ${COVERAGE}%"
-          if [ $COVERAGE -lt 10 ]; then
-            echo "❌ Coverage ${COVERAGE}% est inférieur au seuil requis de 10%"
+          if [ $COVERAGE -lt 30 ]; then
+            echo "❌ Coverage ${COVERAGE}% est inférieur au seuil requis de 30%"
             exit 1
           else
-            echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 10%"
+            echo "✅ Coverage ${COVERAGE}% dépasse le seuil de 30%"
           fi
           
       - name: 🚪 Bundle Size Quality Gate (<= 10MB)
@@ -308,18 +320,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -350,7 +363,7 @@ jobs:
         
       - name: 📊 Upload Lighthouse reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: lighthouse-reports
           path: lighthouse-results/
@@ -450,18 +463,19 @@ jobs:
         
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -479,7 +493,7 @@ jobs:
         
       - name: 📊 Upload E2E test results
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: e2e-results-${{ matrix.browser }}
           path: |
@@ -497,18 +511,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -522,11 +537,11 @@ jobs:
         uses: browser-actions/setup-firefox@latest
         
       - name: ♿ Run accessibility tests
-        run: pnpm a11y
+        run: pnpm exec start-server-and-test preview http://localhost:4173 'pnpm run axe'
         
       - name: 📊 Upload accessibility reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: accessibility-results
           path: accessibility-results.json
@@ -542,18 +557,19 @@ jobs:
     
     steps:
       - name: 📥 Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
         
-      - name: 📦 Setup Node.js
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          
       - name: 📦 Setup PNPM
         uses: pnpm/action-setup@v4
         with:
           run_install: false
-          
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
       - name: 📋 Install dependencies
         run: pnpm install --frozen-lockfile
         
@@ -587,7 +603,7 @@ jobs:
           fi
           
       - name: 📊 Upload final quality report
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v4
         with:
           name: quality-report
           path: quality-report.md
@@ -608,27 +624,5 @@ jobs:
               body: report
             });
 
-  # 🚀 Déploiement des previews (si configuré)
-  deploy-preview:
-    name: 🚀 Deploy Preview
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [quality-report]
-    if: github.event_name == 'pull_request' && success()
-    
-    steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v6
-        
-      - name: 📥 Download build artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dist-files
-          path: dist/
-          
-      - name: 🚀 Deploy to Netlify Preview
-        # Configuration à adapter selon votre plateforme de déploiement
-        run: |
-          echo "🚀 Ready to deploy preview"
-          echo "📁 Build files available in dist/"
-          echo "🔗 Configure your deployment platform here"
+  # 🚀 Deployment is handled by Vercel (auto-deploys on push/PR)
+  # No CI deploy job needed — Vercel watches the repo directly

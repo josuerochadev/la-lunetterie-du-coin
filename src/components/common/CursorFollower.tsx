@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { m, useSpring, useMotionValue } from 'framer-motion';
 
-import LogoEye from '@/assets/logo/logo-eye.svg?react';
+import LogoEye from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 /**
@@ -71,7 +71,7 @@ export default function CursorFollower() {
       animate={{ opacity: 0.6 }}
       transition={{ duration: 0.3 }}
     >
-      <LogoEye className="h-full w-full text-charcoal" aria-hidden="true" />
+      <LogoEye className="h-full w-full text-black" aria-hidden="true" />
     </m.div>
   );
 }

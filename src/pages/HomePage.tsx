@@ -1,51 +1,68 @@
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
+import { Z_INDEX } from '@/config/design';
+import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
 import HomeServices from '@/sections/home/HomeServices';
-import HomeEngagement from '@/sections/home/HomeEngagement';
 import HomeOffers from '@/sections/home/HomeOffers';
 import HomeTestimonials from '@/sections/home/HomeTestimonials';
 import HomeContact from '@/sections/home/HomeContact';
 import CursorFollower from '@/components/common/CursorFollower';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { Seo } from '@/seo/Seo';
 import { LocalBusinessJsonLd } from '@/seo/LocalBusinessJsonLd';
 
 export default function HomePage() {
   useNativeScroll();
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   return (
     <>
       <Seo
         title="La Lunetterie du Coin - Opticien indépendant à Strasbourg"
-        description="Opticien indépendant depuis 2016. Lunettes neuves et d'occasion, lentilles de contact, examens de vue. Engagement écologique et recyclage."
+        description="Opticien indépendant à Strasbourg depuis 2016. Lunettes neuves et d'occasion, examens de vue, lentilles. Du style, du conseil, zéro gâchis."
         canonicalPath="/"
       />
       <LocalBusinessJsonLd />
       <CursorFollower />
+
+      {/* Splash intro — fixed overlay above everything */}
+      {!prefersReducedMotion && <HomeSplash />}
+
       <div className="relative z-base">
         <Layout>
-          {/* Hero avec effet parallax - reste sticky pendant que les autres scrollent par-dessus */}
-          <StickySection zIndex={11} enableSticky={true}>
-            <HomeHero />
-          </StickySection>
-          {/* Toutes les autres sections scrollent normalement avec z-index croissant */}
-          <StickySection zIndex={12}>
+          {/* Spacer — scroll distance for splash fade + hero clip reveal + hero parallax */}
+          {!prefersReducedMotion && (
+            <div className="pointer-events-none h-[200vh] lg:h-[380vh]" aria-hidden="true" />
+          )}
+
+          {/* Hero — fixed overlay on desktop (clipPath L→R), in-flow on mobile */}
+          <HomeHero />
+
+          {/* Hero → Story : gradient integrated into Story section */}
+          <StickySection zIndex={Z_INDEX.story}>
             <HomeStory />
           </StickySection>
-          <StickySection zIndex={13}>
-            <HomeServices />
-          </StickySection>
-          <StickySection zIndex={14}>
+
+          {/* Story → Offers */}
+          <StickySection zIndex={Z_INDEX.offers}>
             <HomeOffers />
           </StickySection>
-          <StickySection zIndex={15}>
-            <HomeEngagement />
+
+          {/* Offers → Services */}
+          <StickySection zIndex={Z_INDEX.services}>
+            <HomeServices />
           </StickySection>
-          <StickySection zIndex={16}>
+
+          {/* Services → Testimonials */}
+          <StickySection zIndex={Z_INDEX.testimonials}>
             <HomeTestimonials />
           </StickySection>
-          <StickySection zIndex={17}>
+
+          {/* Testimonials → Contact */}
+          <StickySection zIndex={Z_INDEX.contact}>
             <HomeContact />
           </StickySection>
         </Layout>

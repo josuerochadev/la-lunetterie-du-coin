@@ -27,7 +27,7 @@ export const OFFERS_DATA: OfferData[] = [
     image: '/images/offers-recyclage-sunglasses.jpg',
     catchphrase: "Vos anciennes lunettes valent de l'or",
     description:
-      "Rapportez vos anciennes lunettes et économisez jusqu'à 70€ sur votre nouvel achat. Un geste pour votre budget et pour la planète.",
+      "Ramenez vos anciennes paires, repartez avec jusqu'à 70€ de remise. Bon pour vous, bon pour la planète.",
     details: [
       "Jusqu'à 70€ de réduction immédiate sur votre équipement complet",
       'Toutes marques acceptées, peu importe leur état',
@@ -49,8 +49,7 @@ export const OFFERS_DATA: OfferData[] = [
     title: 'Deuxième paire',
     image: '/images/offers-second-sunglasses-clip.jpg',
     catchphrase: 'Deux paires, deux styles, un prix imbattable',
-    description:
-      'Obtenez une deuxième paire à partir de 59€ selon vos besoins. Lunettes de soleil, de lecture ou de secours : doublez votre style sans vous ruiner.',
+    description: 'Une deuxième paire à partir de 59€. Solaires, lecture, secours — à vous de voir.',
     details: [
       '59€ : monture + verres unifocaux standards',
       '89€ : verres progressifs pour votre deuxième paire',

@@ -9,39 +9,42 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   // Répertoire des tests E2E
   testDir: './e2e',
-  
+
   // Configuration globale des tests
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  
+
   // Reporter pour les résultats
   reporter: [
     ['html', { outputFolder: 'e2e-results' }],
     ['json', { outputFile: 'e2e-results/results.json' }],
-    process.env.CI ? ['github'] : ['list']
+    process.env.CI ? ['github'] : ['list'],
   ],
-  
+
   // Configuration globale des tests
   use: {
     // URL de base pour tous les tests
-    baseURL: 'http://localhost:5173',
-    
+    baseURL: process.env.CI ? 'http://localhost:4173' : 'http://localhost:5173',
+
     // Configuration des traces pour debug
     trace: process.env.CI ? 'retain-on-failure' : 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    
+
     // Configuration viewport et navigation
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
-    
+
+    // Désactiver les animations pour des tests E2E fiables
+    // SimpleAnimation passe immédiatement à visible quand reducedMotion est activé
+    reducedMotion: 'reduce',
+
     // Timeout des actions
     actionTimeout: 10000,
     navigationTimeout: 30000,
   },
-
 
   // Projets de test (différents navigateurs)
   projects: [
@@ -50,25 +53,25 @@ export default defineConfig({
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
-    
-    // Desktop Firefox  
+
+    // Desktop Firefox
     {
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
-    
+
     // Desktop Safari
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
-    
+
     // Mobile Chrome (tests visuels seulement sur Chromium)
     {
       name: 'mobile-chrome',
       use: { ...devices['Pixel 5'] },
     },
-    
+
     // Tablet (tests visuels seulement sur Chromium)
     {
       name: 'tablet',
@@ -78,18 +81,15 @@ export default defineConfig({
 
   // Serveur Web pour les tests (démarre automatiquement)
   webServer: {
-    command: 'npm run dev',
-    port: 5173,
+    command: process.env.CI ? 'pnpm preview' : 'pnpm dev',
+    port: process.env.CI ? 4173 : 5173,
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
   },
-  
+
   // Dossiers à ignorer
-  testIgnore: [
-    '**/node_modules/**',
-    '**/dist/**',
-  ],
-  
+  testIgnore: ['**/node_modules/**', '**/dist/**'],
+
   // Configuration des timeouts
   timeout: 30000,
   expect: {

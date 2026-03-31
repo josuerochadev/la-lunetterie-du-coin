@@ -1,0 +1,9 @@
+# CODEOWNERS - La Lunetterie du Coin
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for all files
+* @josuerochadev
+
+# CI/CD and infrastructure
+.github/ @josuerochadev
+netlify.toml @josuerochadev

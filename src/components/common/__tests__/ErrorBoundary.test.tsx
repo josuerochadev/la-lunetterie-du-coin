@@ -16,10 +16,10 @@ vi.mock('@sentry/react', () => ({
 
 // Mock Button component to simplify testing
 vi.mock('../Button', () => ({
-  default: ({ children, onClick, variant, className, 'aria-label': ariaLabel }: any) => (
+  default: ({ children, onClick, theme, className, 'aria-label': ariaLabel }: any) => (
     <button
       onClick={onClick}
-      data-variant={variant}
+      data-theme={theme}
       className={className}
       aria-label={ariaLabel}
       data-testid={`button-${ariaLabel ? ariaLabel.toLowerCase().replace(/\s+/g, '-') : 'button'}`}
@@ -215,8 +215,8 @@ describe('ErrorBoundary', () => {
 
       expect(reloadButton).toBeInTheDocument();
       expect(homeButton).toBeInTheDocument();
-      expect(reloadButton).toHaveAttribute('data-variant', 'primary');
-      expect(homeButton).toHaveAttribute('data-variant', 'secondary');
+      expect(reloadButton).toHaveAttribute('data-theme', 'accent');
+      expect(homeButton).toHaveAttribute('data-theme', 'accent');
     });
 
     it('should display contact information', () => {

@@ -1,107 +1,251 @@
+import { type ReactNode, useRef } from 'react';
+import { m, useScroll, useTransform } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Car from 'lucide-react/dist/esm/icons/car';
 import Train from 'lucide-react/dist/esm/icons/train';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import SectionContainer from '@/components/common/SectionContainer';
+import LinkCTA from '@/components/common/LinkCTA';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useIsLg } from '@/hooks/useIsLg';
+import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 
-/**
- * ContactLocation - Plan d'accès et comment rejoindre la boutique
- */
-export default function ContactLocation() {
+// ---------------------------------------------------------------------------
+// Location item — icon + text, no card wrapper (same pattern as ContactInfo)
+// ---------------------------------------------------------------------------
+
+function LocationItem({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: typeof Car;
+  title: string;
+  children: ReactNode;
+}) {
   return (
-    <SectionContainer className="bg-background py-section" aria-labelledby="comment-rejoindre">
-      <div className="mx-auto max-w-container px-container-x">
-        <SimpleAnimation type="slide-up" delay={0}>
-          <h2 id="comment-rejoindre" className="heading-section mb-12 text-center">
-            Comment nous rejoindre
-          </h2>
-        </SimpleAnimation>
+    <div className="flex gap-5">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
+        <Icon className="h-5 w-5 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+      </div>
+      <div>
+        <h3 className="text-subtitle mb-2 text-title-sm text-white">{title}</h3>
+        {children}
+      </div>
+    </div>
+  );
+}
 
-        <div className="mx-auto max-w-6xl">
-          {/* Layout 50/50 : Photo gauche - Informations droite */}
-          <SimpleAnimation type="fade" delay={100}>
-            <div className="grid items-start gap-12 lg:grid-cols-2 lg:gap-16">
-              {/* Photo de la boutique */}
-              <div className="relative w-full">
-                <div className="relative aspect-[2/3] w-full overflow-hidden">
-                  <img
-                    src="/images/contact-informations-boutique-outside.jpg"
-                    alt="Façade de La Lunetterie du Coin"
-                    className="h-full w-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
+// ---------------------------------------------------------------------------
+// Desktop — scroll-driven parallax image + staggered content
+// ---------------------------------------------------------------------------
+
+function LocationDesktop() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Parallax image — slow vertical drift
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.02]);
+
+  // Content entrance — triggered when section scrolls in
+  const contentScroll = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end end'],
+  });
+
+  const title = useScrollEntrance(contentScroll.scrollYProgress, 0.15, 0.3);
+  const content = useScrollEntrance(contentScroll.scrollYProgress, 0.25, 0.45);
+  const footer = useScrollEntrance(contentScroll.scrollYProgress, 0.3, 0.48, 30);
+
+  return (
+    <div ref={sectionRef} className="relative hidden min-h-screen w-full lg:block">
+      {/* Parallax background image */}
+      <div className="absolute inset-0 overflow-hidden">
+        <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
+          <ResponsiveImage
+            src="/images/contact-informations-boutique-outside.jpg"
+            alt="Façade de La Lunetterie du Coin"
+            className="h-full w-full object-cover"
+            loading="lazy"
+            widths={[640, 1024, 1280, 1920]}
+            sizes="100vw"
+          />
+        </m.div>
+        {/* Dark overlay for readability */}
+        <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
+      </div>
+
+      <div className="relative z-10 flex min-h-screen items-center">
+        <div className="mx-auto max-w-container px-container-x py-section">
+          <m.div style={{ opacity: title.opacity, y: title.y }}>
+            <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
+          </m.div>
+
+          <m.div
+            className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2"
+            style={{ opacity: content.opacity, y: content.y }}
+          >
+            <LocationItem icon={Car} title="En voiture">
+              <div className="space-y-2 text-body text-white/50">
+                <p>
+                  <span className="font-medium text-white/70">Parking payant</span> : Parking Halles
+                  et Opéra Broglie (environ 10 min à pied)
+                </p>
+              </div>
+            </LocationItem>
+
+            <LocationItem icon={Train} title="En transports">
+              <div className="space-y-2 text-body text-white/50">
+                <p>
+                  <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt Broglie (7
+                  min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Tram A, D</span> : arrêt Ancienne
+                  Synagogue / Les Halles (7 min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg de
+                  Pierre (2 min à pied)
+                </p>
+                <p>
+                  <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal (5 min
+                  à pied)
+                </p>
+                <p className="pt-2 text-white/60">
+                  À 15 minutes à pied de la gare centrale de Strasbourg
+                </p>
+              </div>
+            </LocationItem>
+          </m.div>
+
+          {/* Accessibility + Maps CTA */}
+          <m.div
+            className="mx-auto mt-12 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
+            style={{ opacity: footer.opacity, y: footer.y }}
+          >
+            <p className="text-body text-white/80">
+              <span className="font-medium text-white">Accessibilité :</span> Le magasin est
+              accessible aux personnes à mobilité réduite
+            </p>
+            <LinkCTA
+              href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
+              target="_blank"
+              rel="noopener noreferrer"
+              icon={MapPin}
+              theme="dark"
+            >
+              Voir sur Google Maps
+            </LinkCTA>
+          </m.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Main
+// ---------------------------------------------------------------------------
+
+export default function ContactLocation() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
+
+  return (
+    <section id="localisation" className="relative" data-navbar-theme="light">
+      {/* Desktop — scroll-driven parallax */}
+      {!prefersReducedMotion && isLg && <LocationDesktop />}
+
+      {/* Mobile / reduced-motion fallback */}
+      <div className={!prefersReducedMotion && isLg ? 'hidden' : ''}>
+        <div className="relative w-full">
+          <ResponsiveImage
+            src="/images/contact-informations-boutique-outside.jpg"
+            alt="Façade de La Lunetterie du Coin"
+            className="absolute inset-0 h-full w-full object-cover"
+            loading="lazy"
+            widths={[640, 768, 1024]}
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
+
+          <div className="relative z-10 flex items-center">
+            <div className="mx-auto max-w-container px-container-x py-section">
+              <SimpleAnimation type="slide-up" delay={0}>
+                <h2 className="heading-section mb-12 text-center text-white lg:mb-16">
+                  Comment venir
+                </h2>
+              </SimpleAnimation>
+
+              <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
+                <SimpleAnimation type="slide-up" delay={100}>
+                  <LocationItem icon={Car} title="En voiture">
+                    <div className="space-y-2 text-body text-white/50">
+                      <p>
+                        <span className="font-medium text-white/70">Parking payant</span> : Parking
+                        Halles et Opéra Broglie (environ 10 min à pied)
+                      </p>
+                    </div>
+                  </LocationItem>
+                </SimpleAnimation>
+
+                <SimpleAnimation type="slide-up" delay={150}>
+                  <LocationItem icon={Train} title="En transports">
+                    <div className="space-y-2 text-body text-white/50">
+                      <p>
+                        <span className="font-medium text-white/70">Tram B, C, F</span> : arrêt
+                        Broglie (7 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Tram A, D</span> : arrêt
+                        Ancienne Synagogue / Les Halles (7 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Bus C3</span> : arrêt Faubourg
+                        de Pierre (2 min à pied)
+                      </p>
+                      <p>
+                        <span className="font-medium text-white/70">Bus C6</span> : arrêt Tribunal
+                        (5 min à pied)
+                      </p>
+                      <p className="pt-2 text-white/60">
+                        À 15 minutes à pied de la gare centrale de Strasbourg
+                      </p>
+                    </div>
+                  </LocationItem>
+                </SimpleAnimation>
               </div>
 
-              {/* Informations d'accès */}
-              <div className="space-y-8">
-                {/* En voiture */}
-                <div className="border-t border-stone/20 pt-6">
-                  <div className="mb-4 flex items-center gap-2">
-                    <Car className="h-5 w-5 text-accent" aria-hidden="true" />
-                    <h3 className="heading-subsection">En voiture</h3>
-                  </div>
-                  <div className="space-y-2 text-body text-stone">
-                    <p>
-                      <span className="font-medium text-text">Parking payant</span> : Parking Halles
-                      et Opéra Broglie (environ 10 min à pied)
-                    </p>
-                  </div>
-                </div>
-
-                {/* En transports en commun */}
-                <div className="border-t border-stone/20 pt-6">
-                  <div className="mb-4 flex items-center gap-2">
-                    <Train className="h-5 w-5 text-accent" aria-hidden="true" />
-                    <h3 className="heading-subsection">En transports</h3>
-                  </div>
-                  <div className="space-y-2 text-body text-stone">
-                    <p>
-                      <span className="font-medium text-text">Tram B, C, F</span> : arrêt Broglie (7
-                      min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-text">Tram A, D</span> : arrêt Ancienne
-                      Synagogue / Les Halles (7 min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-text">Bus C3</span> : arrêt Faubourg de
-                      Pierre (2 min à pied)
-                    </p>
-                    <p>
-                      <span className="font-medium text-text">Bus C6</span> : arrêt Tribunal (5 min
-                      à pied)
-                    </p>
-                    <p className="pt-2">À 15 minutes à pied de la gare centrale de Strasbourg</p>
-                  </div>
-                </div>
-
-                {/* Accessibilité PMR */}
-                <div className="border-t border-stone/20 pt-6">
-                  <p className="text-body text-stone">
-                    <span className="font-medium text-text">Accessibilité :</span> Le magasin est
-                    accessible aux personnes à mobilité réduite
+              <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
+                <SimpleAnimation type="fade" delay={200}>
+                  <p className="text-body text-white/50">
+                    <span className="font-medium text-white/70">Accessibilité :</span> Le magasin
+                    est accessible aux personnes à mobilité réduite
                   </p>
-                </div>
+                </SimpleAnimation>
 
-                {/* Bouton Google Maps */}
-                <div className="pt-4">
-                  <a
+                <SimpleAnimation type="fade" delay={250}>
+                  <LinkCTA
                     href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
+                    icon={MapPin}
+                    theme="dark"
                   >
-                    <MapPin className="h-5 w-5" aria-hidden="true" />
                     Voir sur Google Maps
-                  </a>
-                </div>
+                  </LinkCTA>
+                </SimpleAnimation>
               </div>
             </div>
-          </SimpleAnimation>
+          </div>
         </div>
       </div>
-    </SectionContainer>
+    </section>
   );
 }

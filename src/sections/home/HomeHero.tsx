@@ -1,92 +1,12 @@
-import { forwardRef } from 'react';
+import { HeroAnimated, HeroStatic } from './hero/HeroDesktop';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import ResponsiveImage from '@/components/common/ResponsiveImage';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
-/**
- * Composant HomeHero - Hero de la page d'accueil.
- *
- * Design éditorial immersif avec :
- * - Deux images 50/50 en fond pleine hauteur
- * - Rectangle flottant centré avec phrase d'accroche
- * - Fond semi-transparent (style navbar)
- * - Baseline en bas
- *
- * Style éditorial Kinfolk avec profondeur et espace.
- *
- * @component
- * @param {React.Ref<HTMLElement>} ref - Référence transmise à la section principale.
- *
- * @example
- * <HomeHero ref={myRef} />
- *
- * @returns {JSX.Element} La section Hero éditoriale immersive.
- */
-const HomeHero = forwardRef<HTMLElement>((props, ref) => {
-  return (
-    <section
-      ref={ref}
-      id="hero"
-      className="relative h-screen w-full overflow-hidden bg-background"
-      aria-labelledby="hero-title"
-      {...props}
-    >
-      {/* 50% inférieur : images 50/50 avec gaps */}
-      <div className="absolute bottom-0 left-0 right-0 flex h-[50%] w-full gap-4 px-4 pb-4 sm:gap-6 sm:px-6 sm:pb-6">
-        {/* Image gauche */}
-        <div className="relative h-full w-1/2">
-          <SimpleAnimation type="fade" delay={0} immediate={true} className="h-full w-full">
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-left.jpg"
-              alt="Lunettes élégantes - La Lunetterie du Coin"
-              className="h-full w-full object-cover object-center"
-              loading="eager"
-              sizes="50vw"
-              widths={[640, 768, 1024, 1280, 1920]}
-            />
-          </SimpleAnimation>
-        </div>
+function HomeHero() {
+  const prefersReducedMotion = usePrefersReducedMotion();
 
-        {/* Image droite */}
-        <div className="relative h-full w-1/2">
-          <SimpleAnimation type="fade" delay={200} immediate={true} className="h-full w-full">
-            <ResponsiveImage
-              src="/images/hero-eyeglasses-right.jpg"
-              alt="Collection de montures - La Lunetterie du Coin"
-              className="h-full w-full object-cover object-center"
-              loading="eager"
-              sizes="50vw"
-              widths={[640, 768, 1024, 1280, 1920]}
-            />
-          </SimpleAnimation>
-        </div>
-      </div>
-
-      {/* Contenu texte - centré horizontalement avec max-width, texte aligné à gauche */}
-      <div className="absolute left-0 right-0 top-[60px] z-10 flex h-[calc(50%-60px)] items-center justify-center px-6 sm:top-[72px] sm:h-[calc(50%-72px)] sm:px-12 lg:px-16">
-        <SimpleAnimation type="fade" delay={400} immediate={true}>
-          <div className="mx-auto w-full max-w-7xl space-y-6">
-            <h1
-              id="hero-title"
-              className="font-light uppercase leading-tight tracking-wide text-charcoal"
-              style={{ fontSize: 'clamp(2.5rem, 4vw, 5rem)' }}
-            >
-              Des lunettes qui ont du style, une démarche qui a du sens
-            </h1>
-
-            <p
-              className="leading-relaxed text-charcoal"
-              style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)' }}
-            >
-              Opticien à Strasbourg depuis 2016. Neuf & Occasion.
-            </p>
-          </div>
-        </SimpleAnimation>
-      </div>
-    </section>
-  );
-});
-
-HomeHero.displayName = 'HomeHero';
+  if (prefersReducedMotion) return <HeroStatic />;
+  return <HeroAnimated />;
+}
 
 export default HomeHero;

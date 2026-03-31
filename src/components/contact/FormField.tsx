@@ -1,7 +1,9 @@
 import type React from 'react';
+import { useState } from 'react';
+import Check from 'lucide-react/dist/esm/icons/check';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import type { FormErrors } from '@/hooks/useFormSubmission';
+import type { FormErrors } from '@/types/forms';
 
 interface BaseFieldProps {
   name: keyof FormErrors;
@@ -50,20 +52,35 @@ export default function FormField(props: FormFieldProps) {
     className = '',
   } = props;
 
+  const [charCount, setCharCount] = useState(0);
+  const [touched, setTouched] = useState(false);
+
   const fieldId = name;
   const hintId = `${name}-hint`;
   const errorId = `${name}-error`;
+
+  const minLength = 'minLength' in props ? props.minLength : undefined;
+  const maxLength = 'maxLength' in props ? props.maxLength : undefined;
+  const hasCounter = maxLength !== undefined;
+  const isValid = touched && !hasError && charCount > 0 && (!minLength || charCount >= minLength);
+
+  const handleInput = (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setCharCount((e.target as HTMLInputElement | HTMLTextAreaElement).value.length);
+    if (!touched) setTouched(true);
+    onInput(e);
+  };
 
   const renderField = () => {
     const commonProps = {
       id: fieldId,
       name,
       required,
-      className: `form-input ${hasError ? 'form-input--error' : ''}`,
+      className: `form-input ${hasError ? 'form-input--error' : isValid ? 'form-input--valid' : ''}`,
       'aria-describedby': `${hintId} ${errorId}`,
       'aria-invalid': hasError,
       onInvalid,
-      onInput,
+      onInput: handleInput,
+      onBlur: () => setTouched(true),
     };
 
     if (props.type === 'textarea') {
@@ -103,12 +120,31 @@ export default function FormField(props: FormFieldProps) {
               *
             </span>
           )}
+          {isValid && (
+            <Check
+              className="ml-1.5 inline-block h-4 w-4 text-secondary-green"
+              aria-label="champ valide"
+            />
+          )}
         </label>
 
         {renderField()}
 
-        <div id={hintId} className="form-hint">
-          {hint}
+        <div className="mt-2 flex items-center justify-between gap-2">
+          <span id={hintId} className="form-hint mt-0">
+            {hint}
+          </span>
+          {hasCounter && (
+            <span
+              className={`shrink-0 text-body-xs tabular-nums ${
+                maxLength && charCount > maxLength * 0.9 ? 'text-red-600' : 'text-black/40'
+              }`}
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {charCount}/{maxLength}
+            </span>
+          )}
         </div>
 
         {hasError && errorMessage && (

@@ -43,9 +43,7 @@ export default function ServiceCard({ service, index, className }: ServiceCardPr
         {service.title}
       </h3>
 
-      <p className="text-body leading-relaxed tracking-wide text-accent/90">
-        {service.description}
-      </p>
+      <p className="text-body tracking-wide text-accent/90">{service.description}</p>
     </section>
   );
 }

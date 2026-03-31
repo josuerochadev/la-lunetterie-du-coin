@@ -147,7 +147,7 @@ const ContactForm = ({ onSubmit }: ContactFormProps) => {
 ```css
 /* ✅ Utiliser les couleurs sémantiques */
 .button-primary {
-  @apply bg-brand text-brand-contrast;
+  @apply text-brand-contrast bg-brand;
 }
 
 /* ❌ Éviter les couleurs directes */
@@ -247,7 +247,7 @@ test('should submit contact form', async ({ page }) => {
 
 ### Couverture de Tests
 
-- **Objectif**: Maintenir > 85% de couverture
+- **Objectif**: Maintenir >= 10% de couverture (quality gate CI/CD)
 - **Focus**: Logique métier et interactions critiques
 - **Éviter**: Tests sur des détails d'implémentation
 

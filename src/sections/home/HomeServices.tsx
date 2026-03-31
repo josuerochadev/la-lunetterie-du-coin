@@ -1,107 +1,163 @@
-import { forwardRef } from 'react';
-import ArrowRight from 'lucide-react/dist/esm/icons/arrow-right';
+import { useRef } from 'react';
+import { useScroll } from 'framer-motion';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { SERVICE_COUNT } from './services/constants';
+import { GrainOverlay } from './services/GrainOverlay';
+import { PatternBackground } from './services/PatternBackground';
+import { SectionTitle } from './services/SectionTitle';
+import { PhotoStack } from './services/PhotoStack';
+import { ServiceText } from './services/ServiceText';
+import { SectionOutro } from './services/SectionOutro';
+import { ServiceProgressIndicator } from './services/ServiceProgressIndicator';
+import { StaticServiceList } from './services/StaticServiceList';
+
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { useIsLg } from '@/hooks/useIsLg';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import LinkCTA from '@/components/common/LinkCTA';
+import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
- * Section HomeServices - Section Services de la page d'accueil
+ * Section HomeServices — Scrollytelling with circle pattern
  *
- * Design éditorial Kinfolk avec 4 services en cards verticales :
- * - Lunettes neuves
- * - Lunettes d'occasion
- * - Examens de vue
- * - Lentilles de contact
- *
- * Style éditorial minimaliste :
- * - Images pleine largeur en haut (ratio portrait)
- * - Texte sur fond crème en dessous
- * - Grille 2 colonnes responsive
- * - Pas de bordures, design épuré
- *
- * @component
- * @returns {JSX.Element} La section Services avec cards verticales
+ * Desktop: sticky viewport with scroll-linked animations.
+ * Mobile: simple stacked cards with SimpleAnimation.
  */
-const HomeServices = forwardRef<HTMLElement>(() => {
+function HomeServices() {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  const isLg = useIsLg();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const shouldAnimate = !prefersReducedMotion && isLg;
+
+  const { scrollYProgress } = useScroll({
+    target: shouldAnimate ? sectionRef : undefined,
+    offset: ['start start', 'end end'],
+  });
+
   return (
     <section
       id="services"
-      className="relative w-full bg-background py-section"
       aria-labelledby="services-title"
+      data-navbar-theme="dark"
+      className="pointer-events-none relative bg-white [overflow-x:clip]"
     >
-      <div className="mx-auto max-w-container px-container-x">
-        {/* En-tête */}
-        <div className="mx-auto mb-16 max-w-6xl text-center">
+      {/* Subtle noise texture over white background */}
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] opacity-[0.025]"
+        aria-hidden="true"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: 'repeat',
+        }}
+      />
+
+      {/* Concave curve */}
+      <div
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
+        aria-hidden="true"
+      />
+
+      {/* ── Mobile ── */}
+      <div className="pointer-events-auto px-container-x py-section lg:hidden">
+        <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="heading-section mb-4">
+            <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
               {HOMEPAGE_SECTIONS.services.title}
             </h2>
           </SimpleAnimation>
 
-          <SimpleAnimation type="slide-up" delay={100}>
-            <p className="text-body-lg text-stone">{HOMEPAGE_SECTIONS.services.subtitle}</p>
-          </SimpleAnimation>
-        </div>
-
-        {/* Grille de services - 2 colonnes sur desktop, 1 sur mobile */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:gap-12">
-          {HOMEPAGE_SERVICES.map((service, index) => (
-            <SimpleAnimation key={service.title} type="fade" delay={index * 100}>
-              <article className="group relative">
-                {/* Image pleine hauteur avec texte superposé */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
-                  />
-
-                  {/* Boîte de texte superposée en bas */}
-                  <div className="absolute bottom-0 left-0 right-0 flex justify-center p-4 sm:p-6">
-                    <div className="w-full space-y-3 bg-background px-4 py-6 sm:space-y-4 sm:px-6 sm:py-8">
-                      <h3 className="heading-subsection">{service.title}</h3>
-
-                      <p className="text-body-sm leading-relaxed text-stone sm:text-body">
-                        {service.description}
-                      </p>
-
-                      <a
-                        href={service.link}
-                        className="inline-flex items-center gap-2 text-body-sm font-medium text-accent transition-colors hover:text-text focus-visible:text-text sm:text-body"
-                        aria-label={`En savoir plus sur ${service.title}`}
-                      >
-                        En savoir plus
-                        <ArrowRight
-                          className="h-4 w-4 transition-transform group-hover:translate-x-1"
-                          aria-hidden="true"
-                        />
-                      </a>
-                    </div>
+          <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-10">
+            {HOMEPAGE_SERVICES.map((service, index) => (
+              <article key={service.title}>
+                <SimpleAnimation type="fade" delay={index * 100}>
+                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="h-full w-full object-cover transition-transform duration-300"
+                      loading="lazy"
+                    />
+                    <GrainOverlay />
                   </div>
-                </div>
+                  <div className="mt-6 space-y-3">
+                    <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
+                    <p className="text-body text-black/60">{service.description}</p>
+                    <LinkCTA
+                      to={service.link}
+                      theme="light"
+                      aria-label={`En savoir plus sur ${service.title}`}
+                    >
+                      En savoir plus
+                    </LinkCTA>
+                  </div>
+                </SimpleAnimation>
               </article>
-            </SimpleAnimation>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Bouton CTA vers la page Services complète */}
-        <div className="mt-16 text-center">
-          <SimpleAnimation type="slide-up" delay={400}>
-            <a
-              href={HOMEPAGE_SECTIONS.services.cta.link}
-              className="inline-flex items-center gap-2 border border-accent bg-transparent px-6 py-3 text-body font-medium text-accent transition-all hover:bg-accent hover:text-cream focus-visible:bg-accent focus-visible:text-cream"
-              aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
-            >
-              {HOMEPAGE_SECTIONS.services.cta.text}
-            </a>
-          </SimpleAnimation>
+          <div className="mt-16 text-center">
+            <SimpleAnimation type="slide-up" delay={400}>
+              <LinkCTA
+                to={HOMEPAGE_SECTIONS.services.cta.link}
+                theme="light"
+                aria-label={HOMEPAGE_SECTIONS.services.cta.ariaLabel}
+              >
+                {HOMEPAGE_SECTIONS.services.cta.text}
+              </LinkCTA>
+            </SimpleAnimation>
+          </div>
         </div>
       </div>
+
+      {/* ── Desktop: Scrollytelling ── */}
+      {isLg && (
+        <div ref={sectionRef} className="relative">
+          <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
+            <div className="sticky top-0 h-screen overflow-hidden">
+              {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
+
+              {shouldAnimate ? (
+                <SectionTitle scrollYProgress={scrollYProgress} />
+              ) : (
+                <div className="absolute inset-x-0 top-[6vh] z-30 flex justify-center">
+                  <h2 id="services-title" className="heading-section text-black">
+                    {HOMEPAGE_SECTIONS.services.title}
+                  </h2>
+                </div>
+              )}
+
+              {!shouldAnimate ? (
+                <div className="flex h-full items-center">
+                  <StaticServiceList />
+                </div>
+              ) : (
+                <>
+                  <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                    <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                      <PhotoStack scrollYProgress={scrollYProgress} />
+                      <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
+                      <div className="relative flex w-[45%] flex-col justify-center">
+                        {HOMEPAGE_SERVICES.map((service, i) => (
+                          <ServiceText
+                            key={service.title}
+                            service={service}
+                            index={i}
+                            scrollYProgress={scrollYProgress}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <SectionOutro scrollYProgress={scrollYProgress} />
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
-});
-
-HomeServices.displayName = 'HomeServices';
+}
 
 export default HomeServices;
