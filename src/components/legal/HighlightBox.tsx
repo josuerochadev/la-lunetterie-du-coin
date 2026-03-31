@@ -27,7 +27,7 @@ export default function HighlightBox({
       role="note"
     >
       {title && <h3 className="heading-subsection mb-4">{title}</h3>}
-      <div className="space-y-3 text-body text-black/70">{children}</div>
+      <div className="space-y-3 text-body text-black">{children}</div>
     </div>
   );
 }

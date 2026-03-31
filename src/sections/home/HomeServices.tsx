@@ -85,7 +85,7 @@ function HomeServices() {
                   </div>
                   <div className="mt-6 space-y-3">
                     <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body text-black/60">{service.description}</p>
+                    <p className="text-body text-black">{service.description}</p>
                     <LinkCTA
                       to={service.link}
                       theme="light"

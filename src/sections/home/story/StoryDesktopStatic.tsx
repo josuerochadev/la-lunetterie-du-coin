@@ -25,7 +25,7 @@ export function StoryDesktopStatic() {
           </div>
 
           <div className="ml-[36%] w-[36%] pl-8">
-            <p className="text-body-xl text-white/80">{STORY_BODY}</p>
+            <p className="text-body-xl text-white">{STORY_BODY}</p>
             <LinkCTA to="/a-propos" theme="dark" className="mt-8">
               Nous découvrir
             </LinkCTA>

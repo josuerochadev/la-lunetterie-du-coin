@@ -67,9 +67,7 @@ function InfoDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <InfoItem icon={MapPin} title="Adresse">
-              <address className="mb-3 text-body not-italic text-white/50">
-                {COMPANY_ADDRESS}
-              </address>
+              <address className="mb-3 text-body not-italic text-white">{COMPANY_ADDRESS}</address>
               <LinkCTA
                 href={STORE_INFO.address.googleMapsSearchUrl}
                 target="_blank"
@@ -84,7 +82,7 @@ function InfoDesktop() {
             <InfoItem icon={Phone} title="Téléphone">
               <a
                 href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Appeler le ${COMPANY_PHONE}`}
               >
                 {COMPANY_PHONE}
@@ -94,7 +92,7 @@ function InfoDesktop() {
             <InfoItem icon={Mail} title="Email">
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
               >
                 {COMPANY_EMAIL}
@@ -105,8 +103,8 @@ function InfoDesktop() {
               <dl className="space-y-1.5">
                 {OPENING_HOURS.map((schedule) => (
                   <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                    <dt className="font-medium text-white/60">{schedule.day}</dt>
-                    <dd className="text-white/60">{schedule.hours}</dd>
+                    <dt className="font-medium text-white">{schedule.day}</dt>
+                    <dd className="text-white">{schedule.hours}</dd>
                   </div>
                 ))}
               </dl>
@@ -160,14 +158,14 @@ export default function ContactInfo() {
             <div className="grid gap-10 md:grid-cols-2">
               <SimpleAnimation type="slide-up" delay={0}>
                 <InfoItem icon={MapPin} title="Adresse">
-                  <address className="mb-3 text-body not-italic text-white/50">
+                  <address className="mb-3 text-body not-italic text-white">
                     {COMPANY_ADDRESS}
                   </address>
                   <a
                     href={STORE_INFO.address.googleMapsSearchUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-block text-body-sm font-medium text-white/70 transition-colors hover:text-secondary-orange"
+                    className="inline-block text-body-sm font-medium text-white transition-colors hover:text-secondary-orange"
                   >
                     Voir sur Google Maps →
                   </a>
@@ -178,7 +176,7 @@ export default function ContactInfo() {
                 <InfoItem icon={Phone} title="Téléphone">
                   <a
                     href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
                     aria-label={`Appeler le ${COMPANY_PHONE}`}
                   >
                     {COMPANY_PHONE}
@@ -190,7 +188,7 @@ export default function ContactInfo() {
                 <InfoItem icon={Mail} title="Email">
                   <a
                     href={`mailto:${COMPANY_EMAIL}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
                     aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
                   >
                     {COMPANY_EMAIL}
@@ -203,8 +201,8 @@ export default function ContactInfo() {
                   <dl className="space-y-1.5">
                     {OPENING_HOURS.map((schedule) => (
                       <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                        <dt className="font-medium text-white/60">{schedule.day}</dt>
-                        <dd className="text-white/60">{schedule.hours}</dd>
+                        <dt className="font-medium text-white">{schedule.day}</dt>
+                        <dd className="text-white">{schedule.hours}</dd>
                       </div>
                     ))}
                   </dl>

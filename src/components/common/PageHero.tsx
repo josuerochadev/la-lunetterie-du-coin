@@ -25,16 +25,16 @@ const THEME_CONFIG = {
     navbarTheme: 'light' as const,
     titleClass: 'text-accent',
     titleClassMobile: 'text-accent',
-    subtitleClass: 'text-white/80',
-    subtitleClassMobile: 'text-white/80',
+    subtitleClass: 'text-white',
+    subtitleClassMobile: 'text-white',
   },
   light: {
     bg: 'bg-accent',
     navbarTheme: 'dark' as const,
     titleClass: 'text-black',
     titleClassMobile: 'text-black',
-    subtitleClass: 'text-black/60',
-    subtitleClassMobile: 'text-black/60',
+    subtitleClass: 'text-black',
+    subtitleClassMobile: 'text-black',
   },
 };
 

@@ -68,7 +68,7 @@ export function ServiceEditorialCard({
         <div className={`border border-black p-6 ${isImageLeft ? '' : 'text-left'}`}>
           <ul className="space-y-2">
             {service.details.map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body text-black/50">
+              <li key={i} className="flex gap-3 text-body text-black">
                 <span className="text-accent" aria-hidden="true">
                   •
                 </span>

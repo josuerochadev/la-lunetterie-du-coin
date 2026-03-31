@@ -110,7 +110,7 @@ export default function ContactForm() {
 
         {/* Case à cocher RGPD — placée avant l'avertissement pour visibilité */}
         <div className="md:col-span-2">
-          <label className="flex cursor-pointer items-start gap-3 text-body-sm text-black/70">
+          <label className="flex cursor-pointer items-start gap-3 text-body-sm text-black">
             <input
               type="checkbox"
               name="consent"
@@ -133,8 +133,8 @@ export default function ContactForm() {
             className="border-l-4 border-secondary-green/30 bg-secondary-green/5 p-6"
             role="note"
           >
-            <p className="text-body-sm text-black/60">
-              <span className="font-medium text-black/80">Important :</span> Ne transmettez pas
+            <p className="text-body-sm text-black">
+              <span className="font-medium text-black">Important :</span> Ne transmettez pas
               d'informations confidentielles ou sensibles via ce formulaire. Pour une communication
               sécurisée, contactez-nous directement par téléphone ou prenez rendez-vous.
             </p>

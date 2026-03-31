@@ -31,7 +31,7 @@ function FormDesktop() {
           </m.div>
 
           <m.p
-            className="mx-auto mb-12 max-w-lg text-center text-body-lg text-black/60"
+            className="mx-auto mb-12 max-w-lg text-center text-body-lg text-black"
             style={{ opacity: sub.opacity, y: sub.y }}
           >
             Question, remarque ou juste envie de dire bonjour — on lit tout.
@@ -68,7 +68,7 @@ export default function ContactFormSection() {
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={50}>
-              <p className="mx-auto mb-10 max-w-lg text-center text-body-lg text-black/60">
+              <p className="mx-auto mb-10 max-w-lg text-center text-body-lg text-black">
                 Question, remarque ou juste envie de dire bonjour — on lit tout.
               </p>
             </SimpleAnimation>

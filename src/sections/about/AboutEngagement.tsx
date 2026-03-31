@@ -59,7 +59,7 @@ function StatCard({
         >
           {stat.number}
         </div>
-        <div className="mt-2 text-body-sm text-black/60">{stat.label}</div>
+        <div className="mt-2 text-body-sm text-black">{stat.label}</div>
       </div>
     </m.div>
   );
@@ -133,7 +133,7 @@ function EngagementDesktop() {
               scrollYProgress={scrollYProgress}
               revealStart={0.26}
               revealEnd={0.4}
-              className="text-body-lg text-black/60"
+              className="text-body-lg text-black"
             >
               {ENGAGEMENT_BODY}
             </ScrollWordReveal>
@@ -190,14 +190,14 @@ export default function AboutEngagement() {
                     <div className="mb-1 text-title-sm font-bold text-secondary-orange sm:text-title-md">
                       {stat.number}
                     </div>
-                    <div className="text-body-xs text-black/60 sm:text-body-sm">{stat.label}</div>
+                    <div className="text-body-xs text-black sm:text-body-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={150}>
-              <div className="space-y-6 text-body text-black/60">
+              <div className="space-y-6 text-body text-black">
                 <p className="text-text">{ENGAGEMENT_BODY}</p>
                 <p className="text-body-sm italic text-secondary-orange">{ENGAGEMENT_HIGHLIGHT}</p>
               </div>

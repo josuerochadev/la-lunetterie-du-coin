@@ -65,9 +65,7 @@ export default function ServicesCTA() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={100}>
-                  <p className="mt-8 text-body-lg text-black/60">
-                    Passez nous voir, le reste suivra.
-                  </p>
+                  <p className="mt-8 text-body-lg text-black">Passez nous voir, le reste suivra.</p>
                 </SimpleAnimation>
 
                 <SimpleAnimation type="fade" delay={200}>
@@ -96,7 +94,7 @@ export default function ServicesCTA() {
                 </m.div>
 
                 <m.p
-                  className="mt-8 text-body-lg text-black/60"
+                  className="mt-8 text-body-lg text-black"
                   style={{ opacity: sub.opacity, y: sub.y }}
                 >
                   Passez nous voir, le reste suivra.

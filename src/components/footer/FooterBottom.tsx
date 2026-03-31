@@ -28,7 +28,7 @@ export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
         </div>
 
         {/* Signature */}
-        <p className="text-white/50">
+        <p className="text-white">
           Développé par{' '}
           <a
             href="https://josuerocha.dev"

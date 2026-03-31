@@ -95,7 +95,7 @@ function TeamDesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.2}
                 revealEnd={0.38}
-                className="text-body-lg text-white/70"
+                className="text-body-lg text-white"
               >
                 {TEAM_BIO}
               </ScrollWordReveal>
@@ -160,7 +160,7 @@ export default function AboutTeam() {
                 />
               </div>
               <div>
-                <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
+                <p className="text-body-lg text-white">{TEAM_BIO}</p>
               </div>
             </div>
           </SimpleAnimation>

@@ -34,11 +34,11 @@ export function OfferMobileBlock({
               aria-hidden="true"
             />
             <div className="relative z-10 px-6 py-8">
-              <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/30">
+              <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white">
                 {number} / {String(OFFER_COUNT).padStart(2, '0')}
               </span>
               <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-              <p className="mt-3 text-body-lg text-white/60">{offer.summary}</p>
+              <p className="mt-3 text-body-lg text-white">{offer.summary}</p>
               <LinkCTA
                 href={offer.link}
                 theme="dark"

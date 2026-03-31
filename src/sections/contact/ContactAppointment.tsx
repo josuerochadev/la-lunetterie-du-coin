@@ -67,7 +67,7 @@ export default function ContactAppointment() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={100}>
-                  <p className="mb-10 text-body-lg text-black/60">
+                  <p className="mb-10 text-body-lg text-black">
                     Examen de vue, essayage ou juste un conseil.
                   </p>
                 </SimpleAnimation>
@@ -100,7 +100,7 @@ export default function ContactAppointment() {
 
                 {/* Subtitle — staggered entrance */}
                 <m.p
-                  className="mt-8 text-body-lg text-black/60"
+                  className="mt-8 text-body-lg text-black"
                   style={{ opacity: sub.opacity, y: sub.y }}
                 >
                   Examen de vue, essayage ou juste un conseil.

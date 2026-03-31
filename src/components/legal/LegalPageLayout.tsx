@@ -39,7 +39,7 @@ export default function LegalPageLayout({
               <SimpleAnimation type="fade" delay={0}>
                 <Link
                   to="/"
-                  className="mb-10 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white/40 transition-colors hover:text-white/70"
+                  className="mb-10 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white transition-colors hover:text-white"
                   aria-label="Revenir à la page d'accueil"
                 >
                   ← Accueil
@@ -56,7 +56,7 @@ export default function LegalPageLayout({
 
               {lastUpdated && (
                 <SimpleAnimation type="fade" delay={150}>
-                  <p className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white/30">
+                  <p className="mt-6 text-body-sm font-medium uppercase tracking-widest text-white">
                     Mise à jour : {lastUpdated}
                   </p>
                 </SimpleAnimation>

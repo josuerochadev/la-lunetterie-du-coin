@@ -45,13 +45,13 @@ export function ServiceText({
       className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
       style={{ opacity, y, pointerEvents }}
     >
-      <span className="mb-4 text-sm font-medium uppercase tracking-widest text-black/30">
+      <span className="mb-4 text-sm font-medium uppercase tracking-widest text-black">
         {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
       </span>
 
       <h3 className="text-subtitle mb-5 text-title-sm text-black">{service.title}</h3>
 
-      <p className="mb-8 max-w-lg text-body-lg text-black/60">{service.description}</p>
+      <p className="mb-8 max-w-lg text-body-lg text-black">{service.description}</p>
 
       <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
         En savoir plus

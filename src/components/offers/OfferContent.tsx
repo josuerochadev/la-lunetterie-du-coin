@@ -38,7 +38,7 @@ export function OfferContent({
 
         {/* Détails */}
         <div className="space-y-3 pt-2">
-          <p className="whitespace-pre-line text-body text-black/50">{details}</p>
+          <p className="whitespace-pre-line text-body text-black">{details}</p>
         </div>
 
         {/* CTA */}

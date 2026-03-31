@@ -60,7 +60,7 @@ function ValueCard({
       <div className="space-y-5">
         <Icon className="h-10 w-10 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
         <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-        <p className="text-body text-black/60">{value.description}</p>
+        <p className="text-body text-black">{value.description}</p>
       </div>
     </m.div>
   );
@@ -173,7 +173,7 @@ export default function AboutValues() {
                       aria-hidden="true"
                     />
                     <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-                    <p className="text-body text-black/60">{value.description}</p>
+                    <p className="text-body text-black">{value.description}</p>
                   </div>
                 </SimpleAnimation>
               );

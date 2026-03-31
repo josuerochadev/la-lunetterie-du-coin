@@ -137,7 +137,7 @@ export default function FormField(props: FormFieldProps) {
           {hasCounter && (
             <span
               className={`shrink-0 text-body-xs tabular-nums ${
-                maxLength && charCount > maxLength * 0.9 ? 'text-red-600' : 'text-black/40'
+                maxLength && charCount > maxLength * 0.9 ? 'text-red-600' : 'text-black'
               }`}
               aria-live="polite"
               aria-atomic="true"
