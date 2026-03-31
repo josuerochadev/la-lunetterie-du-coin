@@ -112,8 +112,8 @@ export function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue
   const logoRotateRaw = useTransform(scrollYProgress, [0.95, LOGO_FLOAT_END], [0, Math.PI * 2]);
   const logoRotate = useTransform(logoRotateRaw, (v: number) => Math.sin(v) * 4);
 
-  // ── Background white → yellow ──
-  const bgOpacity = useTransform(scrollYProgress, [0.9, 0.94], [0, 1]);
+  // ── Background white → yellow (completes before logo appears, stays yellow) ──
+  const bgOpacity = useTransform(scrollYProgress, [0.88, 0.93], [0, 1]);
 
   // ── CTA ──
   const ctaOpacity = useTransform(scrollYProgress, [0.89, 0.91, 0.96, 0.98], [0, 1, 1, 0]);
@@ -143,7 +143,7 @@ export function SectionOutro({ scrollYProgress }: { scrollYProgress: MotionValue
 
   return (
     <>
-      {/* Yellow background overlay */}
+      {/* Yellow background overlay — fades in over white, stays yellow through end */}
       <m.div
         className="pointer-events-none absolute inset-0 z-10 bg-accent"
         style={{ opacity: bgOpacity }}

@@ -39,7 +39,7 @@ function HomeServices() {
       id="services"
       aria-labelledby="services-title"
       data-navbar-theme="dark"
-      className="pointer-events-none relative bg-white [overflow-x:clip]"
+      className="pointer-events-none relative bg-accent [overflow-x:clip]"
     >
       {/* Subtle noise texture over white background */}
       <div
@@ -58,7 +58,7 @@ function HomeServices() {
       />
 
       {/* ── Mobile ── */}
-      <div className="pointer-events-auto px-container-x py-section lg:hidden">
+      <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
         <div className="relative z-10 mx-auto max-w-container">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
@@ -112,8 +112,8 @@ function HomeServices() {
       {/* ── Desktop: Scrollytelling ── */}
       {isLg && (
         <div ref={sectionRef} className="relative">
-          <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
-            <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
+            <div className="sticky top-0 h-screen overflow-hidden bg-white">
               {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
 
               {shouldAnimate ? (
