@@ -58,7 +58,7 @@ test.describe('Navigation - La Lunetterie du Coin', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      const footer = page.locator('footer');
+      const footer = page.locator('#footer');
       await footer.scrollIntoViewIfNeeded();
 
       // Check for key footer links
@@ -71,17 +71,19 @@ test.describe('Navigation - La Lunetterie du Coin', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      const footer = page.locator('footer');
+      const footer = page.locator('#footer');
       await footer.scrollIntoViewIfNeeded();
 
       const mentionsLink = footer.locator('a[href="/mentions-legales"]');
       const conditionsLink = footer.locator('a[href="/conditions-de-vente"]');
 
       if ((await mentionsLink.count()) > 0) {
-        await expect(mentionsLink).toBeVisible();
+        await mentionsLink.first().scrollIntoViewIfNeeded();
+        await expect(mentionsLink.first()).toBeVisible();
       }
       if ((await conditionsLink.count()) > 0) {
-        await expect(conditionsLink).toBeVisible();
+        await conditionsLink.first().scrollIntoViewIfNeeded();
+        await expect(conditionsLink.first()).toBeVisible();
       }
     });
 
@@ -89,10 +91,11 @@ test.describe('Navigation - La Lunetterie du Coin', () => {
       await page.goto('/');
       await page.waitForLoadState('networkidle');
 
-      const footer = page.locator('footer');
+      const footer = page.locator('#footer');
       await footer.scrollIntoViewIfNeeded();
 
       const mentionsLink = footer.locator('a[href="/mentions-legales"]').first();
+      await mentionsLink.scrollIntoViewIfNeeded();
       if (await mentionsLink.isVisible()) {
         await mentionsLink.click();
         await page.waitForLoadState('networkidle');

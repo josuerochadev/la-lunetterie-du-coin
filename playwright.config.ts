@@ -37,6 +37,10 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
 
+    // Désactiver les animations pour des tests E2E fiables
+    // SimpleAnimation passe immédiatement à visible quand reducedMotion est activé
+    reducedMotion: 'reduce',
+
     // Timeout des actions
     actionTimeout: 10000,
     navigationTimeout: 30000,
