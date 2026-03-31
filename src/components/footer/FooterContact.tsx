@@ -19,7 +19,7 @@ export default function FooterContact() {
             href={STORE_INFO.address.googleMapsUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-style flex items-start gap-3 transition-colors duration-300 hover:text-accent"
+            className="focus-style flex items-start gap-3 transition-colors duration-300 hover:text-secondary-orange"
           >
             <MapPin className="mt-1 h-4 w-4 flex-shrink-0 text-secondary-blue" aria-hidden="true" />
             <div>
@@ -34,7 +34,7 @@ export default function FooterContact() {
             <Phone className="h-4 w-4 flex-shrink-0 text-secondary-blue" aria-hidden="true" />
             <a
               href={`tel:${STORE_INFO.phone.tel}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
+              className="focus-style font-semibold transition-colors duration-300 hover:text-secondary-orange"
             >
               {STORE_INFO.phone.display}
             </a>
@@ -44,7 +44,7 @@ export default function FooterContact() {
             <Mail className="h-4 w-4 flex-shrink-0 text-secondary-blue" aria-hidden="true" />
             <a
               href={`mailto:${COMPANY_EMAIL}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
+              className="focus-style font-semibold transition-colors duration-300 hover:text-secondary-orange"
             >
               {COMPANY_EMAIL}
             </a>

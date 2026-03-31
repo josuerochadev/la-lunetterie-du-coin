@@ -39,7 +39,7 @@ export default function LegalPageLayout({
               <SimpleAnimation type="fade" delay={0}>
                 <Link
                   to="/"
-                  className="mb-10 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white transition-colors hover:text-white"
+                  className="mb-10 inline-flex items-center gap-2 text-body-sm font-medium uppercase tracking-widest text-white transition-colors hover:text-secondary-orange"
                   aria-label="Revenir à la page d'accueil"
                 >
                   ← Accueil

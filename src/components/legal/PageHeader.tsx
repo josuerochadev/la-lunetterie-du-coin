@@ -14,7 +14,10 @@ export default function PageHeader({ title, backTo = '/', backLabel = 'Accueil' 
       <nav aria-label="Fil d'Ariane" className="mt-8">
         <ol className="inline-flex items-center gap-2 text-body-sm text-black">
           <li>
-            <Link to="/" className="focus-style transition-colors duration-300 hover:text-black">
+            <Link
+              to="/"
+              className="focus-style transition-colors duration-300 hover:text-secondary-orange"
+            >
               Accueil
             </Link>
           </li>
@@ -24,7 +27,7 @@ export default function PageHeader({ title, backTo = '/', backLabel = 'Accueil' 
               <li>
                 <Link
                   to={backTo}
-                  className="focus-style transition-colors duration-300 hover:text-black"
+                  className="focus-style transition-colors duration-300 hover:text-secondary-orange"
                 >
                   {backLabel}
                 </Link>

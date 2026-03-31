@@ -32,7 +32,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
           <p>
             <a
               href={`tel:${STORE_INFO.phone.tel}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-accent"
+              className="focus-style font-semibold transition-colors duration-300 hover:text-secondary-orange"
             >
               {STORE_INFO.phone.display}
             </a>
@@ -68,7 +68,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
             {FOOTER_LINKS.map((link) => (
               <Link
                 key={link.href}
-                className="focus-style text-body-sm font-semibold text-black transition-colors duration-300 hover:text-accent"
+                className="focus-style text-body-sm font-semibold text-black transition-colors duration-300 hover:text-secondary-orange"
                 to={link.href}
                 onClick={onLinkClick}
               >

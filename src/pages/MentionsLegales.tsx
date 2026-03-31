@@ -82,7 +82,7 @@ export default function MentionsLegales() {
             <dd>
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
-                className="text-black underline underline-offset-4 transition-colors hover:text-text"
+                className="text-black underline underline-offset-4 transition-colors hover:text-secondary-orange"
               >
                 {COMPANY_EMAIL}
               </a>
@@ -92,7 +92,7 @@ export default function MentionsLegales() {
             <dd>
               <a
                 href={`tel:${COMPANY_PHONE}`}
-                className="text-black underline underline-offset-4 transition-colors hover:text-text"
+                className="text-black underline underline-offset-4 transition-colors hover:text-secondary-orange"
               >
                 {COMPANY_PHONE}
               </a>
@@ -159,7 +159,7 @@ export default function MentionsLegales() {
                   href={MEDIATOR_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline underline-offset-4 transition-colors hover:text-text"
+                  className="underline underline-offset-4 transition-colors hover:text-secondary-orange"
                 >
                   Plus d'informations sur la médiation →
                 </a>
