@@ -19,7 +19,7 @@ function ScrollWord({
   const range = rangeEnd - rangeStart;
   const wordStart = rangeStart + (index / total) * range;
   const wordEnd = Math.min(wordStart + range / total + range * 0.2, rangeEnd);
-  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0.15, 1]);
+  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0, 1]);
   const y = useTransform(scrollYProgress, [wordStart, wordEnd], [12, 0]);
 
   return (

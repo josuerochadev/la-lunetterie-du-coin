@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { m, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -7,6 +7,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const STORY_TITLE = 'Notre Histoire';
@@ -32,12 +33,7 @@ const STORY_BODY_2 =
 // ---------------------------------------------------------------------------
 
 function HistoryDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: Photo clipPath reveal + grow (delayed so dome settles first)
   const photoClipProgress = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);

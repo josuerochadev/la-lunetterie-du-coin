@@ -1,20 +1,16 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useTransform } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { BOOKING_URL } from '@/config/endpoints';
 
 export default function ContactAppointment() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: wrapperRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref: wrapperRef, scrollYProgress } = useManualScrollProgress('start-end');
 
   // Motif — scale grows throughout the full scroll range (matching AboutCTA intensity)
   const motifScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);

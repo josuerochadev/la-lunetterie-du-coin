@@ -1,11 +1,11 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useIsLg } from '@/hooks/useIsLg';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 
 // ── Desktop ─────────────────────────────────────────────────────────────────
@@ -24,11 +24,7 @@ import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 // ─────────────────────────────────────────────────────────────────────────────
 
 function ContactDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // ── Motif — scale grows through the hold phase ──────────────────────
   const motifScale = useTransform(scrollYProgress, [0.2, 1], [1, 1.4]);
@@ -44,7 +40,7 @@ function ContactDesktop() {
   const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={ref} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-accent">
         {/* Circle motif — scale grows through hold phase */}
         <m.img

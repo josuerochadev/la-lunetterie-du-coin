@@ -1,29 +1,25 @@
-import { useRef } from 'react';
-import { m, useScroll } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ContactForm from '@/components/contact/ContactForm';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 
 // ---------------------------------------------------------------------------
 // Desktop — scroll-driven entrance
 // ---------------------------------------------------------------------------
 
 function FormDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
 
   const title = useScrollEntrance(scrollYProgress, 0.05, 0.22);
   const sub = useScrollEntrance(scrollYProgress, 0.1, 0.28, 30);
   const form = useScrollEntrance(scrollYProgress, 0.15, 0.35);
 
   return (
-    <div ref={sectionRef} className="hidden lg:block">
+    <div ref={ref} className="hidden lg:block">
       <div className="mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-3xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>

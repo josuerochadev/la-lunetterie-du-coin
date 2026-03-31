@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { FEATURED, OTHERS, OTHER_COUNT, SCROLL_HEIGHT_VH } from './constants';
 
@@ -11,6 +10,7 @@ import { type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
@@ -151,11 +151,7 @@ function TestimonialSlide({
 }
 
 export function TestimonialsDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   const ctaOpacity = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [20, 0, 0, -30]);
@@ -163,7 +159,7 @@ export function TestimonialsDesktop() {
   const ctaPointer = usePointerEvents(ctaOpacity);
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={ref} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         <GiantCounter
           scrollYProgress={scrollYProgress}

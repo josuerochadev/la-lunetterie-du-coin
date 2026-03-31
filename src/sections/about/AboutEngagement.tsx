@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { GiantCounter } from '@/components/motion/GiantCounter';
@@ -7,6 +6,7 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { STATS_DATA } from '@/data/about';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
@@ -66,12 +66,7 @@ function StatCard({
 }
 
 function EngagementDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.04], [0, 1]);
@@ -89,7 +84,7 @@ function EngagementDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[280vh] bg-background lg:block">
+    <div ref={ref} className="hidden h-[280vh] bg-background lg:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-background">
         <GiantCounter
           scrollYProgress={scrollYProgress}

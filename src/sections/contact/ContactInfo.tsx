@@ -1,5 +1,5 @@
-import { type ReactNode, useRef } from 'react';
-import { m, useScroll } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -10,6 +10,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { STORE_INFO } from '@/config/store';
 import { OPENING_HOURS } from '@/data/contact';
@@ -45,17 +46,13 @@ function InfoItem({
 // ---------------------------------------------------------------------------
 
 function InfoDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
 
   const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
   const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
 
   return (
-    <div ref={sectionRef} className="hidden lg:block">
+    <div ref={ref} className="hidden lg:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
