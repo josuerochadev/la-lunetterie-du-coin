@@ -1,6 +1,6 @@
-import { m, useTransform, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
@@ -77,15 +77,77 @@ function ContactDesktop() {
   );
 }
 
+// ── Mobile animated ─────────────────────────────────────────────────────────
+
+function ContactMobileAnimated() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  // ── "VOIR" zoom — scale 3→1 (lighter than desktop's 12→1) ──
+  const voirScale = useTransform(scrollYProgress, [0.0, 0.2], [3, 1]);
+  const voirOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 1]);
+
+  // ── "PASSEZ NOUS" — slide up ──
+  const passezY = useTransform(scrollYProgress, [0.1, 0.25], [30, 0]);
+  const passezOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
+
+  // ── CTA ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+
+  // ── Motif — subtle scale ──
+  const motifScale = useTransform(scrollYProgress, [0.0, 0.5], [1, 1.15]);
+
+  return (
+    <div ref={ref} className="relative lg:hidden">
+      {/* Circle motif */}
+      <m.img
+        src="/images/motif-cercle.png"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
+        style={{ scale: motifScale }}
+      />
+
+      <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+        <div className="mx-auto max-w-5xl text-center">
+          <h2
+            className="text-heading text-fluid-hero-sub mb-10 text-black"
+            style={{ lineHeight: '0.95' }}
+          >
+            <m.span className="block" style={{ opacity: passezOpacity, y: passezY }}>
+              PASSEZ NOUS
+            </m.span>
+            <m.span
+              className="block origin-center will-change-transform"
+              style={{ scale: voirScale, opacity: voirOpacity }}
+            >
+              VOIR
+            </m.span>
+          </h2>
+
+          <m.div style={{ opacity: ctaOpacity }} className="will-change-transform">
+            <LinkCTA to="/contact" theme="accent">
+              Nous contacter
+            </LinkCTA>
+          </m.div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ── Main component ──────────────────────────────────────────────────────────
 
 /**
  * Section HomeContact — Yellow Punchline
  *
  * Desktop: Sticky viewport with scroll-linked entrance + hold for footer.
- * Mobile/reduced-motion: SimpleAnimation fallback.
- *
- * @component
+ * Mobile animated: Scroll-driven VOIR zoom + motif scale.
+ * Reduced-motion: Static layout.
  */
 export default function HomeContact() {
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -101,29 +163,24 @@ export default function HomeContact() {
       {/* Desktop */}
       {!prefersReducedMotion && isLg && <ContactDesktop />}
 
-      {/* Mobile / reduced-motion — stacked layout */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      {/* Mobile animated */}
+      {!prefersReducedMotion && !isLg && <ContactMobileAnimated />}
+
+      {/* Reduced-motion — static layout */}
+      {prefersReducedMotion && (
         <div className="mx-auto max-w-container px-container-x py-section">
           <div className="mx-auto max-w-5xl text-center">
-            <SimpleAnimation type="slide-up" delay={0}>
-              <h2
-                id={prefersReducedMotion ? 'contact-title' : undefined}
-                className="text-heading text-fluid-hero-sub mb-10 text-black"
-              >
-                Passez
-                <br />
-                nous voir
-              </h2>
-            </SimpleAnimation>
-
-            <SimpleAnimation type="fade" delay={100}>
-              <LinkCTA to="/contact" theme="accent">
-                Nous contacter
-              </LinkCTA>
-            </SimpleAnimation>
+            <h2 id="contact-title" className="text-heading text-fluid-hero-sub mb-10 text-black">
+              Passez
+              <br />
+              nous voir
+            </h2>
+            <LinkCTA to="/contact" theme="accent">
+              Nous contacter
+            </LinkCTA>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
