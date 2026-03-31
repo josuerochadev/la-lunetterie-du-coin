@@ -18,15 +18,16 @@ function HomeStory() {
   return (
     <section
       id="story"
-      className="relative w-full bg-black pt-[36vw] [overflow-x:clip] lg:pt-[35vh]"
+      className="relative -mt-[8vw] w-full bg-black pt-[36vw] [overflow-x:clip] lg:-mt-0 lg:pt-[35vh]"
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
-      {/* Convex eyelid curve — elliptical arc wider than viewport, no flat edges */}
+      {/* Convex eyelid dome — top half of ellipse only, flat bottom edge */}
       <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-black"
+        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[22.5vw] w-[140vw] -translate-x-1/2 bg-black"
         aria-hidden="true"
         data-navbar-theme="light"
+        style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
       />
 
       {variant === 'desktop-animated' && <StoryDesktopAnimated />}
