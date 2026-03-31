@@ -11,7 +11,7 @@ type FooterNavigationProps = {
  */
 export default function FooterNavigation({ onLinkClick }: FooterNavigationProps) {
   return (
-    <nav aria-label="Navigation du footer" className="lg:w-auto">
+    <nav aria-label="Navigation du footer">
       <h3 className="text-subtitle mb-4 text-body-sm text-accent">Navigation</h3>
       <ul className="space-y-2">
         {FOOTER_NAV_LINKS.map((link) => (
