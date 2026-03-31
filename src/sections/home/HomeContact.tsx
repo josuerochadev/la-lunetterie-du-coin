@@ -1,5 +1,5 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { useRef, useCallback, useEffect } from 'react';
+import { m, useTransform, useSpring, useMotionValue, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -17,7 +17,7 @@ import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 //
 //  scroll distance = 200vh
 //
-//  0.00 – 0.02  Yellow bg instant reveal
+//  0.00 – 0.02  Black overlay fades out (yellow base revealed)
 //  0.00 – 0.20  "VOIR" zooms scale 12 → 1 (fast, Story rhythm)
 //  0.14 – 0.22  "PASSEZ" slides up
 //  0.19 – 0.27  "NOUS" slides up
@@ -27,32 +27,56 @@ import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 
 function ContactDesktop() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
 
-  // ── Yellow bg — instant reveal ─────────────────────────────────────────
-  const yellowBg = useTransform(scrollYProgress, [0.0, 0.02], [0, 1]);
+  // ── Manual scroll progress — bypasses framer-motion useScroll bug ────────
+  // useScroll({ target, offset }) returns broken values for deep-page
+  // elements behind stacked sticky sections. We compute progress manually
+  // from the global scroll position and the element's bounding rect.
+  const scrollProgress = useMotionValue(0);
+
+  const updateProgress = useCallback(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const viewportH = window.innerHeight;
+    const totalScroll = el.offsetHeight - viewportH;
+    // progress 0 = top of section at viewport top
+    // progress 1 = bottom of section at viewport bottom
+    const raw = -rect.top / totalScroll;
+    scrollProgress.set(Math.max(0, Math.min(1, raw)));
+  }, [scrollProgress]);
+
+  useEffect(() => {
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', updateProgress);
+      window.removeEventListener('resize', updateProgress);
+    };
+  }, [updateProgress]);
+
+  // ── Black overlay — fades out to reveal yellow base ────────────────────
+  const blackOverlay = useTransform(scrollProgress, [0.0, 0.02], [1, 0]);
 
   // ── Motif — scale grows through the hold phase ──────────────────────
-  const motifScale = useTransform(scrollYProgress, [0.2, 1], [1, 1.4]);
+  const motifScale = useTransform(scrollProgress, [0.2, 1], [1, 1.4]);
 
   // ── "VOIR" zoom — scale 12→1, Story-matching pace & spring ────────────
-  const voirScaleRaw = useTransform(scrollYProgress, [0.0, 0.2], [12, 1]);
+  const voirScaleRaw = useTransform(scrollProgress, [0.0, 0.2], [12, 1]);
   const voirScale = useSpring(voirScaleRaw, SPRING_CONFIG_SLOW);
 
   // ── "PASSEZ NOUS" — line 1 ────────────────────────────────────────────
-  const passez = useScrollEntrance(scrollYProgress, 0.14, 0.22);
+  const passez = useScrollEntrance(scrollProgress, 0.14, 0.22);
 
   // ── CTA ──────────────────────────────────────────────────────────────────
-  const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
+  const cta = useScrollEntrance(scrollProgress, 0.26, 0.34, 30);
 
   // Navbar theme strip — starts "light" (black bg) then removes when yellow reveals
   const contactStripRef = useRef<HTMLDivElement>(null);
-  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+  useMotionValueEvent(blackOverlay, 'change', (v) => {
     if (!contactStripRef.current) return;
-    if (v < 0.03) {
+    if (v > 0.5) {
       contactStripRef.current.setAttribute('data-navbar-theme', 'light');
     } else {
       contactStripRef.current.removeAttribute('data-navbar-theme');
@@ -61,11 +85,11 @@ function ContactDesktop() {
 
   return (
     <div ref={sectionRef} className="hidden h-[300vh] lg:block">
-      <div className="sticky top-0 h-screen overflow-hidden bg-black">
-        {/* Yellow bg — instant reveal behind VOIR */}
+      <div className="sticky top-0 h-screen overflow-hidden bg-accent">
+        {/* Black overlay — fades out to reveal yellow base */}
         <m.div
-          className="absolute inset-0 bg-accent"
-          style={{ opacity: yellowBg }}
+          className="absolute inset-0 z-[1] bg-black"
+          style={{ opacity: blackOverlay }}
           aria-hidden="true"
         />
 

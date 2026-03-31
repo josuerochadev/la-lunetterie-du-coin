@@ -61,8 +61,8 @@ export default function HomePage() {
             <HomeTestimonials />
           </StickySection>
 
-          {/* Testimonials → Contact — hold supplémentaire pour retarder le footer */}
-          <StickySection zIndex={Z_INDEX.contact} enableSticky wrapperMinHeight="200vh">
+          {/* Testimonials → Contact */}
+          <StickySection zIndex={Z_INDEX.contact}>
             <HomeContact />
           </StickySection>
         </Layout>
