@@ -1,9 +1,7 @@
 import { useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
-import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT } from './services/constants';
-import { GrainOverlay } from './services/GrainOverlay';
 import { PatternBackground } from './services/PatternBackground';
 import { SectionTitle } from './services/SectionTitle';
 import { PhotoStack } from './services/PhotoStack';
@@ -11,14 +9,13 @@ import { ServiceText } from './services/ServiceText';
 import { SectionOutro } from './services/SectionOutro';
 import { ServiceProgressIndicator } from './services/ServiceProgressIndicator';
 import { StaticServiceList } from './services/StaticServiceList';
+import { ServicesMobileAnimated } from './services/ServicesMobileAnimated';
 
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ACCENT_HEX } from '@/config/design';
-import { BOOKING_URL } from '@/config/endpoints';
 import LinkCTA from '@/components/common/LinkCTA';
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
  * Section HomeServices — Scrollytelling with circle pattern
@@ -63,60 +60,17 @@ function HomeServices() {
         aria-hidden="true"
       />
 
-      {/* ── Mobile ── */}
-      <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
-        <div className="relative z-10 mx-auto max-w-container">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
+      {/* ── Mobile: scroll-driven / Reduced-motion: static ── */}
+      {!prefersReducedMotion && !isLg ? (
+        <ServicesMobileAnimated />
+      ) : (
+        <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
+          <div className="relative z-10 mx-auto max-w-container">
+            <h2 id="services-title" className="heading-section mb-12 text-black">
               {HOMEPAGE_SECTIONS.services.title}
             </h2>
-          </SimpleAnimation>
-
-          <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-10">
-            {HOMEPAGE_SERVICES.map((service, index) => (
-              <article key={service.title}>
-                <SimpleAnimation type="fade" delay={index * 100}>
-                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="h-full w-full object-cover transition-transform duration-300"
-                      loading="lazy"
-                    />
-                    <GrainOverlay />
-                  </div>
-                  <div className="mt-6 space-y-3">
-                    <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body text-black">{service.description}</p>
-                    <div className="flex flex-col items-start gap-3">
-                      <LinkCTA
-                        to={service.link}
-                        theme="light"
-                        aria-label={`En savoir plus sur ${service.title}`}
-                      >
-                        En savoir plus
-                      </LinkCTA>
-                      {service.title === 'Examens de vue' && (
-                        <LinkCTA
-                          href={BOOKING_URL}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          theme="light"
-                          icon={ExternalLink}
-                          aria-label="Prendre rendez-vous pour un examen de vue"
-                        >
-                          Prendre RDV
-                        </LinkCTA>
-                      )}
-                    </div>
-                  </div>
-                </SimpleAnimation>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <SimpleAnimation type="slide-up" delay={400}>
+            <StaticServiceList />
+            <div className="mt-16 text-center">
               <LinkCTA
                 to={HOMEPAGE_SECTIONS.services.cta.link}
                 theme="light"
@@ -124,10 +78,10 @@ function HomeServices() {
               >
                 {HOMEPAGE_SECTIONS.services.cta.text}
               </LinkCTA>
-            </SimpleAnimation>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ── Desktop: Scrollytelling ── */}
       {isLg && (
