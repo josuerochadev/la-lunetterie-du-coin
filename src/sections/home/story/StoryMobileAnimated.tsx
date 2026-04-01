@@ -3,6 +3,7 @@ import { m, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
@@ -142,13 +143,19 @@ export function StoryMobileAnimated() {
           className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path]"
           style={{ clipPath: photoClip }}
         >
-          <m.img
-            src={STORY_IMAGE}
-            alt={STORY_IMAGE_ALT}
-            className="h-full w-full object-cover will-change-transform"
-            loading="lazy"
+          <m.div
+            className="h-full w-full will-change-transform"
             style={{ scale: photoScale, y: photoY, filter: photoFilter }}
-          />
+          >
+            <ResponsiveImage
+              src={STORY_IMAGE}
+              alt={STORY_IMAGE_ALT}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              sizes="100vw"
+              widths={[640, 768, 1024]}
+            />
+          </m.div>
         </m.div>
 
         {/* ── Title (tight to top / dome) ── */}
@@ -199,7 +206,7 @@ export function StoryMobileAnimated() {
         >
           {/* VOYEZ — fades out during GRAND zoom */}
           <m.span
-            className="text-heading text-fluid-outro text-white will-change-transform"
+            className="text-heading text-fluid-outro text-white"
             style={{ opacity: word1Opacity, y: word1Y }}
           >
             <m.span style={{ opacity: surroundingFade }}>VOYEZ</m.span>
@@ -233,7 +240,7 @@ export function StoryMobileAnimated() {
 
           {/* PAYEZ — fades out during GRAND zoom */}
           <m.span
-            className="text-heading text-fluid-outro mt-2 text-white will-change-transform"
+            className="text-heading text-fluid-outro mt-2 text-white"
             style={{ opacity: word3Opacity, y: word3Y }}
           >
             <m.span style={{ opacity: surroundingFade }}>PAYEZ</m.span>
@@ -241,7 +248,7 @@ export function StoryMobileAnimated() {
 
           {/* PETIT — fades out during GRAND zoom */}
           <m.span
-            className="text-heading text-fluid-outro text-white will-change-transform"
+            className="text-heading text-fluid-outro text-white"
             style={{ opacity: word4Opacity, y: word4Y }}
           >
             <m.span style={{ opacity: surroundingFade }}>PETIT</m.span>

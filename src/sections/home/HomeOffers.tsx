@@ -6,8 +6,7 @@ import { OfferMobileBlock } from './offers/OfferMobileBlock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 
 /**
@@ -18,11 +17,8 @@ import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
  * Reduced-motion: static stacked cards.
  */
 function HomeOffers() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
   const sectionRef = useRef<HTMLElement>(null);
-
-  const isMobileAnimated = !prefersReducedMotion && !isLg;
 
   return (
     <section
@@ -33,13 +29,13 @@ function HomeOffers() {
       data-navbar-theme="dark"
     >
       {/* Desktop — sticky scrollytelling */}
-      {!prefersReducedMotion && isLg && <OffersDesktop />}
+      {variant === 'desktop-animated' && <OffersDesktop />}
 
       {/* Mobile-animated — sticky viewport with layered images + cards */}
-      {isMobileAnimated && <OffersMobileAnimated />}
+      {variant === 'mobile-animated' && <OffersMobileAnimated />}
 
       {/* Reduced-motion — static stacked cards */}
-      {prefersReducedMotion && <OffersStatic />}
+      {variant === 'static' && <OffersStatic />}
     </section>
   );
 }

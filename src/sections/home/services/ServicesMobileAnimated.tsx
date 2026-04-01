@@ -5,6 +5,7 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 import { GrainOverlay } from './GrainOverlay';
 import { SERVICE_COUNT, OUTRO_WORDS } from './constants';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { BOOKING_URL } from '@/config/endpoints';
@@ -95,13 +96,16 @@ function ServiceSlide({
         className="absolute inset-0 will-change-[opacity,transform]"
         style={{ opacity: photoOpacity, zIndex: index }}
       >
-        <m.img
-          src={service.image}
-          alt=""
-          className="h-full w-full object-cover will-change-transform"
-          loading={index === 0 ? 'eager' : 'lazy'}
-          style={{ scale: photoScale }}
-        />
+        <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
+          <ResponsiveImage
+            src={service.image}
+            alt=""
+            className="h-full w-full object-cover"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            sizes="100vw"
+            widths={[640, 768, 1024]}
+          />
+        </m.div>
         <GrainOverlay />
       </m.div>
 
@@ -504,7 +508,7 @@ export function ServicesMobileAnimated() {
 
           {/* Accent curtain — slides up to reveal photos (same curve as HomeStory dome, inverted) */}
           <m.div
-            className="pointer-events-none absolute inset-0 z-40 bg-accent will-change-transform"
+            className="pointer-events-none absolute inset-0 z-40 bg-accent"
             style={{ y: curtainY }}
             aria-hidden="true"
           >

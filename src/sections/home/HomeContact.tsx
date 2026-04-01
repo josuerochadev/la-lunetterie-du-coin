@@ -1,9 +1,8 @@
 import { m, useTransform, useSpring } from 'framer-motion';
 
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 
@@ -127,7 +126,7 @@ function ContactMobileAnimated() {
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Black overlay — matches Testimonials bg, fades to reveal yellow */}
         <m.div
-          className="pointer-events-none absolute inset-0 z-30 bg-black will-change-transform"
+          className="pointer-events-none absolute inset-0 z-30 bg-black"
           style={{ opacity: overlayOpacity }}
         />
 
@@ -143,24 +142,18 @@ function ContactMobileAnimated() {
         <div className="relative z-10 flex h-full flex-col items-start justify-center px-container-x">
           <h2 id="contact-title" className="text-heading text-fluid-outro text-black">
             {/* PASSEZ — slides up after VOIR lands */}
-            <m.span
-              className="block will-change-transform"
-              style={{ opacity: passezOpacity, y: passezY }}
-            >
+            <m.span className="block" style={{ opacity: passezOpacity, y: passezY }}>
               PASSEZ
             </m.span>
 
             {/* NOUS — staggered slide-up */}
-            <m.span
-              className="block will-change-transform"
-              style={{ opacity: nousOpacity, y: nousY }}
-            >
+            <m.span className="block" style={{ opacity: nousOpacity, y: nousY }}>
               NOUS
             </m.span>
 
             {/* VOIR — dramatic zoom from huge to normal */}
             <m.span
-              className="block origin-left will-change-transform"
+              className="block origin-left"
               style={{ scale: voirScale, opacity: voirOpacity }}
             >
               VOIR
@@ -168,7 +161,7 @@ function ContactMobileAnimated() {
           </h2>
 
           {/* CTA — left-aligned under phrase */}
-          <m.div className="mt-8 will-change-transform" style={{ opacity: ctaOpacity, y: ctaY }}>
+          <m.div className="mt-8" style={{ opacity: ctaOpacity, y: ctaY }}>
             <LinkCTA to="/contact" theme="accent">
               Nous contacter
             </LinkCTA>
@@ -189,8 +182,7 @@ function ContactMobileAnimated() {
  * Reduced-motion: Static layout.
  */
 export default function HomeContact() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -200,13 +192,13 @@ export default function HomeContact() {
       data-navbar-theme="dark"
     >
       {/* Desktop */}
-      {!prefersReducedMotion && isLg && <ContactDesktop />}
+      {variant === 'desktop-animated' && <ContactDesktop />}
 
       {/* Mobile animated */}
-      {!prefersReducedMotion && !isLg && <ContactMobileAnimated />}
+      {variant === 'mobile-animated' && <ContactMobileAnimated />}
 
       {/* Reduced-motion — static layout */}
-      {prefersReducedMotion && (
+      {variant === 'static' && (
         <div className="relative min-h-svh overflow-hidden lg:min-h-0">
           {/* Eye pattern — static texture */}
           <img

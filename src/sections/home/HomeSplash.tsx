@@ -43,7 +43,13 @@ export default function HomeSplash() {
   const [videoPaused, setVideoPaused] = useState(false);
 
   const { scrollY } = useScroll();
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800));
+
+  useEffect(() => {
+    const handleVhChange = () => setVh(window.innerHeight);
+    window.addEventListener('resize', handleVhChange);
+    return () => window.removeEventListener('resize', handleVhChange);
+  }, []);
 
   // ── Desktop: video fades out on scroll ──
   const videoOpacity = useTransform(scrollY, [vh * 0.08, vh * 0.3], [1, 0]);

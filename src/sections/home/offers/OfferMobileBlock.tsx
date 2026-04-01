@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS } from '@/data/homepage';
 
@@ -44,22 +45,21 @@ export function OfferMobileBlock({
     <article ref={ref} className="py-10 lg:hidden">
       {/* Image with scale entrance */}
       <div className="px-container-x">
-        <m.div
-          style={{ scale: imgScale, opacity: imgOpacity, y: imgY }}
-          className="will-change-transform"
-        >
-          <img
+        <m.div style={{ scale: imgScale, opacity: imgOpacity, y: imgY }}>
+          <ResponsiveImage
             src={offer.image}
             alt={offer.title}
             className="h-auto w-full object-contain"
             loading="lazy"
+            sizes="(min-width: 768px) 50vw, 100vw"
+            widths={[384, 640, 768]}
           />
         </m.div>
       </div>
 
       {/* Card with scroll-driven slide-up + internal stagger */}
       <div className="mt-6 px-container-x">
-        <m.div style={{ y: cardY, opacity: cardOpacity }} className="will-change-transform">
+        <m.div style={{ y: cardY, opacity: cardOpacity }}>
           <div className="relative overflow-hidden rounded-r-2xl bg-black">
             <m.div
               className="absolute bottom-0 left-0 top-0 w-1.5 origin-bottom bg-secondary-blue"

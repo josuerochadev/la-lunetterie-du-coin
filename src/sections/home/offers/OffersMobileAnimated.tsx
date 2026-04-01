@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
@@ -118,19 +119,21 @@ export function OffersMobileAnimated() {
           {HOMEPAGE_OFFERS.map((offer, i) => (
             <m.div
               key={offer.id}
-              className="absolute inset-0 flex items-center justify-center will-change-transform"
+              className="absolute inset-0 flex items-center justify-center"
               style={{
                 opacity: imgTransforms[i].opacity,
                 y: imgTransforms[i].y,
                 scale: imgTransforms[i].scale,
               }}
             >
-              <img
+              <ResponsiveImage
                 src={offer.image}
                 alt=""
-                aria-hidden="true"
                 className="h-[130vh] w-auto max-w-none object-contain"
                 loading={i === 0 ? 'eager' : 'lazy'}
+                sizes="100vw"
+                widths={[640, 768, 1024]}
+                imgProps={{ 'aria-hidden': true }}
               />
             </m.div>
           ))}
@@ -161,7 +164,7 @@ export function OffersMobileAnimated() {
               return (
                 <m.div
                   key={offer.id}
-                  className="absolute inset-x-0 top-0 will-change-transform"
+                  className="absolute inset-x-0 top-0"
                   style={{
                     opacity: cardTransforms[i].opacity,
                     y: cardTransforms[i].y,

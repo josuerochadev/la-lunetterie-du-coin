@@ -2,8 +2,7 @@ import { TestimonialsDesktop } from './testimonials/TestimonialsDesktop';
 import { TestimonialsMobile } from './testimonials/TestimonialsMobile';
 import { TestimonialsMobileAnimated } from './testimonials/TestimonialsMobileAnimated';
 
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { ACCENT_HEX } from '@/config/design';
 
 /**
@@ -14,8 +13,7 @@ import { ACCENT_HEX } from '@/config/design';
  * Reduced-motion: Static stacked layout.
  */
 function HomeTestimonials() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -52,15 +50,15 @@ function HomeTestimonials() {
         aria-hidden="true"
       />
 
-      {!prefersReducedMotion && isLg && <TestimonialsDesktop />}
+      {variant === 'desktop-animated' && <TestimonialsDesktop />}
 
-      {!prefersReducedMotion && !isLg && (
+      {variant === 'mobile-animated' && (
         <div className="pointer-events-auto lg:hidden">
           <TestimonialsMobileAnimated />
         </div>
       )}
 
-      {prefersReducedMotion && (
+      {variant === 'static' && (
         <div className="pointer-events-auto">
           <TestimonialsMobile />
         </div>

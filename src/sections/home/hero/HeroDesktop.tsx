@@ -6,18 +6,12 @@ import { InfoAccent, HeroMobileContent } from './HeroMobile';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { SPRING_CONFIG } from '@/lib/motion';
 
-export function HeroAnimated() {
+export function HeroDesktopAnimated() {
   const [choreographyStarted, setChoreographyStarted] = useState(false);
   const [vh, setVh] = useState(() => (typeof window !== 'undefined' ? window.innerHeight : 800));
-  const [isLg, setIsLg] = useState(
-    () => typeof window !== 'undefined' && window.innerWidth >= 1024,
-  );
 
   useEffect(() => {
-    const handleResize = () => {
-      setVh(window.innerHeight);
-      setIsLg(window.innerWidth >= 1024);
-    };
+    const handleResize = () => setVh(window.innerHeight);
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -118,14 +112,14 @@ export function HeroAnimated() {
   return (
     <m.section
       id="hero"
-      className="sticky top-0 z-[11] h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10] lg:h-screen"
-      style={isLg ? { clipPath: heroClip } : undefined}
+      className="fixed inset-0 z-[10] h-screen w-full overflow-hidden bg-accent"
+      style={{ clipPath: heroClip }}
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
     >
       {/* Desktop photos */}
       <m.div
-        className="absolute inset-y-0 left-0 z-10 hidden w-[25%] overflow-hidden lg:block"
+        className="absolute inset-y-0 left-0 z-10 w-[25%] overflow-hidden"
         style={{ x: photoLeftX, scale: photoLeftScale, opacity: photoLeftOpacity }}
       >
         <ResponsiveImage
@@ -139,7 +133,7 @@ export function HeroAnimated() {
       </m.div>
 
       <m.div
-        className="absolute left-0 top-0 z-10 hidden h-full w-[35%] overflow-hidden lg:block"
+        className="absolute left-0 top-0 z-10 h-full w-[35%] overflow-hidden"
         style={{ x: photoRightX, scale: photoRightScale, opacity: photoRightOpacity }}
       >
         <ResponsiveImage
@@ -154,7 +148,7 @@ export function HeroAnimated() {
 
       {/* Desktop title */}
       <m.div
-        className="absolute bottom-[30%] left-0 z-20 hidden w-full lg:block"
+        className="absolute bottom-[30%] left-0 z-20 w-full"
         style={{ x: titleX, opacity: titleOpacity }}
       >
         <m.div
@@ -173,7 +167,7 @@ export function HeroAnimated() {
       </m.div>
 
       {/* Desktop info accents */}
-      <div className="absolute bottom-[12%] left-1/2 z-20 hidden -translate-x-1/2 gap-12 lg:flex">
+      <div className="absolute bottom-[12%] left-1/2 z-20 flex -translate-x-1/2 gap-12">
         <m.div style={{ y: block1Y, x: block1X, opacity: block1Opacity }}>
           <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
         </m.div>
@@ -185,10 +179,20 @@ export function HeroAnimated() {
           />
         </m.div>
       </div>
-
-      {/* Mobile */}
-      <HeroMobileContent />
     </m.section>
+  );
+}
+
+export function HeroMobileAnimated() {
+  return (
+    <section
+      id="hero"
+      className="sticky top-0 z-[11] h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent"
+      aria-labelledby="hero-title"
+      data-navbar-theme="dark"
+    >
+      <HeroMobileContent />
+    </section>
   );
 }
 

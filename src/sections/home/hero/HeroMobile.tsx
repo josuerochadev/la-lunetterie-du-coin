@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
@@ -131,9 +131,20 @@ function HeroMobileAccents({
   );
 }
 
+function useViewportHeight() {
+  return useSyncExternalStore(
+    (cb) => {
+      window.addEventListener('resize', cb);
+      return () => window.removeEventListener('resize', cb);
+    },
+    () => window.innerHeight,
+    () => 800,
+  );
+}
+
 export function HeroMobileContent({ titleId }: { titleId?: string }) {
   const { scrollY } = useScroll();
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const vh = useViewportHeight();
   const revealStart = vh * 1.4;
 
   // ── Photo curtain reveal — rises from below like a curtain ──

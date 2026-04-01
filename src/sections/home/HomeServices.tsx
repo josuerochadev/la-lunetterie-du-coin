@@ -12,8 +12,8 @@ import { StaticServiceList } from './services/StaticServiceList';
 import { ServicesMobileAnimated } from './services/ServicesMobileAnimated';
 
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useIsLg } from '@/hooks/useIsLg';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { ACCENT_HEX } from '@/config/design';
 import LinkCTA from '@/components/common/LinkCTA';
 
@@ -24,10 +24,10 @@ import LinkCTA from '@/components/common/LinkCTA';
  * Mobile: simple stacked cards with SimpleAnimation.
  */
 function HomeServices() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
   const isLg = useIsLg();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const shouldAnimate = !prefersReducedMotion && isLg;
+  const shouldAnimate = variant === 'desktop-animated';
 
   const { scrollYProgress } = useScroll({
     target: shouldAnimate ? sectionRef : undefined,
@@ -61,7 +61,7 @@ function HomeServices() {
       />
 
       {/* ── Mobile: scroll-driven / Reduced-motion: static ── */}
-      {!prefersReducedMotion && !isLg ? (
+      {variant === 'mobile-animated' ? (
         <ServicesMobileAnimated />
       ) : (
         <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
@@ -83,7 +83,7 @@ function HomeServices() {
         </div>
       )}
 
-      {/* ── Desktop: Scrollytelling ── */}
+      {/* ── Desktop: Scrollytelling (or desktop static fallback) ── */}
       {isLg && (
         <div ref={sectionRef} className="relative">
           <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
