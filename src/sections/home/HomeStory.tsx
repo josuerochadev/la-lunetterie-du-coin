@@ -18,17 +18,22 @@ function HomeStory() {
   return (
     <section
       id="story"
-      className="relative -mt-[8vw] w-full bg-black pt-[36vw] [overflow-x:clip] lg:-mt-0 lg:pt-[35vh]"
+      className="relative -mt-[8vw] w-full bg-black pt-[36vw] lg:-mt-0 lg:pt-[35vh] lg:[overflow-x:clip]"
       aria-labelledby="story-title"
       data-navbar-theme="light"
     >
-      {/* Convex eyelid dome — top half of ellipse only, flat bottom edge */}
+      {/* Convex eyelid dome — wrapped to prevent horizontal scroll on mobile
+          while allowing the dome to extend above the section (no overflow-clip on mobile) */}
       <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 z-20 h-[22.5vw] w-[140vw] -translate-x-1/2 bg-black"
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-20 h-[22.5vw] overflow-hidden"
         aria-hidden="true"
         data-navbar-theme="light"
-        style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
-      />
+      >
+        <div
+          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-black"
+          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+        />
+      </div>
 
       {variant === 'desktop-animated' && <StoryDesktopAnimated />}
       {variant === 'mobile-animated' && <StoryMobileAnimated />}

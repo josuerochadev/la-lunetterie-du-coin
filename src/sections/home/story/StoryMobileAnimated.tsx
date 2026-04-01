@@ -1,131 +1,257 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { ACCENT_HEX } from '@/config/design';
 
 export function StoryMobileAnimated() {
-  const textRef = useRef<HTMLDivElement>(null);
-  const photoWrapRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress: textProgress } = useScroll({
-    target: textRef,
+  const { scrollYProgress } = useScroll({
+    target: ref,
     offset: ['start end', 'end start'],
   });
 
-  const { scrollYProgress: photoProgress } = useScroll({
-    target: photoWrapRef,
-    offset: ['start start', 'end start'],
+  // ──────────────────────────────────────────────────────────────────────
+  // Scroll math: h-[300vh] + offset ['start end','end start']
+  // Total range = 300vh + 100vh = 400vh
+  // progress ~0.25 → ref top at viewport top (sticky activates)
+  // progress ~0.75 → ref bottom at viewport bottom (sticky ends)
+  //
+  // Layout: Title → Body text + CTA → Photo (right after CTA)
+  //
+  // Phase 1 (0.05–0.22) : Entrance — title slide-in, word reveal
+  // Phase 2 (0.22–0.48) : Photo grows upward, text slides up naturally
+  // Phase 3 (0.48–0.56) : Dark overlay, Ken Burns zoom
+  // Phase 4 (0.56–0.68) : VOYEZ / GRAND / PAYEZ / PETIT stagger
+  // Phase 5 (0.68–0.74) : Surrounding words fade, GRAND turns yellow
+  // Phase 6 (0.74–0.88) : GRAND zooms to fill viewport with yellow
+  // ──────────────────────────────────────────────────────────────────────
+
+  // ── Title entrance: slides up + fades in as section approaches ──
+  const titleEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
+  const titleEntranceY = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
+
+  // ── Title exit: slides up naturally when photo expands ──
+  const titleExitOpacity = useTransform(scrollYProgress, [0.26, 0.38], [1, 0]);
+  const titleExitY = useTransform(scrollYProgress, [0.26, 0.42], [0, -250]);
+
+  // Combined title transforms
+  const titleOpacity = useTransform(
+    [titleEntranceOpacity, titleExitOpacity],
+    ([enter, exit]: number[]) => Math.min(enter, exit),
+  );
+  const titleY = useTransform(
+    [titleEntranceY, titleExitY],
+    ([enter, exit]: number[]) => enter + exit,
+  );
+
+  // ── Body text + CTA: slides up naturally (slightly delayed) ──
+  const textExitOpacity = useTransform(scrollYProgress, [0.3, 0.44], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0.3, 0.46], [0, -200]);
+
+  // ── Photo clip: bottom band → fullscreen (grows from bottom to top) ──
+  const clipTop = useTransform(scrollYProgress, [0.15, 0.22, 0.48], [70, 70, 0]);
+  const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
+
+  // Ken Burns: gentle zoom + vertical drift
+  const photoScale = useTransform(scrollYProgress, [0.22, 0.68], [1, 1.15]);
+  const photoY = useTransform(scrollYProgress, [0.48, 0.68], [0, -20]);
+
+  // Photo darkness: starts dim, brightens as it expands
+  const photoBrightness = useTransform(scrollYProgress, [0.15, 0.42], [0.45, 0.8]);
+  const photoFilter = useTransform(photoBrightness, (b) => `brightness(${b})`);
+
+  // ── Dark overlay for outro ──
+  const overlayOpacity = useTransform(scrollYProgress, [0.48, 0.56], [0, 0.6]);
+
+  // ── Outro: word-by-word stagger — VOYEZ / GRAND / PAYEZ / PETIT ──
+  const STAGGER = 0.025;
+  const OUTRO_START = 0.56;
+  const word1Opacity = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.04], [0, 1]);
+  const word1Y = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.04], [40, 0]);
+  const word2Opacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER, OUTRO_START + STAGGER + 0.04],
+    [0, 1],
+  );
+  const word2Y = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER, OUTRO_START + STAGGER + 0.04],
+    [40, 0],
+  );
+  const word3Opacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 2, OUTRO_START + STAGGER * 2 + 0.04],
+    [0, 1],
+  );
+  const word3Y = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 2, OUTRO_START + STAGGER * 2 + 0.04],
+    [40, 0],
+  );
+  const word4Opacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 3, OUTRO_START + STAGGER * 3 + 0.04],
+    [0, 1],
+  );
+  const word4Y = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 3, OUTRO_START + STAGGER * 3 + 0.04],
+    [40, 0],
+  );
+  const ctaOpacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 4, OUTRO_START + STAGGER * 4 + 0.04],
+    [0, 1],
+  );
+  const outroPointer = usePointerEvents(word1Opacity);
+
+  // ── Phase 5: Surrounding words fade, GRAND isolates ──
+  const surroundingFade = useTransform(scrollYProgress, [0.68, 0.74], [1, 0]);
+
+  // GRAND color: white → accent yellow
+  const grandColor = useTransform(scrollYProgress, [0.68, 0.74], ['#FFFFFF', ACCENT_HEX]);
+
+  // ── Phase 6: GRAND zooms to fill viewport ──
+  const grandScale = useTransform(scrollYProgress, [0.74, 0.88], [1, 35]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.84, 0.9], [0, 1]);
+
+  // Navbar theme: switch to dark when yellow fills
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (!navRef.current) return;
+    navRef.current.setAttribute('data-navbar-theme', v >= 0.82 ? 'dark' : 'light');
   });
 
-  // CTA — scroll-driven opacity instead of generic slide-up
-  const ctaOpacity = useTransform(textProgress, [0.2, 0.28], [0, 1]);
-
-  // ── Phase 2: Photo — lens opening effect ──
-  // Starts with inset + rounded corners, expands to fill viewport
-  const insetX = useTransform(photoProgress, [0, 0.35], ['7.5%', '0%']);
-  const insetY = useTransform(photoProgress, [0, 0.35], ['20%', '0%']);
-  // Continuous internal zoom for life
-  const photoScale = useTransform(photoProgress, [0, 0.5], [1, 1.12]);
-
-  // ── Phase 3: Transition phrase + exit ──
-  // Dark overlay fades in over the photo
-  const overlayOpacity = useTransform(photoProgress, [0.4, 0.55], [0, 0.65]);
-  // "VOYEZ GRAND" entrance
-  const voyezOpacity = useTransform(photoProgress, [0.45, 0.55], [0, 1]);
-  const voyezY = useTransform(photoProgress, [0.45, 0.55], [30, 0]);
-  const voyezScale = useTransform(photoProgress, [0.55, 0.8], [1, 1.3]);
-  // "PAYEZ PETIT" entrance — slight delay
-  const petitOpacity = useTransform(photoProgress, [0.52, 0.62], [0, 1]);
-  const petitY = useTransform(photoProgress, [0.52, 0.62], [20, 0]);
-  // Everything fades out at the end
-  const exitOpacity = useTransform(photoProgress, [0.78, 0.92], [1, 0]);
-
   return (
-    <div className="lg:hidden">
-      {/* Phase 1: Text content — scroll-driven word reveals */}
-      <div ref={textRef} className="px-container-x">
-        <ScrollWordReveal
-          as="h2"
-          id="story-title"
-          scrollYProgress={textProgress}
-          revealStart={0.0}
-          revealEnd={0.12}
-          className="text-heading text-fluid-story text-white"
+    <div ref={ref} className="relative h-[300vh] lg:hidden">
+      <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
+        {/* ── Photo — below CTA, grows upward, darkened for readability ── */}
+        <m.div
+          className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path]"
+          style={{ clipPath: photoClip }}
         >
-          {STORY_TITLE}
-        </ScrollWordReveal>
+          <m.img
+            src={STORY_IMAGE}
+            alt={STORY_IMAGE_ALT}
+            className="h-full w-full object-cover will-change-transform"
+            loading="lazy"
+            style={{ scale: photoScale, y: photoY, filter: photoFilter }}
+          />
+        </m.div>
 
-        <div className="mt-8">
+        {/* ── Title (tight to top / dome) ── */}
+        <m.div
+          className="relative z-10 px-container-x pt-[2vh]"
+          style={{ opacity: titleOpacity, y: titleY }}
+        >
+          <h2 id="story-title" className="text-heading text-fluid-story text-white">
+            {STORY_TITLE}
+          </h2>
+        </m.div>
+
+        {/* ── Body text + CTA ── */}
+        <m.div
+          className="relative z-10 mt-6 px-container-x"
+          style={{ opacity: textExitOpacity, y: textExitY }}
+        >
           <ScrollWordReveal
             as="p"
-            scrollYProgress={textProgress}
+            scrollYProgress={scrollYProgress}
             revealStart={0.05}
-            revealEnd={0.22}
-            className="text-body-xl text-secondary-blue"
+            revealEnd={0.18}
+            className="text-body-xl text-white/80"
           >
             {STORY_BODY}
           </ScrollWordReveal>
-        </div>
-
-        <m.div className="mt-10" style={{ opacity: ctaOpacity }}>
-          <LinkCTA to="/a-propos" theme="dark" className="text-body-sm !text-white">
-            Nous découvrir
-          </LinkCTA>
+          <div className="mt-6">
+            <LinkCTA to="/a-propos" theme="dark" className="text-body-sm !text-white">
+              Nous découvrir
+            </LinkCTA>
+          </div>
         </m.div>
-      </div>
 
-      {/* Phase 2 + 3: Photo cinématique + transition phrase */}
-      <div ref={photoWrapRef} className="relative h-[220vh]">
-        <div className="sticky top-0 h-screen">
-          {/* Photo — expands from inset to fullscreen */}
-          <m.div
-            className="absolute z-0 overflow-hidden will-change-[top,bottom,left,right]"
+        {/* Spacer — photo band sits right after CTA */}
+        <div className="flex-1" />
+
+        {/* ── Dark overlay for outro ── */}
+        <m.div
+          className="pointer-events-none absolute inset-0 z-20 bg-black"
+          style={{ opacity: overlayOpacity }}
+          aria-hidden="true"
+        />
+
+        {/* ── Outro: VOYEZ / GRAND / PAYEZ / PETIT → GRAND zooms yellow ── */}
+        <m.div
+          className="absolute inset-0 z-30 flex flex-col items-start justify-center px-container-x"
+          style={{ pointerEvents: outroPointer }}
+        >
+          {/* VOYEZ — fades out during GRAND zoom */}
+          <m.span
+            className="text-heading text-fluid-outro text-white will-change-transform"
+            style={{ opacity: word1Opacity, y: word1Y }}
+          >
+            <m.span style={{ opacity: surroundingFade }}>VOYEZ</m.span>
+          </m.span>
+
+          {/* GRAND — stays, changes color, zooms to fill viewport */}
+          <m.span
+            className="text-heading text-fluid-outro will-change-transform"
             style={{
-              top: insetY,
-              bottom: insetY,
-              left: insetX,
-              right: insetX,
+              opacity: word2Opacity,
+              y: word2Y,
+              color: grandColor,
+              scale: grandScale,
+              transformOrigin: 'center center',
             }}
           >
-            <m.img
-              src={STORY_IMAGE}
-              alt={STORY_IMAGE_ALT}
-              className="h-full w-full object-cover will-change-transform"
-              loading="lazy"
-              style={{ scale: photoScale }}
-            />
-          </m.div>
+            GRAND
+          </m.span>
 
-          {/* Dark overlay — above the photo */}
-          <m.div
-            className="pointer-events-none absolute inset-0 z-10 bg-black"
-            style={{ opacity: overlayOpacity }}
-            aria-hidden="true"
-          />
-
-          {/* Transition phrase — "VOYEZ GRAND / PAYEZ PETIT" */}
-          <m.div
-            className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-2"
-            style={{ opacity: exitOpacity }}
-            aria-hidden="true"
+          {/* PAYEZ — fades out during GRAND zoom */}
+          <m.span
+            className="text-heading text-fluid-outro mt-2 text-white will-change-transform"
+            style={{ opacity: word3Opacity, y: word3Y }}
           >
-            <m.span
-              className="text-heading text-title-md text-accent will-change-transform"
-              style={{ opacity: voyezOpacity, y: voyezY, scale: voyezScale }}
-            >
-              VOYEZ GRAND
-            </m.span>
-            <m.span
-              className="text-heading text-title-sm text-accent"
-              style={{ opacity: petitOpacity, y: petitY }}
-            >
-              PAYEZ PETIT
-            </m.span>
+            <m.span style={{ opacity: surroundingFade }}>PAYEZ</m.span>
+          </m.span>
+
+          {/* PETIT — fades out during GRAND zoom */}
+          <m.span
+            className="text-heading text-fluid-outro text-white will-change-transform"
+            style={{ opacity: word4Opacity, y: word4Y }}
+          >
+            <m.span style={{ opacity: surroundingFade }}>PETIT</m.span>
+          </m.span>
+
+          {/* CTA — fades out before GRAND zoom */}
+          <m.div className="mt-6" style={{ opacity: ctaOpacity }}>
+            <m.div style={{ opacity: surroundingFade }}>
+              <LinkCTA to="/a-propos" theme="dark">
+                Nous découvrir
+              </LinkCTA>
+            </m.div>
           </m.div>
-        </div>
+        </m.div>
+
+        {/* ── Yellow overlay — safety net as GRAND fills screen ── */}
+        <m.div
+          className="pointer-events-none absolute inset-0 z-40 bg-accent"
+          style={{ opacity: yellowOverlay }}
+          aria-hidden="true"
+        />
+
+        {/* Navbar theme strip */}
+        <div
+          ref={navRef}
+          className="pointer-events-none absolute inset-x-0 top-0 z-50 h-20"
+          data-navbar-theme="light"
+        />
       </div>
     </div>
   );

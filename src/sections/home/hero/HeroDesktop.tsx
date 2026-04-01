@@ -118,7 +118,7 @@ export function HeroAnimated() {
   return (
     <m.section
       id="hero"
-      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10] lg:h-screen"
+      className="sticky top-0 z-[11] h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:fixed lg:inset-0 lg:z-[10] lg:h-screen"
       style={isLg ? { clipPath: heroClip } : undefined}
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
@@ -196,7 +196,7 @@ export function HeroStatic() {
   return (
     <section
       id="hero"
-      className="relative h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:h-screen"
+      className="sticky top-0 z-[11] h-[calc(100vh+8vw)] w-full overflow-hidden bg-accent lg:relative lg:h-screen"
       aria-labelledby="hero-title"
       data-navbar-theme="dark"
     >

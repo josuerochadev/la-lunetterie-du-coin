@@ -83,3 +83,9 @@
 .text-fluid-story {
   font-size: clamp(2.5rem, 10vw, 5rem);
 }
+
+/* Outro display: bold statement text, one step below hero fit-to-width */
+.text-fluid-outro {
+  font-size: clamp(3.5rem, 20vw, 12rem);
+  line-height: 0.85;
+}
