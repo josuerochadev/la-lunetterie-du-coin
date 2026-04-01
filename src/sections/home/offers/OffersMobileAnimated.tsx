@@ -6,20 +6,22 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { SPRING_CONFIG } from '@/lib/motion';
 
-const SCROLL_HEIGHT_VH = 180;
+const SCROLL_HEIGHT_VH = 200;
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 
 /**
  * Mobile-animated offers — sticky viewport with layered images + cards.
  *
- * Timeline (scroll progress 0→1 over 180vh):
+ * Timeline (scroll progress 0→1 over 200vh):
  *   0.00–0.10  Image 1 fade-in + scale
- *   0.08–0.20  Card 1 slide-up + micro-stagger
- *   0.20–0.42  Hold offer 1
- *   0.42–0.55  Card 1 exit + crossfade images
- *   0.55–0.67  Card 2 slide-up + micro-stagger
- *   0.67–0.88  Hold offer 2
- *   0.88–1.00  Card 2 exit
+ *   0.08–0.18  Card 1 slide-up + micro-stagger
+ *   0.18–0.38  Hold offer 1
+ *   0.38–0.48  Card 1 exit + crossfade images
+ *   0.48–0.58  Card 2 slide-up + micro-stagger
+ *   0.58–0.75  Hold offer 2
+ *   0.75–0.82  Card 2 exit + title fade-out
+ *   0.82–0.92  Outro phrase "UNE PAIRE QUI A DU CHIEN"
+ *   0.90–0.97  CTA "Voir nos offres"
  */
 export function OffersMobileAnimated() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -30,43 +32,43 @@ export function OffersMobileAnimated() {
   });
 
   // ── Images (faded backdrop — max opacity 0.55 for card readability) ──
-  const img0Opacity = useTransform(scrollYProgress, [0.0, 0.1, 0.42, 0.55], [0, 0.55, 0.55, 0]);
-  const img0YRaw = useTransform(scrollYProgress, [0.0, 0.55], [60, -60]);
+  const img0Opacity = useTransform(scrollYProgress, [0.0, 0.1, 0.38, 0.48], [0, 0.55, 0.55, 0]);
+  const img0YRaw = useTransform(scrollYProgress, [0.0, 0.48], [60, -60]);
   const img0Y = useSpring(img0YRaw, SPRING_CONFIG);
   const img0Scale = useTransform(scrollYProgress, [0.0, 0.12], [0.88, 1]);
 
-  const img1Opacity = useTransform(scrollYProgress, [0.42, 0.55, 0.88, 1.0], [0, 0.55, 0.55, 0]);
-  const img1YRaw = useTransform(scrollYProgress, [0.42, 1.0], [60, -60]);
+  const img1Opacity = useTransform(scrollYProgress, [0.38, 0.48, 0.75, 0.82], [0, 0.55, 0.55, 0]);
+  const img1YRaw = useTransform(scrollYProgress, [0.38, 0.82], [60, -60]);
   const img1Y = useSpring(img1YRaw, SPRING_CONFIG);
-  const img1Scale = useTransform(scrollYProgress, [0.42, 0.57], [0.88, 1]);
+  const img1Scale = useTransform(scrollYProgress, [0.38, 0.5], [0.88, 1]);
 
   // ── Card 0 ──────────────────────────────────────────────────────
-  const card0Opacity = useTransform(scrollYProgress, [0.08, 0.18, 0.42, 0.52], [0, 1, 1, 0]);
-  const card0YRaw = useTransform(scrollYProgress, [0.08, 0.2, 0.42, 0.52], [60, 0, 0, -40]);
+  const card0Opacity = useTransform(scrollYProgress, [0.08, 0.18, 0.38, 0.46], [0, 1, 1, 0]);
+  const card0YRaw = useTransform(scrollYProgress, [0.08, 0.18, 0.38, 0.46], [60, 0, 0, -40]);
   const card0Y = useSpring(card0YRaw, SPRING_CONFIG);
-  const card0Scale = useTransform(scrollYProgress, [0.08, 0.2, 0.42, 0.52], [0.95, 1, 1, 0.95]);
+  const card0Scale = useTransform(scrollYProgress, [0.08, 0.18, 0.38, 0.46], [0.95, 1, 1, 0.95]);
 
   // Card 0 internals — micro-stagger
-  const c0TitleOpacity = useTransform(scrollYProgress, [0.1, 0.18], [0, 1]);
-  const c0TitleY = useTransform(scrollYProgress, [0.1, 0.18], [14, 0]);
-  const c0DescOpacity = useTransform(scrollYProgress, [0.13, 0.21], [0, 1]);
-  const c0DescY = useTransform(scrollYProgress, [0.13, 0.21], [14, 0]);
-  const c0CtaOpacity = useTransform(scrollYProgress, [0.16, 0.24], [0, 1]);
-  const c0BarScaleY = useTransform(scrollYProgress, [0.1, 0.22], [0, 1]);
+  const c0TitleOpacity = useTransform(scrollYProgress, [0.1, 0.17], [0, 1]);
+  const c0TitleY = useTransform(scrollYProgress, [0.1, 0.17], [14, 0]);
+  const c0DescOpacity = useTransform(scrollYProgress, [0.13, 0.2], [0, 1]);
+  const c0DescY = useTransform(scrollYProgress, [0.13, 0.2], [14, 0]);
+  const c0CtaOpacity = useTransform(scrollYProgress, [0.15, 0.22], [0, 1]);
+  const c0BarScaleY = useTransform(scrollYProgress, [0.1, 0.2], [0, 1]);
 
   // ── Card 1 ──────────────────────────────────────────────────────
-  const card1Opacity = useTransform(scrollYProgress, [0.55, 0.65, 0.88, 0.97], [0, 1, 1, 0]);
-  const card1YRaw = useTransform(scrollYProgress, [0.55, 0.67, 0.88, 0.97], [60, 0, 0, -40]);
+  const card1Opacity = useTransform(scrollYProgress, [0.48, 0.58, 0.75, 0.82], [0, 1, 1, 0]);
+  const card1YRaw = useTransform(scrollYProgress, [0.48, 0.58, 0.75, 0.82], [60, 0, 0, -40]);
   const card1Y = useSpring(card1YRaw, SPRING_CONFIG);
-  const card1Scale = useTransform(scrollYProgress, [0.55, 0.67, 0.88, 0.97], [0.95, 1, 1, 0.95]);
+  const card1Scale = useTransform(scrollYProgress, [0.48, 0.58, 0.75, 0.82], [0.95, 1, 1, 0.95]);
 
   // Card 1 internals — micro-stagger
-  const c1TitleOpacity = useTransform(scrollYProgress, [0.57, 0.65], [0, 1]);
-  const c1TitleY = useTransform(scrollYProgress, [0.57, 0.65], [14, 0]);
-  const c1DescOpacity = useTransform(scrollYProgress, [0.6, 0.68], [0, 1]);
-  const c1DescY = useTransform(scrollYProgress, [0.6, 0.68], [14, 0]);
-  const c1CtaOpacity = useTransform(scrollYProgress, [0.63, 0.71], [0, 1]);
-  const c1BarScaleY = useTransform(scrollYProgress, [0.57, 0.69], [0, 1]);
+  const c1TitleOpacity = useTransform(scrollYProgress, [0.5, 0.57], [0, 1]);
+  const c1TitleY = useTransform(scrollYProgress, [0.5, 0.57], [14, 0]);
+  const c1DescOpacity = useTransform(scrollYProgress, [0.53, 0.6], [0, 1]);
+  const c1DescY = useTransform(scrollYProgress, [0.53, 0.6], [14, 0]);
+  const c1CtaOpacity = useTransform(scrollYProgress, [0.55, 0.62], [0, 1]);
+  const c1BarScaleY = useTransform(scrollYProgress, [0.5, 0.6], [0, 1]);
 
   const cardInternals = [
     {
@@ -88,11 +90,14 @@ export function OffersMobileAnimated() {
   ];
 
   // ── Title ───────────────────────────────────────────────────────
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.06, 0.95, 1.0], [0, 1, 1, 0]);
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.06, 0.75, 0.82], [0, 1, 1, 0]);
+
+  // ── Outro phrase ──────────────────────────────────────────────
+  const outroOpacity = useTransform(scrollYProgress, [0.82, 0.88, 0.96, 1.0], [0, 1, 1, 0]);
 
   // ── Section CTA ────────────────────────────────────────────────
-  const sectionCtaOpacity = useTransform(scrollYProgress, [0.92, 0.97], [0, 1]);
-  const sectionCtaYRaw = useTransform(scrollYProgress, [0.92, 0.97], [20, 0]);
+  const sectionCtaOpacity = useTransform(scrollYProgress, [0.88, 0.93, 0.96, 1.0], [0, 1, 1, 0]);
+  const sectionCtaYRaw = useTransform(scrollYProgress, [0.88, 0.93], [20, 0]);
   const sectionCtaY = useSpring(sectionCtaYRaw, SPRING_CONFIG);
 
   const imgTransforms = [
@@ -208,18 +213,29 @@ export function OffersMobileAnimated() {
           </div>
         </div>
 
-        {/* ── Section CTA ── */}
-        <m.div
-          className="relative z-20 shrink-0 pb-8 text-center"
-          style={{ opacity: sectionCtaOpacity, y: sectionCtaY }}
-        >
-          <LinkCTA
-            to={HOMEPAGE_SECTIONS.offers.cta.link}
-            aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
-          >
-            {HOMEPAGE_SECTIONS.offers.cta.text}
-          </LinkCTA>
-        </m.div>
+        {/* ── Outro + CTA (centered, replaces cards after they exit) ── */}
+        <div className="absolute inset-0 z-20 flex flex-col items-start justify-center gap-6 px-container-x">
+          <m.div style={{ opacity: outroOpacity }}>
+            <ScrollWordReveal
+              as="h3"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.82}
+              revealEnd={0.88}
+              className="text-heading text-fluid-outro text-black"
+            >
+              UNE PAIRE QUI A DU CHIEN
+            </ScrollWordReveal>
+          </m.div>
+
+          <m.div style={{ opacity: sectionCtaOpacity, y: sectionCtaY }}>
+            <LinkCTA
+              to={HOMEPAGE_SECTIONS.offers.cta.link}
+              aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+            >
+              {HOMEPAGE_SECTIONS.offers.cta.text}
+            </LinkCTA>
+          </m.div>
+        </div>
       </div>
     </div>
   );
