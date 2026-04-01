@@ -1,11 +1,10 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
 
 import { OffersDesktop } from './offers/OffersDesktop';
+import { OffersMobileAnimated } from './offers/OffersMobileAnimated';
 import { OfferMobileBlock } from './offers/OfferMobileBlock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
-import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { useIsLg } from '@/hooks/useIsLg';
@@ -15,28 +14,13 @@ import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
  * Section HomeOffers — Scrollytelling offer showcase
  *
  * Desktop: sticky viewport with 3D tilted images + card overlays.
- * Mobile: scroll-driven card reveals with micro-stagger.
+ * Mobile-animated: sticky viewport with layered floating images + sequential cards.
  * Reduced-motion: static stacked cards.
  */
 function HomeOffers() {
   const prefersReducedMotion = usePrefersReducedMotion();
   const isLg = useIsLg();
   const sectionRef = useRef<HTMLElement>(null);
-  const mobileTitleRef = useRef<HTMLDivElement>(null);
-  const mobileCTARef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress: titleProgress } = useScroll({
-    target: mobileTitleRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const { scrollYProgress: ctaProgress } = useScroll({
-    target: mobileCTARef,
-    offset: ['start end', 'end start'],
-  });
-
-  const ctaOpacity = useTransform(ctaProgress, [0.05, 0.25], [0, 1]);
-  const ctaY = useTransform(ctaProgress, [0.05, 0.25], [30, 0]);
 
   const isMobileAnimated = !prefersReducedMotion && !isLg;
 
@@ -51,68 +35,44 @@ function HomeOffers() {
       {/* Desktop — sticky scrollytelling */}
       {!prefersReducedMotion && isLg && <OffersDesktop />}
 
-      {/* Mobile / reduced-motion — stacked */}
-      <div
-        className={prefersReducedMotion ? 'pointer-events-auto' : 'pointer-events-auto lg:hidden'}
-      >
-        <div
-          ref={mobileTitleRef}
-          className="mx-auto max-w-container px-container-x pb-4 pt-section text-center"
-        >
-          {isMobileAnimated ? (
-            <ScrollWordReveal
-              as="h2"
-              scrollYProgress={titleProgress}
-              revealStart={0.0}
-              revealEnd={0.2}
-              className="heading-section text-black"
-            >
-              {HOMEPAGE_SECTIONS.offers.title}
-            </ScrollWordReveal>
-          ) : (
-            <SimpleAnimation type="slide-up" delay={0}>
-              <h2
-                id={prefersReducedMotion ? 'offers-title' : undefined}
-                className="heading-section text-black"
-              >
-                {HOMEPAGE_SECTIONS.offers.title}
-              </h2>
-            </SimpleAnimation>
-          )}
-        </div>
+      {/* Mobile-animated — sticky viewport with layered images + cards */}
+      {isMobileAnimated && <OffersMobileAnimated />}
 
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          {HOMEPAGE_OFFERS.map((offer, index) => (
-            <OfferMobileBlock key={offer.id} offer={offer} index={index} />
-          ))}
-        </div>
-
-        <div
-          ref={mobileCTARef}
-          className="mx-auto max-w-container px-container-x pb-section pt-8 text-center"
-        >
-          {isMobileAnimated ? (
-            <m.div style={{ opacity: ctaOpacity, y: ctaY }} className="will-change-transform">
-              <LinkCTA
-                href={HOMEPAGE_SECTIONS.offers.cta.link}
-                aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
-              >
-                {HOMEPAGE_SECTIONS.offers.cta.text}
-              </LinkCTA>
-            </m.div>
-          ) : (
-            <SimpleAnimation type="slide-up" delay={200}>
-              <LinkCTA
-                href={HOMEPAGE_SECTIONS.offers.cta.link}
-                aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
-              >
-                {HOMEPAGE_SECTIONS.offers.cta.text}
-              </LinkCTA>
-            </SimpleAnimation>
-          )}
-        </div>
-      </div>
+      {/* Reduced-motion — static stacked cards */}
+      {prefersReducedMotion && <OffersStatic />}
     </section>
+  );
+}
+
+/** Static fallback for reduced-motion preference. */
+function OffersStatic() {
+  return (
+    <div className="pointer-events-auto">
+      <div className="mx-auto max-w-container px-container-x pb-4 pt-section text-center">
+        <SimpleAnimation type="slide-up" delay={0}>
+          <h2 id="offers-title" className="heading-section text-black">
+            {HOMEPAGE_SECTIONS.offers.title}
+          </h2>
+        </SimpleAnimation>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        {HOMEPAGE_OFFERS.map((offer, index) => (
+          <OfferMobileBlock key={offer.id} offer={offer} index={index} />
+        ))}
+      </div>
+
+      <div className="mx-auto max-w-container px-container-x pb-section pt-8 text-center">
+        <SimpleAnimation type="slide-up" delay={200}>
+          <LinkCTA
+            href={HOMEPAGE_SECTIONS.offers.cta.link}
+            aria-label={HOMEPAGE_SECTIONS.offers.cta.ariaLabel}
+          >
+            {HOMEPAGE_SECTIONS.offers.cta.text}
+          </LinkCTA>
+        </SimpleAnimation>
+      </div>
+    </div>
   );
 }
 
