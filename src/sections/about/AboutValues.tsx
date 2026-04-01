@@ -1,4 +1,5 @@
-import { m, useTransform, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
@@ -7,7 +8,7 @@ import { VALUES_DATA } from '@/data/about';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import EyePattern from '@/components/common/EyePattern';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
@@ -129,11 +130,125 @@ function ValuesDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated — per-card scroll-driven entrance with accent bar
+// ---------------------------------------------------------------------------
+
+type ValueData = (typeof VALUES_DATA)[number];
+
+function MobileValueCard({ value, index }: { value: ValueData; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  // Accent bar: scaleX 0→1 from left (0.00–0.20)
+  const barScaleX = useTransform(scrollYProgress, [0.0, 0.2], [0, 1]);
+
+  // Card entrance: scale 0.95→1, opacity 0→1, Y 30→0 (0.05–0.22)
+  const cardScale = useTransform(scrollYProgress, [0.05, 0.22], [0.95, 1]);
+  const cardOpacity = useTransform(scrollYProgress, [0.05, 0.22], [0, 1]);
+  const cardY = useTransform(scrollYProgress, [0.05, 0.22], [30, 0]);
+
+  // Icon: scale 0→1 with slight overshoot (0.08–0.25)
+  const iconScale = useTransform(scrollYProgress, [0.08, 0.25], [0, 1.08]);
+  const iconSettled = useTransform(scrollYProgress, [0.25, 0.28], [1.08, 1]);
+
+  // Title: opacity + Y (0.12–0.28)
+  const titleOpacity = useTransform(scrollYProgress, [0.12, 0.28], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.12, 0.28], [16, 0]);
+
+  // Description: opacity + Y (0.18–0.32)
+  const descOpacity = useTransform(scrollYProgress, [0.18, 0.32], [0, 1]);
+  const descY = useTransform(scrollYProgress, [0.18, 0.32], [16, 0]);
+
+  const Icon = iconMap[value.iconName];
+
+  // Merge icon overshoot into settled value
+  const iconFinalScale = useTransform(
+    [iconScale, iconSettled] as const,
+    ([s, settled]: [number, number]) => (s >= 1.08 ? settled : s),
+  );
+
+  // Alternate subtle rotation for visual variety
+  const cardRotate = useTransform(scrollYProgress, [0.05, 0.22], [index % 2 === 0 ? 1 : -1, 0]);
+
+  return (
+    <m.div
+      ref={ref}
+      className="space-y-4 will-change-transform"
+      style={{ opacity: cardOpacity, y: cardY, scale: cardScale, rotate: cardRotate }}
+    >
+      {/* Accent bar */}
+      <m.div
+        className="h-0.5 w-12 origin-left bg-secondary-orange will-change-transform"
+        style={{ scaleX: barScaleX }}
+      />
+
+      {/* Icon */}
+      <m.div className="will-change-transform" style={{ scale: iconFinalScale }}>
+        <Icon className="h-8 w-8 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
+      </m.div>
+
+      {/* Title */}
+      <m.h3
+        className="text-subtitle text-title-sm text-black will-change-transform"
+        style={{ opacity: titleOpacity, y: titleY }}
+      >
+        {value.title}
+      </m.h3>
+
+      {/* Description */}
+      <m.p
+        className="text-body text-black will-change-transform"
+        style={{ opacity: descOpacity, y: descY }}
+      >
+        {value.description}
+      </m.p>
+    </m.div>
+  );
+}
+
+function ValuesMobileAnimated() {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: titleProgress } = useScroll({
+    target: titleRef,
+    offset: ['start end', 'end start'],
+  });
+
+  return (
+    <div className="relative z-10 lg:hidden">
+      <div className="mx-auto max-w-container px-container-x py-section">
+        {/* Title with ScrollWordReveal */}
+        <div ref={titleRef} className="mb-12 text-center">
+          <ScrollWordReveal
+            as="h2"
+            scrollYProgress={titleProgress}
+            revealStart={0.0}
+            revealEnd={0.25}
+            className="heading-section text-black"
+          >
+            Une lunetterie qui a du cœur
+          </ScrollWordReveal>
+        </div>
+
+        {/* Cards grid */}
+        <div className="grid gap-10 sm:grid-cols-2">
+          {VALUES_DATA.map((value, i) => (
+            <MobileValueCard key={value.title} value={value} index={i} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutValues() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -144,38 +259,38 @@ export default function AboutValues() {
     >
       <EyePattern variant="jaune" opacity={0.07} />
 
-      {/* Desktop animated */}
-      {!prefersReducedMotion && <ValuesDesktop />}
+      {variant === 'desktop-animated' && <ValuesDesktop />}
+      {variant === 'mobile-animated' && <ValuesMobileAnimated />}
+      {variant === 'static' && (
+        <div className="relative z-10">
+          <div className="mx-auto max-w-container px-container-x py-section">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <div className="mb-12 text-center lg:mb-16">
+                <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+              </div>
+            </SimpleAnimation>
 
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? 'relative z-10' : 'relative z-10 lg:hidden'}>
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <div className="mb-12 text-center lg:mb-16">
-              <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+              {VALUES_DATA.map((value, i) => {
+                const Icon = iconMap[value.iconName];
+                return (
+                  <SimpleAnimation key={value.title} type="slide-up" delay={100 + i * 100}>
+                    <div className="space-y-4">
+                      <Icon
+                        className="h-8 w-8 text-secondary-orange"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+                      <p className="text-body text-black">{value.description}</p>
+                    </div>
+                  </SimpleAnimation>
+                );
+              })}
             </div>
-          </SimpleAnimation>
-
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-            {VALUES_DATA.map((value, i) => {
-              const Icon = iconMap[value.iconName];
-              return (
-                <SimpleAnimation key={value.title} type="slide-up" delay={100 + i * 100}>
-                  <div className="space-y-4">
-                    <Icon
-                      className="h-8 w-8 text-secondary-orange"
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                    />
-                    <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-                    <p className="text-body text-black">{value.description}</p>
-                  </div>
-                </SimpleAnimation>
-              );
-            })}
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

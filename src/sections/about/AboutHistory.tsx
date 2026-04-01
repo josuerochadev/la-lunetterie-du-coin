@@ -1,11 +1,11 @@
 import { useRef } from 'react';
-import { m, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
@@ -211,11 +211,133 @@ function HistoryDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated — scroll-driven photo reveal + text + transition phrase
+//
+//  0.00 – 0.25  Photo clipPath strip reveal (inset bottom 100% → 0%) + Ken Burns
+//  0.08 – 0.22  Title ScrollWordReveal
+//  0.15 – 0.35  Body text ScrollWordReveal (paragraph 1)
+//  0.28 – 0.42  Body text ScrollWordReveal (paragraph 2)
+//  0.35 – 0.50  CTA opacity + Y entrance
+//  0.45 – 0.65  Transition phrase "UNE VISION DIFFÉRENTE" — scale 2.5→1 + opacity
+//  0.60 – 0.75  Transition phrase fade out
+// ---------------------------------------------------------------------------
+
+function HistoryMobileAnimated() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  // ── Photo — clipPath reveal from bottom + Ken Burns + parallax ──
+  const clipBottom = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
+  const photoClip = useTransform(clipBottom, (v) => `inset(0 0 ${v}% 0)`);
+  const photoScale = useTransform(scrollYProgress, [0.0, 0.25], [1.06, 1]);
+  const photoY = useTransform(scrollYProgress, [0, 0.5], ['3%', '-3%']);
+
+  // ── CTA entrance ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
+  const ctaY = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
+
+  // ── Transition phrase — "UNE VISION DIFFÉRENTE" ──
+  const phraseOpacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
+  const phraseScale = useTransform(scrollYProgress, [0.45, 0.65], [2.5, 1]);
+  const phraseFadeOut = useTransform(scrollYProgress, [0.6, 0.75], [1, 0]);
+  const phraseCombinedOpacity = useTransform(
+    [phraseOpacity, phraseFadeOut] as const,
+    ([a, b]: number[]) => Math.min(a, b),
+  );
+
+  return (
+    <div ref={ref} className="relative lg:hidden">
+      {/* Photo with clipPath reveal */}
+      <m.div
+        className="relative aspect-[3/4] w-full overflow-hidden will-change-[clip-path]"
+        style={{ clipPath: photoClip }}
+      >
+        <m.div
+          className="h-full w-full will-change-transform"
+          style={{ scale: photoScale, y: photoY }}
+        >
+          <ResponsiveImage
+            src="/images/about-history-shop-indoors.png"
+            alt="Intérieur de La Lunetterie du Coin"
+            className="h-full w-full object-cover"
+            loading="lazy"
+            widths={[640, 768, 1024]}
+            sizes="100vw"
+          />
+        </m.div>
+      </m.div>
+
+      {/* Text content */}
+      <div className="px-container-x py-section">
+        {/* Title */}
+        <ScrollWordReveal
+          as="h2"
+          scrollYProgress={scrollYProgress}
+          revealStart={0.08}
+          revealEnd={0.22}
+          className="heading-section mb-6 text-black"
+        >
+          {STORY_TITLE}
+        </ScrollWordReveal>
+
+        {/* Body paragraph 1 */}
+        <ScrollWordReveal
+          as="p"
+          scrollYProgress={scrollYProgress}
+          revealStart={0.15}
+          revealEnd={0.35}
+          className="text-body-lg text-black"
+        >
+          {STORY_BODY}
+        </ScrollWordReveal>
+
+        {/* Body paragraph 2 */}
+        <div className="mt-4">
+          <ScrollWordReveal
+            as="p"
+            scrollYProgress={scrollYProgress}
+            revealStart={0.28}
+            revealEnd={0.42}
+            className="text-body text-black"
+          >
+            {STORY_BODY_2}
+          </ScrollWordReveal>
+        </div>
+
+        {/* CTA */}
+        <m.div className="mt-8 will-change-transform" style={{ opacity: ctaOpacity, y: ctaY }}>
+          <LinkCTA to="/services" theme="light">
+            Voir nos services
+          </LinkCTA>
+        </m.div>
+      </div>
+
+      {/* Transition phrase — "UNE VISION DIFFÉRENTE" */}
+      <m.div
+        className="flex items-center justify-center px-container-x py-section"
+        style={{ opacity: phraseCombinedOpacity }}
+      >
+        <m.span
+          className="text-heading text-center text-title-xl text-black will-change-transform"
+          style={{ scale: phraseScale }}
+        >
+          UNE VISION DIFFÉRENTE
+        </m.span>
+      </m.div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutHistory() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -239,41 +361,41 @@ export default function AboutHistory() {
         <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
       </svg>
 
-      {/* Desktop animated */}
-      {!prefersReducedMotion && <HistoryDesktop />}
-
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-        <div className="relative w-full">
-          <SimpleAnimation type="fade" delay={0} immediate>
-            <ResponsiveImage
-              src="/images/about-history-shop-indoors.png"
-              alt="Intérieur de La Lunetterie du Coin"
-              className="max-h-[80vh] min-h-[50vh] w-full object-cover"
-              widths={[640, 768, 1024]}
-              sizes="100vw"
-            />
-          </SimpleAnimation>
-
-          <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12">
-            <SimpleAnimation type="slide-up" delay={200}>
-              <div className="w-full max-w-4xl space-y-4 bg-accent/90 px-container-x py-container-y backdrop-blur-sm">
-                <span className="text-body-sm font-medium uppercase tracking-wider text-black">
-                  Notre histoire
-                </span>
-                <h2 id="histoire-title" className="heading-section text-black">
-                  Un peu d&apos;histoire
-                </h2>
-                <p className="text-body-lg text-black">{STORY_BODY}</p>
-                <p className="text-body text-black">{STORY_BODY_2}</p>
-                <LinkCTA to="/services" theme="light" className="mt-4">
-                  Voir nos services
-                </LinkCTA>
-              </div>
+      {variant === 'desktop-animated' && <HistoryDesktop />}
+      {variant === 'mobile-animated' && <HistoryMobileAnimated />}
+      {variant === 'static' && (
+        <div>
+          <div className="relative w-full">
+            <SimpleAnimation type="fade" delay={0} immediate>
+              <ResponsiveImage
+                src="/images/about-history-shop-indoors.png"
+                alt="Intérieur de La Lunetterie du Coin"
+                className="max-h-[80vh] min-h-[50vh] w-full object-cover"
+                widths={[640, 768, 1024]}
+                sizes="100vw"
+              />
             </SimpleAnimation>
+
+            <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12">
+              <SimpleAnimation type="slide-up" delay={200}>
+                <div className="w-full max-w-4xl space-y-4 bg-accent/90 px-container-x py-container-y backdrop-blur-sm">
+                  <span className="text-body-sm font-medium uppercase tracking-wider text-black">
+                    Notre histoire
+                  </span>
+                  <h2 id="histoire-title" className="heading-section text-black">
+                    Un peu d&apos;histoire
+                  </h2>
+                  <p className="text-body-lg text-black">{STORY_BODY}</p>
+                  <p className="text-body text-black">{STORY_BODY_2}</p>
+                  <LinkCTA to="/services" theme="light" className="mt-4">
+                    Voir nos services
+                  </LinkCTA>
+                </div>
+              </SimpleAnimation>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

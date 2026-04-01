@@ -1,9 +1,10 @@
-import { m, useTransform, useSpring } from 'framer-motion';
+import { useRef } from 'react';
+import { m, useTransform, useSpring, useScroll } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
@@ -103,11 +104,85 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated — scroll-driven clipPath reveal + word reveal
+//
+//  0.00 – 0.25  Portrait clipPath reveal from bottom + Ken Burns scale
+//  0.05 – 0.20  Title ScrollWordReveal
+//  0.20 – 0.45  Bio ScrollWordReveal (word by word)
+//  0.00 – 0.50  Portrait subtle Y parallax
+// ---------------------------------------------------------------------------
+
+function TeamMobileAnimated() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  // Photo clipPath from bottom
+  const clipBottom = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
+  const photoClip = useTransform(clipBottom, (v) => `inset(0 0 ${v}% 0)`);
+  const photoScale = useTransform(scrollYProgress, [0.0, 0.35], [1.08, 1]);
+  const photoY = useTransform(scrollYProgress, [0, 0.5], ['3%', '-3%']);
+
+  return (
+    <div ref={ref} className="lg:hidden">
+      <div className="mx-auto max-w-container px-container-x py-section">
+        {/* Title */}
+        <div className="mb-8 text-center">
+          <ScrollWordReveal
+            as="h2"
+            scrollYProgress={scrollYProgress}
+            revealStart={0.05}
+            revealEnd={0.2}
+            className="text-heading text-accent"
+            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
+          >
+            L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+          </ScrollWordReveal>
+        </div>
+
+        {/* Portrait with clipPath reveal */}
+        <m.div
+          className="relative aspect-[3/4] overflow-hidden will-change-[clip-path]"
+          style={{ clipPath: photoClip }}
+        >
+          <m.div
+            className="h-full w-full will-change-transform"
+            style={{ scale: photoScale, y: photoY }}
+          >
+            <ResponsiveImage
+              src="/images/about-team-romain.jpeg"
+              alt="Romain Corato, fondateur de La Lunetterie du Coin"
+              className="h-full w-full object-cover object-top"
+              sizes="100vw"
+            />
+          </m.div>
+        </m.div>
+
+        {/* Bio with ScrollWordReveal */}
+        <div className="mt-8">
+          <ScrollWordReveal
+            as="p"
+            scrollYProgress={scrollYProgress}
+            revealStart={0.2}
+            revealEnd={0.45}
+            className="text-body-lg text-white"
+          >
+            {TEAM_BIO}
+          </ScrollWordReveal>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutTeam() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -125,42 +200,42 @@ export default function AboutTeam() {
         aria-hidden="true"
       />
 
-      {/* Desktop animated */}
-      {!prefersReducedMotion && <TeamDesktop />}
-
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <div className="mb-8 text-center">
-              <h2
-                className="text-heading text-accent"
-                style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
-              >
-                L&apos;ŒIL DERRIÈRE
-                <br />
-                LA BOUTIQUE
-              </h2>
-            </div>
-          </SimpleAnimation>
-
-          <SimpleAnimation type="slide-up" delay={100}>
-            <div className="grid items-center gap-8 md:grid-cols-2">
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <ResponsiveImage
-                  src="/images/about-team-romain.jpeg"
-                  alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                  className="h-full w-full object-cover object-top"
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                />
+      {variant === 'desktop-animated' && <TeamDesktop />}
+      {variant === 'mobile-animated' && <TeamMobileAnimated />}
+      {variant === 'static' && (
+        <div>
+          <div className="mx-auto max-w-container px-container-x py-section">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <div className="mb-8 text-center">
+                <h2
+                  className="text-heading text-accent"
+                  style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
+                >
+                  L&apos;ŒIL DERRIÈRE
+                  <br />
+                  LA BOUTIQUE
+                </h2>
               </div>
-              <div>
-                <p className="text-body-lg text-white">{TEAM_BIO}</p>
+            </SimpleAnimation>
+
+            <SimpleAnimation type="slide-up" delay={100}>
+              <div className="grid items-center gap-8 md:grid-cols-2">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <ResponsiveImage
+                    src="/images/about-team-romain.jpeg"
+                    alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                    className="h-full w-full object-cover object-top"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+                <div>
+                  <p className="text-body-lg text-white">{TEAM_BIO}</p>
+                </div>
               </div>
-            </div>
-          </SimpleAnimation>
+            </SimpleAnimation>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }
