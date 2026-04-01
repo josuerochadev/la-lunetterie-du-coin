@@ -119,7 +119,13 @@ export function StoryMobileAnimated() {
   const grandColor = useTransform(scrollYProgress, [0.68, 0.74], ['#FFFFFF', ACCENT_HEX]);
 
   // ── Phase 6: GRAND zooms to fill viewport ──
-  const grandScale = useTransform(scrollYProgress, [0.74, 0.88], [1, 35]);
+  // Boosted rasterization: 10× font-size + 1/10 starting scale = crisp zoom
+  const RASTER_BOOST = 10;
+  const grandScale = useTransform(
+    scrollYProgress,
+    [0.74, 0.88],
+    [1 / RASTER_BOOST, 35 / RASTER_BOOST],
+  );
   const yellowOverlay = useTransform(scrollYProgress, [0.84, 0.9], [0, 1]);
 
   // Navbar theme: switch to dark when yellow fills
@@ -200,18 +206,30 @@ export function StoryMobileAnimated() {
           </m.span>
 
           {/* GRAND — stays, changes color, zooms to fill viewport */}
-          <m.span
-            className="text-heading text-fluid-outro will-change-transform"
-            style={{
-              opacity: word2Opacity,
-              y: word2Y,
-              color: grandColor,
-              scale: grandScale,
-              transformOrigin: 'center center',
-            }}
-          >
-            GRAND
-          </m.span>
+          {/* Ghost spacer — keeps flex layout identical to original */}
+          <span className="relative inline-flex items-center">
+            <span
+              className="text-heading text-fluid-outro invisible select-none"
+              aria-hidden="true"
+            >
+              GRAND
+            </span>
+            {/* Actual GRAND — oversized font for crisp zoom rasterization */}
+            <m.span
+              className="text-heading absolute inset-0 flex items-center justify-center overflow-visible whitespace-nowrap will-change-transform"
+              style={{
+                fontSize: 'calc(clamp(3.5rem, 20vw, 12rem) * 10)',
+                lineHeight: '0.85',
+                opacity: word2Opacity,
+                y: word2Y,
+                color: grandColor,
+                scale: grandScale,
+                transformOrigin: 'center center',
+              }}
+            >
+              GRAND
+            </m.span>
+          </span>
 
           {/* PAYEZ — fades out during GRAND zoom */}
           <m.span
