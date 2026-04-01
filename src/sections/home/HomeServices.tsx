@@ -54,9 +54,9 @@ function HomeServices() {
         }}
       />
 
-      {/* Concave curve */}
+      {/* Concave dome — desktop/static only (mobile uses internal curtain) */}
       <div
-        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent lg:block"
         aria-hidden="true"
       />
 
