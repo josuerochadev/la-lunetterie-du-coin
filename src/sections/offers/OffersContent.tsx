@@ -1,10 +1,10 @@
-import { type ReactNode } from 'react';
-import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { type ReactNode, useRef } from 'react';
+import { m, useTransform, useSpring, useScroll, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
@@ -327,10 +327,196 @@ function OffersDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile
+// Mobile — scroll-driven animated
 // ---------------------------------------------------------------------------
 
-function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number }) {
+function OfferMobileBlock({ offer, index }: { offer: OfferData; index: number }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  // ── Photo: clipPath reveal from bottom + scale + Y parallax ──
+  const clipRaw = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
+  const clipSmooth = useSpring(clipRaw, SPRING_CONFIG);
+  const clipPath = useTransform(clipSmooth, (v: number) => `inset(0 0 ${v}% 0)`);
+  const imgScale = useTransform(scrollYProgress, [0.0, 0.25], [1.06, 1]);
+  const imgY = useTransform(scrollYProgress, [0.0, 0.5], ['-3%', '3%']);
+
+  // ── Dark gradient overlay ──
+  const overlayOpacity = useTransform(scrollYProgress, [0.0, 0.25], [0, 0.35]);
+
+  // ── Counter ──
+  const counterOpacity = useTransform(scrollYProgress, [0.08, 0.2], [0, 1]);
+
+  // ── Title (catchphrase) ──
+  const titleOpacity = useTransform(scrollYProgress, [0.1, 0.26], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.1, 0.26], [25, 0]);
+  const titleScale = useTransform(scrollYProgress, [0.1, 0.26], [0.96, 1]);
+
+  // ── Description ──
+  const descOpacity = useTransform(scrollYProgress, [0.16, 0.3], [0, 1]);
+  const descY = useTransform(scrollYProgress, [0.16, 0.3], [20, 0]);
+
+  // ── Details list ──
+  const detailsOpacity = useTransform(scrollYProgress, [0.22, 0.35], [0, 1]);
+  const detailsY = useTransform(scrollYProgress, [0.22, 0.35], [15, 0]);
+
+  // ── Conditions box ──
+  const condOpacity = useTransform(scrollYProgress, [0.28, 0.4], [0, 1]);
+  const condY = useTransform(scrollYProgress, [0.28, 0.4], [15, 0]);
+
+  // ── CTA ──
+  const ctaOpacity = useTransform(scrollYProgress, [0.33, 0.45], [0, 1]);
+
+  // ── Accent separator line (skip first) ──
+  const separatorScaleX = useTransform(scrollYProgress, [0.0, 0.18], [0, 1]);
+
+  return (
+    <article ref={ref} className="relative">
+      {/* Accent separator line between offers */}
+      {index > 0 && (
+        <m.div
+          className="mx-auto mb-12 h-px w-full origin-left bg-black/15 will-change-transform"
+          style={{ scaleX: separatorScaleX }}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* Photo with clipPath reveal */}
+      <m.div
+        className="relative aspect-[3/4] w-full overflow-hidden rounded-sm will-change-[clip-path]"
+        style={{ clipPath }}
+      >
+        <m.img
+          src={offer.image}
+          alt={offer.title}
+          className="h-full w-full object-cover will-change-transform"
+          style={{ scale: imgScale, y: imgY }}
+          loading="lazy"
+        />
+        {/* Dark gradient overlay */}
+        <m.div
+          className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
+          style={{ opacity: overlayOpacity }}
+          aria-hidden="true"
+        />
+      </m.div>
+
+      {/* Content */}
+      <div className="mt-6 space-y-4">
+        {/* Counter */}
+        <m.span
+          className="block text-body-sm font-medium uppercase tracking-widest text-black will-change-transform"
+          style={{ opacity: counterOpacity }}
+        >
+          {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
+        </m.span>
+
+        {/* Title */}
+        <m.h3
+          className="text-subtitle text-title-sm text-black will-change-transform"
+          style={{ opacity: titleOpacity, y: titleY, scale: titleScale }}
+        >
+          {offer.catchphrase}
+        </m.h3>
+
+        {/* Description */}
+        <m.p
+          className="text-body-lg text-black will-change-transform"
+          style={{ opacity: descOpacity, y: descY }}
+        >
+          {offer.description}
+        </m.p>
+
+        {/* Details list */}
+        <m.ul
+          className="grid grid-cols-1 gap-y-2 will-change-transform sm:grid-cols-2 sm:gap-x-6"
+          style={{ opacity: detailsOpacity, y: detailsY }}
+        >
+          {offer.details.map((detail, i) => (
+            <li key={i} className="flex gap-2.5 text-body-sm text-black">
+              <span
+                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                aria-hidden="true"
+              />
+              <span>{detail}</span>
+            </li>
+          ))}
+        </m.ul>
+
+        {/* Conditions box */}
+        <m.div
+          className="group/cond relative overflow-hidden rounded-r-2xl bg-black/[0.04] will-change-transform"
+          style={{ opacity: condOpacity, y: condY }}
+        >
+          <div
+            className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue"
+            aria-hidden="true"
+          />
+          <div className="py-4 pl-6 pr-5">
+            <h4 className="mb-2 text-body-sm font-medium text-black">Conditions</h4>
+            <ul className="space-y-1">
+              {offer.conditions.map((condition, i) => (
+                <li key={i} className="text-body-sm text-black">
+                  {condition}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </m.div>
+
+        {/* CTA */}
+        <m.div style={{ opacity: ctaOpacity }} className="will-change-transform">
+          <LinkCTA to="/contact" theme="light" aria-label={`Profiter de ${offer.title}`}>
+            En profiter
+          </LinkCTA>
+        </m.div>
+      </div>
+    </article>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile animated wrapper
+// ---------------------------------------------------------------------------
+
+function OffersMobileAnimated() {
+  const titleRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: titleProgress } = useScroll({
+    target: titleRef,
+    offset: ['start end', 'end start'],
+  });
+
+  return (
+    <div className="mx-auto max-w-container px-container-x py-section lg:hidden">
+      <div ref={titleRef} className="mb-12">
+        <ScrollWordReveal
+          as="h2"
+          scrollYProgress={titleProgress}
+          revealStart={0.0}
+          revealEnd={0.2}
+          className="heading-section text-black"
+        >
+          NOS OFFRES
+        </ScrollWordReveal>
+      </div>
+
+      <div className="flex flex-col gap-16">
+        {OFFERS_DATA.map((offer, index) => (
+          <OfferMobileBlock key={offer.id} offer={offer} index={index} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Static fallback (reduced motion)
+// ---------------------------------------------------------------------------
+
+function OfferStaticBlock({ offer, index }: { offer: OfferData; index: number }) {
   return (
     <article className="py-10">
       <SimpleAnimation type="fade" delay={0}>
@@ -395,8 +581,7 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
 // ---------------------------------------------------------------------------
 
 export default function OffersContent() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -418,17 +603,15 @@ export default function OffersContent() {
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
 
-      {/* Desktop */}
-      {!prefersReducedMotion && isLg && <OffersDesktop />}
-
-      {/* Mobile / reduced-motion */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      {variant === 'desktop-animated' && <OffersDesktop />}
+      {variant === 'mobile-animated' && <OffersMobileAnimated />}
+      {variant === 'static' && (
         <div className="mx-auto max-w-container px-container-x py-section">
           {OFFERS_DATA.map((offer, index) => (
-            <MobileOfferBlock key={offer.id} offer={offer} index={index} />
+            <OfferStaticBlock key={offer.id} offer={offer} index={index} />
           ))}
         </div>
-      </div>
+      )}
 
       {/* Bottom gradient dissolve — black → accent for CTA transition */}
       <div
