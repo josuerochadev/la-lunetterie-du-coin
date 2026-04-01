@@ -24,6 +24,7 @@ export function OfferMobileBlock({
   // ── Image — scale entrance + fade ──
   const imgScale = useTransform(scrollYProgress, [0, 0.3], [0.92, 1]);
   const imgOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1]);
+  const imgY = useTransform(scrollYProgress, [0, 0.5], ['3%', '-3%']);
 
   // ── Card — slide up from below ──
   const cardY = useTransform(scrollYProgress, [0.1, 0.32], [50, 0]);
@@ -43,7 +44,10 @@ export function OfferMobileBlock({
     <article ref={ref} className="py-10 lg:hidden">
       {/* Image with scale entrance */}
       <div className="px-container-x">
-        <m.div style={{ scale: imgScale, opacity: imgOpacity }} className="will-change-transform">
+        <m.div
+          style={{ scale: imgScale, opacity: imgOpacity, y: imgY }}
+          className="will-change-transform"
+        >
           <img
             src={offer.image}
             alt={offer.title}

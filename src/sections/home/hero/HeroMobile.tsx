@@ -136,12 +136,12 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
   const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
   const revealStart = vh * 1.4;
 
-  // ── Photo circle reveal — "opening the eye" ──
+  // ── Photo curtain reveal — rises from below like a curtain ──
   const revealEnd = revealStart + HERO_WORDS.length * 60 + 400;
-  const circleRadius = useTransform(scrollY, [revealStart, revealEnd], [0, 85]);
-  const photoClip = useTransform(circleRadius, (r) => `circle(${r}% at 50% 60%)`);
+  const clipTop = useTransform(scrollY, [revealStart, revealEnd], [100, 0]);
+  const photoClip = useTransform(clipTop, (v) => `inset(${v}% 0 0 0)`);
 
-  // Ken Burns — slow zoom-out as circle opens (creates depth)
+  // Ken Burns — slow zoom-out as curtain lifts (creates depth)
   const photoScale = useTransform(scrollY, [revealStart, revealEnd + 300], [1.15, 1]);
 
   // Yellow overlay fades to reveal photo underneath
