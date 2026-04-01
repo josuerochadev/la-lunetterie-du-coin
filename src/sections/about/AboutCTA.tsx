@@ -3,13 +3,13 @@ import { m, useTransform, useSpring } from 'framer-motion';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 export default function AboutCTA() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
   const { ref: wrapperRef, scrollYProgress } = useManualScrollProgress('start-end');
 
   // Motif — scale grows throughout the full scroll range
@@ -33,7 +33,7 @@ export default function AboutCTA() {
         data-navbar-theme="dark"
       >
         {/* Circle motif — scale grows through full scroll */}
-        {prefersReducedMotion ? (
+        {variant === 'static' ? (
           <img
             src="/images/motif-cercle.png"
             alt=""
@@ -52,7 +52,7 @@ export default function AboutCTA() {
 
         <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
           <div className="mx-auto max-w-4xl text-center">
-            {prefersReducedMotion ? (
+            {variant === 'static' ? (
               <>
                 <SimpleAnimation type="slide-up" delay={0}>
                   <h2 className="heading-section text-black">YEUX T&apos;AIMENT</h2>

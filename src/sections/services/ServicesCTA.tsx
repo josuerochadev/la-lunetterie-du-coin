@@ -3,12 +3,12 @@ import { m, useTransform } from 'framer-motion';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 
 export default function ServicesCTA() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
   const { ref: wrapperRef, scrollYProgress } = useManualScrollProgress('start-end');
 
   // Motif — scale grows throughout the full scroll range
@@ -31,7 +31,7 @@ export default function ServicesCTA() {
         data-navbar-theme="dark"
       >
         {/* Circle motif — scale grows through full scroll */}
-        {prefersReducedMotion ? (
+        {variant === 'static' ? (
           <img
             src="/images/motif-cercle.png"
             alt=""
@@ -50,7 +50,7 @@ export default function ServicesCTA() {
 
         <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
           <div className="mx-auto max-w-4xl text-center">
-            {prefersReducedMotion ? (
+            {variant === 'static' ? (
               <>
                 <SimpleAnimation type="slide-up" delay={0}>
                   <h2 className="text-heading text-fluid-cta text-black">
