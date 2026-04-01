@@ -1,212 +1,203 @@
-import { useEffect, useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
-import { FEATURED, OTHERS } from './constants';
+import { FEATURED, OTHERS, OTHER_COUNT, SCROLL_HEIGHT_VH } from './constants';
 
+import { GiantCounter } from '@/components/motion/GiantCounter';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { RatingStars } from '@/components/common/RatingStars';
+import { type Testimonial } from '@/data/testimonials';
 import { STORE_INFO } from '@/config/store';
-import type { Testimonial } from '@/data/testimonials';
+import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
+import { SPRING_CONFIG } from '@/lib/motion';
 
-/** Individual testimonial card with scroll-driven entrance */
-function TestimonialCard({ testimonial, index }: { testimonial: Testimonial; index: number }) {
-  const ref = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+/* ── Sub-components ────────────────────────────────────────────── */
 
-  const cardOpacity = useTransform(scrollYProgress, [0.0, 0.2], [0, 1]);
-  const cardY = useTransform(scrollYProgress, [0.0, 0.2], [40, 0]);
-  // Alternate subtle rotation for visual variety
-  const cardRotate = useTransform(scrollYProgress, [0.0, 0.2], [index % 2 === 0 ? 1.5 : -1.5, 0]);
+function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '8vh']);
+  const y = useSpring(yRaw, SPRING_CONFIG);
+  const opacity = useFadeInOut(scrollYProgress, 0, 0.03, 0.76, 0.8);
 
   return (
-    <m.article
-      ref={ref}
-      className="rounded-sm bg-white/[0.04] p-6 will-change-transform sm:p-8"
-      style={{ opacity: cardOpacity, y: cardY, rotate: cardRotate }}
+    <m.div
+      className="pointer-events-none absolute inset-x-0 z-20 px-container-x"
+      style={{ top: y, opacity }}
     >
-      <RatingStars rating={testimonial.rating} className="mb-4" />
-
-      <blockquote className="mb-5">
-        <p className="text-body text-white">&ldquo;{testimonial.quote}&rdquo;</p>
-      </blockquote>
-
-      <footer>
-        <cite className="not-italic">
-          <div className="mb-1 text-body-sm font-medium text-white">{testimonial.name}</div>
-          <div className="flex items-center gap-2 text-body-xs text-secondary-blue">
-            <span>{testimonial.role}</span>
-            {testimonial.date && (
-              <>
-                <span aria-hidden="true">&middot;</span>
-                <time>{testimonial.date}</time>
-              </>
-            )}
-          </div>
-        </cite>
-      </footer>
-    </m.article>
+      <ScrollWordReveal
+        as="h2"
+        id="testimonials-title"
+        scrollYProgress={scrollYProgress}
+        revealStart={0.0}
+        revealEnd={0.06}
+        className="heading-section text-white"
+      >
+        On ne le dit pas, ils le disent.
+      </ScrollWordReveal>
+    </m.div>
   );
 }
 
-export function TestimonialsMobileAnimated() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const featuredRef = useRef<HTMLElement>(null);
-  const ctaRef = useRef<HTMLDivElement>(null);
-  const countRef = useRef<HTMLSpanElement>(null);
+function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const containerOpacity = useTransform(scrollYProgress, [0.06, 0.1, 0.28, 0.34], [0, 1, 1, 0]);
+  const containerYRaw = useTransform(scrollYProgress, [0.06, 0.1, 0.28, 0.34], [60, 0, 0, -60]);
+  const containerY = useSpring(containerYRaw, SPRING_CONFIG);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const { scrollYProgress: featuredProgress } = useScroll({
-    target: featuredRef,
-    offset: ['start end', 'end start'],
-  });
-
-  const { scrollYProgress: ctaProgress } = useScroll({
-    target: ctaRef,
-    offset: ['start end', 'end start'],
-  });
-
-  // ── Giant counter background — counts 0→4.9 on scroll ──
-  const count = useTransform(scrollYProgress, [0.05, 0.4], [0, 4.9]);
-  const counterOpacity = useTransform(scrollYProgress, [0.05, 0.15, 0.65, 0.8], [0, 0.1, 0.1, 0]);
-  const counterScale = useTransform(scrollYProgress, [0.05, 0.4], [0.85, 1.05]);
-
-  useEffect(() => {
-    const unsubscribe = count.on('change', (v) => {
-      if (countRef.current) {
-        countRef.current.textContent = v.toFixed(1);
-      }
-    });
-    return unsubscribe;
-  }, [count]);
-
-  // ── Featured quote — scale + fade entrance ──
-  const featuredOpacity = useTransform(featuredProgress, [0.0, 0.2], [0, 1]);
-  const featuredScale = useTransform(featuredProgress, [0.0, 0.2], [0.96, 1]);
-  const featuredY = useTransform(featuredProgress, [0.0, 0.2], [30, 0]);
-  const quoteMarkOpacity = useTransform(featuredProgress, [0.05, 0.25], [0, 0.2]);
-
-  // ── CTA ──
-  const ctaOpacity = useTransform(ctaProgress, [0.05, 0.25], [0, 1]);
-  const ctaY = useTransform(ctaProgress, [0.05, 0.25], [25, 0]);
+  const authorOpacity = useTransform(scrollYProgress, [0.22, 0.26], [0, 1]);
+  const authorYRaw = useTransform(scrollYProgress, [0.22, 0.26], [16, 0]);
+  const authorY = useSpring(authorYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={sectionRef} className="relative mx-auto max-w-container px-container-x py-section">
-      {/* Giant counter background */}
-      <m.div
-        className="text-heading pointer-events-none absolute right-[5%] top-1/3 z-0 select-none text-accent"
-        style={{
-          fontSize: 'clamp(10rem, 28vw, 20rem)',
-          lineHeight: 1,
-          opacity: counterOpacity,
-          scale: counterScale,
-        }}
-        aria-hidden="true"
-      >
-        <span ref={countRef}>0.0</span>
-      </m.div>
+    <m.div
+      className="absolute inset-0 z-10 flex items-center px-container-x"
+      style={{ opacity: containerOpacity, y: containerY }}
+    >
+      <div className="w-full">
+        <RatingStars rating={FEATURED.rating} size="h-5 w-5" className="mb-6" />
 
-      {/* Header with rating */}
-      <div className="relative z-10 mb-16 flex flex-col items-start gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <ScrollWordReveal
-          as="h2"
-          scrollYProgress={scrollYProgress}
-          revealStart={0.0}
-          revealEnd={0.12}
-          className="heading-section text-white"
-        >
-          On ne le dit pas, ils le disent.
-        </ScrollWordReveal>
-
-        <m.div
-          className="flex items-baseline gap-2"
-          style={{
-            opacity: useTransform(scrollYProgress, [0.08, 0.18], [0, 1]),
-          }}
-        >
-          <span
-            className="text-heading text-accent"
-            style={{ fontSize: 'clamp(2rem, 4vw, 3.5rem)' }}
+        <blockquote>
+          <ScrollWordReveal
+            as="p"
+            scrollYProgress={scrollYProgress}
+            revealStart={0.1}
+            revealEnd={0.24}
+            className="text-body-xl text-white"
           >
-            4.9
-          </span>
-          <span className="text-body text-white">/5</span>
-        </m.div>
+            {`\u201C${FEATURED.quote}\u201D`}
+          </ScrollWordReveal>
+        </blockquote>
+
+        <m.footer className="mt-6" style={{ opacity: authorOpacity, y: authorY }}>
+          <cite className="not-italic">
+            <div className="text-body-lg font-medium text-white">{FEATURED.name}</div>
+            <div className="mt-1 flex items-center gap-2 text-body-sm text-secondary-blue">
+              <span>{FEATURED.role}</span>
+              {FEATURED.date && (
+                <>
+                  <span aria-hidden="true">&middot;</span>
+                  <time>{FEATURED.date}</time>
+                </>
+              )}
+            </div>
+          </cite>
+        </m.footer>
       </div>
+    </m.div>
+  );
+}
 
-      {/* Featured quote */}
-      <m.article
-        ref={featuredRef}
-        className="relative z-10 mb-16 border-t border-white/10 pt-10 will-change-transform"
-        style={{ opacity: featuredOpacity, scale: featuredScale, y: featuredY }}
-      >
-        <m.div
-          className="pointer-events-none absolute -top-6 left-0 select-none font-serif text-accent"
-          style={{
-            fontSize: 'clamp(5rem, 10vw, 12rem)',
-            lineHeight: '1',
-            opacity: quoteMarkOpacity,
-          }}
-          aria-hidden="true"
-        >
-          &ldquo;
-        </m.div>
+function TestimonialSlide({
+  testimonial,
+  index,
+  scrollYProgress,
+}: {
+  testimonial: Testimonial;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const PARADE_START = 0.34;
+  const PARADE_END = 0.78;
+  const range = PARADE_END - PARADE_START;
+  const segmentSize = range / OTHER_COUNT;
+  const start = PARADE_START + index * segmentSize;
 
-        <div className="relative z-10 max-w-4xl">
-          <RatingStars rating={FEATURED.rating} size="h-6 w-6" className="mb-6" />
+  const enterEnd = start + segmentSize * 0.25;
+  const exitStart = start + segmentSize * 0.75;
+  const end = start + segmentSize;
 
-          <blockquote className="mb-8">
-            <p className="text-white" style={{ fontSize: 'clamp(1.25rem, 2vw, 1.75rem)' }}>
-              &ldquo;{FEATURED.quote}&rdquo;
-            </p>
-          </blockquote>
+  const yRaw = useTransform(scrollYProgress, [start, enterEnd, exitStart, end], [60, 0, 0, -60]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
 
-          <footer>
-            <cite className="not-italic">
-              <div className="mb-1 text-body-lg font-medium text-white">{FEATURED.name}</div>
-              <div className="flex items-center gap-2 text-body-sm text-secondary-blue">
-                <span>{FEATURED.role}</span>
-                {FEATURED.date && (
-                  <>
-                    <span aria-hidden="true">&middot;</span>
-                    <time>{FEATURED.date}</time>
-                  </>
-                )}
-              </div>
-            </cite>
-          </footer>
+  const opacity = useFadeInOut(scrollYProgress, start, start + segmentSize * 0.15, exitStart, end);
+  const pointerEvents = usePointerEvents(opacity);
+
+  const rotation = index % 2 === 0 ? -1 : 1;
+
+  return (
+    <m.div
+      className={`${index === 0 ? '' : 'absolute inset-0'} flex items-center`}
+      style={{ opacity, y, pointerEvents }}
+    >
+      <article className="w-full" style={{ transform: `rotate(${rotation}deg)` }}>
+        <RatingStars rating={testimonial.rating} size="h-4 w-4" className="mb-4" />
+
+        <blockquote className="mb-4">
+          <p className="text-body-lg text-white">&ldquo;{testimonial.quote}&rdquo;</p>
+        </blockquote>
+
+        <footer>
+          <cite className="not-italic">
+            <div className="text-body font-medium text-white">{testimonial.name}</div>
+            <div className="mt-1 flex items-center gap-2 text-body-sm text-secondary-blue">
+              <span>{testimonial.role}</span>
+              {testimonial.date && (
+                <>
+                  <span aria-hidden="true">&middot;</span>
+                  <time>{testimonial.date}</time>
+                </>
+              )}
+            </div>
+          </cite>
+        </footer>
+      </article>
+    </m.div>
+  );
+}
+
+/* ── Main component ────────────────────────────────────────────── */
+
+export function TestimonialsMobileAnimated() {
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  const ctaOpacity = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [0, 1, 1, 0]);
+  const ctaYRaw = useTransform(scrollYProgress, [0.38, 0.44, 0.76, 0.82], [20, 0, 0, -30]);
+  const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
+  const ctaPointer = usePointerEvents(ctaOpacity);
+
+  return (
+    <div ref={ref} style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+      <div className="sticky top-0 h-screen overflow-hidden">
+        <GiantCounter
+          scrollYProgress={scrollYProgress}
+          countRange={[0.02, 0.12]}
+          countValues={[0, 4.9]}
+          opacityRange={[0.01, 0.06, 0.76, 0.8]}
+          fontSize="clamp(8rem, 28vw, 14rem)"
+        />
+
+        <SectionTitle scrollYProgress={scrollYProgress} />
+        <FeaturedQuote scrollYProgress={scrollYProgress} />
+
+        {/* Testimonial parade */}
+        <div className="absolute inset-0 z-10 flex items-center px-container-x">
+          <div className="relative w-full">
+            {OTHERS.map((testimonial, i) => (
+              <TestimonialSlide
+                key={testimonial.id}
+                testimonial={testimonial}
+                index={i}
+                scrollYProgress={scrollYProgress}
+              />
+            ))}
+          </div>
         </div>
-      </m.article>
 
-      {/* Other testimonials — scroll-driven stagger */}
-      <div className="relative z-10 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {OTHERS.map((testimonial, i) => (
-          <TestimonialCard key={testimonial.id} testimonial={testimonial} index={i} />
-        ))}
-      </div>
-
-      {/* CTA */}
-      <m.div
-        ref={ctaRef}
-        className="relative z-10 mt-12 text-center will-change-transform"
-        style={{ opacity: ctaOpacity, y: ctaY }}
-      >
-        <LinkCTA
-          href={STORE_INFO.googleReviewsUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          theme="dark"
+        {/* CTA */}
+        <m.div
+          className="absolute inset-x-0 bottom-[12%] z-20 px-container-x"
+          style={{ opacity: ctaOpacity, y: ctaY, pointerEvents: ctaPointer }}
         >
-          Voir nos avis Google
-        </LinkCTA>
-      </m.div>
+          <LinkCTA
+            href={STORE_INFO.googleReviewsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            theme="dark"
+          >
+            Voir nos avis Google
+          </LinkCTA>
+        </m.div>
+      </div>
     </div>
   );
 }
