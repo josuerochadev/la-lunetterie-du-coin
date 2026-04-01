@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
@@ -78,58 +77,98 @@ function ContactDesktop() {
 }
 
 // ── Mobile animated ─────────────────────────────────────────────────────────
+//
+//  250vh container with sticky viewport.
+//  Black overlay fades out (0→0.15) to blend from Testimonials' black bg.
+//  "VOIR" zooms during the fade = seamless noir→jaune transition.
+//  Entrances compressed into first 35% → long hold for text + CTA.
+//
+//  scroll distance = 150vh (250vh container − 100vh viewport)
+//
+//  0.00 – 0.15  Black overlay fades out (seamless Testimonials→Contact)
+//  0.00 – 0.22  "VOIR" zoom scale 12→1 (concurrent with fade)
+//  0.00 – 0.50  Motif fade-in + zoom 1→2.4 with spring
+//  0.15 – 0.25  "PASSEZ" slide-up + fade-in
+//  0.20 – 0.30  "NOUS" slide-up + fade-in
+//  0.30 – 0.38  CTA slide-up + fade-in
+//  0.38 – 1.00  Hold — text + CTA visible, footer covers section
+// ─────────────────────────────────────────────────────────────────────────────
 
 function ContactMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // ── Black overlay — seamless noir→jaune transition ──
+  const overlayOpacity = useTransform(scrollYProgress, [0.0, 0.15], [1, 0]);
 
-  // ── "VOIR" zoom — scale 3→1 (lighter than desktop's 12→1) ──
-  const voirScale = useTransform(scrollYProgress, [0.0, 0.2], [3, 1]);
-  const voirOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 1]);
+  // ── Motif — eye pattern, zoom-in through scroll ──
+  const motifScaleRaw = useTransform(scrollYProgress, [0.0, 0.5], [1, 2.4]);
+  const motifScale = useSpring(motifScaleRaw, { stiffness: 60, damping: 30 });
+  const motifOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 0.15]);
 
-  // ── "PASSEZ NOUS" — slide up ──
-  const passezY = useTransform(scrollYProgress, [0.1, 0.25], [30, 0]);
-  const passezOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
+  // ── "VOIR" — dramatic zoom-in during reveal (12→1) ──
+  const voirScaleRaw = useTransform(scrollYProgress, [0.0, 0.22], [12, 1]);
+  const voirScale = useSpring(voirScaleRaw, SPRING_CONFIG_SLOW);
+  const voirOpacity = useTransform(scrollYProgress, [0.0, 0.08], [0, 1]);
 
-  // ── CTA ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.2, 0.35], [0, 1]);
+  // ── "PASSEZ" — slide up after VOIR lands ──
+  const passezY = useTransform(scrollYProgress, [0.15, 0.25], [20, 0]);
+  const passezOpacity = useTransform(scrollYProgress, [0.15, 0.25], [0, 1]);
 
-  // ── Motif — subtle scale ──
-  const motifScale = useTransform(scrollYProgress, [0.0, 0.5], [1, 1.15]);
+  // ── "NOUS" — staggered after PASSEZ ──
+  const nousY = useTransform(scrollYProgress, [0.2, 0.3], [20, 0]);
+  const nousOpacity = useTransform(scrollYProgress, [0.2, 0.3], [0, 1]);
+
+  // ── CTA — slide up ──
+  const ctaY = useTransform(scrollYProgress, [0.3, 0.38], [24, 0]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.3, 0.38], [0, 1]);
 
   return (
-    <div ref={ref} className="relative lg:hidden">
-      {/* Circle motif */}
-      <m.img
-        src="/images/motif-cercle.png"
-        alt=""
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover opacity-20 mix-blend-multiply"
-        style={{ scale: motifScale }}
-      />
+    <div ref={ref} className="h-[250vh] lg:hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
+        {/* Black overlay — matches Testimonials bg, fades to reveal yellow */}
+        <m.div
+          className="pointer-events-none absolute inset-0 z-30 bg-black will-change-transform"
+          style={{ opacity: overlayOpacity }}
+        />
 
-      <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
-        <div className="mx-auto max-w-5xl text-center">
-          <h2
-            className="text-heading text-fluid-hero-sub mb-10 text-black"
-            style={{ lineHeight: '0.95' }}
-          >
-            <m.span className="block" style={{ opacity: passezOpacity, y: passezY }}>
-              PASSEZ NOUS
-            </m.span>
+        {/* Eye pattern — cropped by overflow-hidden, subtle texture */}
+        <m.img
+          src="/images/motif-eye-pattern.svg"
+          alt=""
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 h-full w-full object-cover mix-blend-multiply will-change-transform"
+          style={{ scale: motifScale, opacity: motifOpacity }}
+        />
+
+        <div className="relative z-10 flex h-full flex-col items-start justify-center px-container-x">
+          <h2 id="contact-title" className="text-heading text-fluid-outro text-black">
+            {/* PASSEZ — slides up after VOIR lands */}
             <m.span
-              className="block origin-center will-change-transform"
+              className="block will-change-transform"
+              style={{ opacity: passezOpacity, y: passezY }}
+            >
+              PASSEZ
+            </m.span>
+
+            {/* NOUS — staggered slide-up */}
+            <m.span
+              className="block will-change-transform"
+              style={{ opacity: nousOpacity, y: nousY }}
+            >
+              NOUS
+            </m.span>
+
+            {/* VOIR — dramatic zoom from huge to normal */}
+            <m.span
+              className="block origin-left will-change-transform"
               style={{ scale: voirScale, opacity: voirOpacity }}
             >
               VOIR
             </m.span>
           </h2>
 
-          <m.div style={{ opacity: ctaOpacity }} className="will-change-transform">
+          {/* CTA — left-aligned under phrase */}
+          <m.div className="mt-8 will-change-transform" style={{ opacity: ctaOpacity, y: ctaY }}>
             <LinkCTA to="/contact" theme="accent">
               Nous contacter
             </LinkCTA>
@@ -146,7 +185,7 @@ function ContactMobileAnimated() {
  * Section HomeContact — Yellow Punchline
  *
  * Desktop: Sticky viewport with scroll-linked entrance + hold for footer.
- * Mobile animated: Scroll-driven VOIR zoom + motif scale.
+ * Mobile animated: Zoomed motif texture + ScrollWordReveal, left-aligned.
  * Reduced-motion: Static layout.
  */
 export default function HomeContact() {
@@ -168,16 +207,29 @@ export default function HomeContact() {
 
       {/* Reduced-motion — static layout */}
       {prefersReducedMotion && (
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <div className="mx-auto max-w-5xl text-center">
-            <h2 id="contact-title" className="text-heading text-fluid-hero-sub mb-10 text-black">
-              Passez
+        <div className="relative min-h-svh overflow-hidden lg:min-h-0">
+          {/* Eye pattern — static texture */}
+          <img
+            src="/images/motif-eye-pattern.svg"
+            alt=""
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-0 h-full w-full scale-[1.3] object-cover opacity-15 mix-blend-multiply"
+          />
+          <div className="relative z-10 flex min-h-svh flex-col items-start justify-center px-container-x lg:min-h-0 lg:items-center lg:py-section lg:text-center">
+            <h2
+              id="contact-title"
+              className="text-heading text-fluid-outro lg:text-fluid-hero-sub text-black"
+              style={{ lineHeight: '0.95' }}
+            >
+              PASSEZ
               <br />
-              nous voir
+              NOUS VOIR
             </h2>
-            <LinkCTA to="/contact" theme="accent">
-              Nous contacter
-            </LinkCTA>
+            <div className="mt-8">
+              <LinkCTA to="/contact" theme="accent">
+                Nous contacter
+              </LinkCTA>
+            </div>
           </div>
         </div>
       )}

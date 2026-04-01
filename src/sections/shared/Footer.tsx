@@ -54,24 +54,24 @@ export default function Footer({
       id="footer"
       {...rest}
       className={clsx(
-        'relative z-20 -mt-[8vw] w-full bg-primary text-accent [overflow-x:clip]',
+        'relative z-20 -mt-[12svh] w-full bg-primary text-accent [overflow-x:clip] sm:-mt-[10svh] lg:-mt-[8vw]',
         className,
       )}
     >
-      {/* Convex eyelid curve — same style as HomeStory.
+      {/* Convex eyelid curve — enlarged on mobile for the "label" effect.
           data-navbar-theme makes IO detect this as footer → hides navbar early */}
       <div
-        className="pointer-events-none absolute -top-[11vw] left-1/2 h-[45vw] w-[140vw] -translate-x-1/2 rounded-[50%] bg-primary"
+        className="pointer-events-none absolute -top-[10svh] left-1/2 h-[30svh] w-[160vw] -translate-x-1/2 rounded-[50%] bg-primary sm:-top-[8svh] sm:h-[24svh] lg:-top-[11vw] lg:h-[45vw] lg:w-[140vw]"
         aria-hidden="true"
         data-navbar-theme="light"
       />
 
       {/* Logo sitting on the curve */}
-      <div className="absolute -top-[6vw] left-1/2 z-10 -translate-x-1/2">
+      <div className="absolute -top-[7svh] left-1/2 z-10 -translate-x-1/2 sm:-top-[6svh] lg:-top-[6vw]">
         <FooterLogo />
       </div>
 
-      <SectionContainer className="relative px-container-x pb-8 pt-[10vw] lg:pb-10">
+      <SectionContainer className="relative px-container-x pb-8 pt-[10svh] sm:pt-[8svh] lg:pb-10 lg:pt-[10vw]">
         {/* Grille 3 colonnes : Navigation | Contact+Horaires | RDV+Réseaux */}
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:justify-items-center">
           <FooterNavigation onLinkClick={onLinkClick} />
