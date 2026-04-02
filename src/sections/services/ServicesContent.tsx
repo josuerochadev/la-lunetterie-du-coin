@@ -30,9 +30,9 @@ export default function ServicesContent() {
       className="relative"
       style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
     >
-      {/* Convex dome */}
+      {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
       <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
         style={{ height: '12vw' }}
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
@@ -40,6 +40,16 @@ export default function ServicesContent() {
       >
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
+      <div
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
+        aria-hidden="true"
+        data-navbar-theme="light"
+      >
+        <div
+          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-black"
+          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+        />
+      </div>
 
       {/* Static fallback (reduced motion) */}
       {variant === 'static' && (
