@@ -1,4 +1,5 @@
 import { useNativeScroll } from '@/hooks/useNativeScroll';
+import { useIsLg } from '@/hooks/useIsLg';
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import { Seo } from '@/seo/Seo';
@@ -26,6 +27,7 @@ import AboutCTA from '@/sections/about/AboutCTA';
  */
 export default function AboutPage() {
   useNativeScroll();
+  const isLg = useIsLg();
 
   return (
     <>
@@ -50,13 +52,18 @@ export default function AboutPage() {
           <AboutValues />
         </StickySection>
 
-        {/* Équipe — fond noir, portrait parallax + bio word reveal */}
-        <StickySection zIndex={14} enableSticky>
+        {/* Équipe — fond noir, rideau intégral sur Valeurs (-mt-[100vh]) en mobile
+            puis sticky pour se faire couvrir par Engagement */}
+        <StickySection
+          zIndex={14}
+          enableSticky={!isLg}
+          className={isLg ? undefined : '-mt-[100vh]'}
+        >
           <AboutTeam />
         </StickySection>
 
         {/* Engagement — fond blanc, counter géant + stats */}
-        <StickySection zIndex={15} enableSticky>
+        <StickySection zIndex={15} enableSticky={!isLg}>
           <AboutEngagement />
         </StickySection>
 
