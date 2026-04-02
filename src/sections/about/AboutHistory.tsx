@@ -211,123 +211,165 @@ function HistoryDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — scroll-driven photo reveal + text + transition phrase
+// Mobile animated — scroll-driven story + photo dissolve to yellow
 //
-//  0.00 – 0.25  Photo clipPath strip reveal (inset bottom 100% → 0%) + Ken Burns
-//  0.08 – 0.22  Title ScrollWordReveal
-//  0.15 – 0.35  Body text ScrollWordReveal (paragraph 1)
-//  0.28 – 0.42  Body text ScrollWordReveal (paragraph 2)
-//  0.35 – 0.50  CTA opacity + Y entrance
-//  0.45 – 0.65  Transition phrase "UNE VISION DIFFÉRENTE" — scale 2.5→1 + opacity
-//  0.60 – 0.75  Transition phrase fade out
+//  200vh container with sticky viewport
+//  Total scroll range: 200vh + 100vh = 300vh (offset start-end / end-start)
+//
+//  Phase 1 (0.05–0.14) : Title "Notre Histoire" slides up + fades in
+//  Phase 2 (0.05–0.20) : Body text 1 ScrollWordReveal
+//  Phase 3 (0.16–0.30) : Body text 2 ScrollWordReveal
+//  Phase 4 (0.16–0.24) : Photo reveals from bottom band (clip 70%→0%)
+//  Phase 5 (0.24–0.55) : Photo Ken Burns zoom (no drift)
+//  Phase 6 (0.16–0.38) : Photo brightens (0.45→0.8)
+//  Phase 7 (0.24–0.32) : CTA fades in
+//  Phase 8 (0.32–0.44) : Title + text + CTA fade out + exit upward
+//  Phase 9 (0.44–0.60) : Photo dissolves (opacity → 0)
+//  Phase 10 (0.52–0.68): Yellow overlay fills screen
+//  Phase 11 (0.62+)    : Navbar theme → dark
 // ---------------------------------------------------------------------------
 
 function HistoryMobileAnimated() {
   const ref = useRef<HTMLDivElement>(null);
+  const navRef = useRef<HTMLDivElement>(null);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
 
-  // ── Photo — clipPath reveal from bottom + Ken Burns + parallax ──
-  const clipBottom = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
-  const photoClip = useTransform(clipBottom, (v) => `inset(0 0 ${v}% 0)`);
-  const photoScale = useTransform(scrollYProgress, [0.0, 0.25], [1.06, 1]);
-  const photoY = useTransform(scrollYProgress, [0, 0.5], ['3%', '-3%']);
+  // ── Title entrance: slides up + fades in ──
+  const titleEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
+  const titleEntranceY = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
 
-  // ── CTA entrance ──
-  const ctaOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-  const ctaY = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
+  // ── Title exit: fades out + slides up ──
+  const titleExitOpacity = useTransform(scrollYProgress, [0.32, 0.44], [1, 0]);
+  const titleExitY = useTransform(scrollYProgress, [0.32, 0.44], [0, -250]);
 
-  // ── Transition phrase — "UNE VISION DIFFÉRENTE" ──
-  const phraseOpacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
-  const phraseScale = useTransform(scrollYProgress, [0.45, 0.65], [2.5, 1]);
-  const phraseFadeOut = useTransform(scrollYProgress, [0.6, 0.75], [1, 0]);
-  const phraseCombinedOpacity = useTransform(
-    [phraseOpacity, phraseFadeOut] as const,
-    ([a, b]: number[]) => Math.min(a, b),
+  // Combined title transforms
+  const titleOpacity = useTransform(
+    [titleEntranceOpacity, titleExitOpacity],
+    ([enter, exit]: number[]) => Math.min(enter, exit),
+  );
+  const titleY = useTransform(
+    [titleEntranceY, titleExitY],
+    ([enter, exit]: number[]) => enter + exit,
   );
 
+  // ── Body text + CTA exit ──
+  const textExitOpacity = useTransform(scrollYProgress, [0.34, 0.46], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0.34, 0.48], [0, -200]);
+
+  // ── CTA entrance (before exit) ──
+  const ctaEntranceOpacity = useTransform(scrollYProgress, [0.24, 0.32], [0, 1]);
+
+  // ── Photo: bottom band → fullscreen (grows from bottom to top) ──
+  const clipTop = useTransform(scrollYProgress, [0.16, 0.24, 0.48], [70, 70, 0]);
+  const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
+
+  // Ken Burns: gentle zoom only — no vertical drift
+  const photoScale = useTransform(scrollYProgress, [0.24, 0.55], [1, 1.15]);
+
+  // Photo brightness: starts dim, brightens as it expands
+  const photoBrightness = useTransform(scrollYProgress, [0.16, 0.38], [0.45, 0.8]);
+  const photoFilter = useTransform(photoBrightness, (b) => `brightness(${b})`);
+
+  // ── Photo dissolves on screen — no movement, just fade ──
+  const photoDissolve = useTransform(scrollYProgress, [0.44, 0.6], [1, 0]);
+
+  // ── Yellow overlay — transition to Values section ──
+  const yellowOverlay = useTransform(scrollYProgress, [0.52, 0.68], [0, 1]);
+
+  // ── Navbar theme: switch to dark when yellow fills ──
+  useMotionValueEvent(scrollYProgress, 'change', (v) => {
+    if (!navRef.current) return;
+    navRef.current.setAttribute('data-navbar-theme', v >= 0.62 ? 'dark' : 'light');
+  });
+
   return (
-    <div ref={ref} className="relative lg:hidden">
-      {/* Photo with clipPath reveal */}
-      <m.div
-        className="relative aspect-[3/4] w-full overflow-hidden will-change-[clip-path]"
-        style={{ clipPath: photoClip }}
-      >
+    <div ref={ref} className="relative h-[200vh] lg:hidden">
+      <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
+        {/* ── Photo — below content, grows upward, dissolves in place ── */}
         <m.div
-          className="h-full w-full will-change-transform"
-          style={{ scale: photoScale, y: photoY }}
+          className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path]"
+          style={{ clipPath: photoClip, opacity: photoDissolve }}
         >
-          <ResponsiveImage
-            src="/images/about-history-shop-indoors.png"
-            alt="Intérieur de La Lunetterie du Coin"
-            className="h-full w-full object-cover"
-            loading="lazy"
-            widths={[640, 768, 1024]}
-            sizes="100vw"
-          />
+          <m.div
+            className="h-full w-full will-change-transform"
+            style={{ scale: photoScale, filter: photoFilter }}
+          >
+            <ResponsiveImage
+              src="/images/about-history-shop-indoors.png"
+              alt="Intérieur de La Lunetterie du Coin"
+              className="h-full w-full object-cover"
+              loading="lazy"
+              sizes="100vw"
+              widths={[640, 768, 1024]}
+            />
+          </m.div>
         </m.div>
-      </m.div>
 
-      {/* Text content */}
-      <div className="px-container-x py-section">
-        {/* Title */}
-        <ScrollWordReveal
-          as="h2"
-          scrollYProgress={scrollYProgress}
-          revealStart={0.08}
-          revealEnd={0.22}
-          className="heading-section mb-6 text-black"
+        {/* ── Title (below dome area) ── */}
+        <m.div
+          className="relative z-10 px-container-x pt-[14vw]"
+          style={{ opacity: titleOpacity, y: titleY }}
         >
-          {STORY_TITLE}
-        </ScrollWordReveal>
+          <h2 id="histoire-title" className="text-heading text-fluid-story text-black">
+            {STORY_TITLE}
+          </h2>
+        </m.div>
 
-        {/* Body paragraph 1 */}
-        <ScrollWordReveal
-          as="p"
-          scrollYProgress={scrollYProgress}
-          revealStart={0.15}
-          revealEnd={0.35}
-          className="text-body-lg text-black"
+        {/* ── Body text + CTA ── */}
+        <m.div
+          className="relative z-10 mt-6 px-container-x"
+          style={{ opacity: textExitOpacity, y: textExitY }}
         >
-          {STORY_BODY}
-        </ScrollWordReveal>
-
-        {/* Body paragraph 2 */}
-        <div className="mt-4">
           <ScrollWordReveal
             as="p"
             scrollYProgress={scrollYProgress}
-            revealStart={0.28}
-            revealEnd={0.42}
-            className="text-body text-black"
+            revealStart={0.05}
+            revealEnd={0.2}
+            className="text-body-xl text-black"
           >
-            {STORY_BODY_2}
+            {STORY_BODY}
           </ScrollWordReveal>
-        </div>
 
-        {/* CTA */}
-        <m.div className="mt-8 will-change-transform" style={{ opacity: ctaOpacity, y: ctaY }}>
-          <LinkCTA to="/services" theme="light">
-            Voir nos services
-          </LinkCTA>
+          <div className="mt-4">
+            <ScrollWordReveal
+              as="p"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.16}
+              revealEnd={0.3}
+              className="text-body text-black"
+            >
+              {STORY_BODY_2}
+            </ScrollWordReveal>
+          </div>
+
+          <m.div className="mt-6" style={{ opacity: ctaEntranceOpacity }}>
+            <LinkCTA to="/services" theme="light">
+              Voir nos services
+            </LinkCTA>
+          </m.div>
         </m.div>
-      </div>
 
-      {/* Transition phrase — "UNE VISION DIFFÉRENTE" */}
-      <m.div
-        className="flex items-center justify-center px-container-x py-section"
-        style={{ opacity: phraseCombinedOpacity }}
-      >
-        <m.span
-          className="text-heading text-center text-title-xl text-black will-change-transform"
-          style={{ scale: phraseScale }}
-        >
-          UNE VISION DIFFÉRENTE
-        </m.span>
-      </m.div>
+        {/* Spacer — photo band sits right after CTA */}
+        <div className="flex-1" />
+
+        {/* ── Yellow overlay — transition to Values ── */}
+        <m.div
+          className="pointer-events-none absolute inset-0 z-40 bg-accent"
+          style={{ opacity: yellowOverlay }}
+          aria-hidden="true"
+        />
+
+        {/* Navbar theme strip */}
+        <div
+          ref={navRef}
+          className="pointer-events-none absolute inset-x-0 top-0 z-50 h-20"
+          data-navbar-theme="light"
+        />
+      </div>
     </div>
   );
 }
@@ -350,16 +392,19 @@ export default function AboutHistory() {
       aria-labelledby="histoire-title"
       data-navbar-theme="light"
     >
-      {/* Convex dome — accent dome with transparent corners revealing the hero behind */}
-      <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
-        style={{ height: '12vw' }}
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
+      {/* Convex dome — CSS border-radius (like HomeStory)
+          Height extended to 24vw so it overlaps the gradient start at 12vw,
+          preventing a visible seam between dome and section bg. */}
+      <div
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden"
         aria-hidden="true"
+        data-navbar-theme="light"
       >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
-      </svg>
+        <div
+          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-accent"
+          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+        />
+      </div>
 
       {variant === 'desktop-animated' && <HistoryDesktop />}
       {variant === 'mobile-animated' && <HistoryMobileAnimated />}

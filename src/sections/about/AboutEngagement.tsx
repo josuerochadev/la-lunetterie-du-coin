@@ -156,27 +156,31 @@ function EngagementDesktop() {
 // Mobile animated stat card — per-element scroll tracking
 // ---------------------------------------------------------------------------
 
-function MobileStatCard({ stat }: { stat: StatData }) {
+function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start end', 'end start'],
   });
 
-  // Stat number: scale 0.8→1, opacity 0→1 (0.0–0.25)
-  const numberScale = useTransform(scrollYProgress, [0.0, 0.25], [0.8, 1]);
-  const numberOpacity = useTransform(scrollYProgress, [0.0, 0.25], [0, 1]);
+  // Stagger by index for cascade effect
+  const delay = index * 0.04;
 
-  // Accent border-top: scaleX 0→1 from left (0.0–0.20)
-  const borderScaleX = useTransform(scrollYProgress, [0.0, 0.2], [0, 1]);
+  // Stat number: scale 0.8→1, opacity 0→1
+  const numberScale = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0.8, 1]);
+  const numberOpacity = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0, 1]);
+  const numberY = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [30, 0]);
 
-  // Label: opacity + Y (0.08–0.28)
-  const labelOpacity = useTransform(scrollYProgress, [0.08, 0.28], [0, 1]);
-  const labelYRaw = useTransform(scrollYProgress, [0.08, 0.28], [20, 0]);
+  // Accent border-top: scaleX 0→1 from left
+  const borderScaleX = useTransform(scrollYProgress, [0.0 + delay, 0.18 + delay], [0, 1]);
+
+  // Label: opacity + Y (staggered after number)
+  const labelOpacity = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [0, 1]);
+  const labelYRaw = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [20, 0]);
   const labelY = useSpring(labelYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="text-center">
+    <div ref={ref}>
       {/* Accent border-top */}
       <m.div
         className="mb-4 h-0.5 origin-left bg-secondary-orange will-change-transform"
@@ -190,6 +194,7 @@ function MobileStatCard({ stat }: { stat: StatData }) {
           fontSize: 'clamp(1.75rem, 6vw, 3rem)',
           scale: numberScale,
           opacity: numberOpacity,
+          y: numberY,
         }}
       >
         {stat.number}
@@ -217,6 +222,10 @@ function EngagementMobileAnimated() {
     offset: ['start end', 'end start'],
   });
 
+  // Title entrance — Y slide + fade
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
+
   // Highlight entrance
   const highlightOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
   const highlightYRaw = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
@@ -238,8 +247,8 @@ function EngagementMobileAnimated() {
 
       <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
         <div className="mx-auto max-w-4xl">
-          {/* Title */}
-          <div className="mb-8 text-center">
+          {/* Title — left-aligned with entrance animation */}
+          <m.div className="mb-8" style={{ opacity: titleOpacity, y: titleY }}>
             <ScrollWordReveal
               as="h2"
               scrollYProgress={scrollYProgress}
@@ -249,17 +258,17 @@ function EngagementMobileAnimated() {
             >
               {ENGAGEMENT_TITLE}
             </ScrollWordReveal>
-          </div>
+          </m.div>
 
-          {/* Stats grid */}
-          <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {STATS_DATA.map((stat) => (
-              <MobileStatCard key={stat.label} stat={stat} />
+          {/* Stats grid — staggered cascade */}
+          <div className="mb-8 grid grid-cols-3 gap-4">
+            {STATS_DATA.map((stat, i) => (
+              <MobileStatCard key={stat.label} stat={stat} index={i} />
             ))}
           </div>
 
-          {/* Body */}
-          <div className="mb-6 text-center">
+          {/* Body — left-aligned */}
+          <div className="mb-6">
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
@@ -271,9 +280,9 @@ function EngagementMobileAnimated() {
             </ScrollWordReveal>
           </div>
 
-          {/* Highlight */}
+          {/* Highlight — left-aligned */}
           <m.p
-            className="text-center text-body-sm italic text-secondary-orange will-change-transform"
+            className="text-body-sm italic text-secondary-orange will-change-transform"
             style={{
               opacity: highlightOpacity,
               y: highlightY,

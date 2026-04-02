@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
@@ -130,114 +129,83 @@ function ValuesDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — per-card scroll-driven entrance with accent bar
+// Mobile animated — curtain reveal from History's yellow overlay
+//
+//  200vh container with sticky viewport
+//  Uses useManualScrollProgress('start-start')
+//
+//  0.00 – 0.40  Clip-path reveals content top → bottom
+//  0.08 – 0.25  Title micro-scale 0.97 → 1
+//  0.15 – 0.45  Cards staggered micro-movements (scale 0.97→1, Y -8→0)
+//  0.45 – 1.00  Hold — content fully visible
 // ---------------------------------------------------------------------------
 
-type ValueData = (typeof VALUES_DATA)[number];
+function MobileRevealCard({
+  value,
+  index,
+  scrollYProgress,
+}: {
+  value: (typeof VALUES_DATA)[number];
+  index: number;
+  scrollYProgress: import('framer-motion').MotionValue<number>;
+}) {
+  const stagger = index * 0.06;
+  const start = 0.15 + stagger;
+  const end = start + 0.2;
 
-function MobileValueCard({ value, index }: { value: ValueData; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-
-  // Accent bar: scaleX 0→1 from left (0.00–0.20)
-  const barScaleX = useTransform(scrollYProgress, [0.0, 0.2], [0, 1]);
-
-  // Card entrance: scale 0.95→1, opacity 0→1, Y 30→0 (0.05–0.22)
-  const cardScale = useTransform(scrollYProgress, [0.05, 0.22], [0.95, 1]);
-  const cardOpacity = useTransform(scrollYProgress, [0.05, 0.22], [0, 1]);
-  const cardY = useTransform(scrollYProgress, [0.05, 0.22], [30, 0]);
-
-  // Icon: scale 0→1 with slight overshoot (0.08–0.25)
-  const iconScale = useTransform(scrollYProgress, [0.08, 0.25], [0, 1.08]);
-  const iconSettled = useTransform(scrollYProgress, [0.25, 0.28], [1.08, 1]);
-
-  // Title: opacity + Y (0.12–0.28)
-  const titleOpacity = useTransform(scrollYProgress, [0.12, 0.28], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.12, 0.28], [16, 0]);
-
-  // Description: opacity + Y (0.18–0.32)
-  const descOpacity = useTransform(scrollYProgress, [0.18, 0.32], [0, 1]);
-  const descY = useTransform(scrollYProgress, [0.18, 0.32], [16, 0]);
+  const scale = useTransform(scrollYProgress, [start, end], [0.97, 1]);
+  const y = useTransform(scrollYProgress, [start, end], [-8, 0]);
 
   const Icon = iconMap[value.iconName];
 
-  // Merge icon overshoot into settled value
-  const iconFinalScale = useTransform(
-    [iconScale, iconSettled] as const,
-    ([s, settled]: [number, number]) => (s >= 1.08 ? settled : s),
-  );
-
-  // Alternate subtle rotation for visual variety
-  const cardRotate = useTransform(scrollYProgress, [0.05, 0.22], [index % 2 === 0 ? 1 : -1, 0]);
-
   return (
-    <m.div
-      ref={ref}
-      className="space-y-4 will-change-transform"
-      style={{ opacity: cardOpacity, y: cardY, scale: cardScale, rotate: cardRotate }}
-    >
-      {/* Accent bar */}
-      <m.div
-        className="h-0.5 w-12 origin-left bg-secondary-orange will-change-transform"
-        style={{ scaleX: barScaleX }}
+    <m.div className="space-y-4 text-center will-change-transform" style={{ scale, y }}>
+      <Icon
+        className="mx-auto h-8 w-8 text-secondary-orange"
+        strokeWidth={1.5}
+        aria-hidden="true"
       />
-
-      {/* Icon */}
-      <m.div className="will-change-transform" style={{ scale: iconFinalScale }}>
-        <Icon className="h-8 w-8 text-secondary-orange" strokeWidth={1.5} aria-hidden="true" />
-      </m.div>
-
-      {/* Title */}
-      <m.h3
-        className="text-subtitle text-title-sm text-black will-change-transform"
-        style={{ opacity: titleOpacity, y: titleY }}
-      >
-        {value.title}
-      </m.h3>
-
-      {/* Description */}
-      <m.p
-        className="text-body text-black will-change-transform"
-        style={{ opacity: descOpacity, y: descY }}
-      >
-        {value.description}
-      </m.p>
+      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+      <p className="text-body text-black">{value.description}</p>
     </m.div>
   );
 }
 
 function ValuesMobileAnimated() {
-  const titleRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: titleProgress } = useScroll({
-    target: titleRef,
-    offset: ['start end', 'end start'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  // Clip-path: reveals content from top to bottom
+  const clipBottom = useTransform(scrollYProgress, [0.0, 0.4], [100, 0]);
+  const contentClip = useTransform(clipBottom, (b) => `inset(0% 0% ${b}% 0%)`);
+
+  // Title micro-scale — settles into place as clip opens
+  const titleScaleRaw = useTransform(scrollYProgress, [0.08, 0.25], [0.97, 1]);
+  const titleScale = useSpring(titleScaleRaw, SPRING_CONFIG);
 
   return (
-    <div className="relative z-10 lg:hidden">
-      <div className="mx-auto max-w-container px-container-x py-section">
-        {/* Title with ScrollWordReveal */}
-        <div ref={titleRef} className="mb-12 text-center">
-          <ScrollWordReveal
-            as="h2"
-            scrollYProgress={titleProgress}
-            revealStart={0.0}
-            revealEnd={0.25}
-            className="heading-section text-black"
-          >
-            Une lunetterie qui a du cœur
-          </ScrollWordReveal>
-        </div>
+    <div ref={ref} className="relative z-10 h-[200vh] lg:hidden">
+      <div className="sticky top-0 flex h-svh items-center overflow-hidden">
+        <m.div
+          className="w-full px-container-x will-change-[clip-path]"
+          style={{ clipPath: contentClip }}
+        >
+          {/* Title — centered, revealed by clip */}
+          <m.div className="mb-12 text-center will-change-transform" style={{ scale: titleScale }}>
+            <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+          </m.div>
 
-        {/* Cards grid */}
-        <div className="grid gap-10 sm:grid-cols-2">
-          {VALUES_DATA.map((value, i) => (
-            <MobileValueCard key={value.title} value={value} index={i} />
-          ))}
-        </div>
+          {/* Cards grid — staggered micro-movements */}
+          <div className="grid gap-10 sm:grid-cols-2">
+            {VALUES_DATA.map((value, i) => (
+              <MobileRevealCard
+                key={value.title}
+                value={value}
+                index={i}
+                scrollYProgress={scrollYProgress}
+              />
+            ))}
+          </div>
+        </m.div>
       </div>
     </div>
   );

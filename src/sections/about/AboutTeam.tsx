@@ -104,12 +104,15 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — scroll-driven clipPath reveal + word reveal
+// Mobile animated — fullscreen portrait bg + dark overlay + text
 //
-//  0.00 – 0.25  Portrait clipPath reveal from bottom + Ken Burns scale
+//  Photo fills the viewport as background, dark gradient overlay for readability.
+//  Title left-aligned, bio revealed word-by-word on top of the darkened photo.
+//
+//  0.00 – 0.25  Photo Ken Burns zoom + parallax
+//  0.02 – 0.18  Dark overlay fades in (0→0.55)
 //  0.05 – 0.20  Title ScrollWordReveal
-//  0.20 – 0.45  Bio ScrollWordReveal (word by word)
-//  0.00 – 0.50  Portrait subtle Y parallax
+//  0.18 – 0.45  Bio ScrollWordReveal (word by word)
 // ---------------------------------------------------------------------------
 
 function TeamMobileAnimated() {
@@ -119,7 +122,7 @@ function TeamMobileAnimated() {
     offset: ['start end', 'end start'],
   });
 
-  // Photo clipPath from bottom
+  // Photo clipPath reveal from bottom + Ken Burns
   const clipBottom = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
   const photoClip = useTransform(clipBottom, (v) => `inset(0 0 ${v}% 0)`);
   const photoScale = useTransform(scrollYProgress, [0.0, 0.35], [1.08, 1]);
@@ -127,45 +130,44 @@ function TeamMobileAnimated() {
 
   return (
     <div ref={ref} className="lg:hidden">
-      <div className="mx-auto max-w-container px-container-x py-section">
-        {/* Title */}
-        <div className="mb-8 text-center">
-          <ScrollWordReveal
-            as="h2"
-            scrollYProgress={scrollYProgress}
-            revealStart={0.05}
-            revealEnd={0.2}
-            className="text-heading text-accent"
-            style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
-          >
-            L&apos;ŒIL DERRIÈRE LA BOUTIQUE
-          </ScrollWordReveal>
-        </div>
-
-        {/* Portrait with clipPath reveal */}
+      {/* Portrait with clipPath reveal — constrained height to fit text below */}
+      <m.div
+        className="relative aspect-[4/5] max-h-[50vh] overflow-hidden will-change-[clip-path]"
+        style={{ clipPath: photoClip }}
+      >
         <m.div
-          className="relative aspect-[3/4] overflow-hidden will-change-[clip-path]"
-          style={{ clipPath: photoClip }}
+          className="h-full w-full will-change-transform"
+          style={{ scale: photoScale, y: photoY }}
         >
-          <m.div
-            className="h-full w-full will-change-transform"
-            style={{ scale: photoScale, y: photoY }}
-          >
-            <ResponsiveImage
-              src="/images/about-team-romain.jpeg"
-              alt="Romain Corato, fondateur de La Lunetterie du Coin"
-              className="h-full w-full object-cover object-top"
-              sizes="100vw"
-            />
-          </m.div>
+          <ResponsiveImage
+            src="/images/about-team-romain.jpeg"
+            alt="Romain Corato, fondateur de La Lunetterie du Coin"
+            className="h-full w-full object-cover object-top"
+            sizes="100vw"
+          />
         </m.div>
+      </m.div>
 
-        {/* Bio with ScrollWordReveal */}
-        <div className="mt-8">
+      {/* Text content — below photo on black bg */}
+      <div className="px-container-x py-section">
+        {/* Title — left-aligned */}
+        <ScrollWordReveal
+          as="h2"
+          scrollYProgress={scrollYProgress}
+          revealStart={0.05}
+          revealEnd={0.2}
+          className="text-heading text-accent"
+          style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
+        >
+          L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+        </ScrollWordReveal>
+
+        {/* Bio — word reveal */}
+        <div className="mt-8 max-w-md">
           <ScrollWordReveal
             as="p"
             scrollYProgress={scrollYProgress}
-            revealStart={0.2}
+            revealStart={0.18}
             revealEnd={0.45}
             className="text-body-lg text-white"
           >
@@ -188,25 +190,16 @@ export default function AboutTeam() {
     <section
       id="equipe"
       aria-label="Notre équipe"
-      className="relative w-full bg-black"
+      className="relative min-h-svh w-full bg-black lg:min-h-0"
       data-navbar-theme="light"
     >
-      {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) */}
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[40vh]"
-        style={{
-          background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
-        }}
-        aria-hidden="true"
-      />
-
       {variant === 'desktop-animated' && <TeamDesktop />}
       {variant === 'mobile-animated' && <TeamMobileAnimated />}
       {variant === 'static' && (
         <div>
           <div className="mx-auto max-w-container px-container-x py-section">
             <SimpleAnimation type="slide-up" delay={0}>
-              <div className="mb-8 text-center">
+              <div className="mb-8">
                 <h2
                   className="text-heading text-accent"
                   style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}

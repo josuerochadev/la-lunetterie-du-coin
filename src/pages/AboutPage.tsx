@@ -51,12 +51,12 @@ export default function AboutPage() {
         </StickySection>
 
         {/* Équipe — fond noir, portrait parallax + bio word reveal */}
-        <StickySection zIndex={14}>
+        <StickySection zIndex={14} enableSticky>
           <AboutTeam />
         </StickySection>
 
         {/* Engagement — fond blanc, counter géant + stats */}
-        <StickySection zIndex={15}>
+        <StickySection zIndex={15} enableSticky>
           <AboutEngagement />
         </StickySection>
 

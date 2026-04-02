@@ -89,3 +89,9 @@
   font-size: clamp(3.5rem, 20vw, 12rem);
   line-height: 0.85;
 }
+
+/* Outro display — compact variant for phrases with longer words */
+.text-fluid-outro-sm {
+  font-size: clamp(3rem, 12vw, 10rem);
+  line-height: 0.85;
+}
