@@ -7,7 +7,6 @@ import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
-import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const STORY_TITLE = 'Notre Histoire';
@@ -33,7 +32,12 @@ const STORY_BODY_2 =
 // ---------------------------------------------------------------------------
 
 function HistoryDesktop() {
-  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
 
   // Phase 1: Photo clipPath reveal + grow (delayed so dome settles first)
   const photoClipProgress = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);
@@ -148,7 +152,7 @@ function HistoryDesktop() {
               scrollYProgress={scrollYProgress}
               revealStart={0.16}
               revealEnd={0.28}
-              className="text-body-xl text-black"
+              className="text-body-xl text-black/60"
             >
               {STORY_BODY}
             </ScrollWordReveal>
@@ -159,7 +163,7 @@ function HistoryDesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.26}
                 revealEnd={0.32}
-                className="text-body-lg text-black"
+                className="text-body-lg text-black/40"
               >
                 {STORY_BODY_2}
               </ScrollWordReveal>
@@ -211,22 +215,27 @@ function HistoryDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — scroll-driven story + photo dissolve to yellow
+// Mobile animated — scroll-driven story + outro + photo dissolve to yellow
 //
-//  200vh container with sticky viewport
-//  Total scroll range: 200vh + 100vh = 300vh (offset start-end / end-start)
+//  250vh container with sticky viewport
+//  Total scroll range: 250vh + 100vh = 350vh (offset start-end / end-start)
 //
-//  Phase 1 (0.05–0.14) : Title "Notre Histoire" slides up + fades in
-//  Phase 2 (0.05–0.20) : Body text 1 ScrollWordReveal
-//  Phase 3 (0.16–0.30) : Body text 2 ScrollWordReveal
-//  Phase 4 (0.16–0.24) : Photo reveals from bottom band (clip 70%→0%)
-//  Phase 5 (0.24–0.55) : Photo Ken Burns zoom (no drift)
-//  Phase 6 (0.16–0.38) : Photo brightens (0.45→0.8)
-//  Phase 7 (0.24–0.32) : CTA fades in
-//  Phase 8 (0.32–0.44) : Title + text + CTA fade out + exit upward
-//  Phase 9 (0.44–0.60) : Photo dissolves (opacity → 0)
-//  Phase 10 (0.52–0.68): Yellow overlay fills screen
-//  Phase 11 (0.62+)    : Navbar theme → dark
+//  Phase 1  (0.04–0.12) : Title "Notre Histoire" slides up + fades in
+//  Phase 2  (0.04–0.16) : Body text 1 ScrollWordReveal
+//  Phase 3  (0.12–0.24) : Body text 2 ScrollWordReveal
+//  Phase 4  (0.12–0.18) : Photo reveals from bottom band (clip 70%)
+//  Phase 5  (0.18–0.28) : Photo expands fullscreen (clip 70%→0%, covers text)
+//  Phase 6  (0.18–0.50) : Photo Ken Burns zoom
+//  Phase 7  (0.12–0.30) : Photo brightens (0.45→0.8)
+//  Phase 8  (0.18–0.26) : CTA fades in
+//  Phase 9  (0.26–0.36) : Title + text + CTA exit upward (behind photo)
+//  Phase 10 (0.32–0.40) : Dark overlay on photo (0→0.6)
+//  Phase 11 (0.36–0.50) : Outro stagger — UNE / VISION / DIFFÉRENTE
+//  Phase 12 (0.42–0.48) : Outro CTA entrance
+//  Phase 13 (0.48–0.56) : Outro + CTA fade out
+//  Phase 14 (0.54–0.66) : Photo dissolves (opacity → 0)
+//  Phase 15 (0.60–0.74) : Yellow overlay fills screen
+//  Phase 16 (0.68+)     : Navbar theme → dark
 // ---------------------------------------------------------------------------
 
 function HistoryMobileAnimated() {
@@ -239,12 +248,12 @@ function HistoryMobileAnimated() {
   });
 
   // ── Title entrance: slides up + fades in ──
-  const titleEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
-  const titleEntranceY = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
+  const titleEntranceOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);
+  const titleEntranceY = useTransform(scrollYProgress, [0.04, 0.12], [40, 0]);
 
-  // ── Title exit: fades out + slides up ──
-  const titleExitOpacity = useTransform(scrollYProgress, [0.32, 0.44], [1, 0]);
-  const titleExitY = useTransform(scrollYProgress, [0.32, 0.44], [0, -250]);
+  // ── Title exit: fades out + slides up (behind photo) ──
+  const titleExitOpacity = useTransform(scrollYProgress, [0.32, 0.42], [1, 0]);
+  const titleExitY = useTransform(scrollYProgress, [0.32, 0.42], [0, -250]);
 
   // Combined title transforms
   const titleOpacity = useTransform(
@@ -257,41 +266,81 @@ function HistoryMobileAnimated() {
   );
 
   // ── Body text + CTA exit ──
-  const textExitOpacity = useTransform(scrollYProgress, [0.34, 0.46], [1, 0]);
-  const textExitY = useTransform(scrollYProgress, [0.34, 0.48], [0, -200]);
+  const textExitOpacity = useTransform(scrollYProgress, [0.34, 0.44], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0.34, 0.46], [0, -200]);
 
   // ── CTA entrance (before exit) ──
-  const ctaEntranceOpacity = useTransform(scrollYProgress, [0.24, 0.32], [0, 1]);
+  const ctaEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.28], [0, 1]);
 
-  // ── Photo: bottom band → fullscreen (grows from bottom to top) ──
-  const clipTop = useTransform(scrollYProgress, [0.16, 0.24, 0.48], [70, 70, 0]);
+  // ── Photo: bottom band → fullscreen (grows from bottom to top, covers text) ──
+  const clipTop = useTransform(scrollYProgress, [0.12, 0.2, 0.36], [70, 70, 0]);
   const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
 
   // Ken Burns: gentle zoom only — no vertical drift
   const photoScale = useTransform(scrollYProgress, [0.24, 0.55], [1, 1.15]);
 
   // Photo brightness: starts dim, brightens as it expands
-  const photoBrightness = useTransform(scrollYProgress, [0.16, 0.38], [0.45, 0.8]);
+  const photoBrightness = useTransform(scrollYProgress, [0.12, 0.34], [0.45, 0.8]);
   const photoFilter = useTransform(photoBrightness, (b) => `brightness(${b})`);
 
-  // ── Photo dissolves on screen — no movement, just fade ──
-  const photoDissolve = useTransform(scrollYProgress, [0.44, 0.6], [1, 0]);
+  // ── Dark overlay for outro ──
+  const overlayOpacity = useTransform(scrollYProgress, [0.38, 0.46], [0, 0.6]);
+
+  // ── Outro: word-by-word stagger — UNE / VISION / DIFFÉRENTE ──
+  const STAGGER = 0.025;
+  const OUTRO_START = 0.42;
+
+  const word1Opacity = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [0, 1]);
+  const word1Y = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [40, 0]);
+
+  const word2Opacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER, OUTRO_START + STAGGER + 0.05],
+    [0, 1],
+  );
+  const word2Y = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER, OUTRO_START + STAGGER + 0.05],
+    [40, 0],
+  );
+
+  const word3Opacity = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 2, OUTRO_START + STAGGER * 2 + 0.05],
+    [0, 1],
+  );
+  const word3Y = useTransform(
+    scrollYProgress,
+    [OUTRO_START + STAGGER * 2, OUTRO_START + STAGGER * 2 + 0.05],
+    [40, 0],
+  );
+
+  const outroPointer = usePointerEvents(word1Opacity);
+
+  // ── Outro CTA entrance ──
+  const outroCTAOpacity = useTransform(scrollYProgress, [0.48, 0.54], [0, 1]);
+
+  // ── Outro fade out ──
+  const outroFadeOut = useTransform(scrollYProgress, [0.54, 0.6], [1, 0]);
+
+  // ── Photo dissolves on screen — fast fade, no movement ──
+  const photoDissolve = useTransform(scrollYProgress, [0.58, 0.64], [1, 0]);
 
   // ── Yellow overlay — transition to Values section ──
-  const yellowOverlay = useTransform(scrollYProgress, [0.52, 0.68], [0, 1]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.62, 0.74], [0, 1]);
 
   // ── Navbar theme: switch to dark when yellow fills ──
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (!navRef.current) return;
-    navRef.current.setAttribute('data-navbar-theme', v >= 0.62 ? 'dark' : 'light');
+    navRef.current.setAttribute('data-navbar-theme', v >= 0.68 ? 'dark' : 'light');
   });
 
   return (
-    <div ref={ref} className="relative h-[200vh] lg:hidden">
+    <div ref={ref} className="relative h-[250vh] lg:hidden">
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
-        {/* ── Photo — below content, grows upward, dissolves in place ── */}
+        {/* ── Photo — ABOVE text (z-20), grows upward to cover content ── */}
         <m.div
-          className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path]"
+          className="absolute inset-0 z-20 overflow-hidden will-change-[clip-path]"
           style={{ clipPath: photoClip, opacity: photoDissolve }}
         >
           <m.div
@@ -327,8 +376,8 @@ function HistoryMobileAnimated() {
           <ScrollWordReveal
             as="p"
             scrollYProgress={scrollYProgress}
-            revealStart={0.05}
-            revealEnd={0.2}
+            revealStart={0.04}
+            revealEnd={0.16}
             className="text-body-xl text-black"
           >
             {STORY_BODY}
@@ -338,8 +387,8 @@ function HistoryMobileAnimated() {
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
-              revealStart={0.16}
-              revealEnd={0.3}
+              revealStart={0.12}
+              revealEnd={0.24}
               className="text-body text-black"
             >
               {STORY_BODY_2}
@@ -353,8 +402,66 @@ function HistoryMobileAnimated() {
           </m.div>
         </m.div>
 
-        {/* Spacer — photo band sits right after CTA */}
+        {/* Spacer */}
         <div className="flex-1" />
+
+        {/* ── Dark overlay for outro ── */}
+        <m.div
+          className="pointer-events-none absolute inset-0 z-30 bg-black"
+          style={{ opacity: overlayOpacity }}
+          aria-hidden="true"
+        />
+
+        {/* ── Outro: UNE / VISION / DIFFÉRENTE — stagger entrance, then fade ── */}
+        <m.div
+          className="absolute inset-0 z-30 flex flex-col items-start justify-center px-container-x"
+          style={{ pointerEvents: outroPointer }}
+        >
+          <m.span
+            className="text-heading text-accent will-change-transform"
+            style={{
+              fontSize: 'clamp(2.5rem, 14vw, 8rem)',
+              lineHeight: 0.85,
+              opacity: word1Opacity,
+              y: word1Y,
+            }}
+          >
+            <m.span style={{ opacity: outroFadeOut }}>UNE</m.span>
+          </m.span>
+
+          <m.span
+            className="text-heading text-accent will-change-transform"
+            style={{
+              fontSize: 'clamp(2.5rem, 14vw, 8rem)',
+              lineHeight: 0.85,
+              opacity: word2Opacity,
+              y: word2Y,
+            }}
+          >
+            <m.span style={{ opacity: outroFadeOut }}>VISION</m.span>
+          </m.span>
+
+          <m.span
+            className="text-heading text-accent will-change-transform"
+            style={{
+              fontSize: 'clamp(2.5rem, 14vw, 8rem)',
+              lineHeight: 0.85,
+              opacity: word3Opacity,
+              y: word3Y,
+            }}
+          >
+            <m.span style={{ opacity: outroFadeOut }}>DIFFÉRENTE</m.span>
+          </m.span>
+
+          {/* CTA — under the outro phrase */}
+          <m.div className="mt-6" style={{ opacity: outroCTAOpacity }}>
+            <m.div style={{ opacity: outroFadeOut }}>
+              <LinkCTA to="/services" theme="dark">
+                Voir nos services
+              </LinkCTA>
+            </m.div>
+          </m.div>
+        </m.div>
 
         {/* ── Yellow overlay — transition to Values ── */}
         <m.div
@@ -392,11 +499,18 @@ export default function AboutHistory() {
       aria-labelledby="histoire-title"
       data-navbar-theme="light"
     >
-      {/* Convex dome — CSS border-radius (like HomeStory)
-          Height extended to 24vw so it overlaps the gradient start at 12vw,
-          preventing a visible seam between dome and section bg. */}
+      {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
+      <svg
+        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
+        style={{ height: '12vw' }}
+        viewBox="0 0 1440 120"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
+      </svg>
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
         aria-hidden="true"
         data-navbar-theme="light"
       >
@@ -424,14 +538,14 @@ export default function AboutHistory() {
             <div className="absolute bottom-0 left-0 right-0 flex justify-center px-4 pb-8 sm:px-8 sm:pb-12">
               <SimpleAnimation type="slide-up" delay={200}>
                 <div className="w-full max-w-4xl space-y-4 bg-accent/90 px-container-x py-container-y backdrop-blur-sm">
-                  <span className="text-body-sm font-medium uppercase tracking-wider text-black">
+                  <span className="text-body-sm font-medium uppercase tracking-wider text-black/40">
                     Notre histoire
                   </span>
                   <h2 id="histoire-title" className="heading-section text-black">
                     Un peu d&apos;histoire
                   </h2>
-                  <p className="text-body-lg text-black">{STORY_BODY}</p>
-                  <p className="text-body text-black">{STORY_BODY_2}</p>
+                  <p className="text-body-lg text-black/60">{STORY_BODY}</p>
+                  <p className="text-body text-black/40">{STORY_BODY_2}</p>
                   <LinkCTA to="/services" theme="light" className="mt-4">
                     Voir nos services
                   </LinkCTA>

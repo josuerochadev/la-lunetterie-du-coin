@@ -1,11 +1,10 @@
 import { useRef } from 'react';
-import { m, useTransform, useSpring, useScroll } from 'framer-motion';
+import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
-import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const TEAM_BIO =
@@ -24,7 +23,12 @@ const TEAM_BIO =
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
-  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end end'],
+  });
 
   // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
@@ -47,7 +51,7 @@ function TeamDesktop() {
   const exitY = useTransform(scrollYProgress, [0.65, 0.8], [0, -40]);
 
   return (
-    <div ref={ref} className="hidden h-[300vh] lg:block">
+    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <m.div
           className="flex h-full items-center px-16 xl:px-20"
@@ -91,7 +95,7 @@ function TeamDesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.2}
                 revealEnd={0.38}
-                className="text-body-lg text-white"
+                className="text-body-lg text-white/70"
               >
                 {TEAM_BIO}
               </ScrollWordReveal>
@@ -104,13 +108,12 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — fullscreen portrait bg + dark overlay + text
+// Mobile animated — full-width portrait + scroll zoom + text below
 //
-//  Photo fills the viewport as background, dark gradient overlay for readability.
-//  Title left-aligned, bio revealed word-by-word on top of the darkened photo.
+//  Photo full width (aspect 3/4), zoom 1→1.12 on scroll.
+//  Title left-aligned, bio revealed word-by-word below the photo.
 //
-//  0.00 – 0.25  Photo Ken Burns zoom + parallax
-//  0.02 – 0.18  Dark overlay fades in (0→0.55)
+//  0.00 – 0.50  Photo scroll zoom (scale 1→1.12)
 //  0.05 – 0.20  Title ScrollWordReveal
 //  0.18 – 0.45  Bio ScrollWordReveal (word by word)
 // ---------------------------------------------------------------------------
@@ -122,34 +125,20 @@ function TeamMobileAnimated() {
     offset: ['start end', 'end start'],
   });
 
-  // Photo clipPath reveal from bottom + Ken Burns
-  const clipBottom = useTransform(scrollYProgress, [0.0, 0.25], [100, 0]);
-  const photoClip = useTransform(clipBottom, (v) => `inset(0 0 ${v}% 0)`);
-  const photoScale = useTransform(scrollYProgress, [0.0, 0.35], [1.08, 1]);
-  const photoY = useTransform(scrollYProgress, [0, 0.5], ['3%', '-3%']);
-
   return (
     <div ref={ref} className="lg:hidden">
-      {/* Portrait with clipPath reveal — constrained height to fit text below */}
-      <m.div
-        className="relative aspect-[4/5] max-h-[50vh] overflow-hidden will-change-[clip-path]"
-        style={{ clipPath: photoClip }}
-      >
-        <m.div
-          className="h-full w-full will-change-transform"
-          style={{ scale: photoScale, y: photoY }}
-        >
-          <ResponsiveImage
-            src="/images/about-team-romain.jpeg"
-            alt="Romain Corato, fondateur de La Lunetterie du Coin"
-            className="h-full w-full object-cover object-top"
-            sizes="100vw"
-          />
-        </m.div>
-      </m.div>
+      {/* Portrait — full width */}
+      <div className="relative aspect-[3/4] w-full overflow-hidden">
+        <ResponsiveImage
+          src="/images/about-team-romain.jpeg"
+          alt="Romain Corato, fondateur de La Lunetterie du Coin"
+          className="h-full w-full object-cover object-top"
+          sizes="100vw"
+        />
+      </div>
 
       {/* Text content — below photo on black bg */}
-      <div className="px-container-x py-section">
+      <div className="px-container-x pb-section pt-8">
         {/* Title — left-aligned */}
         <ScrollWordReveal
           as="h2"
@@ -190,9 +179,18 @@ export default function AboutTeam() {
     <section
       id="equipe"
       aria-label="Notre équipe"
-      className="relative min-h-svh w-full bg-black lg:min-h-0"
+      className="relative w-full bg-black lg:min-h-0"
       data-navbar-theme="light"
     >
+      {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) — desktop only */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] lg:block"
+        style={{
+          background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
+        }}
+        aria-hidden="true"
+      />
+
       {variant === 'desktop-animated' && <TeamDesktop />}
       {variant === 'mobile-animated' && <TeamMobileAnimated />}
       {variant === 'static' && (
@@ -222,7 +220,7 @@ export default function AboutTeam() {
                   />
                 </div>
                 <div>
-                  <p className="text-body-lg text-white">{TEAM_BIO}</p>
+                  <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
                 </div>
               </div>
             </SimpleAnimation>
