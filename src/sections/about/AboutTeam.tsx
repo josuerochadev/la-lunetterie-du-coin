@@ -5,6 +5,7 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const TEAM_BIO =
@@ -108,61 +109,87 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — full-width portrait + scroll zoom + text below
+// Mobile animated — internal sticky + scroll-driven animations
 //
-//  Photo full width (aspect 3/4), zoom 1→1.12 on scroll.
-//  Title left-aligned, bio revealed word-by-word below the photo.
+//  200vh container with sticky viewport
+//  useManualScrollProgress('start-start') — progress 0→1 over 100vh
 //
-//  0.00 – 0.50  Photo scroll zoom (scale 1→1.12)
-//  0.05 – 0.20  Title ScrollWordReveal
-//  0.18 – 0.45  Bio ScrollWordReveal (word by word)
+//  0.00 – 0.60  Photo Ken Burns zoom (scale 1 → 1.08)
+//  0.00 – 0.10  Title entrance (opacity + Y 40→0)
+//  0.00 – 0.20  Title ScrollWordReveal (word-by-word)
+//  0.12 – 0.18  Bio entrance gate (opacity 0→1)
+//  0.15 – 0.50  Bio ScrollWordReveal (word-by-word)
+//  0.70 – 0.90  Exit — entire content fades out + drifts up
 // ---------------------------------------------------------------------------
 
 function TeamMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  // Photo Ken Burns zoom
+  const photoScale = useTransform(scrollYProgress, [0.0, 0.6], [1, 1.08]);
+
+  // Title entrance — gates ScrollWordReveal's base opacity
+  const titleEntrance = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  // Bio entrance gate
+  const bioEntrance = useTransform(scrollYProgress, [0.12, 0.18], [0, 1]);
+
+  // Exit — fade out + drift up
+  const exitOpacity = useTransform(scrollYProgress, [0.7, 0.9], [1, 0]);
+  const exitYRaw = useTransform(scrollYProgress, [0.7, 0.9], [0, -40]);
+  const exitY = useSpring(exitYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="lg:hidden">
-      {/* Portrait — full width */}
-      <div className="relative aspect-[3/4] w-full overflow-hidden">
-        <ResponsiveImage
-          src="/images/about-team-romain.jpeg"
-          alt="Romain Corato, fondateur de La Lunetterie du Coin"
-          className="h-full w-full object-cover object-top"
-          sizes="100vw"
-        />
-      </div>
-
-      {/* Text content — below photo on black bg */}
-      <div className="px-container-x pb-section pt-8">
-        {/* Title — left-aligned */}
-        <ScrollWordReveal
-          as="h2"
-          scrollYProgress={scrollYProgress}
-          revealStart={0.05}
-          revealEnd={0.2}
-          className="text-heading text-accent"
-          style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
+    <div ref={ref} className="h-[200vh] lg:hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
+        <m.div
+          className="flex h-full flex-col will-change-transform"
+          style={{ opacity: exitOpacity, y: exitY }}
         >
-          L&apos;ŒIL DERRIÈRE LA BOUTIQUE
-        </ScrollWordReveal>
+          {/* Portrait — full width with Ken Burns zoom */}
+          <div className="relative aspect-[3/4] w-full overflow-hidden">
+            <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
+              <ResponsiveImage
+                src="/images/about-team-romain.jpeg"
+                alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                className="h-full w-full object-cover object-top"
+                sizes="100vw"
+              />
+            </m.div>
+          </div>
 
-        {/* Bio — word reveal */}
-        <div className="mt-8 max-w-md">
-          <ScrollWordReveal
-            as="p"
-            scrollYProgress={scrollYProgress}
-            revealStart={0.18}
-            revealEnd={0.45}
-            className="text-body-lg text-white"
-          >
-            {TEAM_BIO}
-          </ScrollWordReveal>
-        </div>
+          {/* Text content — below photo on black bg */}
+          <div className="px-container-x pb-section pt-8">
+            {/* Title — entrance gated */}
+            <m.div style={{ opacity: titleEntrance, y: titleY }}>
+              <ScrollWordReveal
+                as="h2"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.0}
+                revealEnd={0.2}
+                className="text-heading text-accent"
+                style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
+              >
+                L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+              </ScrollWordReveal>
+            </m.div>
+
+            {/* Bio — entrance gated + word reveal */}
+            <m.div className="mt-8 max-w-md" style={{ opacity: bioEntrance }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.15}
+                revealEnd={0.5}
+                className="text-body-lg text-white"
+              >
+                {TEAM_BIO}
+              </ScrollWordReveal>
+            </m.div>
+          </div>
+        </m.div>
       </div>
     </div>
   );

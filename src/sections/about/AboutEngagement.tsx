@@ -163,31 +163,24 @@ function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
     offset: ['start end', 'end start'],
   });
 
-  // Stagger by index for cascade effect
   const delay = index * 0.04;
 
-  // Stat number: scale 0.8→1, opacity 0→1
   const numberScale = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0.8, 1]);
   const numberOpacity = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0, 1]);
   const numberY = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [30, 0]);
 
-  // Accent border-top: scaleX 0→1 from left
   const borderScaleX = useTransform(scrollYProgress, [0.0 + delay, 0.18 + delay], [0, 1]);
 
-  // Label: opacity + Y (staggered after number)
   const labelOpacity = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [0, 1]);
   const labelYRaw = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [20, 0]);
   const labelY = useSpring(labelYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref}>
-      {/* Accent border-top */}
+    <div ref={ref} className="text-center">
       <m.div
-        className="mb-4 h-0.5 origin-left bg-secondary-orange will-change-transform"
+        className="mx-auto mb-4 h-0.5 w-full origin-left bg-secondary-orange will-change-transform"
         style={{ scaleX: borderScaleX }}
       />
-
-      {/* Stat number */}
       <m.div
         className="text-heading text-secondary-orange will-change-transform"
         style={{
@@ -199,8 +192,6 @@ function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
       >
         {stat.number}
       </m.div>
-
-      {/* Label */}
       <m.div
         className="mt-2 text-body-xs text-black will-change-transform sm:text-body-sm"
         style={{ opacity: labelOpacity, y: labelY }}
@@ -212,7 +203,15 @@ function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — scroll-driven engagement section
+// Mobile animated — centered layout matching desktop, scroll-driven
+//
+//  Natural-flow section (no sticky), tracks via ['start end', 'end start']
+//
+//  0.05 – 0.17  Title ScrollWordReveal + entrance (centered)
+//  0.10 – 0.30  Stats cascade (3-col, centered, per-element scroll)
+//  0.25 – 0.45  Body text ScrollWordReveal (centered)
+//  0.40 – 0.55  Highlight entrance (centered)
+//  0.65 – 0.82  Exit — gentle fade out + drift up
 // ---------------------------------------------------------------------------
 
 function EngagementMobileAnimated() {
@@ -222,76 +221,81 @@ function EngagementMobileAnimated() {
     offset: ['start end', 'end start'],
   });
 
-  // Title entrance — Y slide + fade
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
+  // Title entrance
+  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // Highlight entrance
-  const highlightOpacity = useTransform(scrollYProgress, [0.35, 0.5], [0, 1]);
-  const highlightYRaw = useTransform(scrollYProgress, [0.35, 0.5], [20, 0]);
+  const highlightOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
+  const highlightYRaw = useTransform(scrollYProgress, [0.4, 0.55], [20, 0]);
   const highlightY = useSpring(highlightYRaw, SPRING_CONFIG);
+
+  // Exit — gentle fade
+  const exitOpacity = useTransform(scrollYProgress, [0.65, 0.82], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.65, 0.82], [0, -30]);
 
   return (
     <div ref={sectionRef} className="relative bg-background">
       {/* GiantCounter background */}
       <GiantCounter
         scrollYProgress={scrollYProgress}
-        countRange={[0.02, 0.25]}
+        countRange={[0.05, 0.3]}
         countValues={[0, 2000]}
         formatValue={(v) => Math.round(v).toLocaleString('fr-FR')}
-        opacityRange={[0.01, 0.08, 0.65, 0.8]}
+        opacityRange={[0.04, 0.12, 0.65, 0.82]}
         peakOpacity={0.08}
         fontSize="clamp(8rem, 22vw, 14rem)"
         className="text-black/[0.06]"
       />
 
-      <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
+      <m.div
+        className="relative z-10 mx-auto max-w-container px-container-x py-section"
+        style={{ opacity: exitOpacity, y: exitY }}
+      >
         <div className="mx-auto max-w-4xl">
-          {/* Title — left-aligned with entrance animation */}
-          <m.div className="mb-8" style={{ opacity: titleOpacity, y: titleY }}>
+          {/* Title — centered */}
+          <m.div className="mb-8 text-center" style={{ opacity: titleOpacity, y: titleY }}>
             <ScrollWordReveal
               as="h2"
               scrollYProgress={scrollYProgress}
-              revealStart={0.0}
-              revealEnd={0.12}
+              revealStart={0.05}
+              revealEnd={0.17}
               className="heading-section text-black"
             >
               {ENGAGEMENT_TITLE}
             </ScrollWordReveal>
           </m.div>
 
-          {/* Stats grid — staggered cascade */}
+          {/* Stats — 3-col centered, staggered cascade */}
           <div className="mb-8 grid grid-cols-3 gap-4">
             {STATS_DATA.map((stat, i) => (
               <MobileStatCard key={stat.label} stat={stat} index={i} />
             ))}
           </div>
 
-          {/* Body — left-aligned */}
-          <div className="mb-6">
+          {/* Body — centered */}
+          <div className="mb-6 text-center">
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
-              revealStart={0.2}
-              revealEnd={0.4}
+              revealStart={0.25}
+              revealEnd={0.45}
               className="text-body text-black"
             >
               {ENGAGEMENT_BODY}
             </ScrollWordReveal>
           </div>
 
-          {/* Highlight — left-aligned */}
+          {/* Highlight — centered */}
           <m.p
-            className="text-body-sm italic text-secondary-orange will-change-transform"
-            style={{
-              opacity: highlightOpacity,
-              y: highlightY,
-            }}
+            className="text-center text-body-sm italic text-secondary-orange will-change-transform"
+            style={{ opacity: highlightOpacity, y: highlightY }}
           >
             {ENGAGEMENT_HIGHLIGHT}
           </m.p>
         </div>
-      </div>
+      </m.div>
     </div>
   );
 }
