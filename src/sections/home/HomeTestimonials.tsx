@@ -20,7 +20,7 @@ function HomeTestimonials() {
       id="testimonials"
       aria-labelledby="testimonials-title"
       data-navbar-theme="light"
-      className="relative -mt-1 bg-black"
+      className="relative bg-black"
     >
       {/* Top gradient — smooth yellow → black transition from Services */}
       <div

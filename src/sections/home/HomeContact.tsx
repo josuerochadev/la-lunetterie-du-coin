@@ -10,7 +10,7 @@ import { SPRING_CONFIG_SLOW } from '@/lib/motion';
 //
 //  300vh container. VOIR IS the transition between sections.
 //  Yellow bg throughout. VOIR zooms fast (Story rhythm).
-//  Footer (z-20) covers Contact (z-16) while it stays sticky.
+//  Footer (z-20) covers Contact (inside z-12 wrapper) while it stays sticky.
 //
 //  scroll distance = 200vh
 //
