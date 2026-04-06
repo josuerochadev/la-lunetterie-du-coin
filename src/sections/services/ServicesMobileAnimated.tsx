@@ -67,10 +67,18 @@ function ProgressSegment({
 
 function ProgressBar({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
   const progress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  // Fade out during the last service's exit phase
+  const lastSliceStart = (SERVICE_COUNT - 1) * SLICE;
+  const barOpacity = useTransform(
+    scrollYProgress,
+    [lastSliceStart + EXIT_START, lastSliceStart + EXIT_END],
+    [1, 0],
+  );
 
   return (
-    <div
+    <m.div
       className="absolute inset-x-0 bottom-0 z-30 flex items-center gap-3 px-container-x pb-8"
+      style={{ opacity: barOpacity }}
       aria-hidden="true"
     >
       {SERVICES_DATA.map((_, i) => (
@@ -82,7 +90,7 @@ function ProgressBar({ scrollYProgress }: { scrollYProgress: MotionValue<number>
           segEnd={(i + 1) / SERVICE_COUNT}
         />
       ))}
-    </div>
+    </m.div>
   );
 }
 
