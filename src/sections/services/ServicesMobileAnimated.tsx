@@ -194,89 +194,105 @@ function ServiceSlide({
         aria-hidden="true"
       />
 
-      {/* Text content — anchored to bottom of viewport, blurred for readability */}
+      {/* Text content — anchored to bottom of viewport */}
       <m.div
-        className="absolute inset-x-0 bottom-0 flex flex-col justify-end px-container-x pb-16 backdrop-blur-[6px]"
-        style={{ y: exitY, top: '38%' }}
+        className="absolute inset-x-0 bottom-0 flex flex-col items-start justify-end px-container-x pb-16"
+        style={{ y: exitY }}
       >
-        {/* Counter */}
-        <m.span
-          className="mb-3 block text-body font-medium uppercase tracking-widest text-white/70"
-          style={{ opacity: counterOpacity }}
-        >
-          {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
-        </m.span>
+        {/* Blur scrim — sized by content, behind text (z-0) */}
+        <div
+          className="pointer-events-none absolute inset-0 -top-8 z-0 backdrop-blur-[6px]"
+          style={{
+            mask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+          }}
+          aria-hidden="true"
+        />
+        {/* Text wrapper — relative z-10 so it sits above the blur scrim */}
+        <div className="relative z-10 flex flex-col items-start">
+          {/* Counter */}
+          <m.span
+            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/70"
+            style={{ opacity: counterOpacity }}
+          >
+            {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
+          </m.span>
 
-        {/* Title — Satoshi Black Caps (matches homepage services) */}
-        <m.h3
-          className="text-subtitle mb-4 text-title-sm text-white"
-          style={{ opacity: titleOpacity, y: titleY }}
-        >
-          {service.title}
-        </m.h3>
+          {/* Title — Satoshi Black Caps (matches homepage services) */}
+          <m.h3
+            className="text-subtitle mb-4 text-title-sm text-white"
+            style={{ opacity: titleOpacity, y: titleY }}
+          >
+            {service.title}
+          </m.h3>
 
-        {/* Description */}
-        <m.p
-          className="mb-5 text-body-lg leading-relaxed text-white/85"
-          style={{ opacity: descOpacity, y: descY }}
-        >
-          {service.description}
-        </m.p>
+          {/* Description */}
+          <m.p
+            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            style={{ opacity: descOpacity, y: descY }}
+          >
+            {service.description}
+          </m.p>
 
-        {/* Details list */}
-        <m.ul
-          className="mb-5 grid grid-cols-1 gap-y-1.5 sm:grid-cols-2 sm:gap-x-6"
-          style={{ opacity: detailsOpacity }}
-        >
-          {service.details.map((detail, i) => (
-            <li key={i} className="flex gap-2 text-body text-white/70">
-              <span
-                className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
-                aria-hidden="true"
-              />
-              <span>{detail}</span>
-            </li>
-          ))}
-        </m.ul>
-
-        {/* Examens: conditions box */}
-        {isExamens && (
-          <m.div
-            className="mb-5 border-l-2 border-accent/30 pl-4"
+          {/* Details list */}
+          <m.ul
+            className="mb-5 grid grid-cols-1 gap-y-1.5 sm:grid-cols-2 sm:gap-x-6"
             style={{ opacity: detailsOpacity }}
           >
-            <h4 className="mb-2 text-body font-medium text-white">
-              Conditions pour un examen en magasin
-            </h4>
-            <ul className="space-y-1 text-body text-white/70">
-              <li>
-                Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+            {service.details.map((detail, i) => (
+              <li key={i} className="flex gap-2 text-body text-white/70">
+                <span
+                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
+                  aria-hidden="true"
+                />
+                <span>{detail}</span>
               </li>
-              <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-              <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-            </ul>
-          </m.div>
-        )}
+            ))}
+          </m.ul>
 
-        {/* CTA */}
-        <m.div style={{ opacity: ctaOpacity }}>
-          {isExamens ? (
-            <LinkCTA
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              theme="dark"
-              icon={ExternalLink}
-              aria-label="Prendre rendez-vous pour un examen de vue"
+          {/* Examens: conditions box */}
+          {isExamens && (
+            <m.div
+              className="mb-5 border-l-2 border-accent/30 pl-4"
+              style={{ opacity: detailsOpacity }}
             >
-              Prendre rendez-vous
-            </LinkCTA>
-          ) : (
-            <LinkCTA to="/contact" theme="dark" aria-label={`En savoir plus sur ${service.title}`}>
-              Nous contacter
-            </LinkCTA>
+              <h4 className="mb-2 text-body font-medium text-white">
+                Conditions pour un examen en magasin
+              </h4>
+              <ul className="space-y-1 text-body text-white/70">
+                <li>
+                  Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                </li>
+                <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+              </ul>
+            </m.div>
           )}
-        </m.div>
+
+          {/* CTA */}
+          <m.div style={{ opacity: ctaOpacity }}>
+            {isExamens ? (
+              <LinkCTA
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                theme="dark"
+                icon={ExternalLink}
+                aria-label="Prendre rendez-vous pour un examen de vue"
+              >
+                Prendre rendez-vous
+              </LinkCTA>
+            ) : (
+              <LinkCTA
+                to="/contact"
+                theme="dark"
+                aria-label={`En savoir plus sur ${service.title}`}
+              >
+                Nous contacter
+              </LinkCTA>
+            )}
+          </m.div>
+        </div>
       </m.div>
     </m.div>
   );
