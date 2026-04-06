@@ -442,9 +442,17 @@ function MobileOutro({ scrollYProgress }: { scrollYProgress: MotionValue<number>
 export function ServicesMobileAnimated() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
+  // Manual scroll progress — bypasses FM's target tracking which can fail
+  // when the element is inside a `transform: translateZ(0)` ancestor.
+  // Equivalent to useScroll({ target, offset: ['start start', 'end end'] }).
+  const { scrollY } = useScroll();
+  const scrollYProgress = useTransform(scrollY, () => {
+    const el = sectionRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    const range = rect.height - window.innerHeight;
+    if (range <= 0) return 0;
+    return Math.min(1, Math.max(0, -rect.top / range));
   });
 
   // Curtain — accent overlay slides up to reveal photos (fast: 0 → 3%)

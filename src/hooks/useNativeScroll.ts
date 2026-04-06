@@ -20,7 +20,15 @@ export function useNativeScroll() {
     // Optionnel: Améliorer l'expérience avec scroll-padding
     document.documentElement.style.scrollPaddingTop = '2rem';
 
+    // Force Framer Motion useScroll hooks to recalculate after layout settles.
+    // Without this, scroll-driven animations can stay at opacity 0 when the
+    // browser restores a scroll position (reload, HMR, back/forward nav).
+    const id = requestAnimationFrame(() => {
+      window.dispatchEvent(new Event('scroll'));
+    });
+
     return () => {
+      cancelAnimationFrame(id);
       document.documentElement.style.scrollBehavior = '';
       document.documentElement.style.scrollPaddingTop = '';
     };

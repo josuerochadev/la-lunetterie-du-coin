@@ -15,9 +15,17 @@ type StickySectionProps = {
  * Composant StickySection
  *
  * Wrapper pour créer l'effet parallax entre les sections.
- * translateZ(0) promotes each wrapper to a GPU compositing layer,
+ *
+ * Desktop: translateZ(0) promotes each wrapper to a GPU compositing layer,
  * eliminating subpixel rasterization seams between adjacent sections.
+ *
+ * Mobile: isolation:isolate creates a stacking context without the
+ * containing-block side-effect of transform, which would break
+ * position:sticky inside child scroll-driven sections.
  */
+
+const LAYER_CLASS = 'relative w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)]';
+
 export default function StickySection({
   children,
   zIndex,
@@ -27,10 +35,7 @@ export default function StickySection({
 }: StickySectionProps) {
   if (enableSticky && wrapperMinHeight) {
     return (
-      <div
-        className={cn('relative w-full [transform:translateZ(0)]', className)}
-        style={{ minHeight: wrapperMinHeight, zIndex }}
-      >
+      <div className={cn(LAYER_CLASS, className)} style={{ minHeight: wrapperMinHeight, zIndex }}>
         <div className="sticky top-0 w-full">{children}</div>
       </div>
     );
@@ -38,11 +43,7 @@ export default function StickySection({
 
   return (
     <div
-      className={cn(
-        'relative w-full [transform:translateZ(0)]',
-        enableSticky && 'sticky top-0',
-        className,
-      )}
+      className={cn(LAYER_CLASS, enableSticky && 'sticky top-0', className)}
       style={zIndex !== undefined ? { zIndex } : undefined}
     >
       {children}

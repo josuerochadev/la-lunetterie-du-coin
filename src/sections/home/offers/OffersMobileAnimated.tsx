@@ -27,9 +27,17 @@ const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 export function OffersMobileAnimated() {
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
+  // Manual scroll progress — bypasses FM's target tracking which can fail
+  // when the element is inside a `transform: translateZ(0)` ancestor.
+  // Equivalent to useScroll({ target, offset: ['start start', 'end end'] }).
+  const { scrollY } = useScroll();
+  const scrollYProgress = useTransform(scrollY, () => {
+    const el = sectionRef.current;
+    if (!el) return 0;
+    const rect = el.getBoundingClientRect();
+    const range = rect.height - window.innerHeight;
+    if (range <= 0) return 0;
+    return Math.min(1, Math.max(0, -rect.top / range));
   });
 
   // ── Images (faded backdrop — max opacity 0.55 for card readability) ──
@@ -142,7 +150,7 @@ export function OffersMobileAnimated() {
         {/* ── Title + Cards group (centered vertically as one block) ── */}
         <div className="relative z-10 flex flex-1 flex-col justify-center px-container-x">
           {/* Title */}
-          <m.div className="relative z-10 mb-6" style={{ opacity: titleOpacity }}>
+          <m.div className="relative z-10 mb-12" style={{ opacity: titleOpacity }}>
             <ScrollWordReveal
               as="h2"
               id="offers-title"
