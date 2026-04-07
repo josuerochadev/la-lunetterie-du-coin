@@ -16,7 +16,7 @@ export function InfoAccent({
   const barColor = color === 'green' ? 'bg-secondary-green' : 'bg-secondary-orange';
   return (
     <div className="flex flex-col gap-1">
-      <span className="font-display text-title-sm uppercase leading-none text-black">
+      <span className="whitespace-nowrap font-display text-body uppercase leading-none text-black sm:text-title-sm">
         {keyword}
       </span>
       <div className={`h-[3px] w-8 ${barColor}`} />
