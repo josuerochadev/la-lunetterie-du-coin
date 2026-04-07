@@ -24,7 +24,14 @@ type StickySectionProps = {
  * position:sticky inside child scroll-driven sections.
  */
 
-const LAYER_CLASS = 'relative w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)]';
+/**
+ * Anti-seam: -mb-px pulls the next sibling up by 1px, creating a physical
+ * overlap. The later section (higher DOM order / z-index) paints on top,
+ * covering the 1px gap with its own background. Works universally regardless
+ * of whether the bg class is on the wrapper or the child section.
+ */
+const LAYER_CLASS =
+  'relative -mb-px w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)]';
 
 export default function StickySection({
   children,
