@@ -217,25 +217,26 @@ function HistoryDesktop() {
 // ---------------------------------------------------------------------------
 // Mobile animated — scroll-driven story + outro + photo dissolve to yellow
 //
-//  250vh container with sticky viewport
-//  Total scroll range: 250vh + 100vh = 350vh (offset start-end / end-start)
+//  350vh container with sticky viewport
+//  Total scroll range: 350vh + 100vh = 450vh (offset start-end / end-start)
 //
 //  Phase 1  (0.04–0.12) : Title "Notre Histoire" slides up + fades in
 //  Phase 2  (0.04–0.16) : Body text 1 ScrollWordReveal
 //  Phase 3  (0.12–0.24) : Body text 2 ScrollWordReveal
-//  Phase 4  (0.12–0.18) : Photo reveals from bottom band (clip 70%)
-//  Phase 5  (0.18–0.28) : Photo expands fullscreen (clip 70%→0%, covers text)
-//  Phase 6  (0.18–0.50) : Photo Ken Burns zoom
-//  Phase 7  (0.12–0.30) : Photo brightens (0.45→0.8)
-//  Phase 8  (0.18–0.26) : CTA fades in
-//  Phase 9  (0.26–0.36) : Title + text + CTA exit upward (behind photo)
-//  Phase 10 (0.32–0.40) : Dark overlay on photo (0→0.6)
-//  Phase 11 (0.36–0.50) : Outro stagger — UNE / VISION / DIFFÉRENTE
-//  Phase 12 (0.42–0.48) : Outro CTA entrance
-//  Phase 13 (0.48–0.56) : Outro + CTA fade out
-//  Phase 14 (0.54–0.66) : Photo dissolves (opacity → 0)
-//  Phase 15 (0.60–0.74) : Yellow overlay fills screen
-//  Phase 16 (0.68+)     : Navbar theme → dark
+//  Phase 4  (0.12–0.28) : Photo reveals from bottom band (clip 70%)
+//  Phase 5  (0.28–0.42) : Photo expands fullscreen (clip 70%→0%, covers text)
+//  Phase 6  (0.28–0.58) : Photo Ken Burns zoom
+//  Phase 7  (0.12–0.38) : Photo brightens (0.45→0.8)
+//  Phase 8  (0.20–0.28) : CTA fades in
+//  Phase 9  (0.36–0.46) : Title exit upward (behind photo)
+//  Phase 10 (0.38–0.48) : Text + CTA exit upward
+//  Phase 11 (0.44–0.52) : Dark overlay on photo (0→0.6)
+//  Phase 12 (0.48–0.53) : Outro stagger — UNE / VISION / DIFFÉRENTE
+//  Phase 13 (0.54–0.60) : Outro CTA entrance
+//  Phase 14 (0.60–0.66) : Outro + CTA fade out
+//  Phase 15 (0.64–0.70) : Photo dissolves (opacity → 0)
+//  Phase 16 (0.68–0.78) : Yellow overlay fills screen
+//  Phase 17 (0.72+)     : Navbar theme → dark
 // ---------------------------------------------------------------------------
 
 function HistoryMobileAnimated() {
@@ -252,8 +253,8 @@ function HistoryMobileAnimated() {
   const titleEntranceY = useTransform(scrollYProgress, [0.04, 0.12], [40, 0]);
 
   // ── Title exit: fades out + slides up (behind photo) ──
-  const titleExitOpacity = useTransform(scrollYProgress, [0.32, 0.42], [1, 0]);
-  const titleExitY = useTransform(scrollYProgress, [0.32, 0.42], [0, -250]);
+  const titleExitOpacity = useTransform(scrollYProgress, [0.36, 0.46], [1, 0]);
+  const titleExitY = useTransform(scrollYProgress, [0.36, 0.46], [0, -250]);
 
   // Combined title transforms
   const titleOpacity = useTransform(
@@ -266,29 +267,29 @@ function HistoryMobileAnimated() {
   );
 
   // ── Body text + CTA exit ──
-  const textExitOpacity = useTransform(scrollYProgress, [0.34, 0.44], [1, 0]);
-  const textExitY = useTransform(scrollYProgress, [0.34, 0.46], [0, -200]);
+  const textExitOpacity = useTransform(scrollYProgress, [0.38, 0.48], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0.38, 0.5], [0, -200]);
 
   // ── CTA entrance (before exit) ──
   const ctaEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.28], [0, 1]);
 
   // ── Photo: bottom band → fullscreen (grows from bottom to top, covers text) ──
-  const clipTop = useTransform(scrollYProgress, [0.12, 0.2, 0.36], [70, 70, 0]);
+  const clipTop = useTransform(scrollYProgress, [0.12, 0.28, 0.42], [70, 70, 0]);
   const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
 
   // Ken Burns: gentle zoom only — no vertical drift
-  const photoScale = useTransform(scrollYProgress, [0.24, 0.55], [1, 1.15]);
+  const photoScale = useTransform(scrollYProgress, [0.28, 0.58], [1, 1.15]);
 
   // Photo brightness: starts dim, brightens as it expands
-  const photoBrightness = useTransform(scrollYProgress, [0.12, 0.34], [0.45, 0.8]);
+  const photoBrightness = useTransform(scrollYProgress, [0.12, 0.38], [0.45, 0.8]);
   const photoFilter = useTransform(photoBrightness, (b) => `brightness(${b})`);
 
   // ── Dark overlay for outro ──
-  const overlayOpacity = useTransform(scrollYProgress, [0.38, 0.46], [0, 0.6]);
+  const overlayOpacity = useTransform(scrollYProgress, [0.44, 0.52], [0, 0.6]);
 
   // ── Outro: word-by-word stagger — UNE / VISION / DIFFÉRENTE ──
   const STAGGER = 0.025;
-  const OUTRO_START = 0.42;
+  const OUTRO_START = 0.48;
 
   const word1Opacity = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [0, 1]);
   const word1Y = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [40, 0]);
@@ -318,25 +319,25 @@ function HistoryMobileAnimated() {
   const outroPointer = usePointerEvents(word1Opacity);
 
   // ── Outro CTA entrance ──
-  const outroCTAOpacity = useTransform(scrollYProgress, [0.48, 0.54], [0, 1]);
+  const outroCTAOpacity = useTransform(scrollYProgress, [0.54, 0.6], [0, 1]);
 
   // ── Outro fade out ──
-  const outroFadeOut = useTransform(scrollYProgress, [0.54, 0.6], [1, 0]);
+  const outroFadeOut = useTransform(scrollYProgress, [0.6, 0.66], [1, 0]);
 
   // ── Photo dissolves on screen — fast fade, no movement ──
-  const photoDissolve = useTransform(scrollYProgress, [0.58, 0.64], [1, 0]);
+  const photoDissolve = useTransform(scrollYProgress, [0.64, 0.7], [1, 0]);
 
   // ── Yellow overlay — transition to Values section ──
-  const yellowOverlay = useTransform(scrollYProgress, [0.62, 0.74], [0, 1]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.68, 0.78], [0, 1]);
 
   // ── Navbar theme: switch to dark when yellow fills ──
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (!navRef.current) return;
-    navRef.current.setAttribute('data-navbar-theme', v >= 0.68 ? 'dark' : 'light');
+    navRef.current.setAttribute('data-navbar-theme', v >= 0.72 ? 'dark' : 'light');
   });
 
   return (
-    <div ref={ref} className="relative h-[250vh] lg:hidden">
+    <div ref={ref} className="relative h-[350vh] lg:hidden">
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
         {/* ── Photo — ABOVE text (z-20), grows upward to cover content ── */}
         <m.div
