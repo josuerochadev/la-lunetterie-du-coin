@@ -91,7 +91,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
 
           {/* Nav links — centered vertically, main focus */}
           <div className="flex flex-1 items-center px-6">
-            <nav aria-label="Navigation principale" className="space-y-5">
+            <nav aria-label="Navigation principale" className="space-y-3 sm:space-y-5">
               {FOOTER_NAV_LINKS.map((link, i) => {
                 const isActive = pathname === link.href;
                 return (
@@ -99,7 +99,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     <Link
                       to={link.href}
                       onClick={onClose}
-                      className={`text-heading block text-title-lg transition-colors duration-300 hover:text-secondary-orange ${isActive ? 'text-accent' : 'text-white'}`}
+                      className={`text-heading block text-title-md transition-colors duration-300 hover:text-secondary-orange sm:text-title-lg ${isActive ? 'text-accent' : 'text-white'}`}
                       aria-current={isActive ? 'page' : undefined}
                     >
                       {link.label}
