@@ -31,7 +31,7 @@ export default function TableOfContents({ sections }: TableOfContentsProps) {
                 onClick={(e) => handleClick(e, section.id)}
                 className="group inline-flex items-baseline gap-3 text-body text-black transition-colors hover:text-black focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                <span className="text-body-sm text-black transition-colors group-hover:text-secondary-orange">
+                <span className="text-body-sm text-black transition-colors group-hover:text-secondary-orange print:text-black">
                   {String(index + 1).padStart(2, '0')}
                 </span>
                 <span className="transition-colors">{section.title}</span>

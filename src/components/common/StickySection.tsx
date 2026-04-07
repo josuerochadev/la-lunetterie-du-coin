@@ -31,7 +31,7 @@ type StickySectionProps = {
  * of whether the bg class is on the wrapper or the child section.
  */
 const LAYER_CLASS =
-  'relative -mb-px w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)]';
+  'relative -mb-px w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)] print:!static print:!mb-0 print:![transform:none] print:![isolation:auto]';
 
 export default function StickySection({
   children,
@@ -43,14 +43,14 @@ export default function StickySection({
   if (enableSticky && wrapperMinHeight) {
     return (
       <div className={cn(LAYER_CLASS, className)} style={{ minHeight: wrapperMinHeight, zIndex }}>
-        <div className="sticky top-0 w-full">{children}</div>
+        <div className="sticky top-0 w-full print:!static">{children}</div>
       </div>
     );
   }
 
   return (
     <div
-      className={cn(LAYER_CLASS, enableSticky && 'sticky top-0', className)}
+      className={cn(LAYER_CLASS, enableSticky && 'sticky top-0 print:!static', className)}
       style={zIndex !== undefined ? { zIndex } : undefined}
     >
       {children}

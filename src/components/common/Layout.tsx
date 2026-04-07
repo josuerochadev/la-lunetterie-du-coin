@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
       <div className="relative z-base">
         <SkipLink />
         <Navbar />
-        <main id="main" tabIndex={-1} className="min-h-screen outline-none">
+        <main id="main" tabIndex={-1} className="min-h-screen outline-none print:min-h-0">
           {children}
         </main>
         <Footer />

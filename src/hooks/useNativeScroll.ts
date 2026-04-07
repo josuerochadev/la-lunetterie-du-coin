@@ -23,8 +23,10 @@ export function useNativeScroll() {
     // Force Framer Motion useScroll hooks to recalculate after layout settles.
     // Without this, scroll-driven animations can stay at opacity 0 when the
     // browser restores a scroll position (reload, HMR, back/forward nav).
+    // Uses scrollTo instead of dispatching a synthetic Event to avoid crashes
+    // in browser extensions that expect event.target.contains to exist.
     const id = requestAnimationFrame(() => {
-      window.dispatchEvent(new Event('scroll'));
+      window.scrollTo({ top: window.scrollY });
     });
 
     return () => {

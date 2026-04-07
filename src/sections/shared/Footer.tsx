@@ -54,7 +54,7 @@ export default function Footer({
       id="footer"
       {...rest}
       className={clsx(
-        'relative z-20 -mt-[12svh] w-full bg-primary text-accent [overflow-x:clip] sm:-mt-[10svh] lg:-mt-[8vw]',
+        'relative z-20 -mt-[12svh] w-full bg-primary text-accent [overflow-x:clip] sm:-mt-[10svh] lg:-mt-[8vw] print:hidden',
         className,
       )}
     >

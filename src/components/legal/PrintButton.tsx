@@ -11,8 +11,7 @@ export default function PrintButton() {
 
   return (
     <div className="flex justify-center pt-12 print:hidden">
-      <Button type="button" onClick={handlePrint} aria-label="Imprimer cette page">
-        <Printer className="h-4 w-4" aria-hidden="true" />
+      <Button type="button" onClick={handlePrint} icon={Printer} aria-label="Imprimer cette page">
         Imprimer cette page
       </Button>
     </div>

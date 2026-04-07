@@ -58,6 +58,27 @@
   @apply text-subtitle text-title-sm;
 }
 
+/* ===== PRINT — tighter hierarchy for legal documents ===== */
+@media print {
+  .heading-section {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    page-break-after: avoid;
+  }
+
+  .heading-subsection-lg,
+  .heading-subsection {
+    font-size: 1rem;
+    line-height: 1.3;
+    page-break-after: avoid;
+  }
+
+  .heading-page {
+    font-size: 2rem;
+  }
+}
+
 /* ===== FLUID HERO SIZES ===== */
 /* Used in hero banners and large display text — more aggressive scaling than title-* tokens. */
 
