@@ -112,15 +112,18 @@ function HeroMobileAccents({
   scrollY: ReturnType<typeof useScroll>['scrollY'];
   revealStart: number;
 }) {
-  const accentsStart = revealStart + HERO_WORDS.length * 60 + 250;
+  // Accents appear concurrently with the last word so they're visible
+  // before the dome covers them on short viewports (iPhone SE etc.)
+  const lastWordStart = revealStart + (HERO_WORDS.length - 1) * 60;
+  const accentsStart = lastWordStart;
 
-  const accent1Y = useTransform(scrollY, [accentsStart, accentsStart + 180], [40, 0]);
-  const accent1Opacity = useTransform(scrollY, [accentsStart, accentsStart + 180], [0, 1]);
-  const accent2Y = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [40, 0]);
-  const accent2Opacity = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [0, 1]);
+  const accent1Y = useTransform(scrollY, [accentsStart, accentsStart + 150], [20, 0]);
+  const accent1Opacity = useTransform(scrollY, [accentsStart, accentsStart + 150], [0, 1]);
+  const accent2Y = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [20, 0]);
+  const accent2Opacity = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [0, 1]);
 
   return (
-    <div className="mx-auto mt-6 flex flex-col items-start gap-4 px-4 lg:hidden">
+    <div className="mx-auto mt-4 flex items-start gap-6 px-4 sm:mt-6 lg:hidden">
       <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
         <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
       </m.div>
@@ -182,8 +185,9 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
         />
       </m.div>
 
-      {/* Text content */}
-      <div className="absolute inset-x-0 bottom-[calc(24vw+1rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
+      {/* Text content — bottom offset leaves room for dome overhang,
+          reduced on small viewports to keep accents visible */}
+      <div className="absolute inset-x-0 bottom-[calc(16vw+0.5rem)] top-0 z-10 -mt-[0.1em] flex flex-col sm:bottom-[calc(24vw+1rem)] lg:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
         </h1>
