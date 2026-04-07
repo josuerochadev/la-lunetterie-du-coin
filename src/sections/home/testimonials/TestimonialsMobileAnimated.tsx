@@ -16,7 +16,7 @@ import { SPRING_CONFIG } from '@/lib/motion';
 /* ── Sub-components ────────────────────────────────────────────── */
 
 function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '8vh']);
+  const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '16vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
   const opacity = useFadeInOut(scrollYProgress, 0, 0.03, 0.76, 0.8);
 

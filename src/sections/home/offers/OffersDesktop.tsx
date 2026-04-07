@@ -179,8 +179,8 @@ export function OffersDesktop() {
   const card1Pointer = usePointerEvents(card1Opacity);
 
   // --- Outro ---
-  const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.95, 0.98], [0, 1, 1, 0]);
-  const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.95, 0.98], [0, 1, 1, 0]);
+  const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.97, 1.0], [0, 1, 1, 0]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.97, 1.0], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = usePointerEvents(ctaOpacity);
