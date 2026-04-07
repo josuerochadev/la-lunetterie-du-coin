@@ -10,6 +10,7 @@ import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
+import { ACCENT_HEX } from '@/config/design';
 
 // ---------------------------------------------------------------------------
 // Location item — icon + text, no card wrapper (same pattern as ContactInfo)
@@ -88,7 +89,7 @@ function LocationDesktop() {
       </div>
 
       <div className="relative z-10 flex min-h-screen items-center">
-        <div className="mx-auto max-w-container px-container-x py-section">
+        <div className="mx-auto max-w-container px-container-x pb-[50vh] pt-[35vh]">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
             <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
           </m.div>
@@ -188,7 +189,7 @@ function LocationMobileAnimated() {
   const footerY = useTransform(scrollYProgress, [0.25, 0.4], [15, 0]);
 
   return (
-    <div ref={ref} className="relative w-full lg:hidden">
+    <div ref={ref} className="relative min-h-screen w-full lg:hidden">
       {/* Parallax background */}
       <div className="absolute inset-0 overflow-hidden">
         <m.div
@@ -207,8 +208,8 @@ function LocationMobileAnimated() {
         <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
       </div>
 
-      <div className="relative z-10 flex items-center">
-        <div className="mx-auto max-w-container px-container-x py-section">
+      <div className="relative z-10 flex min-h-screen items-center">
+        <div className="mx-auto max-w-container px-container-x pb-[50vh] pt-[35vh]">
           <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
             <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
           </m.div>
@@ -284,16 +285,34 @@ export default function ContactLocation() {
   const variant = useResponsiveMotion();
 
   return (
-    <section id="localisation" className="relative" data-navbar-theme="light">
+    <section id="localisation" className="relative bg-black" data-navbar-theme="light">
+      {/* Top gradient fade — white → transparent, photo appears progressively */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 z-20 h-[35vh]"
+        style={{
+          background: [
+            'linear-gradient(to bottom,',
+            'white 0%,',
+            'color-mix(in srgb, white 92%, transparent) 10%,',
+            'color-mix(in srgb, white 75%, transparent) 25%,',
+            'color-mix(in srgb, white 50%, transparent) 42%,',
+            'color-mix(in srgb, white 30%, transparent) 58%,',
+            'color-mix(in srgb, white 12%, transparent) 74%,',
+            'transparent 100%)',
+          ].join(' '),
+        }}
+        aria-hidden="true"
+      />
+
       {/* Desktop — scroll-driven parallax */}
       {variant === 'desktop-animated' && <LocationDesktop />}
 
       {/* Mobile — scroll-driven with subtle parallax */}
       {variant === 'mobile-animated' && <LocationMobileAnimated />}
 
-      {/* Reduced-motion fallback */}
+      {/* Reduced-motion fallback – static */}
       {variant === 'static' && (
-        <div className="relative w-full">
+        <div className="relative min-h-screen w-full">
           <ResponsiveImage
             src="/images/contact-informations-boutique-outside.jpg"
             alt="Façade de La Lunetterie du Coin"
@@ -305,7 +324,7 @@ export default function ContactLocation() {
           <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
 
           <div className="relative z-10 flex items-center">
-            <div className="mx-auto max-w-container px-container-x py-section">
+            <div className="mx-auto max-w-container px-container-x pb-[50vh] pt-[35vh]">
               <SimpleAnimation type="slide-up" delay={0}>
                 <h2 className="heading-section mb-12 text-center text-white lg:mb-16">
                   Comment venir
@@ -375,6 +394,25 @@ export default function ContactLocation() {
           </div>
         </div>
       )}
+      {/* Bottom gradient dissolve — photo fades into accent for CTA transition */}
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[45vh]"
+        style={{
+          background: [
+            'linear-gradient(to bottom,',
+            'transparent 0%,',
+            `color-mix(in srgb, ${ACCENT_HEX} 5%, transparent) 14%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 15%, transparent) 28%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 30%, transparent) 42%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 50%, transparent) 56%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 72%, transparent) 70%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 88%, transparent) 82%,`,
+            `color-mix(in srgb, ${ACCENT_HEX} 96%, transparent) 92%,`,
+            `${ACCENT_HEX} 100%)`,
+          ].join(' '),
+        }}
+        aria-hidden="true"
+      />
     </section>
   );
 }

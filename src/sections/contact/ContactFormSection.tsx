@@ -20,7 +20,7 @@ function FormDesktop() {
 
   return (
     <div ref={ref} className="hidden lg:block">
-      <div className="mx-auto max-w-container px-container-x py-section">
+      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-3xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
             <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>
@@ -64,7 +64,7 @@ function FormMobileAnimated() {
 
   return (
     <div ref={ref} className="lg:hidden">
-      <div className="mx-auto max-w-container px-container-x py-section">
+      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-3xl">
           <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
             <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>

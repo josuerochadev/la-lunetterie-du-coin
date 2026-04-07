@@ -199,7 +199,7 @@ function InfoMobileAnimated() {
 
             <MobileInfoItem scrollYProgress={scrollYProgress} start={0.26}>
               <InfoItem icon={Clock} title="Horaires d'ouverture">
-                <dl className="space-y-1.5">
+                <dl className="max-w-xs space-y-1.5">
                   {OPENING_HOURS.map((schedule) => (
                     <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
                       <dt className="font-medium text-white">{schedule.day}</dt>

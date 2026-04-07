@@ -29,7 +29,7 @@ export default function ContactPage() {
           <ContactInfo />
         </StickySection>
 
-        {/* Formulaire — scroll normal, contenu dépasse le viewport */}
+        {/* Formulaire — scroll normal, gradient dissolve vers Location */}
         <StickySection zIndex={13}>
           <ContactFormSection />
         </StickySection>
