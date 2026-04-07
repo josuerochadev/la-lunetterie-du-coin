@@ -194,18 +194,18 @@ function ValuesMobileAnimated() {
 
   return (
     <div ref={ref} className="relative z-10 h-[250vh] lg:hidden">
-      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[6vh]">
+      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[6vh] pt-[4vh]">
         <m.div
           className="w-full px-container-x will-change-[clip-path]"
           style={{ clipPath: contentClip }}
         >
           {/* Title — centered, revealed by clip */}
-          <m.div className="mb-12 text-center will-change-transform" style={{ scale: titleScale }}>
+          <m.div className="mb-8 text-center will-change-transform" style={{ scale: titleScale }}>
             <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
           </m.div>
 
           {/* Cards grid — staggered micro-movements */}
-          <div className="grid gap-10 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
             {VALUES_DATA.map((value, i) => (
               <MobileRevealCard
                 key={value.title}
