@@ -58,11 +58,11 @@ const config: Config = {
         'title-sm': ['clamp(1.5rem, 2vw, 3.5rem)', '0.9'],
 
         // Corps de texte - line-height 1.3
-        'body-xl': ['clamp(1.5rem, 1.8vw, 3rem)', '1.3'],
-        'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.3'],
-        body: ['clamp(1rem, 1.5vw, 3.5rem)', '1.3'],
-        'body-sm': ['clamp(0.9rem, 1.1vw, 2.5rem)', '1.3'],
-        'body-xs': ['clamp(0.75rem, 1vw, 1.75rem)', '1.3'],
+        'body-xl': ['clamp(1.5rem, 2.4vw, 3rem)', '1.3'],
+        'body-lg': ['clamp(1.25rem, 2vw, 2.5rem)', '1.3'],
+        body: ['clamp(1rem, 1.8vw, 3.5rem)', '1.3'],
+        'body-sm': ['clamp(0.9rem, 1.4vw, 2.5rem)', '1.3'],
+        'body-xs': ['clamp(0.75rem, 1.2vw, 1.75rem)', '1.3'],
       },
 
       /* ====== LAYOUT ====== */
