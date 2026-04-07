@@ -8,8 +8,9 @@ import { VALUES_DATA } from '@/data/about';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import EyePattern from '@/components/common/EyePattern';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const iconMap = {
@@ -134,11 +135,98 @@ function ValuesDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated — curtain reveal from History's yellow overlay
+//
+//  250vh container with sticky viewport
+//  Uses useManualScrollProgress('start-start')
+//  Total scroll range: 250vh − 100vh = 150vh
+//
+//  0.00 – 0.27  Clip-path reveals content top → bottom
+//  0.05 – 0.17  Title micro-scale 0.97 → 1
+//  0.10 – 0.31  Cards staggered micro-movements (scale 0.97→1, Y -8→0)
+//  0.31 – 1.00  Hold — content fully visible, Team curtain rises over
+//
+//  Team's StickySection has -mt-[100vh], so Team enters at progress ~0.33
+//  while Values is still pinned → full-viewport curtain effect.
+// ---------------------------------------------------------------------------
+
+function MobileRevealCard({
+  value,
+  index,
+  scrollYProgress,
+}: {
+  value: (typeof VALUES_DATA)[number];
+  index: number;
+  scrollYProgress: import('framer-motion').MotionValue<number>;
+}) {
+  const stagger = index * 0.04;
+  const start = 0.1 + stagger;
+  const end = start + 0.13;
+
+  const scale = useTransform(scrollYProgress, [start, end], [0.97, 1]);
+  const y = useTransform(scrollYProgress, [start, end], [-8, 0]);
+
+  const Icon = iconMap[value.iconName];
+
+  return (
+    <m.div className="space-y-4 text-center will-change-transform" style={{ scale, y }}>
+      <Icon
+        className="mx-auto h-8 w-8 text-secondary-orange"
+        strokeWidth={1.5}
+        aria-hidden="true"
+      />
+      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+      <p className="text-body text-black">{value.description}</p>
+    </m.div>
+  );
+}
+
+function ValuesMobileAnimated() {
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  // Clip-path: reveals content from top to bottom
+  const clipBottom = useTransform(scrollYProgress, [0.0, 0.27], [100, 0]);
+  const contentClip = useTransform(clipBottom, (b) => `inset(0% 0% ${b}% 0%)`);
+
+  // Title micro-scale — settles into place as clip opens
+  const titleScaleRaw = useTransform(scrollYProgress, [0.05, 0.17], [0.97, 1]);
+  const titleScale = useSpring(titleScaleRaw, SPRING_CONFIG);
+
+  return (
+    <div ref={ref} className="relative z-10 h-[250vh] lg:hidden">
+      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[6vh]">
+        <m.div
+          className="w-full px-container-x will-change-[clip-path]"
+          style={{ clipPath: contentClip }}
+        >
+          {/* Title — centered, revealed by clip */}
+          <m.div className="mb-12 text-center will-change-transform" style={{ scale: titleScale }}>
+            <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+          </m.div>
+
+          {/* Cards grid — staggered micro-movements */}
+          <div className="grid gap-10 sm:grid-cols-2">
+            {VALUES_DATA.map((value, i) => (
+              <MobileRevealCard
+                key={value.title}
+                value={value}
+                index={i}
+                scrollYProgress={scrollYProgress}
+              />
+            ))}
+          </div>
+        </m.div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutValues() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -149,38 +237,38 @@ export default function AboutValues() {
     >
       <EyePattern variant="jaune" opacity={0.07} />
 
-      {/* Desktop animated */}
-      {!prefersReducedMotion && <ValuesDesktop />}
+      {variant === 'desktop-animated' && <ValuesDesktop />}
+      {variant === 'mobile-animated' && <ValuesMobileAnimated />}
+      {variant === 'static' && (
+        <div className="relative z-10">
+          <div className="mx-auto max-w-container px-container-x py-section">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <div className="mb-12 text-center lg:mb-16">
+                <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+              </div>
+            </SimpleAnimation>
 
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? 'relative z-10' : 'relative z-10 lg:hidden'}>
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <div className="mb-12 text-center lg:mb-16">
-              <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+              {VALUES_DATA.map((value, i) => {
+                const Icon = iconMap[value.iconName];
+                return (
+                  <SimpleAnimation key={value.title} type="slide-up" delay={100 + i * 100}>
+                    <div className="space-y-4">
+                      <Icon
+                        className="h-8 w-8 text-secondary-orange"
+                        strokeWidth={1.5}
+                        aria-hidden="true"
+                      />
+                      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+                      <p className="text-body text-black/60">{value.description}</p>
+                    </div>
+                  </SimpleAnimation>
+                );
+              })}
             </div>
-          </SimpleAnimation>
-
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-            {VALUES_DATA.map((value, i) => {
-              const Icon = iconMap[value.iconName];
-              return (
-                <SimpleAnimation key={value.title} type="slide-up" delay={100 + i * 100}>
-                  <div className="space-y-4">
-                    <Icon
-                      className="h-8 w-8 text-secondary-orange"
-                      strokeWidth={1.5}
-                      aria-hidden="true"
-                    />
-                    <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
-                    <p className="text-body text-black/60">{value.description}</p>
-                  </div>
-                </SimpleAnimation>
-              );
-            })}
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

@@ -4,18 +4,10 @@ import { cn } from '@/lib/cn';
 
 type StickySectionProps = {
   children: ReactNode;
-  zIndex: number;
+  /** Optional z-index. Omit to rely on DOM order within a shared stacking context. */
+  zIndex?: number;
   className?: string;
-  /**
-   * Si true, applique l'effet sticky
-   * Si false, utilise juste le z-index pour la superposition
-   */
   enableSticky?: boolean;
-  /**
-   * Hauteur minimale du wrapper pour permettre le scroll
-   * Utilisé pour les sections sticky avec contenu long
-   * Exemples: '200vh', '150vh', etc.
-   */
   wrapperMinHeight?: string;
 };
 
@@ -23,29 +15,24 @@ type StickySectionProps = {
  * Composant StickySection
  *
  * Wrapper pour créer l'effet parallax entre les sections.
- * Supporte les sections longues via wrapperMinHeight.
  *
- * @component
- * @param {ReactNode} children - Contenu de la section
- * @param {number} zIndex - Index z pour la superposition (doit être croissant)
- * @param {boolean} [enableSticky=false] - Active l'effet sticky
- * @param {string} [wrapperMinHeight] - Hauteur min du wrapper (ex: '200vh')
- * @param {string} [className] - Classes CSS additionnelles
+ * Desktop: translateZ(0) promotes each wrapper to a GPU compositing layer,
+ * eliminating subpixel rasterization seams between adjacent sections.
  *
- * @example
- * // Section courte (Hero)
- * <StickySection zIndex={11} enableSticky={true}>
- *   <Hero />
- * </StickySection>
- *
- * @example
- * // Section longue avec wrapper
- * <StickySection zIndex={12} enableSticky={true} wrapperMinHeight="200vh">
- *   <OurStory />
- * </StickySection>
- *
- * @returns {JSX.Element} Section avec effet parallax
+ * Mobile: isolation:isolate creates a stacking context without the
+ * containing-block side-effect of transform, which would break
+ * position:sticky inside child scroll-driven sections.
  */
+
+/**
+ * Anti-seam: -mb-px pulls the next sibling up by 1px, creating a physical
+ * overlap. The later section (higher DOM order / z-index) paints on top,
+ * covering the 1px gap with its own background. Works universally regardless
+ * of whether the bg class is on the wrapper or the child section.
+ */
+const LAYER_CLASS =
+  'relative -mb-px w-full max-lg:[isolation:isolate] lg:[transform:translateZ(0)] print:!static print:!mb-0 print:![transform:none] print:![isolation:auto]';
+
 export default function StickySection({
   children,
   zIndex,
@@ -53,26 +40,18 @@ export default function StickySection({
   enableSticky = false,
   wrapperMinHeight,
 }: StickySectionProps) {
-  // Si on a un wrapperMinHeight, on crée un conteneur externe
   if (enableSticky && wrapperMinHeight) {
     return (
-      <div
-        className="relative w-full"
-        style={{
-          minHeight: wrapperMinHeight,
-          zIndex,
-        }}
-      >
-        <div className={cn('sticky top-0 w-full', className)}>{children}</div>
+      <div className={cn(LAYER_CLASS, className)} style={{ minHeight: wrapperMinHeight, zIndex }}>
+        <div className="sticky top-0 w-full print:!static">{children}</div>
       </div>
     );
   }
 
-  // Sinon, comportement classique
   return (
     <div
-      className={cn('relative w-full', enableSticky && 'sticky top-0', className)}
-      style={{ zIndex }}
+      className={cn(LAYER_CLASS, enableSticky && 'sticky top-0 print:!static', className)}
+      style={zIndex !== undefined ? { zIndex } : undefined}
     >
       {children}
     </div>

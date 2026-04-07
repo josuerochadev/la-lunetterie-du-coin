@@ -20,11 +20,11 @@ export function StaticServiceList() {
             />
           </div>
           <div className="w-[45%]">
-            <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-black/30">
+            <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-black">
               {String(i + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
             </span>
             <h3 className="text-subtitle mb-3 text-title-sm text-black">{service.title}</h3>
-            <p className="text-body text-black/60">{service.description}</p>
+            <p className="text-body text-black">{service.description}</p>
             <LinkCTA
               to={service.link}
               theme="light"

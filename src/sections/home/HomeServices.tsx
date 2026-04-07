@@ -1,8 +1,7 @@
 import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
+import { m, useScroll, useTransform } from 'framer-motion';
 
 import { SERVICE_COUNT } from './services/constants';
-import { GrainOverlay } from './services/GrainOverlay';
 import { PatternBackground } from './services/PatternBackground';
 import { SectionTitle } from './services/SectionTitle';
 import { PhotoStack } from './services/PhotoStack';
@@ -10,12 +9,13 @@ import { ServiceText } from './services/ServiceText';
 import { SectionOutro } from './services/SectionOutro';
 import { ServiceProgressIndicator } from './services/ServiceProgressIndicator';
 import { StaticServiceList } from './services/StaticServiceList';
+import { ServicesMobileAnimated } from './services/ServicesMobileAnimated';
 
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useIsLg } from '@/hooks/useIsLg';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { ACCENT_HEX } from '@/config/design';
 import LinkCTA from '@/components/common/LinkCTA';
-import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 
 /**
  * Section HomeServices — Scrollytelling with circle pattern
@@ -24,22 +24,25 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
  * Mobile: simple stacked cards with SimpleAnimation.
  */
 function HomeServices() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
   const isLg = useIsLg();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const shouldAnimate = !prefersReducedMotion && isLg;
+  const shouldAnimate = variant === 'desktop-animated';
 
   const { scrollYProgress } = useScroll({
     target: shouldAnimate ? sectionRef : undefined,
     offset: ['start start', 'end end'],
   });
 
+  // Sticky viewport bg: white during carousel, yellow for outro + exit
+  const stickyBg = useTransform(scrollYProgress, [0.86, 0.92], ['#ffffff', ACCENT_HEX]);
+
   return (
     <section
       id="services"
       aria-labelledby="services-title"
       data-navbar-theme="dark"
-      className="pointer-events-none relative bg-white [overflow-x:clip]"
+      className="pointer-events-none relative bg-accent [overflow-x:clip]"
     >
       {/* Subtle noise texture over white background */}
       <div
@@ -51,52 +54,23 @@ function HomeServices() {
         }}
       />
 
-      {/* Concave curve */}
+      {/* Concave dome — desktop/static only (mobile uses internal curtain) */}
       <div
-        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent"
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent lg:block"
         aria-hidden="true"
       />
 
-      {/* ── Mobile ── */}
-      <div className="pointer-events-auto px-container-x py-section lg:hidden">
-        <div className="relative z-10 mx-auto max-w-container">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <h2 id="services-title" className="heading-section mb-12 text-black lg:mb-16">
+      {/* ── Mobile: scroll-driven / Reduced-motion: static ── */}
+      {variant === 'mobile-animated' ? (
+        <ServicesMobileAnimated />
+      ) : (
+        <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
+          <div className="relative z-10 mx-auto max-w-container">
+            <h2 id="services-title" className="heading-section mb-12 text-black">
               {HOMEPAGE_SECTIONS.services.title}
             </h2>
-          </SimpleAnimation>
-
-          <div className="grid grid-cols-1 gap-16 md:grid-cols-2 md:gap-10">
-            {HOMEPAGE_SERVICES.map((service, index) => (
-              <article key={service.title}>
-                <SimpleAnimation type="fade" delay={index * 100}>
-                  <div className="relative aspect-[3/4] w-full overflow-hidden rounded-sm">
-                    <img
-                      src={service.image}
-                      alt={service.title}
-                      className="h-full w-full object-cover transition-transform duration-300"
-                      loading="lazy"
-                    />
-                    <GrainOverlay />
-                  </div>
-                  <div className="mt-6 space-y-3">
-                    <h3 className="text-subtitle text-title-sm text-black">{service.title}</h3>
-                    <p className="text-body text-black/60">{service.description}</p>
-                    <LinkCTA
-                      to={service.link}
-                      theme="light"
-                      aria-label={`En savoir plus sur ${service.title}`}
-                    >
-                      En savoir plus
-                    </LinkCTA>
-                  </div>
-                </SimpleAnimation>
-              </article>
-            ))}
-          </div>
-
-          <div className="mt-16 text-center">
-            <SimpleAnimation type="slide-up" delay={400}>
+            <StaticServiceList />
+            <div className="mt-16 text-center">
               <LinkCTA
                 to={HOMEPAGE_SECTIONS.services.cta.link}
                 theme="light"
@@ -104,16 +78,19 @@ function HomeServices() {
               >
                 {HOMEPAGE_SECTIONS.services.cta.text}
               </LinkCTA>
-            </SimpleAnimation>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      {/* ── Desktop: Scrollytelling ── */}
+      {/* ── Desktop: Scrollytelling (or desktop static fallback) ── */}
       {isLg && (
         <div ref={sectionRef} className="relative">
-          <div style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
-            <div className="sticky top-0 h-screen overflow-hidden">
+          <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
+            <m.div
+              className="sticky top-0 h-screen overflow-hidden"
+              style={{ backgroundColor: stickyBg }}
+            >
               {shouldAnimate && <PatternBackground scrollYProgress={scrollYProgress} />}
 
               {shouldAnimate ? (
@@ -152,7 +129,7 @@ function HomeServices() {
                   <SectionOutro scrollYProgress={scrollYProgress} />
                 </>
               )}
-            </div>
+            </m.div>
           </div>
         </div>
       )}

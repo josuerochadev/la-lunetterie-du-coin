@@ -40,6 +40,10 @@ vi.mock('@/components/motion/TextReveal', () => ({
   ),
 }));
 
+vi.mock('@/assets/logo/Logo_LLDC_NO_Noir.svg?react', () => ({
+  default: (props: any) => <svg data-testid="logo-noir" {...props} />,
+}));
+
 vi.mock('@/seo/Seo', () => ({
   Seo: ({ title, description, canonicalPath }: any) => (
     <div

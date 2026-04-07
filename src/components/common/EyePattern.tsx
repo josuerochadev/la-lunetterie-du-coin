@@ -31,7 +31,10 @@ const colorMap: Record<EyePatternVariant, string> = {
 const EyePattern: React.FC<EyePatternProps> = ({ variant = 'noir', opacity = 0.05, className }) => {
   return (
     <div
-      className={clsx('pointer-events-none absolute inset-0 overflow-hidden', className)}
+      className={clsx(
+        'pointer-events-none absolute inset-0 overflow-hidden print:hidden',
+        className,
+      )}
       aria-hidden="true"
       style={{
         opacity,

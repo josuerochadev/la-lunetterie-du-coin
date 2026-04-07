@@ -37,7 +37,7 @@ function ToastEntry({ item, onDismiss }: { item: ToastItem; onDismiss: () => voi
       <span>{item.message}</span>
       <button
         onClick={onDismiss}
-        className="ml-2 text-black/30 transition-colors hover:text-black"
+        className="ml-2 text-black transition-colors hover:text-black"
         aria-label="Fermer"
       >
         <X className="h-3.5 w-3.5" />

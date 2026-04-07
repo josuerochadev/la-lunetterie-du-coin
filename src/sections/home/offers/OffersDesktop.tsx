@@ -290,7 +290,7 @@ export function OffersDesktop() {
                 />
                 <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12">
                   <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-                  <p className="mt-5 max-w-md text-body-lg text-white/50">{offer.summary}</p>
+                  <p className="mt-5 max-w-md text-body-lg text-white">{offer.summary}</p>
                   <LinkCTA
                     to={offer.link}
                     theme="dark"

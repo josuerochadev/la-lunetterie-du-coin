@@ -25,16 +25,16 @@ const THEME_CONFIG = {
     navbarTheme: 'light' as const,
     titleClass: 'text-accent',
     titleClassMobile: 'text-accent',
-    subtitleClass: 'text-white/80',
-    subtitleClassMobile: 'text-white/80',
+    subtitleClass: 'text-white',
+    subtitleClassMobile: 'text-white',
   },
   light: {
     bg: 'bg-accent',
     navbarTheme: 'dark' as const,
     titleClass: 'text-black',
     titleClassMobile: 'text-black',
-    subtitleClass: 'text-black/60',
-    subtitleClassMobile: 'text-black/60',
+    subtitleClass: 'text-black',
+    subtitleClassMobile: 'text-black',
   },
 };
 
@@ -110,23 +110,22 @@ export default function PageHero({
       )}
 
       <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-        <div className="relative flex min-h-[70vh] items-center py-section">
+        <div className="relative flex min-h-svh items-center py-section">
           <EyePattern variant={eyeVariant} opacity={0.03} />
-          <div className="relative z-10 mx-auto max-w-container px-container-x">
-            <div className="flex flex-col items-center justify-center text-center">
-              <TextReveal
-                as="h1"
-                className={`text-heading text-fluid-hero-sub ${config.titleClassMobile}`}
-              >
-                {title}
-              </TextReveal>
 
-              <SimpleAnimation type="slide-up" delay={150}>
-                <p className={`mt-6 max-w-2xl text-body-lg ${config.subtitleClassMobile}`}>
-                  {subtitle}
-                </p>
-              </SimpleAnimation>
-            </div>
+          <div className="relative z-10 px-container-x">
+            <TextReveal
+              as="h1"
+              className={`text-heading text-fluid-outro ${config.titleClassMobile}`}
+            >
+              {title}
+            </TextReveal>
+
+            <SimpleAnimation type="slide-up" delay={150}>
+              <p className={`mt-6 max-w-sm text-body-lg ${config.subtitleClassMobile}`}>
+                {subtitle}
+              </p>
+            </SimpleAnimation>
           </div>
         </div>
       </div>

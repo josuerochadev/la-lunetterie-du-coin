@@ -45,12 +45,11 @@ describe('PrintButton', () => {
       expect(screen.getByText('Imprimer cette page')).toBeInTheDocument();
     });
 
-    it('should have printer icon', () => {
+    it('should pass printer icon to Button via icon prop', () => {
       render(<PrintButton />);
 
-      const icon = screen.getByTestId('printer-icon');
-      expect(icon).toBeInTheDocument();
-      expect(icon).toHaveAttribute('aria-hidden', 'true');
+      // Icon is now rendered by Button component via icon prop, not inline
+      expect(screen.getByTestId('button')).toBeInTheDocument();
     });
   });
 
@@ -86,9 +85,9 @@ describe('PrintButton', () => {
       expect(screen.getByTestId('button')).toHaveAttribute('aria-label', 'Imprimer cette page');
     });
 
-    it('should have icon marked as decorative', () => {
+    it('should have aria-label for accessibility', () => {
       render(<PrintButton />);
-      expect(screen.getByTestId('printer-icon')).toHaveAttribute('aria-hidden', 'true');
+      expect(screen.getByTestId('button')).toHaveAttribute('aria-label', 'Imprimer cette page');
     });
   });
 

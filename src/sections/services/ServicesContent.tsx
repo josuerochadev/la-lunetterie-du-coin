@@ -5,22 +5,20 @@ import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 import { PhotoStack } from './PhotoStack';
 import { ServiceCard } from './ServiceCard';
 import { MobileServiceList } from './MobileServiceList';
+import { ServicesMobileAnimated } from './ServicesMobileAnimated';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { ProgressDots } from '@/components/motion/ProgressDots';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { SERVICES_DATA } from '@/data/services';
 import { ACCENT_HEX } from '@/config/design';
 
 export default function ServicesContent() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
   const sectionRef = useRef<HTMLDivElement>(null);
-  const shouldAnimate = !prefersReducedMotion && isLg;
 
   const { scrollYProgress } = useScroll({
-    target: shouldAnimate ? sectionRef : undefined,
+    target: variant === 'desktop-animated' ? sectionRef : undefined,
     offset: ['start start', 'end end'],
   });
 
@@ -32,9 +30,9 @@ export default function ServicesContent() {
       className="relative"
       style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
     >
-      {/* Convex dome */}
+      {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
       <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
+        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
         style={{ height: '12vw' }}
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
@@ -42,26 +40,36 @@ export default function ServicesContent() {
       >
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
+      <div
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
+        aria-hidden="true"
+        data-navbar-theme="light"
+      >
+        <div
+          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-black"
+          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+        />
+      </div>
 
-      {/* Mobile / reduced-motion */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      {/* Static fallback (reduced motion) */}
+      {variant === 'static' && (
         <div className="px-container-x py-section">
           <div className="mx-auto max-w-container">
             <SimpleAnimation type="slide-up" delay={0}>
-              <h2
-                id={prefersReducedMotion ? 'services-content-title' : undefined}
-                className="heading-section mb-12 text-white lg:mb-16"
-              >
+              <h2 id="services-content-title" className="heading-section mb-12 text-white lg:mb-16">
                 Chaque service mérite son moment
               </h2>
             </SimpleAnimation>
             <MobileServiceList />
           </div>
         </div>
-      </div>
+      )}
+
+      {/* Mobile animated */}
+      {variant === 'mobile-animated' && <ServicesMobileAnimated />}
 
       {/* Desktop: Scrollytelling */}
-      {isLg && (
+      {variant === 'desktop-animated' && (
         <div ref={sectionRef} className="relative">
           <div style={{ height: `${(SERVICE_COUNT * 2 + 2) * 100}vh` }}>
             <div className="sticky top-0 h-screen overflow-hidden">
@@ -69,31 +77,29 @@ export default function ServicesContent() {
                 Nos services en détail
               </h2>
 
-              {shouldAnimate && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
-                  <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
-                    <PhotoStack scrollYProgress={scrollYProgress} />
+              <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+                <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
+                  <PhotoStack scrollYProgress={scrollYProgress} />
 
-                    <ProgressDots
-                      scrollYProgress={scrollYProgress}
-                      count={SERVICE_COUNT}
-                      start={SERVICES_START}
-                      end={SERVICES_END}
-                    />
+                  <ProgressDots
+                    scrollYProgress={scrollYProgress}
+                    count={SERVICE_COUNT}
+                    start={SERVICES_START}
+                    end={SERVICES_END}
+                  />
 
-                    <div className="relative flex w-[45%] flex-col justify-center">
-                      {SERVICES_DATA.map((service, i) => (
-                        <ServiceCard
-                          key={service.id}
-                          service={service}
-                          index={i}
-                          scrollYProgress={scrollYProgress}
-                        />
-                      ))}
-                    </div>
+                  <div className="relative flex w-[45%] flex-col justify-center">
+                    {SERVICES_DATA.map((service, i) => (
+                      <ServiceCard
+                        key={service.id}
+                        service={service}
+                        index={i}
+                        scrollYProgress={scrollYProgress}
+                      />
+                    ))}
                   </div>
                 </div>
-              )}
+              </div>
             </div>
           </div>
         </div>

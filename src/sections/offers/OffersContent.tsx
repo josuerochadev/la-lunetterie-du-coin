@@ -1,15 +1,15 @@
-import { useRef, type ReactNode } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 import { ACCENT_HEX } from '@/config/design';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 const OFFER_COUNT = OFFERS_DATA.length;
 
 // Per-offer scroll windows (normalised 0–1)
@@ -156,7 +156,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={0}
           >
-            <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-black/30">
+            <span className="mb-3 block text-body-sm font-medium uppercase tracking-widest text-black">
               {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
             </span>
           </StaggerChild>
@@ -182,7 +182,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={2}
           >
-            <p className="mb-6 max-w-md text-body leading-relaxed text-black/60">
+            <p className="mb-6 max-w-md text-body leading-relaxed text-black">
               {offer.description}
             </p>
           </StaggerChild>
@@ -198,7 +198,7 @@ function OfferCard({
           >
             <ul className="mb-6 grid max-w-lg grid-cols-2 gap-x-5 gap-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
-                <li key={i} className="flex gap-2 text-body-sm text-black/40">
+                <li key={i} className="flex gap-2 text-body-sm text-black">
                   <span
                     className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
                     aria-hidden="true"
@@ -302,14 +302,10 @@ function BackgroundPhotos({ scrollYProgress }: { scrollYProgress: MotionValue<nu
 // ---------------------------------------------------------------------------
 
 function OffersDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden lg:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
@@ -330,10 +326,307 @@ function OffersDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile
+// Mobile — immersive sticky slideshow (matches Services pattern)
 // ---------------------------------------------------------------------------
 
-function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number }) {
+// ── Scroll budget (normalised 0–1) ─────────────────────────────
+const SLICE = 1 / OFFER_COUNT; // 0.50 per offer
+
+// ── Per-slide phase offsets (relative to slice start) ───────────
+const ENTER_OFFSET = 0.02;
+const ENTER_DUR = 0.04;
+const TEXT_COUNTER = 0.04;
+const TEXT_TITLE = 0.06;
+const TEXT_DESC = 0.09;
+const TEXT_DETAILS = 0.12;
+const TEXT_CONDITIONS = 0.15;
+const TEXT_CTA = 0.18;
+const TEXT_STAGGER = 0.04;
+const EXIT_START = 0.4;
+const EXIT_END = SLICE;
+
+function OfferProgressSegment({
+  progress,
+  segStart,
+  segEnd,
+  index,
+}: {
+  progress: MotionValue<number>;
+  segStart: number;
+  segEnd: number;
+  index: number;
+}) {
+  const fill = useTransform(progress, [segStart, segEnd], [0, 100]);
+  const clampedFill = useTransform(fill, (v) => `${Math.max(0, Math.min(100, v))}%`);
+
+  const segOpacity = useTransform(progress, (p) => {
+    if (p >= segStart && p < segEnd) return 1;
+    if (p >= segEnd) return 0.7;
+    return 0.35;
+  });
+
+  return (
+    <m.div
+      className="relative h-[2px] flex-1 overflow-hidden rounded-full bg-orange/20"
+      style={{ opacity: segOpacity }}
+    >
+      <m.div
+        className="absolute inset-y-0 left-0 rounded-full bg-orange"
+        style={{ width: clampedFill }}
+      />
+      <span className="sr-only">
+        Offre {index + 1} sur {OFFER_COUNT}
+      </span>
+    </m.div>
+  );
+}
+
+function OfferProgressBar({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
+  const progress = useTransform(scrollYProgress, [0, 1], [0, 1]);
+  const lastSliceStart = (OFFER_COUNT - 1) * SLICE;
+  const barOpacity = useTransform(
+    scrollYProgress,
+    [lastSliceStart + EXIT_START, lastSliceStart + EXIT_END],
+    [1, 0],
+  );
+
+  return (
+    <m.div
+      className="absolute inset-x-0 bottom-0 z-30 flex items-center gap-3 px-container-x pb-8"
+      style={{ opacity: barOpacity }}
+      aria-hidden="true"
+    >
+      {OFFERS_DATA.map((_, i) => (
+        <OfferProgressSegment
+          key={i}
+          index={i}
+          progress={progress}
+          segStart={i / OFFER_COUNT}
+          segEnd={(i + 1) / OFFER_COUNT}
+        />
+      ))}
+    </m.div>
+  );
+}
+
+function OfferSlide({
+  offer,
+  index,
+  scrollYProgress,
+}: {
+  offer: OfferData;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const s = index * SLICE;
+
+  // ── Photo entrance — opacity crossfade ──
+  const enterStart = Math.max(0, s - ENTER_OFFSET);
+  const enterEnd = s + ENTER_DUR - ENTER_OFFSET;
+  const photoOpacity = useTransform(scrollYProgress, [enterStart, enterEnd], [0, 1]);
+
+  // Ken Burns zoom
+  const photoScaleRaw = useTransform(scrollYProgress, [s, s + EXIT_START], [1, 1.08]);
+  const photoScale = useSpring(photoScaleRaw, SPRING_CONFIG);
+
+  // ── Text stagger entrance ──
+  const counterOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_COUNTER, s + TEXT_COUNTER + TEXT_STAGGER],
+    [0, 1],
+  );
+
+  const titleOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_TITLE, s + TEXT_TITLE + TEXT_STAGGER],
+    [0, 1],
+  );
+  const titleYRaw = useTransform(
+    scrollYProgress,
+    [s + TEXT_TITLE, s + TEXT_TITLE + TEXT_STAGGER],
+    [25, 0],
+  );
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  const descOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_DESC, s + TEXT_DESC + TEXT_STAGGER],
+    [0, 1],
+  );
+  const descYRaw = useTransform(
+    scrollYProgress,
+    [s + TEXT_DESC, s + TEXT_DESC + TEXT_STAGGER],
+    [20, 0],
+  );
+  const descY = useSpring(descYRaw, SPRING_CONFIG);
+
+  const detailsOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_DETAILS, s + TEXT_DETAILS + TEXT_STAGGER],
+    [0, 1],
+  );
+
+  const condOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_CONDITIONS, s + TEXT_CONDITIONS + TEXT_STAGGER],
+    [0, 1],
+  );
+
+  const ctaOpacity = useTransform(
+    scrollYProgress,
+    [s + TEXT_CTA, s + TEXT_CTA + TEXT_STAGGER],
+    [0, 1],
+  );
+
+  // ── Exit — fade out + slide up ──
+  const exitOpacity = useTransform(scrollYProgress, [s + EXIT_START, s + EXIT_END], [1, 0]);
+  const exitYRaw = useTransform(scrollYProgress, [s + EXIT_START, s + EXIT_END], [0, -30]);
+  const exitY = useSpring(exitYRaw, SPRING_CONFIG);
+
+  // ── Combined visibility ──
+  const slideOpacity = useTransform(
+    [photoOpacity, exitOpacity] as const,
+    ([enter, exit]: number[]) => Math.min(enter, exit),
+  );
+
+  return (
+    <m.div className="absolute inset-0 will-change-[opacity]" style={{ opacity: slideOpacity }}>
+      {/* Full-viewport photo */}
+      <m.img
+        src={offer.image}
+        alt=""
+        className="absolute inset-0 h-full w-full object-cover will-change-transform"
+        loading={index === 0 ? 'eager' : 'lazy'}
+        style={{ scale: photoScale }}
+      />
+
+      {/* Gradient overlays for text readability */}
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-[30%]"
+        style={{
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 100%)',
+        }}
+        aria-hidden="true"
+      />
+      <div
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[65%]"
+        style={{
+          background:
+            'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)',
+        }}
+        aria-hidden="true"
+      />
+
+      {/* Text content — anchored to bottom */}
+      <m.div
+        className="absolute inset-x-0 bottom-0 flex flex-col items-start justify-end px-container-x pb-16"
+        style={{ y: exitY }}
+      >
+        {/* Blur scrim — behind text */}
+        <div
+          className="pointer-events-none absolute inset-0 -top-8 z-0 backdrop-blur-[6px]"
+          style={{
+            mask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+          }}
+          aria-hidden="true"
+        />
+        {/* Text wrapper — above blur scrim */}
+        <div className="relative z-10 flex flex-col items-start">
+          {/* Counter */}
+          <m.span
+            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/70"
+            style={{ opacity: counterOpacity }}
+          >
+            {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
+          </m.span>
+
+          {/* Title */}
+          <m.h3
+            className="text-subtitle mb-4 text-title-sm text-white"
+            style={{ opacity: titleOpacity, y: titleY }}
+          >
+            {offer.catchphrase}
+          </m.h3>
+
+          {/* Description */}
+          <m.p
+            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            style={{ opacity: descOpacity, y: descY }}
+          >
+            {offer.description}
+          </m.p>
+
+          {/* Details list */}
+          <m.ul
+            className="mb-5 grid grid-cols-1 gap-y-1.5 sm:grid-cols-2 sm:gap-x-6"
+            style={{ opacity: detailsOpacity }}
+          >
+            {offer.details.slice(0, 6).map((detail, i) => (
+              <li key={i} className="flex gap-2 text-body text-white/70">
+                <span
+                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
+                  aria-hidden="true"
+                />
+                <span>{detail}</span>
+              </li>
+            ))}
+          </m.ul>
+
+          {/* Conditions box */}
+          <m.div
+            className="mb-5 border-l-2 border-secondary-blue/40 pl-4"
+            style={{ opacity: condOpacity }}
+          >
+            <h4 className="mb-2 text-body font-medium text-white">Conditions</h4>
+            <ul className="space-y-1 text-body text-white/70">
+              {offer.conditions.map((condition, i) => (
+                <li key={i}>{condition}</li>
+              ))}
+            </ul>
+          </m.div>
+
+          {/* CTA */}
+          <m.div style={{ opacity: ctaOpacity }}>
+            <LinkCTA to="/contact" theme="dark" aria-label={`Profiter de ${offer.title}`}>
+              En profiter
+            </LinkCTA>
+          </m.div>
+        </div>
+      </m.div>
+    </m.div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile animated wrapper — sticky slideshow
+// ---------------------------------------------------------------------------
+
+function OffersMobileAnimated() {
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  return (
+    <div ref={ref} className="lg:hidden" style={{ height: '400vh' }}>
+      <div className="sticky top-0 h-svh overflow-hidden bg-black">
+        {/* Offer slides (layered, crossfading) */}
+        <div className="absolute inset-0 z-10">
+          {OFFERS_DATA.map((offer, i) => (
+            <OfferSlide key={offer.id} offer={offer} index={i} scrollYProgress={scrollYProgress} />
+          ))}
+        </div>
+
+        {/* Progress bar */}
+        <OfferProgressBar scrollYProgress={scrollYProgress} />
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Static fallback (reduced motion)
+// ---------------------------------------------------------------------------
+
+function OfferStaticBlock({ offer, index }: { offer: OfferData; index: number }) {
   return (
     <article className="py-10">
       <SimpleAnimation type="fade" delay={0}>
@@ -349,15 +642,15 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
 
       <SimpleAnimation type="slide-up" delay={150}>
         <div className="mt-6 space-y-4">
-          <span className="text-body-sm font-medium uppercase tracking-widest text-black/30">
+          <span className="text-body-sm font-medium uppercase tracking-widest text-black">
             {String(index + 1).padStart(2, '0')} / {String(OFFER_COUNT).padStart(2, '0')}
           </span>
           <h3 className="text-subtitle text-title-sm text-black">{offer.catchphrase}</h3>
-          <p className="text-body-lg text-black/60">{offer.description}</p>
+          <p className="text-body-lg text-black">{offer.description}</p>
 
           <ul className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
             {offer.details.map((detail, i) => (
-              <li key={i} className="flex gap-2.5 text-body-sm text-black/40">
+              <li key={i} className="flex gap-2.5 text-body-sm text-black">
                 <span
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -373,10 +666,10 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
               aria-hidden="true"
             />
             <div className="py-4 pl-6 pr-5">
-              <h4 className="mb-2 text-body-sm font-medium text-black/60">Conditions</h4>
+              <h4 className="mb-2 text-body-sm font-medium text-black">Conditions</h4>
               <ul className="space-y-1">
                 {offer.conditions.map((condition, i) => (
-                  <li key={i} className="text-body-sm text-black/30">
+                  <li key={i} className="text-body-sm text-black">
                     {condition}
                   </li>
                 ))}
@@ -398,8 +691,7 @@ function MobileOfferBlock({ offer, index }: { offer: OfferData; index: number })
 // ---------------------------------------------------------------------------
 
 export default function OffersContent() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -421,17 +713,15 @@ export default function OffersContent() {
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
 
-      {/* Desktop */}
-      {!prefersReducedMotion && isLg && <OffersDesktop />}
-
-      {/* Mobile / reduced-motion */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      {variant === 'desktop-animated' && <OffersDesktop />}
+      {variant === 'mobile-animated' && <OffersMobileAnimated />}
+      {variant === 'static' && (
         <div className="mx-auto max-w-container px-container-x py-section">
           {OFFERS_DATA.map((offer, index) => (
-            <MobileOfferBlock key={offer.id} offer={offer} index={index} />
+            <OfferStaticBlock key={offer.id} offer={offer} index={index} />
           ))}
         </div>
-      </div>
+      )}
 
       {/* Bottom gradient dissolve — black → accent for CTA transition */}
       <div

@@ -1,6 +1,5 @@
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
-import { Z_INDEX } from '@/config/design';
 import HomeSplash from '@/sections/home/HomeSplash';
 import HomeHero from '@/sections/home/HomeHero';
 import HomeStory from '@/sections/home/HomeStory';
@@ -41,30 +40,32 @@ export default function HomePage() {
           {/* Hero — fixed overlay on desktop (clipPath L→R), in-flow on mobile */}
           <HomeHero />
 
-          {/* Hero → Story : gradient integrated into Story section */}
-          <StickySection zIndex={Z_INDEX.story}>
-            <HomeStory />
-          </StickySection>
+          {/*
+            Sections wrapper — single z-index layer above Hero (z-10/z-11).
+            No per-section z-index or isolation to avoid GPU compositing seams.
+            StickySection renders an anti-seam strip that extends bg 2px below each boundary.
+          */}
+          <div className="relative" style={{ zIndex: 12 }}>
+            <StickySection className="bg-black">
+              <HomeStory />
+            </StickySection>
 
-          {/* Story → Offers */}
-          <StickySection zIndex={Z_INDEX.offers}>
-            <HomeOffers />
-          </StickySection>
+            <StickySection className="bg-accent">
+              <HomeOffers />
+            </StickySection>
 
-          {/* Offers → Services */}
-          <StickySection zIndex={Z_INDEX.services}>
-            <HomeServices />
-          </StickySection>
+            <StickySection className="bg-accent">
+              <HomeServices />
+            </StickySection>
 
-          {/* Services → Testimonials */}
-          <StickySection zIndex={Z_INDEX.testimonials}>
-            <HomeTestimonials />
-          </StickySection>
+            <StickySection className="bg-black">
+              <HomeTestimonials />
+            </StickySection>
 
-          {/* Testimonials → Contact */}
-          <StickySection zIndex={Z_INDEX.contact}>
-            <HomeContact />
-          </StickySection>
+            <StickySection className="bg-accent" enableSticky wrapperMinHeight="200vh">
+              <HomeContact />
+            </StickySection>
+          </div>
         </Layout>
       </div>
     </>

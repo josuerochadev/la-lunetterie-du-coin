@@ -4,9 +4,10 @@ import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { GiantCounter } from '@/components/motion/GiantCounter';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
-import { STATS_DATA } from '@/data/about';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { STATS_DATA, type StatData } from '@/data/about';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const ENGAGEMENT_TITLE = 'La mode change. La planète, non.';
@@ -59,19 +60,14 @@ function StatCard({
         >
           {stat.number}
         </div>
-        <div className="mt-2 text-body-sm text-black/60">{stat.label}</div>
+        <div className="mt-2 text-body-sm text-black">{stat.label}</div>
       </div>
     </m.div>
   );
 }
 
 function EngagementDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.04], [0, 1]);
@@ -89,7 +85,7 @@ function EngagementDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[280vh] bg-background lg:block">
+    <div ref={ref} className="h-[280vh] bg-background">
       <div className="sticky top-0 h-screen overflow-hidden bg-background">
         <GiantCounter
           scrollYProgress={scrollYProgress}
@@ -133,7 +129,7 @@ function EngagementDesktop() {
               scrollYProgress={scrollYProgress}
               revealStart={0.26}
               revealEnd={0.4}
-              className="text-body-lg text-black/60"
+              className="text-body-lg text-black"
             >
               {ENGAGEMENT_BODY}
             </ScrollWordReveal>
@@ -157,11 +153,159 @@ function EngagementDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated stat card — per-element scroll tracking
+// ---------------------------------------------------------------------------
+
+function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const delay = index * 0.04;
+
+  const numberScale = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0.8, 1]);
+  const numberOpacity = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0, 1]);
+  const numberY = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [30, 0]);
+
+  const borderScaleX = useTransform(scrollYProgress, [0.0 + delay, 0.18 + delay], [0, 1]);
+
+  const labelOpacity = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [0, 1]);
+  const labelYRaw = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [20, 0]);
+  const labelY = useSpring(labelYRaw, SPRING_CONFIG);
+
+  return (
+    <div ref={ref} className="text-center">
+      <m.div
+        className="mx-auto mb-4 h-0.5 w-full origin-left bg-secondary-orange will-change-transform"
+        style={{ scaleX: borderScaleX }}
+      />
+      <m.div
+        className="text-heading text-secondary-orange will-change-transform"
+        style={{
+          fontSize: 'clamp(1.75rem, 6vw, 3rem)',
+          scale: numberScale,
+          opacity: numberOpacity,
+          y: numberY,
+        }}
+      >
+        {stat.number}
+      </m.div>
+      <m.div
+        className="mt-2 text-body-xs text-black will-change-transform sm:text-body-sm"
+        style={{ opacity: labelOpacity, y: labelY }}
+      >
+        {stat.label}
+      </m.div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Mobile animated — centered layout matching desktop, scroll-driven
+//
+//  Natural-flow section (no sticky), tracks via ['start end', 'end start']
+//
+//  0.05 – 0.17  Title ScrollWordReveal + entrance (centered)
+//  0.10 – 0.30  Stats cascade (3-col, centered, per-element scroll)
+//  0.25 – 0.45  Body text ScrollWordReveal (centered)
+//  0.40 – 0.55  Highlight entrance (centered)
+//  0.65 – 0.82  Exit — gentle fade out + drift up
+// ---------------------------------------------------------------------------
+
+function EngagementMobileAnimated() {
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Title entrance
+  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  // Highlight entrance
+  const highlightOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
+  const highlightYRaw = useTransform(scrollYProgress, [0.4, 0.55], [20, 0]);
+  const highlightY = useSpring(highlightYRaw, SPRING_CONFIG);
+
+  // Exit — gentle fade
+  const exitOpacity = useTransform(scrollYProgress, [0.65, 0.82], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.65, 0.82], [0, -30]);
+
+  return (
+    <div ref={sectionRef} className="relative bg-background">
+      {/* GiantCounter background */}
+      <GiantCounter
+        scrollYProgress={scrollYProgress}
+        countRange={[0.05, 0.3]}
+        countValues={[0, 2000]}
+        formatValue={(v) => Math.round(v).toLocaleString('fr-FR')}
+        opacityRange={[0.04, 0.12, 0.65, 0.82]}
+        peakOpacity={0.08}
+        fontSize="clamp(8rem, 22vw, 14rem)"
+        className="text-black/[0.06]"
+      />
+
+      <m.div
+        className="relative z-10 mx-auto max-w-container px-container-x py-section"
+        style={{ opacity: exitOpacity, y: exitY }}
+      >
+        <div className="mx-auto max-w-4xl">
+          {/* Title — centered */}
+          <m.div className="mb-8 text-center" style={{ opacity: titleOpacity, y: titleY }}>
+            <ScrollWordReveal
+              as="h2"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.05}
+              revealEnd={0.17}
+              className="heading-section text-black"
+            >
+              {ENGAGEMENT_TITLE}
+            </ScrollWordReveal>
+          </m.div>
+
+          {/* Stats — 3-col centered, staggered cascade */}
+          <div className="mb-8 grid grid-cols-3 gap-4">
+            {STATS_DATA.map((stat, i) => (
+              <MobileStatCard key={stat.label} stat={stat} index={i} />
+            ))}
+          </div>
+
+          {/* Body — centered */}
+          <div className="mb-6 text-center">
+            <ScrollWordReveal
+              as="p"
+              scrollYProgress={scrollYProgress}
+              revealStart={0.25}
+              revealEnd={0.45}
+              className="text-body text-black"
+            >
+              {ENGAGEMENT_BODY}
+            </ScrollWordReveal>
+          </div>
+
+          {/* Highlight — centered */}
+          <m.p
+            className="text-center text-body-sm italic text-secondary-orange will-change-transform"
+            style={{ opacity: highlightOpacity, y: highlightY }}
+          >
+            {ENGAGEMENT_HIGHLIGHT}
+          </m.p>
+        </div>
+      </m.div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutEngagement() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -171,10 +315,13 @@ export default function AboutEngagement() {
       data-navbar-theme="dark"
     >
       {/* Desktop animated */}
-      {!prefersReducedMotion && <EngagementDesktop />}
+      {variant === 'desktop-animated' && <EngagementDesktop />}
 
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
+      {/* Mobile animated */}
+      {variant === 'mobile-animated' && <EngagementMobileAnimated />}
+
+      {/* Reduced-motion fallback */}
+      {variant === 'static' && (
         <div className="mx-auto max-w-container px-container-x py-section">
           <div className="mx-auto max-w-4xl">
             <SimpleAnimation type="slide-up" delay={0}>
@@ -190,21 +337,21 @@ export default function AboutEngagement() {
                     <div className="mb-1 text-title-sm font-bold text-secondary-orange sm:text-title-md">
                       {stat.number}
                     </div>
-                    <div className="text-body-xs text-black/60 sm:text-body-sm">{stat.label}</div>
+                    <div className="text-body-xs text-black sm:text-body-sm">{stat.label}</div>
                   </div>
                 ))}
               </div>
             </SimpleAnimation>
 
             <SimpleAnimation type="slide-up" delay={150}>
-              <div className="space-y-6 text-body text-black/60">
+              <div className="space-y-6 text-body text-black">
                 <p className="text-text">{ENGAGEMENT_BODY}</p>
                 <p className="text-body-sm italic text-secondary-orange">{ENGAGEMENT_HIGHLIGHT}</p>
               </div>
             </SimpleAnimation>
           </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

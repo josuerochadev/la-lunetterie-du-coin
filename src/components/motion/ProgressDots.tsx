@@ -2,6 +2,7 @@ import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { SPRING_CONFIG } from '@/lib/motion';
+import { cn } from '@/lib/cn';
 
 function ProgressDot({ index, progress }: { index: number; progress: MotionValue<number> }) {
   const dotOpacity = useTransform(progress, (v: number) => (v >= index && v < index + 1 ? 1 : 0));
@@ -31,11 +32,13 @@ export function ProgressDots({
   count,
   start,
   end,
+  className,
 }: {
   scrollYProgress: MotionValue<number>;
   count: number;
   start: number;
   end: number;
+  className?: string;
 }) {
   const opacity = useFadeInOut(scrollYProgress, start, start + 0.03, end - 0.03, end);
 
@@ -44,7 +47,7 @@ export function ProgressDots({
 
   return (
     <m.div
-      className="flex shrink-0 flex-col items-center gap-3"
+      className={cn('flex shrink-0 flex-col items-center gap-3', className)}
       style={{ opacity }}
       aria-hidden="true"
     >

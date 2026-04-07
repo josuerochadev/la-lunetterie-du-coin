@@ -54,7 +54,7 @@ export default function LinkCTA({
     <>
       {children}
       <Icon
-        className="h-4 w-4 flex-shrink-0 text-secondary-green transition-transform duration-300 group-hover/cta:translate-x-1"
+        className="h-4 w-4 flex-shrink-0 text-secondary-orange transition-transform duration-300 group-hover/cta:translate-x-1"
         aria-hidden="true"
       />
       <span

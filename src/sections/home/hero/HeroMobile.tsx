@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { m, useScroll, useTransform } from 'framer-motion';
+
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 
 /** Typographic info accent — keyword in display font with colored underline */
 export function InfoAccent({
@@ -18,7 +20,7 @@ export function InfoAccent({
         {keyword}
       </span>
       <div className={`h-[3px] w-8 ${barColor}`} />
-      <span className="text-body-sm text-black/70">{detail}</span>
+      <span className="text-body-sm text-black">{detail}</span>
     </div>
   );
 }
@@ -118,7 +120,7 @@ function HeroMobileAccents({
   const accent2Opacity = useTransform(scrollY, [accentsStart + 140, accentsStart + 320], [0, 1]);
 
   return (
-    <div className="mx-auto flex flex-1 flex-col items-start justify-center gap-4 lg:hidden">
+    <div className="mx-auto mt-6 flex flex-col items-start gap-4 px-4 lg:hidden">
       <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
         <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
       </m.div>
@@ -129,14 +131,59 @@ function HeroMobileAccents({
   );
 }
 
+function useViewportHeight() {
+  return useSyncExternalStore(
+    (cb) => {
+      window.addEventListener('resize', cb);
+      return () => window.removeEventListener('resize', cb);
+    },
+    () => window.innerHeight,
+    () => 800,
+  );
+}
+
 export function HeroMobileContent({ titleId }: { titleId?: string }) {
   const { scrollY } = useScroll();
-  const vh = typeof window !== 'undefined' ? window.innerHeight : 800;
+  const vh = useViewportHeight();
   const revealStart = vh * 1.4;
+
+  // ── Photo curtain reveal — rises from below like a curtain ──
+  const revealEnd = revealStart + HERO_WORDS.length * 60 + 400;
+  const clipTop = useTransform(scrollY, [revealStart, revealEnd], [100, 0]);
+  const photoClip = useTransform(clipTop, (v) => `inset(${v}% 0 0 0)`);
+
+  // Ken Burns — slow zoom-out as curtain lifts (creates depth)
+  const photoScale = useTransform(scrollY, [revealStart, revealEnd + 300], [1.15, 1]);
+
+  // Yellow overlay fades to reveal photo underneath
+  const overlayOpacity = useTransform(scrollY, [revealStart, revealEnd], [0.85, 0.25]);
 
   return (
     <>
-      <div className="absolute inset-x-0 bottom-[calc(11vw+0.75rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
+      {/* Photo background with circle reveal */}
+      <m.div
+        className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path] lg:hidden"
+        style={{ clipPath: photoClip }}
+      >
+        <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
+          <ResponsiveImage
+            src="/images/hero-eyeglasses-left.jpg"
+            alt=""
+            className="h-full w-full object-cover"
+            loading="eager"
+            sizes="100vw"
+            widths={[640, 768, 1024]}
+          />
+        </m.div>
+        <m.div
+          className="absolute inset-0 bg-accent"
+          style={{ opacity: overlayOpacity }}
+          aria-hidden="true"
+        />
+      </m.div>
+
+      {/* Text content */}
+      <div className="absolute inset-x-0 bottom-[calc(24vw+1rem)] top-0 z-10 -mt-[0.1em] flex flex-col lg:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
         </h1>

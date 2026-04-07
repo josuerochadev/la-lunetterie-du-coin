@@ -19,7 +19,7 @@ export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
             <Link
               key={link.href}
               to={link.href}
-              className="focus-style transition-colors duration-300 hover:text-accent"
+              className="focus-style transition-colors duration-300 hover:text-secondary-orange"
               onClick={onLinkClick}
             >
               {link.label}
@@ -28,13 +28,13 @@ export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
         </div>
 
         {/* Signature */}
-        <p className="text-white/50">
+        <p className="text-white">
           Développé par{' '}
           <a
             href="https://josuerocha.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-style font-semibold text-secondary-blue transition-colors duration-300 hover:text-accent"
+            className="focus-style font-semibold text-secondary-blue transition-colors duration-300 hover:text-secondary-orange"
           >
             Josué Rocha
           </a>

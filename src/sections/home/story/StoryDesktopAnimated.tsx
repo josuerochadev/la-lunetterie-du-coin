@@ -36,8 +36,16 @@ export function StoryDesktopAnimated() {
   const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
   const phraseYSpring = useSpring(phraseY, SPRING_CONFIG);
 
-  // "GRAND" zoom-out phase
-  const grandScale = useTransform(scrollYProgress, [0.76, 0.88], [1, 50]);
+  // "GRAND" zoom-out phase — boosted rasterization for crisp scaling
+  // The browser rasterizes text at its layout size then scales the bitmap.
+  // By rendering GRAND at RASTER_BOOST× font-size and starting scale at
+  // 1/BOOST, the bitmap is high-res so the zoom stays sharp.
+  const RASTER_BOOST = 10;
+  const grandScale = useTransform(
+    scrollYProgress,
+    [0.76, 0.88],
+    [1 / RASTER_BOOST, 50 / RASTER_BOOST],
+  );
   const grandScaleSpring = useSpring(grandScale, SPRING_CONFIG_SLOW);
   const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
   const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
@@ -108,7 +116,7 @@ export function StoryDesktopAnimated() {
               scrollYProgress={scrollYProgress}
               revealStart={0.17}
               revealEnd={0.32}
-              className="text-body-xl text-white/80"
+              className="text-body-xl text-secondary-blue"
             >
               {STORY_BODY}
             </ScrollWordReveal>
@@ -128,12 +136,26 @@ export function StoryDesktopAnimated() {
               >
                 VOYEZ
               </m.span>
-              <m.span
-                className="text-heading text-title-xl text-accent"
-                style={{ scale: grandScaleSpring }}
-              >
-                GRAND
-              </m.span>
+              {/* Ghost spacer — keeps flex layout identical to original */}
+              <span className="relative inline-flex items-center justify-center">
+                <span
+                  className="text-heading invisible select-none text-title-xl"
+                  aria-hidden="true"
+                >
+                  GRAND
+                </span>
+                {/* Actual GRAND — oversized font for crisp zoom rasterization */}
+                <m.span
+                  className="text-heading absolute inset-0 flex items-center justify-center overflow-visible whitespace-nowrap text-accent"
+                  style={{
+                    fontSize: 'calc(clamp(2.5rem, 5vw, 15rem) * 10)',
+                    lineHeight: '0.9',
+                    scale: grandScaleSpring,
+                  }}
+                >
+                  GRAND
+                </m.span>
+              </span>
             </div>
             <m.span
               className="text-heading text-title-xl text-accent"

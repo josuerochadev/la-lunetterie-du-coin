@@ -4,7 +4,8 @@ import { m, useScroll, useTransform, useSpring } from 'framer-motion';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 const TEAM_BIO =
@@ -108,64 +109,151 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile animated — internal sticky + scroll-driven animations
+//
+//  200vh container with sticky viewport
+//  useManualScrollProgress('start-start') — progress 0→1 over 100vh
+//
+//  0.00 – 0.60  Photo Ken Burns zoom (scale 1 → 1.08)
+//  0.00 – 0.10  Title entrance (opacity + Y 40→0)
+//  0.00 – 0.20  Title ScrollWordReveal (word-by-word)
+//  0.12 – 0.18  Bio entrance gate (opacity 0→1)
+//  0.15 – 0.50  Bio ScrollWordReveal (word-by-word)
+//  0.70 – 0.90  Exit — entire content fades out + drifts up
+// ---------------------------------------------------------------------------
+
+function TeamMobileAnimated() {
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
+
+  // Photo Ken Burns zoom
+  const photoScale = useTransform(scrollYProgress, [0.0, 0.6], [1, 1.08]);
+
+  // Title entrance — gates ScrollWordReveal's base opacity
+  const titleEntrance = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  // Bio entrance gate
+  const bioEntrance = useTransform(scrollYProgress, [0.12, 0.18], [0, 1]);
+
+  // Exit — fade out + drift up
+  const exitOpacity = useTransform(scrollYProgress, [0.7, 0.9], [1, 0]);
+  const exitYRaw = useTransform(scrollYProgress, [0.7, 0.9], [0, -40]);
+  const exitY = useSpring(exitYRaw, SPRING_CONFIG);
+
+  return (
+    <div ref={ref} className="h-[200vh] lg:hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
+        <m.div
+          className="flex h-full flex-col will-change-transform"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
+          {/* Portrait — full width with Ken Burns zoom */}
+          <div className="relative aspect-[3/4] w-full overflow-hidden">
+            <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
+              <ResponsiveImage
+                src="/images/about-team-romain.jpeg"
+                alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                className="h-full w-full object-cover object-top"
+                sizes="100vw"
+              />
+            </m.div>
+          </div>
+
+          {/* Text content — below photo on black bg */}
+          <div className="px-container-x pb-section pt-8">
+            {/* Title — entrance gated */}
+            <m.div style={{ opacity: titleEntrance, y: titleY }}>
+              <ScrollWordReveal
+                as="h2"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.0}
+                revealEnd={0.2}
+                className="text-heading text-accent"
+                style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
+              >
+                L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+              </ScrollWordReveal>
+            </m.div>
+
+            {/* Bio — entrance gated + word reveal */}
+            <m.div className="mt-8 max-w-md" style={{ opacity: bioEntrance }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.15}
+                revealEnd={0.5}
+                className="text-body-lg text-white"
+              >
+                {TEAM_BIO}
+              </ScrollWordReveal>
+            </m.div>
+          </div>
+        </m.div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export default function AboutTeam() {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const variant = useResponsiveMotion();
 
   return (
     <section
       id="equipe"
       aria-label="Notre équipe"
-      className="relative w-full bg-black"
+      className="relative w-full bg-black lg:min-h-0"
       data-navbar-theme="light"
     >
-      {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) */}
+      {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) — desktop only */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[40vh]"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] lg:block"
         style={{
           background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
         }}
         aria-hidden="true"
       />
 
-      {/* Desktop animated */}
-      {!prefersReducedMotion && <TeamDesktop />}
-
-      {/* Mobile / reduced-motion fallback */}
-      <div className={prefersReducedMotion ? '' : 'lg:hidden'}>
-        <div className="mx-auto max-w-container px-container-x py-section">
-          <SimpleAnimation type="slide-up" delay={0}>
-            <div className="mb-8 text-center">
-              <h2
-                className="text-heading text-accent"
-                style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
-              >
-                L&apos;ŒIL DERRIÈRE
-                <br />
-                LA BOUTIQUE
-              </h2>
-            </div>
-          </SimpleAnimation>
-
-          <SimpleAnimation type="slide-up" delay={100}>
-            <div className="grid items-center gap-8 md:grid-cols-2">
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <ResponsiveImage
-                  src="/images/about-team-romain.jpeg"
-                  alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                  className="h-full w-full object-cover object-top"
-                  sizes="(min-width: 768px) 50vw, 100vw"
-                />
+      {variant === 'desktop-animated' && <TeamDesktop />}
+      {variant === 'mobile-animated' && <TeamMobileAnimated />}
+      {variant === 'static' && (
+        <div>
+          <div className="mx-auto max-w-container px-container-x py-section">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <div className="mb-8">
+                <h2
+                  className="text-heading text-accent"
+                  style={{ fontSize: 'clamp(2.5rem, 8vw, 4rem)', lineHeight: '0.95' }}
+                >
+                  L&apos;ŒIL DERRIÈRE
+                  <br />
+                  LA BOUTIQUE
+                </h2>
               </div>
-              <div>
-                <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
+            </SimpleAnimation>
+
+            <SimpleAnimation type="slide-up" delay={100}>
+              <div className="grid items-center gap-8 md:grid-cols-2">
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <ResponsiveImage
+                    src="/images/about-team-romain.jpeg"
+                    alt="Romain Corato, fondateur de La Lunetterie du Coin"
+                    className="h-full w-full object-cover object-top"
+                    sizes="(min-width: 768px) 50vw, 100vw"
+                  />
+                </div>
+                <div>
+                  <p className="text-body-lg text-white/70">{TEAM_BIO}</p>
+                </div>
               </div>
-            </div>
-          </SimpleAnimation>
+            </SimpleAnimation>
+          </div>
         </div>
-      </div>
+      )}
     </section>
   );
 }

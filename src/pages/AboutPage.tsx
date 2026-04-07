@@ -1,4 +1,5 @@
 import { useNativeScroll } from '@/hooks/useNativeScroll';
+import { useIsLg } from '@/hooks/useIsLg';
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import { Seo } from '@/seo/Seo';
@@ -8,6 +9,7 @@ import AboutValues from '@/sections/about/AboutValues';
 import AboutTeam from '@/sections/about/AboutTeam';
 import AboutEngagement from '@/sections/about/AboutEngagement';
 import AboutCTA from '@/sections/about/AboutCTA';
+import SectionTransition from '@/components/motion/SectionTransition';
 
 /**
  * Page À propos — Scrollytelling immersif (Rebranding 2026)
@@ -26,6 +28,7 @@ import AboutCTA from '@/sections/about/AboutCTA';
  */
 export default function AboutPage() {
   useNativeScroll();
+  const isLg = useIsLg();
 
   return (
     <>
@@ -50,18 +53,43 @@ export default function AboutPage() {
           <AboutValues />
         </StickySection>
 
-        {/* Équipe — fond noir, portrait parallax + bio word reveal */}
-        <StickySection zIndex={14}>
+        {/* Équipe — fond noir, rideau sur Valeurs (-mt-[100vh]) en mobile
+            Team gère son propre sticky + scroll en interne (h-[200vh]) */}
+        <StickySection zIndex={14} className={isLg ? undefined : '-mt-[100vh]'}>
           <AboutTeam />
         </StickySection>
 
+        {/* Transition gradient : noir (Team) → blanc (Engagement) — mobile only */}
+        {!isLg && (
+          <StickySection zIndex={15}>
+            <SectionTransition
+              variant="fade"
+              fromColor="rgb(var(--color-black-rgb))"
+              toColor="rgb(var(--color-white-rgb))"
+              height="25vh"
+            />
+          </StickySection>
+        )}
+
         {/* Engagement — fond blanc, counter géant + stats */}
-        <StickySection zIndex={15}>
+        <StickySection zIndex={16}>
           <AboutEngagement />
         </StickySection>
 
+        {/* Transition gradient : blanc (Engagement) → jaune (CTA) — mobile only */}
+        {!isLg && (
+          <StickySection zIndex={17}>
+            <SectionTransition
+              variant="fade"
+              fromColor="rgb(var(--color-white-rgb))"
+              toColor="rgb(var(--color-yellow-rgb))"
+              height="25vh"
+            />
+          </StickySection>
+        )}
+
         {/* CTA — gère son propre sticky + 200vh en interne */}
-        <StickySection zIndex={16}>
+        <StickySection zIndex={18}>
           <AboutCTA />
         </StickySection>
       </Layout>

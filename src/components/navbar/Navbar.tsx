@@ -191,7 +191,7 @@ const Navbar: React.FC = () => {
       {/* Navbar horizontale — fixe en haut */}
       <header
         className={cn(
-          'fixed left-0 right-0 top-0 z-navbar flex items-center px-4 pt-4 sm:px-6 sm:pt-6',
+          'fixed left-0 right-0 top-0 z-navbar flex items-center px-4 pt-4 sm:px-6 sm:pt-6 print:hidden',
           'transition-all duration-500 ease-out',
           isVisible ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-5 opacity-0',
         )}
@@ -255,7 +255,7 @@ const Navbar: React.FC = () => {
           >
             Prendre RDV
             <ExternalLink
-              className="h-3 w-3 text-secondary-green transition-transform duration-300 group-hover/nav:translate-x-0.5"
+              className="h-3 w-3 text-secondary-orange transition-transform duration-300 group-hover/nav:translate-x-0.5"
               aria-hidden="true"
             />
             {/* Invisible bold duplicate to reserve width */}

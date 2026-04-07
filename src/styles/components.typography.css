@@ -28,13 +28,13 @@
 
 /* ===== H1 - TITRES DE PAGES ===== */
 .heading-page {
-  @apply text-heading tracking-wide text-text;
+  @apply text-heading tracking-wide;
   font-size: clamp(2.5rem, 4vw, 5rem);
 }
 
 /* ===== H2 - TITRES DE SECTIONS ===== */
 .heading-section {
-  @apply text-heading text-title-lg text-text;
+  @apply text-heading text-title-lg;
 }
 
 @screen sm {
@@ -45,7 +45,7 @@
 
 /* ===== H3 - SOUS-TITRES ===== */
 .heading-subsection-lg {
-  @apply text-subtitle text-title-sm text-text;
+  @apply text-subtitle text-title-sm;
 }
 
 @screen sm {
@@ -55,7 +55,28 @@
 }
 
 .heading-subsection {
-  @apply text-subtitle text-title-sm text-text;
+  @apply text-subtitle text-title-sm;
+}
+
+/* ===== PRINT — tighter hierarchy for legal documents ===== */
+@media print {
+  .heading-section {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+    page-break-after: avoid;
+  }
+
+  .heading-subsection-lg,
+  .heading-subsection {
+    font-size: 1rem;
+    line-height: 1.3;
+    page-break-after: avoid;
+  }
+
+  .heading-page {
+    font-size: 2rem;
+  }
 }
 
 /* ===== FLUID HERO SIZES ===== */
@@ -82,4 +103,16 @@
 /* Story mobile title */
 .text-fluid-story {
   font-size: clamp(2.5rem, 10vw, 5rem);
+}
+
+/* Outro display: bold statement text, one step below hero fit-to-width */
+.text-fluid-outro {
+  font-size: clamp(3.5rem, 20vw, 12rem);
+  line-height: 0.85;
+}
+
+/* Outro display — compact variant for phrases with longer words */
+.text-fluid-outro-sm {
+  font-size: clamp(3rem, 12vw, 10rem);
+  line-height: 0.85;
 }

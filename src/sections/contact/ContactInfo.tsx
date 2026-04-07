@@ -1,5 +1,5 @@
 import { type ReactNode, useRef } from 'react';
-import { m, useScroll } from 'framer-motion';
+import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
@@ -7,9 +7,9 @@ import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
-import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { STORE_INFO } from '@/config/store';
 import { OPENING_HOURS } from '@/data/contact';
@@ -45,17 +45,13 @@ function InfoItem({
 // ---------------------------------------------------------------------------
 
 function InfoDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end end'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
 
   const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
   const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
 
   return (
-    <div ref={sectionRef} className="hidden lg:block">
+    <div ref={ref} className="hidden lg:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
@@ -67,7 +63,7 @@ function InfoDesktop() {
             style={{ opacity: content.opacity, y: content.y }}
           >
             <InfoItem icon={MapPin} title="Adresse">
-              <address className="mb-3 text-body not-italic text-white/50">
+              <address className="mb-3 text-body not-italic text-secondary-blue">
                 {COMPANY_ADDRESS}
               </address>
               <LinkCTA
@@ -84,7 +80,7 @@ function InfoDesktop() {
             <InfoItem icon={Phone} title="Téléphone">
               <a
                 href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Appeler le ${COMPANY_PHONE}`}
               >
                 {COMPANY_PHONE}
@@ -94,7 +90,7 @@ function InfoDesktop() {
             <InfoItem icon={Mail} title="Email">
               <a
                 href={`mailto:${COMPANY_EMAIL}`}
-                className="text-body text-white/50 transition-colors hover:text-secondary-orange"
+                className="text-body text-white transition-colors hover:text-secondary-orange"
                 aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
               >
                 {COMPANY_EMAIL}
@@ -105,8 +101,8 @@ function InfoDesktop() {
               <dl className="space-y-1.5">
                 {OPENING_HOURS.map((schedule) => (
                   <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                    <dt className="font-medium text-white/60">{schedule.day}</dt>
-                    <dd className="text-white/60">{schedule.hours}</dd>
+                    <dt className="font-medium text-white">{schedule.day}</dt>
+                    <dd className="text-secondary-blue">{schedule.hours}</dd>
                   </div>
                 ))}
               </dl>
@@ -119,12 +115,113 @@ function InfoDesktop() {
 }
 
 // ---------------------------------------------------------------------------
+// Mobile — per-item scroll-driven staggered entrance
+// ---------------------------------------------------------------------------
+
+function MobileInfoItem({
+  children,
+  scrollYProgress,
+  start,
+}: {
+  children: ReactNode;
+  scrollYProgress: MotionValue<number>;
+  start: number;
+}) {
+  const opacity = useTransform(scrollYProgress, [start, start + 0.14], [0, 1]);
+  const y = useTransform(scrollYProgress, [start, start + 0.14], [20, 0]);
+
+  return (
+    <m.div style={{ opacity, y }} className="will-change-transform">
+      {children}
+    </m.div>
+  );
+}
+
+function InfoMobileAnimated() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 1]);
+  const titleY = useTransform(scrollYProgress, [0.0, 0.15], [25, 0]);
+
+  return (
+    <div ref={ref} className="lg:hidden">
+      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
+        <div className="mx-auto max-w-4xl">
+          <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
+            <h2 className="heading-section mb-12 text-center text-white">Les infos utiles</h2>
+          </m.div>
+
+          <div className="grid gap-10 md:grid-cols-2">
+            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.08}>
+              <InfoItem icon={MapPin} title="Adresse">
+                <address className="mb-3 text-body not-italic text-secondary-blue">
+                  {COMPANY_ADDRESS}
+                </address>
+                <LinkCTA
+                  href={STORE_INFO.address.googleMapsSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  icon={MapPin}
+                  theme="dark"
+                >
+                  Voir sur Google Maps
+                </LinkCTA>
+              </InfoItem>
+            </MobileInfoItem>
+
+            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.14}>
+              <InfoItem icon={Phone} title="Téléphone">
+                <a
+                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                  className="text-body text-white transition-colors hover:text-secondary-orange"
+                  aria-label={`Appeler le ${COMPANY_PHONE}`}
+                >
+                  {COMPANY_PHONE}
+                </a>
+              </InfoItem>
+            </MobileInfoItem>
+
+            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.2}>
+              <InfoItem icon={Mail} title="Email">
+                <a
+                  href={`mailto:${COMPANY_EMAIL}`}
+                  className="text-body text-white transition-colors hover:text-secondary-orange"
+                  aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
+                >
+                  {COMPANY_EMAIL}
+                </a>
+              </InfoItem>
+            </MobileInfoItem>
+
+            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.26}>
+              <InfoItem icon={Clock} title="Horaires d'ouverture">
+                <dl className="max-w-xs space-y-1.5">
+                  {OPENING_HOURS.map((schedule) => (
+                    <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
+                      <dt className="font-medium text-white">{schedule.day}</dt>
+                      <dd className="text-secondary-blue">{schedule.hours}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </InfoItem>
+            </MobileInfoItem>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
 
 export default function ContactInfo() {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const variant = useResponsiveMotion();
 
   return (
     <section
@@ -144,76 +241,76 @@ export default function ContactInfo() {
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
 
-      {/* Desktop — scroll-driven */}
-      {!prefersReducedMotion && isLg && <InfoDesktop />}
-
-      {/* Mobile / reduced-motion fallback */}
-      <div className={!prefersReducedMotion && isLg ? 'hidden' : ''}>
-        <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
-          <div className="mx-auto max-w-4xl">
-            <SimpleAnimation type="slide-up" delay={0}>
-              <h2 className="heading-section mb-12 text-center text-white lg:mb-16">
-                Les infos utiles
-              </h2>
-            </SimpleAnimation>
-
-            <div className="grid gap-10 md:grid-cols-2">
+      {variant === 'desktop-animated' && <InfoDesktop />}
+      {variant === 'mobile-animated' && <InfoMobileAnimated />}
+      {variant === 'static' && (
+        <div>
+          <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
+            <div className="mx-auto max-w-4xl">
               <SimpleAnimation type="slide-up" delay={0}>
-                <InfoItem icon={MapPin} title="Adresse">
-                  <address className="mb-3 text-body not-italic text-white/50">
-                    {COMPANY_ADDRESS}
-                  </address>
-                  <a
-                    href={STORE_INFO.address.googleMapsSearchUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block text-body-sm font-medium text-white/70 transition-colors hover:text-secondary-orange"
-                  >
-                    Voir sur Google Maps →
-                  </a>
-                </InfoItem>
+                <h2 className="heading-section mb-12 text-center text-white lg:mb-16">
+                  Les infos utiles
+                </h2>
               </SimpleAnimation>
 
-              <SimpleAnimation type="slide-up" delay={50}>
-                <InfoItem icon={Phone} title="Téléphone">
-                  <a
-                    href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
-                    aria-label={`Appeler le ${COMPANY_PHONE}`}
-                  >
-                    {COMPANY_PHONE}
-                  </a>
-                </InfoItem>
-              </SimpleAnimation>
+              <div className="grid gap-10 md:grid-cols-2">
+                <SimpleAnimation type="slide-up" delay={0}>
+                  <InfoItem icon={MapPin} title="Adresse">
+                    <address className="mb-3 text-body not-italic text-secondary-blue">
+                      {COMPANY_ADDRESS}
+                    </address>
+                    <a
+                      href={STORE_INFO.address.googleMapsSearchUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block text-body-sm font-medium text-white transition-colors hover:text-secondary-orange"
+                    >
+                      Voir sur Google Maps →
+                    </a>
+                  </InfoItem>
+                </SimpleAnimation>
 
-              <SimpleAnimation type="slide-up" delay={100}>
-                <InfoItem icon={Mail} title="Email">
-                  <a
-                    href={`mailto:${COMPANY_EMAIL}`}
-                    className="text-body text-white/50 transition-colors hover:text-secondary-orange"
-                    aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
-                  >
-                    {COMPANY_EMAIL}
-                  </a>
-                </InfoItem>
-              </SimpleAnimation>
+                <SimpleAnimation type="slide-up" delay={50}>
+                  <InfoItem icon={Phone} title="Téléphone">
+                    <a
+                      href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                      className="text-body text-white transition-colors hover:text-secondary-orange"
+                      aria-label={`Appeler le ${COMPANY_PHONE}`}
+                    >
+                      {COMPANY_PHONE}
+                    </a>
+                  </InfoItem>
+                </SimpleAnimation>
 
-              <SimpleAnimation type="slide-up" delay={150}>
-                <InfoItem icon={Clock} title="Horaires d'ouverture">
-                  <dl className="space-y-1.5">
-                    {OPENING_HOURS.map((schedule) => (
-                      <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                        <dt className="font-medium text-white/60">{schedule.day}</dt>
-                        <dd className="text-white/60">{schedule.hours}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </InfoItem>
-              </SimpleAnimation>
+                <SimpleAnimation type="slide-up" delay={100}>
+                  <InfoItem icon={Mail} title="Email">
+                    <a
+                      href={`mailto:${COMPANY_EMAIL}`}
+                      className="text-body text-white transition-colors hover:text-secondary-orange"
+                      aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
+                    >
+                      {COMPANY_EMAIL}
+                    </a>
+                  </InfoItem>
+                </SimpleAnimation>
+
+                <SimpleAnimation type="slide-up" delay={150}>
+                  <InfoItem icon={Clock} title="Horaires d'ouverture">
+                    <dl className="space-y-1.5">
+                      {OPENING_HOURS.map((schedule) => (
+                        <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
+                          <dt className="font-medium text-white">{schedule.day}</dt>
+                          <dd className="text-secondary-blue">{schedule.hours}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </InfoItem>
+                </SimpleAnimation>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Bottom gradient dissolve — smooth black → white for form section transition */}
       <div
