@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { GiantCounter } from '@/components/motion/GiantCounter';
@@ -153,30 +152,34 @@ function EngagementDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated stat card — per-element scroll tracking
+// Mobile animated stat card — uses section scrollYProgress
 // ---------------------------------------------------------------------------
 
-function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+function MobileStatCard({
+  stat,
+  index,
+  scrollYProgress,
+}: {
+  stat: StatData;
+  index: number;
+  scrollYProgress: MotionValue<number>;
+}) {
+  const stagger = index * 0.05;
+  const start = 0.12 + stagger;
+  const end = start + 0.12;
 
-  const delay = index * 0.04;
+  const numberScale = useTransform(scrollYProgress, [start, end], [0.8, 1]);
+  const numberOpacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+  const numberY = useTransform(scrollYProgress, [start, end], [30, 0]);
 
-  const numberScale = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0.8, 1]);
-  const numberOpacity = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [0, 1]);
-  const numberY = useTransform(scrollYProgress, [0.0 + delay, 0.22 + delay], [30, 0]);
+  const borderScaleX = useTransform(scrollYProgress, [start, start + 0.08], [0, 1]);
 
-  const borderScaleX = useTransform(scrollYProgress, [0.0 + delay, 0.18 + delay], [0, 1]);
-
-  const labelOpacity = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [0, 1]);
-  const labelYRaw = useTransform(scrollYProgress, [0.08 + delay, 0.28 + delay], [20, 0]);
+  const labelOpacity = useTransform(scrollYProgress, [start + 0.04, end + 0.04], [0, 1]);
+  const labelYRaw = useTransform(scrollYProgress, [start + 0.04, end + 0.04], [20, 0]);
   const labelY = useSpring(labelYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="text-center">
+    <div className="text-center">
       <m.div
         className="mx-auto mb-4 h-0.5 w-full origin-left bg-secondary-orange will-change-transform"
         style={{ scaleX: borderScaleX }}
@@ -203,99 +206,107 @@ function MobileStatCard({ stat, index }: { stat: StatData; index: number }) {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — centered layout matching desktop, scroll-driven
+// Mobile animated — sticky viewport with scroll-driven animations
 //
-//  Natural-flow section (no sticky), tracks via ['start end', 'end start']
+//  200vh container with sticky viewport
+//  useManualScrollProgress('start-start') — progress 0→1 over 100vh
 //
-//  0.05 – 0.17  Title ScrollWordReveal + entrance (centered)
-//  0.10 – 0.30  Stats cascade (3-col, centered, per-element scroll)
-//  0.25 – 0.45  Body text ScrollWordReveal (centered)
-//  0.40 – 0.55  Highlight entrance (centered)
-//  0.65 – 0.82  Exit — gentle fade out + drift up
+//  0.00 – 0.10  Title entrance (opacity + Y slide)
+//  0.00 – 0.15  Title ScrollWordReveal (word-by-word)
+//  0.12 – 0.35  Stats cascade (3-col, staggered on section scroll)
+//  0.30 – 0.50  Body text ScrollWordReveal (centered)
+//  0.45 – 0.60  Highlight entrance (centered)
+//  0.75 – 0.90  Exit — gentle fade out + drift up
 // ---------------------------------------------------------------------------
 
 function EngagementMobileAnimated() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title entrance
-  const titleOpacity = useTransform(scrollYProgress, [0.05, 0.14], [0, 1]);
-  const titleYRaw = useTransform(scrollYProgress, [0.05, 0.14], [40, 0]);
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
+  // Body text gate
+  const bodyOpacity = useTransform(scrollYProgress, [0.3, 0.38], [0, 1]);
+
   // Highlight entrance
-  const highlightOpacity = useTransform(scrollYProgress, [0.4, 0.55], [0, 1]);
-  const highlightYRaw = useTransform(scrollYProgress, [0.4, 0.55], [20, 0]);
+  const highlightOpacity = useTransform(scrollYProgress, [0.45, 0.6], [0, 1]);
+  const highlightYRaw = useTransform(scrollYProgress, [0.45, 0.6], [20, 0]);
   const highlightY = useSpring(highlightYRaw, SPRING_CONFIG);
 
   // Exit — gentle fade
-  const exitOpacity = useTransform(scrollYProgress, [0.65, 0.82], [1, 0]);
-  const exitY = useTransform(scrollYProgress, [0.65, 0.82], [0, -30]);
+  const exitOpacity = useTransform(scrollYProgress, [0.75, 0.9], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.75, 0.9], [0, -30]);
 
   return (
-    <div ref={sectionRef} className="relative bg-background">
-      {/* GiantCounter background */}
-      <GiantCounter
-        scrollYProgress={scrollYProgress}
-        countRange={[0.05, 0.3]}
-        countValues={[0, 2000]}
-        formatValue={(v) => Math.round(v).toLocaleString('fr-FR')}
-        opacityRange={[0.04, 0.12, 0.65, 0.82]}
-        peakOpacity={0.08}
-        fontSize="clamp(8rem, 22vw, 14rem)"
-        className="text-black/[0.06]"
-      />
+    <div ref={ref} className="h-[200vh] bg-background">
+      <div className="sticky top-0 h-svh overflow-hidden bg-background">
+        {/* GiantCounter background */}
+        <GiantCounter
+          scrollYProgress={scrollYProgress}
+          countRange={[0.02, 0.25]}
+          countValues={[0, 2000]}
+          formatValue={(v) => Math.round(v).toLocaleString('fr-FR')}
+          opacityRange={[0.01, 0.08, 0.75, 0.9]}
+          peakOpacity={0.08}
+          fontSize="clamp(8rem, 22vw, 14rem)"
+          className="text-black/[0.06]"
+        />
 
-      <m.div
-        className="relative z-10 mx-auto max-w-container px-container-x py-section"
-        style={{ opacity: exitOpacity, y: exitY }}
-      >
-        <div className="mx-auto max-w-4xl">
-          {/* Title — centered */}
-          <m.div className="mb-8 text-center" style={{ opacity: titleOpacity, y: titleY }}>
-            <ScrollWordReveal
-              as="h2"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.05}
-              revealEnd={0.17}
-              className="heading-section text-black"
+        <m.div
+          className="relative z-10 flex h-full flex-col items-center justify-center px-container-x"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
+          <div className="w-full max-w-4xl">
+            {/* Title — centered */}
+            <m.div className="mb-6 text-center" style={{ opacity: titleOpacity, y: titleY }}>
+              <ScrollWordReveal
+                as="h2"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.0}
+                revealEnd={0.15}
+                className="heading-section text-black"
+              >
+                {ENGAGEMENT_TITLE}
+              </ScrollWordReveal>
+            </m.div>
+
+            {/* Stats — 3-col centered, staggered cascade */}
+            <div className="mb-6 grid grid-cols-3 gap-2 sm:gap-4">
+              {STATS_DATA.map((stat, i) => (
+                <MobileStatCard
+                  key={stat.label}
+                  stat={stat}
+                  index={i}
+                  scrollYProgress={scrollYProgress}
+                />
+              ))}
+            </div>
+
+            {/* Body — centered */}
+            <m.div className="mb-6 text-center" style={{ opacity: bodyOpacity }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.3}
+                revealEnd={0.5}
+                className="text-body text-black"
+              >
+                {ENGAGEMENT_BODY}
+              </ScrollWordReveal>
+            </m.div>
+
+            {/* Highlight — centered */}
+            <m.p
+              className="text-center text-body-sm italic text-secondary-orange will-change-transform"
+              style={{ opacity: highlightOpacity, y: highlightY }}
             >
-              {ENGAGEMENT_TITLE}
-            </ScrollWordReveal>
-          </m.div>
-
-          {/* Stats — 3-col centered, staggered cascade */}
-          <div className="mb-8 grid grid-cols-3 gap-4">
-            {STATS_DATA.map((stat, i) => (
-              <MobileStatCard key={stat.label} stat={stat} index={i} />
-            ))}
+              {ENGAGEMENT_HIGHLIGHT}
+            </m.p>
           </div>
-
-          {/* Body — centered */}
-          <div className="mb-6 text-center">
-            <ScrollWordReveal
-              as="p"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.25}
-              revealEnd={0.45}
-              className="text-body text-black"
-            >
-              {ENGAGEMENT_BODY}
-            </ScrollWordReveal>
-          </div>
-
-          {/* Highlight — centered */}
-          <m.p
-            className="text-center text-body-sm italic text-secondary-orange will-change-transform"
-            style={{ opacity: highlightOpacity, y: highlightY }}
-          >
-            {ENGAGEMENT_HIGHLIGHT}
-          </m.p>
-        </div>
-      </m.div>
+        </m.div>
+      </div>
     </div>
   );
 }
