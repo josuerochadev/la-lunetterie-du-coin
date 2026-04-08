@@ -40,33 +40,3 @@
     }
   }
 }
-
-/* ========================================
-   TABLET TYPOGRAPHY BOOST (768px - 1279px)
-   ========================================
-   En dessous de xl (1280px) on rend la variante mobile-animated.
-   Les tokens body-* de base utilisent un coefficient vw calibré sur
-   toute la plage responsive : conséquence, le vw reste sous le min
-   jusqu'à ~860-1000px, ce qui bloque le texte à sa taille mobile
-   sur iPad Mini / iPad Pro. Ces overrides ne s'appliquent QUE dans
-   la plage tablette et sont calibrés pour rester continus avec les
-   valeurs desktop au croisement à 1280px. */
-@layer utilities {
-  @media (min-width: 768px) and (max-width: 1279.98px) {
-    .text-body-xl {
-      font-size: clamp(1.75rem, 1.01rem + 1.53vw, 2.25rem);
-    }
-    .text-body-lg {
-      font-size: clamp(1.5rem, 0.87rem + 1.32vw, 2rem);
-    }
-    .text-body {
-      font-size: clamp(1.25rem, 0.6rem + 1.35vw, 1.75rem);
-    }
-    .text-body-sm {
-      font-size: clamp(1.0625rem, 0.615rem + 0.93vw, 1.375rem);
-    }
-    .text-body-xs {
-      font-size: clamp(0.9375rem, 0.66rem + 0.57vw, 1.125rem);
-    }
-  }
-}
