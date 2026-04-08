@@ -7,6 +7,7 @@ import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
+import { ConvexDome } from '@/components/common/ConvexDome';
 import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
@@ -216,16 +217,7 @@ export default function ContactInfo() {
       style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
       data-navbar-theme="light"
     >
-      {/* Convex dome — black dome with transparent corners revealing the hero behind */}
-      <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
-        style={{ height: '12vw' }}
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
-      </svg>
+      <ConvexDome color="black" />
 
       {variant === 'desktop-animated' && <InfoDesktop />}
       {variant === 'mobile-animated' && <InfoMobileAnimated />}
