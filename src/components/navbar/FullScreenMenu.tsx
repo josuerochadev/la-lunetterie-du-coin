@@ -85,14 +85,14 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 className="inline-block transition-opacity duration-200 hover:opacity-80"
                 aria-label="Retour à l'accueil - La Lunetterie Du Coin"
               >
-                <Logo className="h-20 w-auto fill-accent sm:h-24" aria-hidden="true" />
+                <Logo className="h-20 w-auto fill-accent sm:h-24 md:h-32" aria-hidden="true" />
               </Link>
             </SimpleAnimation>
           </div>
 
           {/* Nav links — centered vertically, main focus */}
           <div className="flex flex-1 items-center px-6">
-            <nav aria-label="Navigation principale" className="space-y-3 sm:space-y-5">
+            <nav aria-label="Navigation principale" className="space-y-3 sm:space-y-5 md:space-y-8">
               {FOOTER_NAV_LINKS.map((link, i) => {
                 const isActive = pathname === link.href;
                 return (
@@ -100,7 +100,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     <Link
                       to={link.href}
                       onClick={onClose}
-                      className={`text-heading block text-title-md transition-colors duration-300 hover:text-secondary-orange sm:text-title-lg ${isActive ? 'text-accent' : 'text-white'}`}
+                      className={`text-heading block text-title-md transition-colors duration-300 hover:text-secondary-orange sm:text-title-lg md:text-title-xl ${isActive ? 'text-accent' : 'text-white'}`}
                       aria-current={isActive ? 'page' : undefined}
                     >
                       {link.label}
@@ -122,11 +122,11 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 onClick={onClose}
                 className="group/cta focus-style relative inline-flex items-center gap-2"
               >
-                <span className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black">
+                <span className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black md:text-body">
                   Prendre RDV
                 </span>
                 <ExternalLink
-                  className="h-3.5 w-3.5 flex-shrink-0 text-secondary-orange transition-transform duration-300 group-hover/cta:translate-x-1"
+                  className="h-3.5 w-3.5 flex-shrink-0 text-secondary-orange transition-transform duration-300 group-hover/cta:translate-x-1 md:h-4 md:w-4"
                   aria-hidden="true"
                 />
                 <span
@@ -148,9 +148,9 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 {/* Téléphone */}
                 <a
                   href={`tel:${STORE_INFO.phone.tel}`}
-                  className="focus-style flex items-center gap-2 text-body-sm text-white"
+                  className="focus-style flex items-center gap-2 text-body-sm text-white md:gap-3 md:text-body"
                 >
-                  <Phone className="h-4 w-4 text-secondary-blue" aria-hidden="true" />
+                  <Phone className="h-4 w-4 text-secondary-blue md:h-5 md:w-5" aria-hidden="true" />
                   <span className="font-medium">{STORE_INFO.phone.display}</span>
                 </a>
 
@@ -159,10 +159,10 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                   href={STORE_INFO.address.googleMapsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="focus-style flex items-start gap-2 text-body-sm text-white"
+                  className="focus-style flex items-start gap-2 text-body-sm text-white md:gap-3 md:text-body"
                 >
                   <MapPin
-                    className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-blue"
+                    className="mt-0.5 h-4 w-4 flex-shrink-0 text-secondary-blue md:h-5 md:w-5"
                     aria-hidden="true"
                   />
                   <span className="font-medium">
