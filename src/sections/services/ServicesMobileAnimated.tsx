@@ -1,4 +1,5 @@
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT } from './constants';
@@ -7,6 +8,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { BOOKING_URL } from '@/config/endpoints';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 // ── Scroll budget (normalised 0–1) ─────────────────────────────
@@ -171,11 +173,15 @@ function ServiceSlide({
     [photoOpacity, exitOpacity] as const,
     ([enter, exit]: number[]) => Math.min(enter, exit),
   );
+  const slidePointerEvents = usePointerEvents(slideOpacity);
 
   const isExamens = service.id === 'examens';
 
   return (
-    <m.div className="absolute inset-0 will-change-[opacity]" style={{ opacity: slideOpacity }}>
+    <m.div
+      className="absolute inset-0 will-change-[opacity]"
+      style={{ opacity: slideOpacity, pointerEvents: slidePointerEvents }}
+    >
       {/* Full-viewport photo */}
       <m.img
         src={service.image}
@@ -258,22 +264,25 @@ function ServiceSlide({
             ))}
           </m.ul>
 
-          {/* Examens: conditions box */}
+          {/* Examens: conditions disclosure — collapsed by default to fit short viewports */}
           {isExamens && (
-            <m.div
-              className="mb-5 border-l-2 border-accent/30 pl-4"
-              style={{ opacity: detailsOpacity }}
-            >
-              <h4 className="mb-2 text-body font-medium text-white">
-                Conditions pour un examen en magasin
-              </h4>
-              <ul className="space-y-1 text-body text-white/70">
-                <li>
-                  Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
-                </li>
-                <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-                <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-              </ul>
+            <m.div className="mb-5 w-full" style={{ opacity: detailsOpacity }}>
+              <details className="group border-l-2 border-accent/30 pl-4">
+                <summary className="flex cursor-pointer list-none items-center gap-2 text-body font-medium text-white marker:hidden [&::-webkit-details-marker]:hidden">
+                  <span>Conditions et éligibilité</span>
+                  <ChevronDown
+                    className="h-4 w-4 text-secondary-orange transition-transform duration-200 group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <ul className="mt-3 space-y-1.5 text-body-sm text-white/85">
+                  <li>
+                    Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                  </li>
+                  <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                  <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+                </ul>
+              </details>
             </m.div>
           )}
 
