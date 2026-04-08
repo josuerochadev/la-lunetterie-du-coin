@@ -72,11 +72,11 @@ export default function Footer({
       </div>
 
       <SectionContainer className="relative px-container-x pb-8 pt-[10svh] sm:pt-[8svh] lg:pb-10 lg:pt-[10vw]">
-        {/* Grille 3 colonnes : Navigation | Contact+Horaires | RDV+Réseaux */}
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:justify-items-center">
+        {/* Grille responsive : 1 col mobile → 2 cols tablette → 3 cols desktop (xl) */}
+        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
           <FooterNavigation onLinkClick={onLinkClick} />
           <FooterContact />
-          <FooterSocial />
+          <FooterSocial className="sm:col-span-2 xl:col-span-1" />
         </div>
 
         {/* Barre inférieure : Liens légaux + Signature */}

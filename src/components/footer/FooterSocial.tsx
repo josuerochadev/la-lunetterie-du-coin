@@ -4,12 +4,16 @@ import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS } from '@/config/footer';
 import { BOOKING_URL } from '@/config/endpoints';
 
+type FooterSocialProps = {
+  className?: string;
+};
+
 /**
  * FooterSocial - Prendre RDV + Réseaux sociaux
  */
-export default function FooterSocial() {
+export default function FooterSocial({ className }: FooterSocialProps = {}) {
   return (
-    <div>
+    <div className={className}>
       {/* CTA Prendre RDV — le titre sert de lien */}
       <a
         href={BOOKING_URL}
