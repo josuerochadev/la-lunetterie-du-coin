@@ -189,15 +189,15 @@ function ServiceSlide({
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[30%]"
         style={{
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 100%)',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 100%)',
         }}
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[65%]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[85%]"
         style={{
           background:
-            'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)',
+            'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.82) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.2) 85%, transparent 100%)',
         }}
         aria-hidden="true"
       />
@@ -209,10 +209,10 @@ function ServiceSlide({
       >
         {/* Blur scrim — sized by content, behind text (z-0) */}
         <div
-          className="pointer-events-none absolute inset-0 -top-8 z-0 backdrop-blur-[6px]"
+          className="pointer-events-none absolute inset-0 -top-12 z-0 bg-black/20 backdrop-blur-[12px]"
           style={{
-            mask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+            mask: 'linear-gradient(to bottom, transparent 0%, black 22%)',
+            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 22%)',
           }}
           aria-hidden="true"
         />
@@ -220,7 +220,7 @@ function ServiceSlide({
         <div className="relative z-10 flex flex-col items-start">
           {/* Counter */}
           <m.span
-            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/70"
+            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/85"
             style={{ opacity: counterOpacity }}
           >
             {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
@@ -236,7 +236,7 @@ function ServiceSlide({
 
           {/* Description */}
           <m.p
-            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            className="mb-5 text-body-lg leading-relaxed text-white/95"
             style={{ opacity: descOpacity, y: descY }}
           >
             {service.description}
@@ -248,7 +248,7 @@ function ServiceSlide({
             style={{ opacity: detailsOpacity }}
           >
             {service.details.map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body text-white/70">
+              <li key={i} className="flex gap-2 text-body text-white/85">
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
