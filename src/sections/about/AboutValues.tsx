@@ -169,13 +169,18 @@ function MobileRevealCard({
   const Icon = iconMap[value.iconName];
 
   return (
-    <m.div className="space-y-4 text-center will-change-transform" style={{ scale, y }}>
+    <m.div
+      className="space-y-3 text-center will-change-transform sm:space-y-4"
+      style={{ scale, y }}
+    >
       <Icon
         className="mx-auto h-8 w-8 text-secondary-orange"
         strokeWidth={1.5}
         aria-hidden="true"
       />
-      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+      <h3 className="text-subtitle text-title-sm tracking-[0.1em] text-black sm:tracking-[0.2em]">
+        {value.title}
+      </h3>
       <p className="text-body text-black">{value.description}</p>
     </m.div>
   );
@@ -194,18 +199,21 @@ function ValuesMobileAnimated() {
 
   return (
     <div ref={ref} className="relative z-10 h-[250vh] xl:hidden">
-      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[6vh] pt-[4vh]">
+      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[5vh] pt-[3vh] sm:pb-[6vh] sm:pt-[4vh]">
         <m.div
           className="w-full px-container-x will-change-[clip-path]"
           style={{ clipPath: contentClip }}
         >
           {/* Title — centered, revealed by clip */}
-          <m.div className="mb-8 text-center will-change-transform" style={{ scale: titleScale }}>
+          <m.div
+            className="mb-6 text-center will-change-transform sm:mb-8"
+            style={{ scale: titleScale }}
+          >
             <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
           </m.div>
 
           {/* Cards grid — staggered micro-movements */}
-          <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-10">
             {VALUES_DATA.map((value, i) => (
               <MobileRevealCard
                 key={value.title}
