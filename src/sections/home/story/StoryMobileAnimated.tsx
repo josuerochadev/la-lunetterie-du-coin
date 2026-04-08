@@ -136,7 +136,7 @@ export function StoryMobileAnimated() {
   });
 
   return (
-    <div ref={ref} className="relative h-[300vh] lg:hidden">
+    <div ref={ref} className="relative h-[300vh] xl:hidden">
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
         {/* ── Photo — below CTA, grows upward, darkened for readability ── */}
         <m.div

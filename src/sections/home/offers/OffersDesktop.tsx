@@ -221,7 +221,7 @@ export function OffersDesktop() {
   ];
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={sectionRef} className="hidden xl:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
         {/* Title */}
         <m.div

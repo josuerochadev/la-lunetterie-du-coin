@@ -466,7 +466,7 @@ export function ServicesMobileAnimated() {
   );
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <div ref={sectionRef} className="relative" style={{ height: `${TOTAL_VH * 100}vh` }}>
         <div className="sticky top-0 h-[100dvh] overflow-hidden">
           {/* Photo layers */}

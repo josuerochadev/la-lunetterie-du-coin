@@ -13,7 +13,7 @@ import { ServicesMobileAnimated } from './services/ServicesMobileAnimated';
 
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useIsXl } from '@/hooks/useIsXl';
 import { ACCENT_HEX } from '@/config/design';
 import LinkCTA from '@/components/common/LinkCTA';
 
@@ -25,7 +25,7 @@ import LinkCTA from '@/components/common/LinkCTA';
  */
 function HomeServices() {
   const variant = useResponsiveMotion();
-  const isLg = useIsLg();
+  const isXl = useIsXl();
   const sectionRef = useRef<HTMLDivElement>(null);
   const shouldAnimate = variant === 'desktop-animated';
 
@@ -56,7 +56,7 @@ function HomeServices() {
 
       {/* Concave dome — desktop/static only (mobile uses internal curtain) */}
       <div
-        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent lg:block"
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent xl:block"
         aria-hidden="true"
       />
 
@@ -64,7 +64,7 @@ function HomeServices() {
       {variant === 'mobile-animated' ? (
         <ServicesMobileAnimated />
       ) : (
-        <div className="pointer-events-auto bg-white px-container-x py-section lg:hidden">
+        <div className="pointer-events-auto bg-white px-container-x py-section xl:hidden">
           <div className="relative z-10 mx-auto max-w-container">
             <h2 id="services-title" className="heading-section mb-12 text-black">
               {HOMEPAGE_SECTIONS.services.title}
@@ -84,7 +84,7 @@ function HomeServices() {
       )}
 
       {/* ── Desktop: Scrollytelling (or desktop static fallback) ── */}
-      {isLg && (
+      {isXl && (
         <div ref={sectionRef} className="relative">
           <div className="bg-accent" style={{ height: `${(SERVICE_COUNT * 2 + 1) * 100}vh` }}>
             <m.div

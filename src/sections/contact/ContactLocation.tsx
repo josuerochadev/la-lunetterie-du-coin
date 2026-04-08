@@ -71,7 +71,7 @@ function LocationDesktop() {
   const footer = useScrollEntrance(contentProgress, 0.3, 0.48, 30);
 
   return (
-    <div ref={combinedRef} className="relative hidden min-h-screen w-full lg:block">
+    <div ref={combinedRef} className="relative hidden min-h-screen w-full xl:block">
       {/* Parallax background image */}
       <div className="absolute inset-0 overflow-hidden">
         <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
@@ -189,7 +189,7 @@ function LocationMobileAnimated() {
   const footerY = useTransform(scrollYProgress, [0.25, 0.4], [15, 0]);
 
   return (
-    <div ref={ref} className="relative min-h-screen w-full lg:hidden">
+    <div ref={ref} className="relative min-h-screen w-full xl:hidden">
       {/* Parallax background */}
       <div className="absolute inset-0 overflow-hidden">
         <m.div

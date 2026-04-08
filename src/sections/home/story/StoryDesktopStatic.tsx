@@ -4,7 +4,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 
 export function StoryDesktopStatic() {
   return (
-    <div className="hidden min-h-[450vh] lg:block">
+    <div className="hidden min-h-[450vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           <div className="w-[28%] pr-8">

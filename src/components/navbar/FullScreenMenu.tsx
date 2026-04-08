@@ -74,7 +74,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* ── Mobile layout ─────────────────────────────────────────── */}
-        <div className="flex min-h-dvh flex-col lg:hidden">
+        <div className="flex min-h-dvh flex-col xl:hidden">
           {/* Logo */}
           <div className="px-6 pt-6">
             <SimpleAnimation type="fade" delay={50} immediate={true}>
@@ -209,7 +209,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* ── Desktop layout ───────────────────────────────────────── */}
-        <div className="hidden min-h-screen w-full items-center justify-center px-6 lg:flex">
+        <div className="hidden min-h-screen w-full items-center justify-center px-6 xl:flex">
           <div className="grid w-full max-w-5xl grid-cols-2 gap-20">
             {/* Colonne gauche : Navigation principale */}
             <div className="space-y-16 text-right">

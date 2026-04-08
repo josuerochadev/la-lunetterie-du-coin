@@ -123,7 +123,7 @@ function HeroMobileAccents({
   const accent2Opacity = useTransform(scrollY, [accentsStart + 60, accentsStart + 210], [0, 1]);
 
   return (
-    <div className="mx-auto mt-4 flex items-start gap-6 px-4 sm:mt-6 lg:hidden">
+    <div className="mx-auto mt-4 flex items-start gap-6 px-4 sm:mt-6 xl:hidden">
       <m.div style={{ y: accent1Y, opacity: accent1Opacity }}>
         <InfoAccent color="green" keyword="Strasbourg" detail="Opticien depuis 2016." />
       </m.div>
@@ -165,7 +165,7 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
     <>
       {/* Photo background with circle reveal */}
       <m.div
-        className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path] lg:hidden"
+        className="absolute inset-0 z-0 overflow-hidden will-change-[clip-path] xl:hidden"
         style={{ clipPath: photoClip }}
       >
         <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
@@ -187,7 +187,7 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
 
       {/* Text content — bottom offset leaves room for dome overhang,
           reduced on small viewports to keep accents visible */}
-      <div className="absolute inset-x-0 bottom-[calc(16vw+0.5rem)] top-0 z-10 -mt-[0.1em] flex flex-col sm:bottom-[calc(24vw+1rem)] lg:hidden">
+      <div className="absolute inset-x-0 bottom-[calc(16vw+0.5rem)] top-0 z-10 -mt-[0.1em] flex flex-col sm:bottom-[calc(24vw+1rem)] xl:hidden">
         <h1 id={titleId} className="sr-only">
           POUR L&apos;AMOUR DES YEUX
         </h1>

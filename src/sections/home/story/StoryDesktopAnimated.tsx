@@ -69,7 +69,7 @@ export function StoryDesktopAnimated() {
   const textCombinedOpacity = useFadeInOut(scrollYProgress, 0.15, 0.25, 0.45, 0.5);
 
   return (
-    <div ref={sectionRef} className="hidden min-h-[450vh] lg:block">
+    <div ref={sectionRef} className="hidden min-h-[450vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
           {/* Left — title */}

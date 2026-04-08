@@ -52,7 +52,7 @@ function TeamDesktop() {
   const exitY = useTransform(scrollYProgress, [0.65, 0.8], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={sectionRef} className="hidden h-[300vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <m.div
           className="flex h-full items-center px-16 xl:px-20"
@@ -147,7 +147,7 @@ function TeamMobileAnimated() {
   const exitY = useSpring(exitYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="h-[200vh] lg:hidden">
+    <div ref={ref} className="h-[200vh] xl:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.div
           className="relative h-full w-full will-change-transform"
@@ -224,7 +224,7 @@ export default function AboutTeam() {
     >
       {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) — desktop only */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] lg:block"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] xl:block"
         style={{
           background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
         }}

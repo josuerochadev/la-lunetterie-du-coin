@@ -121,7 +121,7 @@ export function OffersMobileAnimated() {
   ];
 
   return (
-    <div ref={sectionRef} className="lg:hidden" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={sectionRef} className="xl:hidden" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="pointer-events-auto sticky top-0 flex h-screen flex-col overflow-hidden">
         {/* ── Image layer (faded backdrop) ── */}
         <div className="absolute inset-0 z-0">

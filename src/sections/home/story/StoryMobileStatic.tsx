@@ -4,7 +4,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 
 export function StoryMobileStatic() {
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       {/* Text content first */}
       <div className="px-container-x pb-16 sm:pb-20">
         <h2 id="story-title" className="text-heading text-fluid-story text-white">

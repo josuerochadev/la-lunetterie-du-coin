@@ -305,7 +305,7 @@ function OffersDesktop() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden xl:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
@@ -606,7 +606,7 @@ function OffersMobileAnimated() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="lg:hidden" style={{ height: '400vh' }}>
+    <div ref={ref} className="xl:hidden" style={{ height: '400vh' }}>
       <div className="sticky top-0 h-svh overflow-hidden bg-black">
         {/* Offer slides (layered, crossfading) */}
         <div className="absolute inset-0 z-10">

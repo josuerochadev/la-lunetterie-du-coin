@@ -159,7 +159,7 @@ export function TestimonialsDesktop() {
   const ctaPointer = usePointerEvents(ctaOpacity);
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={ref} className="hidden xl:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         <GiantCounter
           scrollYProgress={scrollYProgress}

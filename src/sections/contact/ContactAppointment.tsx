@@ -24,7 +24,7 @@ function CTADesktop() {
   const cta = useScrollEntrance(scrollYProgress, 0.35, 0.5, 20);
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ minHeight: '200vh' }}>
+    <div ref={ref} className="hidden xl:block" style={{ minHeight: '200vh' }}>
       <div className="sticky top-0 flex min-h-screen w-full items-center overflow-hidden bg-accent">
         <m.img
           src="/images/motif-cercle.png"
@@ -97,7 +97,7 @@ function CTAMobile() {
   const ctaY = useTransform(scrollYProgress, [0.28, 0.36], [24, 0]);
 
   return (
-    <div ref={ref} className="h-[250vh] lg:hidden">
+    <div ref={ref} className="h-[250vh] xl:hidden">
       <div className="sticky top-0 h-svh overflow-hidden bg-accent">
         <m.img
           src="/images/motif-eye-pattern.svg"

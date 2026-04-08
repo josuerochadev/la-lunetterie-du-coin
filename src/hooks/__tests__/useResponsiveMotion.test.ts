@@ -7,15 +7,15 @@ vi.mock('@/hooks/usePrefersReducedMotion', () => ({
   usePrefersReducedMotion: vi.fn(),
 }));
 
-vi.mock('@/hooks/useIsLg', () => ({
-  useIsLg: vi.fn(),
+vi.mock('@/hooks/useIsXl', () => ({
+  useIsXl: vi.fn(),
 }));
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useIsXl } from '@/hooks/useIsXl';
 
 const mockUsePrefersReducedMotion = vi.mocked(usePrefersReducedMotion);
-const mockUseIsLg = vi.mocked(useIsLg);
+const mockUseIsXl = vi.mocked(useIsXl);
 
 describe('useResponsiveMotion', () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('useResponsiveMotion', () => {
 
   it('should return "static" when reduced motion is preferred', () => {
     mockUsePrefersReducedMotion.mockReturnValue(true);
-    mockUseIsLg.mockReturnValue(true);
+    mockUseIsXl.mockReturnValue(true);
 
     const { result } = renderHook(() => useResponsiveMotion());
 
@@ -33,25 +33,25 @@ describe('useResponsiveMotion', () => {
 
   it('should return "static" when reduced motion is preferred on small viewport', () => {
     mockUsePrefersReducedMotion.mockReturnValue(true);
-    mockUseIsLg.mockReturnValue(false);
+    mockUseIsXl.mockReturnValue(false);
 
     const { result } = renderHook(() => useResponsiveMotion());
 
     expect(result.current).toBe('static');
   });
 
-  it('should return "desktop-animated" on large viewport with motion', () => {
+  it('should return "desktop-animated" on xl viewport with motion', () => {
     mockUsePrefersReducedMotion.mockReturnValue(false);
-    mockUseIsLg.mockReturnValue(true);
+    mockUseIsXl.mockReturnValue(true);
 
     const { result } = renderHook(() => useResponsiveMotion());
 
     expect(result.current).toBe('desktop-animated');
   });
 
-  it('should return "mobile-animated" on small viewport with motion', () => {
+  it('should return "mobile-animated" below xl viewport with motion', () => {
     mockUsePrefersReducedMotion.mockReturnValue(false);
-    mockUseIsLg.mockReturnValue(false);
+    mockUseIsXl.mockReturnValue(false);
 
     const { result } = renderHook(() => useResponsiveMotion());
 

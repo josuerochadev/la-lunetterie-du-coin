@@ -314,7 +314,7 @@ export function ServicesMobileAnimated() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="lg:hidden" style={{ height: '800vh' }}>
+    <div ref={ref} className="xl:hidden" style={{ height: '800vh' }}>
       <h2 id="services-content-title" className="sr-only">
         Nos services en détail
       </h2>

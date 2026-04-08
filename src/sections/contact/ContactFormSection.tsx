@@ -19,7 +19,7 @@ function FormDesktop() {
   const form = useScrollEntrance(scrollYProgress, 0.15, 0.35);
 
   return (
-    <div ref={ref} className="hidden lg:block">
+    <div ref={ref} className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-3xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
@@ -63,7 +63,7 @@ function FormMobileAnimated() {
   const formScale = useTransform(scrollYProgress, [0.1, 0.25], [0.98, 1]);
 
   return (
-    <div ref={ref} className="lg:hidden">
+    <div ref={ref} className="xl:hidden">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-3xl">
           <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">

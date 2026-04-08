@@ -32,7 +32,7 @@ export default function ServicesContent() {
     >
       {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
       <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
+        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full xl:block"
         style={{ height: '12vw' }}
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
@@ -41,7 +41,7 @@ export default function ServicesContent() {
         <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
       </svg>
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden xl:hidden"
         aria-hidden="true"
         data-navbar-theme="light"
       >

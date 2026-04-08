@@ -1,5 +1,5 @@
 import { useNativeScroll } from '@/hooks/useNativeScroll';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useIsXl } from '@/hooks/useIsXl';
 import Layout from '@/components/common/Layout';
 import StickySection from '@/components/common/StickySection';
 import { Seo } from '@/seo/Seo';
@@ -28,7 +28,7 @@ import SectionTransition from '@/components/motion/SectionTransition';
  */
 export default function AboutPage() {
   useNativeScroll();
-  const isLg = useIsLg();
+  const isXl = useIsXl();
 
   return (
     <>
@@ -55,12 +55,12 @@ export default function AboutPage() {
 
         {/* Équipe — fond noir, rideau sur Valeurs (-mt-[100vh]) en mobile
             Team gère son propre sticky + scroll en interne (h-[200vh]) */}
-        <StickySection zIndex={14} className={isLg ? undefined : '-mt-[100vh]'}>
+        <StickySection zIndex={14} className={isXl ? undefined : '-mt-[100vh]'}>
           <AboutTeam />
         </StickySection>
 
         {/* Transition gradient : noir (Team) → blanc (Engagement) — mobile only */}
-        {!isLg && (
+        {!isXl && (
           <StickySection zIndex={15}>
             <SectionTransition
               variant="fade"
@@ -77,7 +77,7 @@ export default function AboutPage() {
         </StickySection>
 
         {/* Transition gradient : blanc (Engagement) → jaune (CTA) — mobile only */}
-        {!isLg && (
+        {!isXl && (
           <StickySection zIndex={17}>
             <SectionTransition
               variant="fade"

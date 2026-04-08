@@ -51,7 +51,7 @@ function InfoDesktop() {
   const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
 
   return (
-    <div ref={ref} className="hidden lg:block">
+    <div ref={ref} className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
@@ -148,7 +148,7 @@ function InfoMobileAnimated() {
   const titleY = useTransform(scrollYProgress, [0.0, 0.15], [25, 0]);
 
   return (
-    <div ref={ref} className="lg:hidden">
+    <div ref={ref} className="xl:hidden">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
           <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
