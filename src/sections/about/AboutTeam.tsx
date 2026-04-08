@@ -109,10 +109,15 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — internal sticky + scroll-driven animations
+// Mobile animated — full-bleed portrait with overlaid text + gradient scrim
 //
 //  200vh container with sticky viewport
 //  useManualScrollProgress('start-start') — progress 0→1 over 100vh
+//
+//  Layout — photo fills entire sticky viewport, title + bio overlay the
+//  bottom half with a vertical gradient scrim for legibility. This keeps
+//  the full photo visible on short viewports (iPhone SE) instead of being
+//  crushed by a flex-col stack.
 //
 //  0.00 – 0.60  Photo Ken Burns zoom (scale 1 → 1.08)
 //  0.00 – 0.10  Title entrance (opacity + Y 40→0)
@@ -145,23 +150,31 @@ function TeamMobileAnimated() {
     <div ref={ref} className="h-[200vh] lg:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.div
-          className="flex h-full flex-col will-change-transform"
+          className="relative h-full w-full will-change-transform"
           style={{ opacity: exitOpacity, y: exitY }}
         >
-          {/* Portrait — full width with Ken Burns zoom */}
-          <div className="relative aspect-[3/4] w-full overflow-hidden">
-            <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
-              <ResponsiveImage
-                src="/images/about-team-romain.jpeg"
-                alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                className="h-full w-full object-cover object-top"
-                sizes="100vw"
-              />
-            </m.div>
-          </div>
+          {/* Portrait — absolute full-bleed with Ken Burns zoom */}
+          <m.div className="absolute inset-0 will-change-transform" style={{ scale: photoScale }}>
+            <ResponsiveImage
+              src="/images/about-team-romain.jpeg"
+              alt="Romain Corato, fondateur de La Lunetterie du Coin"
+              className="h-full w-full object-cover object-center"
+              sizes="100vw"
+            />
+          </m.div>
 
-          {/* Text content — below photo on black bg */}
-          <div className="px-container-x pb-section pt-8">
+          {/* Gradient scrim — smooth fade from transparent top to near-black bottom */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[75%]"
+            style={{
+              background:
+                'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.15) 85%, transparent 100%)',
+            }}
+            aria-hidden="true"
+          />
+
+          {/* Text content — overlaid at bottom of viewport */}
+          <div className="absolute inset-x-0 bottom-0 px-container-x pb-section">
             {/* Title — entrance gated */}
             <m.div style={{ opacity: titleEntrance, y: titleY }}>
               <ScrollWordReveal
@@ -170,14 +183,14 @@ function TeamMobileAnimated() {
                 revealStart={0.0}
                 revealEnd={0.2}
                 className="text-heading text-accent"
-                style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
+                style={{ fontSize: 'clamp(2.25rem, 9.5vw, 4.5rem)', lineHeight: '0.95' }}
               >
                 L&apos;ŒIL DERRIÈRE LA BOUTIQUE
               </ScrollWordReveal>
             </m.div>
 
             {/* Bio — entrance gated + word reveal */}
-            <m.div className="mt-8 max-w-md" style={{ opacity: bioEntrance }}>
+            <m.div className="mt-6 max-w-md" style={{ opacity: bioEntrance }}>
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
