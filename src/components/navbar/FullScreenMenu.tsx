@@ -11,6 +11,7 @@ import { getSocialIcon } from '@/lib/iconRegistry';
 import { useClickOutside } from '@/hooks/useClickOutside';
 import { useMenuAnimation } from '@/hooks/useMenuAnimation';
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { MENU_LEGAL_LINKS } from '@/config/menu';
 import { BOOKING_URL } from '@/config/endpoints';
 import { STORE_INFO } from '@/config/store';
@@ -142,8 +143,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
             >
               <div className="space-y-3 border-t border-secondary-blue/20 pt-4">
                 {/* Horaires */}
-                <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekdays}</p>
-                <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekend}</p>
+                <OpeningHoursList />
 
                 {/* Téléphone */}
                 <a
@@ -298,10 +298,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
               <SimpleAnimation type="slide-right" delay={400} immediate={true}>
                 <div className="space-y-4">
                   {/* Horaires */}
-                  <div className="space-y-1">
-                    <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekdays}</p>
-                    <p className="text-body-sm text-secondary-blue">{STORE_INFO.hours.weekend}</p>
-                  </div>
+                  <OpeningHoursList />
 
                   {/* Téléphone */}
                   <a

@@ -7,12 +7,12 @@ import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
+import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { STORE_INFO } from '@/config/store';
-import { OPENING_HOURS } from '@/data/contact';
 
 // ---------------------------------------------------------------------------
 // Info item — icon + text, no card wrapper
@@ -98,14 +98,7 @@ function InfoDesktop() {
             </InfoItem>
 
             <InfoItem icon={Clock} title="Horaires d'ouverture">
-              <dl className="space-y-1.5">
-                {OPENING_HOURS.map((schedule) => (
-                  <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                    <dt className="font-medium text-white">{schedule.day}</dt>
-                    <dd className="text-secondary-blue">{schedule.hours}</dd>
-                  </div>
-                ))}
-              </dl>
+              <OpeningHoursList />
             </InfoItem>
           </m.div>
         </div>
@@ -199,14 +192,7 @@ function InfoMobileAnimated() {
 
             <MobileInfoItem scrollYProgress={scrollYProgress} start={0.26}>
               <InfoItem icon={Clock} title="Horaires d'ouverture">
-                <dl className="max-w-xs space-y-1.5">
-                  {OPENING_HOURS.map((schedule) => (
-                    <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                      <dt className="font-medium text-white">{schedule.day}</dt>
-                      <dd className="text-secondary-blue">{schedule.hours}</dd>
-                    </div>
-                  ))}
-                </dl>
+                <OpeningHoursList />
               </InfoItem>
             </MobileInfoItem>
           </div>
@@ -296,14 +282,7 @@ export default function ContactInfo() {
 
                 <SimpleAnimation type="slide-up" delay={150}>
                   <InfoItem icon={Clock} title="Horaires d'ouverture">
-                    <dl className="space-y-1.5">
-                      {OPENING_HOURS.map((schedule) => (
-                        <div key={schedule.day} className="flex justify-between gap-4 text-body-sm">
-                          <dt className="font-medium text-white">{schedule.day}</dt>
-                          <dd className="text-secondary-blue">{schedule.hours}</dd>
-                        </div>
-                      ))}
-                    </dl>
+                    <OpeningHoursList />
                   </InfoItem>
                 </SimpleAnimation>
               </div>
