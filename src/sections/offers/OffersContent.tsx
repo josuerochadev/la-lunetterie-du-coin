@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react';
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
@@ -488,9 +489,13 @@ function OfferSlide({
     [photoOpacity, exitOpacity] as const,
     ([enter, exit]: number[]) => Math.min(enter, exit),
   );
+  const slidePointerEvents = usePointerEvents(slideOpacity);
 
   return (
-    <m.div className="absolute inset-0 will-change-[opacity]" style={{ opacity: slideOpacity }}>
+    <m.div
+      className="absolute inset-0 will-change-[opacity]"
+      style={{ opacity: slideOpacity, pointerEvents: slidePointerEvents }}
+    >
       {/* Full-viewport photo */}
       <m.img
         src={offer.image}
@@ -543,7 +548,7 @@ function OfferSlide({
 
           {/* Title */}
           <m.h3
-            className="text-subtitle mb-4 text-title-sm text-white"
+            className="text-subtitle mb-3 text-title-sm text-white sm:mb-4"
             style={{ opacity: titleOpacity, y: titleY }}
           >
             {offer.catchphrase}
@@ -551,7 +556,7 @@ function OfferSlide({
 
           {/* Description */}
           <m.p
-            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            className="mb-4 text-body leading-snug text-white/85 sm:mb-5 sm:text-body-lg sm:leading-relaxed"
             style={{ opacity: descOpacity, y: descY }}
           >
             {offer.description}
@@ -559,11 +564,11 @@ function OfferSlide({
 
           {/* Details list */}
           <m.ul
-            className="mb-5 grid grid-cols-1 gap-y-1.5 sm:grid-cols-2 sm:gap-x-6"
+            className="mb-4 grid grid-cols-1 gap-y-1.5 sm:mb-5 sm:grid-cols-2 sm:gap-x-6"
             style={{ opacity: detailsOpacity }}
           >
             {offer.details.slice(0, 6).map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body text-white/70">
+              <li key={i} className="flex gap-2 text-body-sm text-white/70 sm:text-body">
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -573,17 +578,22 @@ function OfferSlide({
             ))}
           </m.ul>
 
-          {/* Conditions box */}
-          <m.div
-            className="mb-5 border-l-2 border-secondary-blue/40 pl-4"
-            style={{ opacity: condOpacity }}
-          >
-            <h4 className="mb-2 text-body font-medium text-white">Conditions</h4>
-            <ul className="space-y-1 text-body text-white/70">
-              {offer.conditions.map((condition, i) => (
-                <li key={i}>{condition}</li>
-              ))}
-            </ul>
+          {/* Conditions disclosure — collapsed by default to fit short viewports */}
+          <m.div className="mb-4 w-full sm:mb-5" style={{ opacity: condOpacity }}>
+            <details className="group border-l-2 border-secondary-blue/40 pl-4">
+              <summary className="flex cursor-pointer list-none items-center gap-2 text-body font-medium text-white marker:hidden [&::-webkit-details-marker]:hidden">
+                <span>Conditions</span>
+                <ChevronDown
+                  className="h-4 w-4 text-secondary-orange transition-transform duration-200 group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <ul className="mt-3 space-y-1.5 text-body-sm text-white/85">
+                {offer.conditions.map((condition, i) => (
+                  <li key={i}>{condition}</li>
+                ))}
+              </ul>
+            </details>
           </m.div>
 
           {/* CTA */}
