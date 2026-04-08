@@ -212,8 +212,11 @@ function ValuesMobileAnimated() {
             <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
           </m.div>
 
-          {/* Cards grid — staggered micro-movements */}
-          <div className="grid gap-5 sm:grid-cols-2 sm:gap-10">
+          {/* Cards grid — staggered micro-movements.
+              The last card, when alone on its row (odd count), is centered
+              across the two columns while keeping a half-column width so it
+              visually matches the cards above. */}
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-10 sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:mx-auto sm:[&>*:last-child:nth-child(odd)]:max-w-[calc(50%-1.25rem)]">
             {VALUES_DATA.map((value, i) => (
               <MobileRevealCard
                 key={value.title}
