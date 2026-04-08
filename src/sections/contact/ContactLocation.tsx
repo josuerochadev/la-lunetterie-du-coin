@@ -214,7 +214,10 @@ function LocationMobileAnimated() {
             <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
           </m.div>
 
-          <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
+          {/* Single column below xl — the transport block is far denser than
+              the parking block, so a 2-col grid creates a tall void under the
+              car column. Stacking keeps the rhythm clean on iPad Mini/Pro. */}
+          <div className="mx-auto grid max-w-4xl gap-10">
             <m.div style={{ opacity: item1Opacity, y: item1Y }} className="will-change-transform">
               <LocationItem icon={Car} title="En voiture">
                 <div className="space-y-2 text-body text-secondary-blue">
@@ -254,7 +257,7 @@ function LocationMobileAnimated() {
           </div>
 
           <m.div
-            className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 will-change-transform sm:flex-row"
+            className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-6 text-center will-change-transform"
             style={{ opacity: footerOpacity, y: footerY }}
           >
             <p className="text-body text-white">
@@ -331,7 +334,7 @@ export default function ContactLocation() {
                 </h2>
               </SimpleAnimation>
 
-              <div className="mx-auto grid max-w-4xl gap-10 md:grid-cols-2">
+              <div className="mx-auto grid max-w-4xl gap-10">
                 <SimpleAnimation type="slide-up" delay={100}>
                   <LocationItem icon={Car} title="En voiture">
                     <div className="space-y-2 text-body text-secondary-blue">
@@ -370,7 +373,7 @@ export default function ContactLocation() {
                 </SimpleAnimation>
               </div>
 
-              <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row">
+              <div className="mx-auto mt-10 flex max-w-4xl flex-col items-center gap-6 text-center">
                 <SimpleAnimation type="fade" delay={200}>
                   <p className="text-body text-white">
                     <span className="font-medium text-white">Accessibilité :</span> Le magasin est
