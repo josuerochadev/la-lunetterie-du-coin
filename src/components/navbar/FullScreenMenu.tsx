@@ -210,7 +210,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
 
         {/* ── Tablet + Desktop layout ───────────────────────────────── */}
         <div className="hidden min-h-screen w-full items-center justify-center px-6 md:flex">
-          <div className="grid w-full max-w-3xl grid-cols-2 gap-10 xl:max-w-5xl xl:gap-20">
+          <div className="grid w-full max-w-3xl grid-cols-2 gap-10 xl:max-w-[90vw] xl:gap-20">
             {/* Colonne gauche : Navigation principale */}
             <div className="space-y-10 text-right xl:space-y-16">
               <nav aria-label="Navigation principale" className="space-y-5 text-right xl:space-y-6">
@@ -226,7 +226,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                       <Link
                         to={link.href}
                         onClick={onClose}
-                        className={`text-heading inline-block text-title-md transition-colors duration-300 hover:text-secondary-orange xl:text-title-lg ${isActive ? 'text-accent' : 'text-white'}`}
+                        className={`text-heading inline-block text-title-md transition-colors duration-300 hover:text-secondary-orange ${isActive ? 'text-accent' : 'text-white'}`}
                         aria-current={isActive ? 'page' : undefined}
                       >
                         {link.label}
