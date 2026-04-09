@@ -72,8 +72,11 @@ export default function Footer({
       </div>
 
       <SectionContainer className="relative px-container-x pb-8 pt-[10svh] sm:pt-[8svh] lg:pb-10 lg:pt-[10vw]">
-        {/* Grille responsive : 1 col mobile → 2 cols tablette → 3 cols desktop (xl) */}
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-3 xl:gap-12">
+        {/* Grille responsive : 1 col mobile → 2 cols tablette → 3 cols desktop (xl).
+            At xl+ we switch to flex + justify-evenly so the three columns sit
+            with equal gaps on both sides AND between each other inside the
+            centered max-w-7xl container. */}
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-10 sm:grid-cols-2 xl:flex xl:items-start xl:justify-evenly xl:gap-0">
           <FooterNavigation onLinkClick={onLinkClick} />
           <FooterContact />
           <FooterSocial className="sm:col-span-2 xl:col-span-1" />
