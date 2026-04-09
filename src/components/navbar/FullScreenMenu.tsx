@@ -75,9 +75,9 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* ── Mobile layout ─────────────────────────────────────────── */}
-        <div className="flex min-h-dvh flex-col xl:hidden">
+        <div className="flex min-h-dvh flex-col md:hidden">
           {/* Logo */}
-          <div className="px-6 pt-6">
+          <div className="px-6 pt-4 sm:pt-6">
             <SimpleAnimation type="fade" delay={50} immediate={true}>
               <Link
                 to="/"
@@ -85,14 +85,14 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 className="inline-block transition-opacity duration-200 hover:opacity-80"
                 aria-label="Retour à l'accueil - La Lunetterie Du Coin"
               >
-                <Logo className="h-20 w-auto fill-accent sm:h-24 md:h-32" aria-hidden="true" />
+                <Logo className="h-20 w-auto fill-accent sm:h-24" aria-hidden="true" />
               </Link>
             </SimpleAnimation>
           </div>
 
-          {/* Nav links — centered vertically, main focus */}
-          <div className="flex flex-1 items-center px-6">
-            <nav aria-label="Navigation principale" className="space-y-3 sm:space-y-5 md:space-y-8">
+          {/* Nav links + CTA — centered vertically, main focus */}
+          <div className="flex flex-1 flex-col items-start justify-center px-6">
+            <nav aria-label="Navigation principale" className="space-y-3 sm:space-y-4">
               {FOOTER_NAV_LINKS.map((link, i) => {
                 const isActive = pathname === link.href;
                 return (
@@ -100,7 +100,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                     <Link
                       to={link.href}
                       onClick={onClose}
-                      className={`text-heading block text-title-md transition-colors duration-300 hover:text-secondary-orange sm:text-title-lg md:text-title-xl ${isActive ? 'text-accent' : 'text-white'}`}
+                      className={`text-heading block text-title-md transition-colors duration-300 hover:text-secondary-orange sm:text-title-lg ${isActive ? 'text-accent' : 'text-white'}`}
                       aria-current={isActive ? 'page' : undefined}
                     >
                       {link.label}
@@ -109,10 +109,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 );
               })}
             </nav>
-          </div>
 
-          {/* Bottom — infos empilées */}
-          <div className="space-y-4 px-6 pb-8">
             {/* CTA Prendre RDV — style footer */}
             <SimpleAnimation type="slide-up" delay={FOOTER_NAV_LINKS.length * 80} immediate={true}>
               <a
@@ -120,13 +117,13 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={onClose}
-                className="group/cta focus-style relative inline-flex items-center gap-2"
+                className="group/cta focus-style relative mt-6 inline-flex items-center gap-2 sm:mt-8"
               >
-                <span className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black md:text-body">
+                <span className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black">
                   Prendre RDV
                 </span>
                 <ExternalLink
-                  className="h-3.5 w-3.5 flex-shrink-0 text-secondary-orange transition-transform duration-300 group-hover/cta:translate-x-1 md:h-4 md:w-4"
+                  className="h-3.5 w-3.5 flex-shrink-0 text-secondary-orange transition-transform duration-300 group-hover/cta:translate-x-1"
                   aria-hidden="true"
                 />
                 <span
@@ -135,7 +132,10 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                 />
               </a>
             </SimpleAnimation>
+          </div>
 
+          {/* Bottom — infos empilées */}
+          <div className="px-6 pb-6 sm:pb-8">
             <SimpleAnimation
               type="slide-up"
               delay={FOOTER_NAV_LINKS.length * 80 + 50}
@@ -208,12 +208,12 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        {/* ── Desktop layout ───────────────────────────────────────── */}
-        <div className="hidden min-h-screen w-full items-center justify-center px-6 xl:flex">
-          <div className="grid w-full max-w-5xl grid-cols-2 gap-20">
+        {/* ── Tablet + Desktop layout ───────────────────────────────── */}
+        <div className="hidden min-h-screen w-full items-center justify-center px-6 md:flex">
+          <div className="grid w-full max-w-3xl grid-cols-2 gap-10 xl:max-w-5xl xl:gap-20">
             {/* Colonne gauche : Navigation principale */}
-            <div className="space-y-16 text-right">
-              <nav aria-label="Navigation principale" className="space-y-6 text-right">
+            <div className="space-y-10 text-right xl:space-y-16">
+              <nav aria-label="Navigation principale" className="space-y-5 text-right xl:space-y-6">
                 {FOOTER_NAV_LINKS.map((link, i) => {
                   const isActive = pathname === link.href;
                   return (
@@ -226,7 +226,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                       <Link
                         to={link.href}
                         onClick={onClose}
-                        className={`text-heading inline-block text-title-lg transition-colors duration-300 hover:text-secondary-orange ${isActive ? 'text-accent' : 'text-white'}`}
+                        className={`text-heading inline-block text-title-md transition-colors duration-300 hover:text-secondary-orange xl:text-title-lg ${isActive ? 'text-accent' : 'text-white'}`}
                         aria-current={isActive ? 'page' : undefined}
                       >
                         {link.label}
@@ -258,7 +258,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
             </div>
 
             {/* Colonne droite : Informations pratiques */}
-            <aside className="space-y-8 border-l border-secondary-blue/20 pl-12">
+            <aside className="space-y-6 border-l border-secondary-blue/20 pl-8 xl:space-y-8 xl:pl-12">
               {/* Logo du magasin */}
               <SimpleAnimation type="slide-right" delay={150} immediate={true}>
                 <Link
@@ -267,7 +267,7 @@ const FullScreenMenu: React.FC<FullScreenMenuProps> = ({ isOpen, onClose }) => {
                   className="inline-block transition-opacity duration-200 hover:opacity-80"
                   aria-label="Retour à l'accueil - La Lunetterie Du Coin"
                 >
-                  <Logo className="h-28 w-auto fill-accent sm:h-32" aria-hidden="true" />
+                  <Logo className="h-24 w-auto fill-accent xl:h-32" aria-hidden="true" />
                 </Link>
               </SimpleAnimation>
 
