@@ -48,7 +48,7 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
 
   return (
     <m.div
-      className="absolute inset-0 z-10 flex items-center justify-center px-container-x"
+      className="absolute inset-0 z-10 flex items-start justify-center px-container-x pt-[44vh]"
       style={{ opacity: containerOpacity, y: containerY }}
     >
       <div className="max-w-4xl text-center">
@@ -170,7 +170,7 @@ export function TestimonialsDesktop() {
         <SectionTitle scrollYProgress={scrollYProgress} />
         <FeaturedQuote scrollYProgress={scrollYProgress} />
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
+        <div className="absolute inset-0 z-10 flex items-start justify-center px-container-x pt-[44vh]">
           <div className="relative w-full max-w-2xl">
             {OTHERS.map((testimonial, i) => (
               <TestimonialSlide
