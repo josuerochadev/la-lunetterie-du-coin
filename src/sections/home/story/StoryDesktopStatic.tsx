@@ -6,15 +6,20 @@ export function StoryDesktopStatic() {
   return (
     <div className="hidden min-h-[450vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
-          <div className="w-[28%] pr-8">
-            <h2 id="story-title" className="heading-section text-white">
-              {STORY_TITLE}
+        <div className="relative h-full">
+          {/* Symmetric 3-col grid: [5vw][1fr][5vw][18vw photo][5vw][1fr][5vw]
+              minmax(0,1fr) prevents fr cols from expanding when title text
+              overflows, so layout symmetry holds at any title length. */}
+          <div className="grid h-full grid-cols-[minmax(0,1fr)_18vw_minmax(0,1fr)] items-center gap-x-[5vw] px-[5vw]">
+            <h2 id="story-title" className="heading-section text-right text-white">
+              {STORY_TITLE.split(/\s+/).map((word) => (
+                <span key={word} className="block">
+                  {word}
+                </span>
+              ))}
             </h2>
-          </div>
 
-          <div className="absolute inset-y-0 left-[28%] w-[36%] px-4">
-            <div className="h-full overflow-hidden">
+            <div className="h-[60%] w-full overflow-hidden">
               <img
                 src={STORY_IMAGE}
                 alt={STORY_IMAGE_ALT}
@@ -22,13 +27,13 @@ export function StoryDesktopStatic() {
                 loading="lazy"
               />
             </div>
-          </div>
 
-          <div className="ml-[36%] w-[36%] pl-8">
-            <p className="text-body-xl text-secondary-blue">{STORY_BODY}</p>
-            <LinkCTA to="/a-propos" theme="dark" className="mt-8">
-              Nous découvrir
-            </LinkCTA>
+            <div>
+              <p className="text-body-xl text-secondary-blue">{STORY_BODY}</p>
+              <LinkCTA to="/a-propos" theme="dark" className="mt-8">
+                Nous découvrir
+              </LinkCTA>
+            </div>
           </div>
         </div>
       </div>
