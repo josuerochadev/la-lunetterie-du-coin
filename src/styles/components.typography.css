@@ -49,9 +49,10 @@
 
 /* Legal pages — tighter heading on small mobile to avoid long French
    compound titles (e.g. "Médiation de la consommation") cramping the
-   right edge at 375px width. */
+   right edge at 375px width. Custom clamp keeps the h2/h3 hierarchy
+   visually distinct (36px vs 24px → 1.5× ratio) without overflowing. */
 .legal-content .heading-section {
-  @apply text-title-md;
+  font-size: clamp(2.25rem, 1.36rem + 3.8vw, 3.5rem);
 }
 
 @screen sm {
