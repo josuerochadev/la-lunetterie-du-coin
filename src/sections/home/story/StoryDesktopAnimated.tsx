@@ -203,11 +203,14 @@ export function StoryDesktopAnimated() {
                 >
                   GRAND
                 </span>
-                {/* Actual GRAND — oversized font for crisp zoom rasterization */}
+                {/* Actual GRAND — oversized font for crisp zoom rasterization.
+                    The inner clamp must match the title-xl tailwind token so
+                    GRAND's starting size (fontSize * 1/RASTER_BOOST) lines up
+                    with VOYEZ and PAYEZ PETIT on either side. */}
                 <m.span
                   className="text-heading absolute inset-0 flex items-center justify-center overflow-visible whitespace-nowrap text-accent"
                   style={{
-                    fontSize: 'calc(clamp(2.5rem, 5vw, 15rem) * 10)',
+                    fontSize: 'calc(clamp(3.5rem, 2.2rem + 5.45vw, 15rem) * 10)',
                     lineHeight: '0.9',
                     scale: grandScaleSpring,
                   }}
