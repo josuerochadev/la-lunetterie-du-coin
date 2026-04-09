@@ -52,7 +52,7 @@ export function OfferMobileBlock({
             className="h-auto w-full object-contain"
             loading="lazy"
             sizes="(min-width: 768px) 50vw, 100vw"
-            widths={[384, 640, 768]}
+            widths={[640, 768, 1024]}
           />
         </m.div>
       </div>

@@ -128,7 +128,7 @@ export function HeroDesktopAnimated() {
           className="h-full w-full object-cover"
           loading="eager"
           sizes="25vw"
-          widths={[384, 640, 768, 1024]}
+          widths={[640, 768, 1024, 1280, 1920]}
         />
       </m.div>
 
@@ -142,7 +142,7 @@ export function HeroDesktopAnimated() {
           className="h-full w-full object-cover"
           loading="eager"
           sizes="30vw"
-          widths={[384, 640, 768, 1024]}
+          widths={[640, 768, 1024, 1280, 1920]}
         />
       </m.div>
 

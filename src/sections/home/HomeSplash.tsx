@@ -190,7 +190,7 @@ export default function HomeSplash() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   sizes="54vw"
-                  widths={[384, 640]}
+                  widths={[640, 768, 1024, 1280, 1920]}
                 />
               </m.div>
             </m.div>
@@ -210,7 +210,7 @@ export default function HomeSplash() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   sizes="54vw"
-                  widths={[384, 640]}
+                  widths={[640, 768, 1024, 1280, 1920]}
                 />
               </m.div>
             </m.div>
