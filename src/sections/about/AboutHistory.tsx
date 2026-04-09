@@ -275,7 +275,8 @@ function HistoryMobileAnimated() {
   const ctaEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.28], [0, 1]);
 
   // ── Photo: bottom band → fullscreen (grows from bottom to top, covers text) ──
-  const clipTop = useTransform(scrollYProgress, [0.12, 0.28, 0.42], [70, 70, 0]);
+  // Initial band kept low (85%) so it leaves clear breathing room under the CTA.
+  const clipTop = useTransform(scrollYProgress, [0.12, 0.28, 0.42], [85, 85, 0]);
   const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
 
   // Ken Burns: gentle zoom only — no vertical drift
