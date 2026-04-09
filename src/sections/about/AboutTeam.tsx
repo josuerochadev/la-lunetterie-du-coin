@@ -175,32 +175,34 @@ function TeamMobileAnimated() {
 
           {/* Text content — overlaid at bottom of viewport */}
           <div className="absolute inset-x-0 bottom-0 px-container-x pb-section">
-            {/* Title — entrance gated */}
-            <m.div style={{ opacity: titleEntrance, y: titleY }}>
-              <ScrollWordReveal
-                as="h2"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.0}
-                revealEnd={0.2}
-                className="text-heading text-accent"
-                style={{ fontSize: 'clamp(2.25rem, 9.5vw, 4.5rem)', lineHeight: '0.95' }}
-              >
-                L&apos;ŒIL DERRIÈRE LA BOUTIQUE
-              </ScrollWordReveal>
-            </m.div>
+            <div className="max-w-md sm:max-w-xl md:max-w-2xl">
+              {/* Title — entrance gated */}
+              <m.div style={{ opacity: titleEntrance, y: titleY }}>
+                <ScrollWordReveal
+                  as="h2"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.0}
+                  revealEnd={0.2}
+                  className="text-heading text-accent"
+                  style={{ fontSize: 'clamp(2.25rem, 9.5vw, 4.5rem)', lineHeight: '0.95' }}
+                >
+                  L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+                </ScrollWordReveal>
+              </m.div>
 
-            {/* Bio — entrance gated + word reveal */}
-            <m.div className="mt-6 max-w-md" style={{ opacity: bioEntrance }}>
-              <ScrollWordReveal
-                as="p"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.15}
-                revealEnd={0.5}
-                className="text-body-lg text-white"
-              >
-                {TEAM_BIO}
-              </ScrollWordReveal>
-            </m.div>
+              {/* Bio — entrance gated + word reveal */}
+              <m.div className="mt-6" style={{ opacity: bioEntrance }}>
+                <ScrollWordReveal
+                  as="p"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.15}
+                  revealEnd={0.5}
+                  className="text-body-lg text-white"
+                >
+                  {TEAM_BIO}
+                </ScrollWordReveal>
+              </m.div>
+            </div>
           </div>
         </m.div>
       </div>
