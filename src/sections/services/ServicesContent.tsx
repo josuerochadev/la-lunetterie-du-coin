@@ -1,6 +1,3 @@
-import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
-
 import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 import { PhotoStack } from './PhotoStack';
 import { ServiceCard } from './ServiceCard';
@@ -11,17 +8,16 @@ import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { ProgressDots } from '@/components/motion/ProgressDots';
 import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SERVICES_DATA } from '@/data/services';
 import { ACCENT_HEX } from '@/config/design';
 
 export default function ServicesContent() {
   const variant = useResponsiveMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: variant === 'desktop-animated' ? sectionRef : undefined,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
     <section

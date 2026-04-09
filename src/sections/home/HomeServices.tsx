@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useTransform } from 'framer-motion';
 
 import { SERVICE_COUNT } from './services/constants';
 import { PatternBackground } from './services/PatternBackground';
@@ -14,6 +13,7 @@ import { ServicesMobileAnimated } from './services/ServicesMobileAnimated';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useIsXl } from '@/hooks/useIsXl';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { ACCENT_HEX } from '@/config/design';
 import LinkCTA from '@/components/common/LinkCTA';
 
@@ -26,13 +26,12 @@ import LinkCTA from '@/components/common/LinkCTA';
 function HomeServices() {
   const variant = useResponsiveMotion();
   const isXl = useIsXl();
-  const sectionRef = useRef<HTMLDivElement>(null);
   const shouldAnimate = variant === 'desktop-animated';
 
-  const { scrollYProgress } = useScroll({
-    target: shouldAnimate ? sectionRef : undefined,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections. Always tracked — cheap and
+  // static/mobile variants don't render the scroll-driven elements anyway.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Sticky viewport bg: white during carousel, yellow for outro + exit
   const stickyBg = useTransform(scrollYProgress, [0.86, 0.92], ['#ffffff', ACCENT_HEX]);

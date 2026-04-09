@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m, useTransform } from 'framer-motion';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { HOMEPAGE_OFFERS } from '@/data/homepage';
 
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
@@ -15,12 +15,10 @@ export function OfferMobileBlock({
   index: number;
 }) {
   const number = String(index + 1).padStart(2, '0');
-  const ref = useRef<HTMLElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref, scrollYProgress } = useManualScrollProgress<HTMLElement>('end-start');
 
   // ── Image — scale entrance + fade ──
   const imgScale = useTransform(scrollYProgress, [0, 0.3], [0.92, 1]);

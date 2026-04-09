@@ -1,22 +1,21 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { m, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { ACCENT_HEX } from '@/config/design';
 
 export function StoryMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref, scrollYProgress } = useManualScrollProgress('end-start');
 
   // ──────────────────────────────────────────────────────────────────────
   // Scroll math: h-[300vh] + offset ['start end','end start']

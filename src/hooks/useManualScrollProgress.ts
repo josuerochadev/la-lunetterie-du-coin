@@ -14,11 +14,13 @@ type ScrollOffset = 'start-start' | 'start-end' | 'end-end' | 'end-start';
  *   'start-start': progress 0 when element top = viewport top, 1 when element bottom = viewport bottom
  *   'start-end':   progress 0 when element top = viewport bottom, 1 when element bottom = viewport bottom
  */
-export function useManualScrollProgress(offset: ScrollOffset = 'start-start'): {
-  ref: RefObject<HTMLDivElement | null>;
+export function useManualScrollProgress<T extends HTMLElement = HTMLDivElement>(
+  offset: ScrollOffset = 'start-start',
+): {
+  ref: RefObject<T | null>;
   scrollYProgress: MotionValue<number>;
 } {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<T>(null);
   const scrollYProgress = useMotionValue(0);
 
   const updateProgress = useCallback(() => {

@@ -1,18 +1,12 @@
 import { useRef } from 'react';
-import {
-  m,
-  useScroll,
-  useSpring,
-  useTransform,
-  useMotionValueEvent,
-  type MotionValue,
-} from 'framer-motion';
+import { m, useSpring, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG, SPRING_CONFIG_SLOW } from '@/lib/motion';
 
@@ -52,11 +46,9 @@ function StoryTitleWord({
 }
 
 export function StoryDesktopAnimated() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: photo appears alone — starts at ~60% height, grows + zooms continuously
   const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);

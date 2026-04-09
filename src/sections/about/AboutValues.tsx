@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
@@ -81,12 +80,9 @@ function ValueCard({
 // ---------------------------------------------------------------------------
 
 function ValuesDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections (see hook comment).
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.05], [0, 1]);

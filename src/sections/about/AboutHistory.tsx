@@ -1,12 +1,5 @@
 import { useRef } from 'react';
-import {
-  m,
-  useScroll,
-  useTransform,
-  useSpring,
-  useMotionValueEvent,
-  type MotionValue,
-} from 'framer-motion';
+import { m, useTransform, useSpring, useMotionValueEvent, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -14,6 +7,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
@@ -74,12 +68,9 @@ const STORY_BODY_2 =
 // ---------------------------------------------------------------------------
 
 function HistoryDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: Photo clipPath reveal + grow (delayed so dome settles first)
   const photoClipProgress = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);
@@ -298,13 +289,11 @@ function HistoryDesktop() {
 // ---------------------------------------------------------------------------
 
 function HistoryMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref, scrollYProgress } = useManualScrollProgress('end-start');
 
   // ── Title entrance: slides up + fades in ──
   const titleEntranceOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);

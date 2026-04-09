@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -24,12 +23,11 @@ const TEAM_BIO =
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug with
+  // targets nested behind stacked sticky sections — without this the
+  // scrollYProgress gets stuck inside the exit range and the title + bio
+  // render at ~50% opacity permanently.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
