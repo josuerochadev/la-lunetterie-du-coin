@@ -80,14 +80,8 @@ function InfoDesktop() {
               </LinkCTA>
             </InfoItem>
 
-            <InfoItem icon={Phone} title="Téléphone">
-              <a
-                href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                className="text-body text-white transition-colors hover:text-secondary-orange"
-                aria-label={`Appeler le ${COMPANY_PHONE}`}
-              >
-                {COMPANY_PHONE}
-              </a>
+            <InfoItem icon={Clock} title="Horaires">
+              <OpeningHoursList />
             </InfoItem>
 
             <InfoItem icon={Mail} title="Email">
@@ -100,8 +94,14 @@ function InfoDesktop() {
               </a>
             </InfoItem>
 
-            <InfoItem icon={Clock} title="Horaires d'ouverture">
-              <OpeningHoursList />
+            <InfoItem icon={Phone} title="Téléphone">
+              <a
+                href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                className="text-body text-white transition-colors hover:text-secondary-orange"
+                aria-label={`Appeler le ${COMPANY_PHONE}`}
+              >
+                {COMPANY_PHONE}
+              </a>
             </InfoItem>
           </m.div>
         </div>
@@ -119,9 +119,9 @@ function InfoDesktop() {
 //
 //  0.00 – 0.10  Title entrance (slide-up + ScrollWordReveal)
 //  0.10 – 0.20  Address item enters
-//  0.18 – 0.28  Phone item enters
+//  0.18 – 0.28  Hours item enters
 //  0.26 – 0.36  Email item enters
-//  0.34 – 0.44  Hours item enters
+//  0.34 – 0.44  Phone item enters
 //  0.44 – 0.78  Hold
 //  0.78 – 0.92  Exit — gentle fade + Y drift
 // ---------------------------------------------------------------------------
@@ -202,14 +202,8 @@ function InfoMobileAnimated() {
               </StaggeredItem>
 
               <StaggeredItem scrollYProgress={scrollYProgress} start={0.18}>
-                <InfoItem icon={Phone} title="Téléphone">
-                  <a
-                    href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                    className="text-body text-white transition-colors hover:text-secondary-orange"
-                    aria-label={`Appeler le ${COMPANY_PHONE}`}
-                  >
-                    {COMPANY_PHONE}
-                  </a>
+                <InfoItem icon={Clock} title="Horaires">
+                  <OpeningHoursList />
                 </InfoItem>
               </StaggeredItem>
 
@@ -226,8 +220,14 @@ function InfoMobileAnimated() {
               </StaggeredItem>
 
               <StaggeredItem scrollYProgress={scrollYProgress} start={0.34}>
-                <InfoItem icon={Clock} title="Horaires d'ouverture">
-                  <OpeningHoursList />
+                <InfoItem icon={Phone} title="Téléphone">
+                  <a
+                    href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
+                    aria-label={`Appeler le ${COMPANY_PHONE}`}
+                  >
+                    {COMPANY_PHONE}
+                  </a>
                 </InfoItem>
               </StaggeredItem>
             </div>
@@ -284,14 +284,8 @@ export default function ContactInfo() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={50}>
-                  <InfoItem icon={Phone} title="Téléphone">
-                    <a
-                      href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                      className="text-body text-white transition-colors hover:text-secondary-orange"
-                      aria-label={`Appeler le ${COMPANY_PHONE}`}
-                    >
-                      {COMPANY_PHONE}
-                    </a>
+                  <InfoItem icon={Clock} title="Horaires">
+                    <OpeningHoursList />
                   </InfoItem>
                 </SimpleAnimation>
 
@@ -308,8 +302,14 @@ export default function ContactInfo() {
                 </SimpleAnimation>
 
                 <SimpleAnimation type="slide-up" delay={150}>
-                  <InfoItem icon={Clock} title="Horaires d'ouverture">
-                    <OpeningHoursList />
+                  <InfoItem icon={Phone} title="Téléphone">
+                    <a
+                      href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                      className="text-body text-white transition-colors hover:text-secondary-orange"
+                      aria-label={`Appeler le ${COMPANY_PHONE}`}
+                    >
+                      {COMPANY_PHONE}
+                    </a>
                   </InfoItem>
                 </SimpleAnimation>
               </div>
