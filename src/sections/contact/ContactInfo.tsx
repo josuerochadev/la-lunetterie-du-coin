@@ -1,17 +1,19 @@
-import { type ReactNode, useRef } from 'react';
-import { m, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { type ReactNode } from 'react';
+import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Phone from 'lucide-react/dist/esm/icons/phone';
 import Mail from 'lucide-react/dist/esm/icons/mail';
 import Clock from 'lucide-react/dist/esm/icons/clock';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { ConvexDome } from '@/components/common/ConvexDome';
 import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
+import { SPRING_CONFIG } from '@/lib/motion';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
 import { STORE_INFO } from '@/config/store';
 
@@ -109,10 +111,22 @@ function InfoDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile — per-item scroll-driven staggered entrance
+// Mobile animated — sticky scrollytelling
+//
+//  200vh container with sticky viewport
+//  Uses useManualScrollProgress('start-start')
+//  Total scroll range: 200vh − 100vh = 100vh of pin
+//
+//  0.00 – 0.10  Title entrance (slide-up + ScrollWordReveal)
+//  0.10 – 0.20  Address item enters
+//  0.18 – 0.28  Phone item enters
+//  0.26 – 0.36  Email item enters
+//  0.34 – 0.44  Hours item enters
+//  0.44 – 0.78  Hold
+//  0.78 – 0.92  Exit — gentle fade + Y drift
 // ---------------------------------------------------------------------------
 
-function MobileInfoItem({
+function StaggeredItem({
   children,
   scrollYProgress,
   start,
@@ -121,8 +135,10 @@ function MobileInfoItem({
   scrollYProgress: MotionValue<number>;
   start: number;
 }) {
-  const opacity = useTransform(scrollYProgress, [start, start + 0.14], [0, 1]);
-  const y = useTransform(scrollYProgress, [start, start + 0.14], [20, 0]);
+  const end = start + 0.1;
+  const opacity = useTransform(scrollYProgress, [start, end], [0, 1]);
+  const yRaw = useTransform(scrollYProgress, [start, end], [30, 0]);
+  const y = useSpring(yRaw, SPRING_CONFIG);
 
   return (
     <m.div style={{ opacity, y }} className="will-change-transform">
@@ -132,72 +148,91 @@ function MobileInfoItem({
 }
 
 function InfoMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.0, 0.15], [25, 0]);
+  // Title entrance
+  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.1], [0, 1]);
+  const titleYRaw = useTransform(scrollYProgress, [0.0, 0.1], [40, 0]);
+  const titleY = useSpring(titleYRaw, SPRING_CONFIG);
+
+  // Section-level exit — gentle fade + drift
+  const exitOpacity = useTransform(scrollYProgress, [0.78, 0.92], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.78, 0.92], [0, -30]);
 
   return (
-    <div ref={ref} className="xl:hidden">
-      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
-        <div className="mx-auto max-w-4xl">
-          <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
-            <h2 className="heading-section mb-12 text-center text-white">Les infos utiles</h2>
-          </m.div>
+    <div ref={ref} className="relative h-[200vh] xl:hidden">
+      <div className="sticky top-0 h-svh overflow-hidden">
+        <m.div
+          className="flex h-full flex-col items-center justify-center px-container-x pt-[14vw]"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
+          <div className="mx-auto w-full max-w-4xl">
+            {/* Title — centered, ScrollWordReveal cascade */}
+            <m.div
+              className="mb-8 text-center will-change-transform sm:mb-12"
+              style={{ opacity: titleOpacity, y: titleY }}
+            >
+              <ScrollWordReveal
+                as="h2"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.02}
+                revealEnd={0.14}
+                className="heading-section text-white"
+              >
+                Les infos utiles
+              </ScrollWordReveal>
+            </m.div>
 
-          <div className="grid gap-10 md:grid-cols-2">
-            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.08}>
-              <InfoItem icon={MapPin} title="Adresse">
-                <address className="mb-3 text-body not-italic text-secondary-blue">
-                  {COMPANY_ADDRESS}
-                </address>
-                <LinkCTA
-                  href={STORE_INFO.address.googleMapsSearchUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  icon={MapPin}
-                  theme="dark"
-                >
-                  Voir sur Google Maps
-                </LinkCTA>
-              </InfoItem>
-            </MobileInfoItem>
+            <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
+              <StaggeredItem scrollYProgress={scrollYProgress} start={0.1}>
+                <InfoItem icon={MapPin} title="Adresse">
+                  <address className="mb-3 text-body not-italic text-secondary-blue">
+                    {COMPANY_ADDRESS}
+                  </address>
+                  <LinkCTA
+                    href={STORE_INFO.address.googleMapsSearchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    icon={MapPin}
+                    theme="dark"
+                  >
+                    Voir sur Google Maps
+                  </LinkCTA>
+                </InfoItem>
+              </StaggeredItem>
 
-            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.14}>
-              <InfoItem icon={Phone} title="Téléphone">
-                <a
-                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                  className="text-body text-white transition-colors hover:text-secondary-orange"
-                  aria-label={`Appeler le ${COMPANY_PHONE}`}
-                >
-                  {COMPANY_PHONE}
-                </a>
-              </InfoItem>
-            </MobileInfoItem>
+              <StaggeredItem scrollYProgress={scrollYProgress} start={0.18}>
+                <InfoItem icon={Phone} title="Téléphone">
+                  <a
+                    href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
+                    aria-label={`Appeler le ${COMPANY_PHONE}`}
+                  >
+                    {COMPANY_PHONE}
+                  </a>
+                </InfoItem>
+              </StaggeredItem>
 
-            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.2}>
-              <InfoItem icon={Mail} title="Email">
-                <a
-                  href={`mailto:${COMPANY_EMAIL}`}
-                  className="text-body text-white transition-colors hover:text-secondary-orange"
-                  aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
-                >
-                  {COMPANY_EMAIL}
-                </a>
-              </InfoItem>
-            </MobileInfoItem>
+              <StaggeredItem scrollYProgress={scrollYProgress} start={0.26}>
+                <InfoItem icon={Mail} title="Email">
+                  <a
+                    href={`mailto:${COMPANY_EMAIL}`}
+                    className="text-body text-white transition-colors hover:text-secondary-orange"
+                    aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
+                  >
+                    {COMPANY_EMAIL}
+                  </a>
+                </InfoItem>
+              </StaggeredItem>
 
-            <MobileInfoItem scrollYProgress={scrollYProgress} start={0.26}>
-              <InfoItem icon={Clock} title="Horaires d'ouverture">
-                <OpeningHoursList />
-              </InfoItem>
-            </MobileInfoItem>
+              <StaggeredItem scrollYProgress={scrollYProgress} start={0.34}>
+                <InfoItem icon={Clock} title="Horaires d'ouverture">
+                  <OpeningHoursList />
+                </InfoItem>
+              </StaggeredItem>
+            </div>
           </div>
-        </div>
+        </m.div>
       </div>
     </div>
   );

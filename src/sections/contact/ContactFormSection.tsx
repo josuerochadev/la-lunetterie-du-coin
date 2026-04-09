@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform } from 'framer-motion';
+import { m } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ContactForm from '@/components/contact/ContactForm';
@@ -43,46 +42,31 @@ function FormDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile — scroll-driven entrance
+// Mobile — natural flow with IntersectionObserver-based reveal
+//
+// A form cannot be pinned in a sticky scrollytelling — users need to scroll
+// freely while editing fields. We use SimpleAnimation (IO-based) so each
+// block fades in as it crosses into the viewport, matching the static flow.
 // ---------------------------------------------------------------------------
 
-function FormMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-
-  const titleOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 1]);
-  const titleY = useTransform(scrollYProgress, [0.0, 0.15], [25, 0]);
-
-  const subOpacity = useTransform(scrollYProgress, [0.05, 0.2], [0, 1]);
-  const subY = useTransform(scrollYProgress, [0.05, 0.2], [20, 0]);
-
-  const formOpacity = useTransform(scrollYProgress, [0.1, 0.25], [0, 1]);
-  const formScale = useTransform(scrollYProgress, [0.1, 0.25], [0.98, 1]);
-
+function FormMobile() {
   return (
-    <div ref={ref} className="xl:hidden">
-      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
+    <div className="xl:hidden">
+      <div className="mx-auto max-w-container px-container-x pb-section pt-[max(10vh,5rem)]">
         <div className="mx-auto max-w-3xl">
-          <m.div style={{ opacity: titleOpacity, y: titleY }} className="will-change-transform">
+          <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>
-          </m.div>
+          </SimpleAnimation>
 
-          <m.p
-            className="mx-auto mb-10 max-w-lg text-center text-body-lg text-black will-change-transform"
-            style={{ opacity: subOpacity, y: subY }}
-          >
-            Question, remarque ou juste envie de dire bonjour — on lit tout.
-          </m.p>
+          <SimpleAnimation type="slide-up" delay={80}>
+            <p className="mx-auto mb-10 max-w-lg text-center text-body-lg text-black">
+              Question, remarque ou juste envie de dire bonjour — on lit tout.
+            </p>
+          </SimpleAnimation>
 
-          <m.div
-            style={{ opacity: formOpacity, scale: formScale }}
-            className="will-change-transform"
-          >
+          <SimpleAnimation type="slide-up" delay={160}>
             <ContactForm />
-          </m.div>
+          </SimpleAnimation>
         </div>
       </div>
     </div>
@@ -99,28 +83,7 @@ export default function ContactFormSection() {
   return (
     <section id="formulaire" className="relative bg-background" data-navbar-theme="dark">
       {variant === 'desktop-animated' && <FormDesktop />}
-      {variant === 'mobile-animated' && <FormMobileAnimated />}
-      {variant === 'static' && (
-        <div>
-          <div className="mx-auto max-w-container px-container-x py-section">
-            <div className="mx-auto max-w-3xl">
-              <SimpleAnimation type="slide-up" delay={0}>
-                <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="slide-up" delay={50}>
-                <p className="mx-auto mb-10 max-w-lg text-center text-body-lg text-black">
-                  Question, remarque ou juste envie de dire bonjour — on lit tout.
-                </p>
-              </SimpleAnimation>
-
-              <SimpleAnimation type="fade" delay={100}>
-                <ContactForm />
-              </SimpleAnimation>
-            </div>
-          </div>
-        </div>
-      )}
+      {(variant === 'mobile-animated' || variant === 'static') && <FormMobile />}
     </section>
   );
 }
