@@ -122,7 +122,7 @@ function ServiceSlide({
           {service.title}
         </m.h3>
         <m.p
-          className="mt-3 max-w-[32ch] text-body text-white/85"
+          className="mt-3 max-w-[32ch] text-body text-white/85 md:text-body-lg"
           style={{ opacity: combinedDesc, y: descY }}
         >
           {service.description}

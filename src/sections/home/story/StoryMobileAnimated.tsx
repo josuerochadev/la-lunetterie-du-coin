@@ -183,7 +183,7 @@ export function StoryMobileAnimated() {
             {STORY_BODY}
           </ScrollWordReveal>
           <div className="mt-6">
-            <LinkCTA to="/a-propos" theme="dark" className="text-body-sm !text-white">
+            <LinkCTA to="/a-propos" theme="dark" className="!text-white">
               Nous découvrir
             </LinkCTA>
           </div>
