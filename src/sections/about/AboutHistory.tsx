@@ -1,5 +1,12 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import {
+  m,
+  useScroll,
+  useTransform,
+  useSpring,
+  useMotionValueEvent,
+  type MotionValue,
+} from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -9,6 +16,40 @@ import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
+
+/**
+ * Title word on its own block line, with the same scroll-reveal timing as
+ * ScrollWordReveal. Mirrors the helper used in home StoryDesktopAnimated so
+ * the right-aligned title anchors cleanly to the column edge without the
+ * trailing nbsp that ScrollWordReveal would otherwise insert.
+ */
+function StoryTitleWord({
+  children,
+  scrollYProgress,
+  index,
+  total,
+  revealStart,
+  revealEnd,
+}: {
+  children: string;
+  scrollYProgress: MotionValue<number>;
+  index: number;
+  total: number;
+  revealStart: number;
+  revealEnd: number;
+}) {
+  const range = revealEnd - revealStart;
+  const wordStart = revealStart + (index / total) * range;
+  const wordEnd = Math.min(wordStart + range / total + range * 0.2, revealEnd);
+  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0, 1]);
+  const y = useTransform(scrollYProgress, [wordStart, wordEnd], [12, 0]);
+
+  return (
+    <m.span className="block" style={{ opacity, y }}>
+      {children}
+    </m.span>
+  );
+}
 
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
@@ -67,8 +108,10 @@ function HistoryDesktop() {
   );
 
   // Phase 3: Photo expands fullscreen
-  const photoLeft = useTransform(scrollYProgress, [0.42, 0.54], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.42, 0.54], ['36%', '100%']);
+  // Initial position mirrors the grid middle col: 14vw wide at left 50%
+  // (after 4vw pad + 42vw title col + 4vw gap).
+  const photoLeft = useTransform(scrollYProgress, [0.42, 0.54], ['50%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.42, 0.54], ['14%', '100%']);
   const photoPadding = useTransform(scrollYProgress, [0.42, 0.54], [16, 0]);
   const photoExpandOpacity = useTransform(scrollYProgress, [0.49, 0.58], [1, 0.6]);
 
@@ -97,24 +140,66 @@ function HistoryDesktop() {
   return (
     <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
-          {/* Left — title */}
-          <m.div
-            className="w-[28%] pr-8 will-change-transform"
-            style={{ y: titleY, opacity: titleCombinedOpacity }}
-          >
-            <ScrollWordReveal
-              as="h2"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.12}
-              revealEnd={0.22}
-              className="heading-section text-black"
+        <div className="relative h-full">
+          {/* Asymmetric 3-col grid with uniform 4vw spacing:
+              [4vw][title 1.5fr = 42vw][4vw][photo 14vw][4vw][body 1fr = 28vw][4vw]
+              Mirrors the home StoryDesktopAnimated grid — title col wider so
+              heading-section fits at 1280, photo narrower in the middle,
+              body on the right. minmax(0, Xfr) keeps the layout symmetric
+              when the bold title slightly overflows. */}
+          <div className="grid h-full grid-cols-[minmax(0,1.5fr)_14vw_minmax(0,1fr)] items-center gap-x-[4vw] px-[4vw]">
+            {/* Left — title (right-aligned, one word per block line) */}
+            <m.div
+              className="text-right will-change-transform"
+              style={{ y: titleY, opacity: titleCombinedOpacity }}
             >
-              {STORY_TITLE}
-            </ScrollWordReveal>
-          </m.div>
+              <h2 id="histoire-title" className="heading-section text-black">
+                {STORY_TITLE.split(/\s+/).map((word, i, arr) => (
+                  <StoryTitleWord
+                    key={word}
+                    scrollYProgress={scrollYProgress}
+                    index={i}
+                    total={arr.length}
+                    revealStart={0.12}
+                    revealEnd={0.22}
+                  >
+                    {word}
+                  </StoryTitleWord>
+                ))}
+              </h2>
+            </m.div>
 
-          {/* Center — photo with clipPath reveal */}
+            {/* Middle — empty grid cell; photo is absolute-positioned so it
+                can escape the grid to fullscreen during the expand phase. */}
+            <div aria-hidden="true" />
+
+            {/* Right — body text */}
+            <m.div className="will-change-transform" style={{ opacity: textCombinedOpacity }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.16}
+                revealEnd={0.28}
+                className="text-body-xl text-black/60"
+              >
+                {STORY_BODY}
+              </ScrollWordReveal>
+
+              <m.div className="mt-8" style={{ opacity: textCombinedOpacity }}>
+                <ScrollWordReveal
+                  as="p"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.26}
+                  revealEnd={0.32}
+                  className="text-body-lg text-black/40"
+                >
+                  {STORY_BODY_2}
+                </ScrollWordReveal>
+              </m.div>
+            </m.div>
+          </div>
+
+          {/* Photo — absolute, aligns with the middle grid col then expands fullscreen */}
           <m.div
             className="absolute top-1/2 -translate-y-1/2 will-change-transform"
             style={{
@@ -136,38 +221,10 @@ function HistoryDesktop() {
                   alt="Intérieur de La Lunetterie du Coin"
                   className="h-full w-full object-cover"
                   loading="eager"
-                  widths={[640, 768, 1024]}
-                  sizes="(min-width: 1024px) 36vw, 100vw"
+                  widths={[640, 768, 1024, 1280, 1920]}
+                  sizes="14vw"
                 />
               </m.div>
-            </m.div>
-          </m.div>
-
-          {/* Right — body text */}
-          <m.div
-            className="ml-[36%] w-[36%] pl-8 will-change-transform"
-            style={{ opacity: textCombinedOpacity }}
-          >
-            <ScrollWordReveal
-              as="p"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.16}
-              revealEnd={0.28}
-              className="text-body-xl text-black/60"
-            >
-              {STORY_BODY}
-            </ScrollWordReveal>
-
-            <m.div className="mt-8" style={{ opacity: textCombinedOpacity }}>
-              <ScrollWordReveal
-                as="p"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.26}
-                revealEnd={0.32}
-                className="text-body-lg text-black/40"
-              >
-                {STORY_BODY_2}
-              </ScrollWordReveal>
             </m.div>
           </m.div>
         </div>
