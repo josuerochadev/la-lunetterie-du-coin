@@ -68,9 +68,10 @@ export function StoryDesktopAnimated() {
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // End sequence: photo expands fullscreen
-  // Initial position mirrors the grid middle col: 18vw wide, centered (left 41%).
-  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['41%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['18%', '100%']);
+  // Initial position mirrors the grid middle col: 14vw wide at left 50%
+  // (after 4vw pad + 42vw title col + 4vw gap).
+  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['50%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['14%', '100%']);
   const photoPadding = useTransform(scrollYProgress, [0.5, 0.6], [16, 0]);
   const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.62], [1, 0.7]);
 
@@ -115,10 +116,12 @@ export function StoryDesktopAnimated() {
     <div ref={sectionRef} className="hidden min-h-[450vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full">
-          {/* Symmetric 3-col grid: [5vw][1fr][5vw][18vw photo][5vw][1fr][5vw]
-              minmax(0,1fr) prevents fr cols from expanding when title text
-              overflows, so layout symmetry holds at any title length. */}
-          <div className="grid h-full grid-cols-[minmax(0,1fr)_18vw_minmax(0,1fr)] items-center gap-x-[5vw] px-[5vw]">
+          {/* Asymmetric 3-col grid with uniform 4vw spacing:
+              [4vw][title 1.5fr = 42vw][4vw][photo 14vw][4vw][body 1fr = 28vw][4vw]
+              Title col gets 1.5× the body col so title-xl fits at 1280 without
+              clipping the viewport. minmax(0, Xfr) prevents fr cols from
+              expanding when the bold title slightly overflows. */}
+          <div className="grid h-full grid-cols-[minmax(0,1.5fr)_14vw_minmax(0,1fr)] items-center gap-x-[4vw] px-[4vw]">
             {/* Left — title (right-aligned, one word per block line) */}
             <m.div className="text-right" style={{ y: titleY, opacity: titleCombinedOpacity }}>
               <h2 id="story-title" className="heading-section text-white">
