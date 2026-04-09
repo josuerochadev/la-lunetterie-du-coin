@@ -273,7 +273,7 @@ export function OffersDesktop() {
           {HOMEPAGE_OFFERS.map((offer, i) => (
             <m.div
               key={offer.id}
-              className="absolute w-full max-w-2xl px-container-x 3xl:max-w-3xl 4xl:max-w-5xl"
+              className="absolute w-full max-w-3xl px-container-x 3xl:max-w-4xl 4xl:max-w-5xl"
               style={{
                 opacity: cardTransforms[i].opacity,
                 y: cardTransforms[i].y,
@@ -289,7 +289,7 @@ export function OffersDesktop() {
                   aria-hidden="true"
                 />
                 <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12 4xl:px-20 4xl:py-16">
-                  <h3 className="text-subtitle text-title-md text-accent">{offer.catchphrase}</h3>
+                  <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
                   <p className="mt-5 max-w-md text-body-lg text-white 3xl:max-w-lg 4xl:max-w-2xl">
                     {offer.summary}
                   </p>
