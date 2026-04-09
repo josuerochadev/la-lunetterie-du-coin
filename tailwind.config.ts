@@ -67,9 +67,9 @@ const config: Config = {
          *   title-lg : 44  /  58 /  77 / 100 / 123
          *   title-md : 32  /  43 /  58 /  76 /  94
          *   title-sm : 24  /  31 /  39 /  50 /  61
-         *   body-xl  : 26  /  29 /  32 /  36 /  40
-         *   body-lg  : 22  /  24 /  27 /  30 /  33
-         *   body     : 18  /  20 /  22 /  24 /  27
+         *   body-xl  : 26  /  29 /  34 /  39 /  44
+         *   body-lg  : 22  /  25 /  28 /  33 /  37
+         *   body     : 18  /  21 /  24 /  28 /  32
          *   body-sm  : 16  /  17 /  18 /  19 /  20
          *   body-xs  : 14  /  15 /  15 /  16 /  17
          */
@@ -81,9 +81,9 @@ const config: Config = {
         'title-sm': ['clamp(1.5rem, 1.1rem + 1.68vw, 5rem)', '0.9'],
 
         // Corps de texte - line-height 1.3
-        'body-xl': ['clamp(1.625rem, 1.47rem + 0.65vw, 3rem)', '1.3'],
-        'body-lg': ['clamp(1.375rem, 1.25rem + 0.52vw, 2.5rem)', '1.3'],
-        body: ['clamp(1.125rem, 1.03rem + 0.39vw, 2rem)', '1.3'],
+        'body-xl': ['clamp(1.625rem, 1.43rem + 0.84vw, 3rem)', '1.3'],
+        'body-lg': ['clamp(1.375rem, 1.21rem + 0.71vw, 2.5rem)', '1.3'],
+        body: ['clamp(1.125rem, 0.97rem + 0.65vw, 2.5rem)', '1.3'],
         'body-sm': ['clamp(1rem, 0.95rem + 0.2vw, 1.5rem)', '1.3'],
         'body-xs': ['clamp(0.875rem, 0.84rem + 0.13vw, 1.25rem)', '1.3'],
       },
