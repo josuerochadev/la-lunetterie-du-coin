@@ -47,7 +47,7 @@ function ValueCard({
 
   return (
     <m.div
-      className="will-change-transform"
+      className="min-w-0 will-change-transform"
       style={{
         opacity: entrance.opacity,
         y: entrance.y,
@@ -114,7 +114,7 @@ function ValuesDesktop() {
           </m.div>
 
           {/* Cards — 3 columns */}
-          <div className="grid w-full max-w-6xl grid-cols-3 gap-12">
+          <div className="grid w-full max-w-[88rem] grid-cols-3 gap-x-[6vw] gap-y-12">
             {VALUES_DATA.map((value, i) => (
               <ValueCard
                 key={value.title}
