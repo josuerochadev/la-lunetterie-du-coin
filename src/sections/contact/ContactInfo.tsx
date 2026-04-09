@@ -163,13 +163,13 @@ function InfoMobileAnimated() {
     <div ref={ref} className="relative h-[200vh] xl:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.div
-          className="flex h-full flex-col items-center justify-center px-container-x pt-[14vw]"
+          className="flex h-full flex-col items-center justify-center px-container-x pt-[10vw] sm:pt-[14vw]"
           style={{ opacity: exitOpacity, y: exitY }}
         >
           <div className="mx-auto w-full max-w-4xl">
             {/* Title — centered, ScrollWordReveal cascade */}
             <m.div
-              className="mb-8 text-center will-change-transform sm:mb-12"
+              className="mb-6 text-center will-change-transform sm:mb-12"
               style={{ opacity: titleOpacity, y: titleY }}
             >
               <ScrollWordReveal
@@ -183,7 +183,7 @@ function InfoMobileAnimated() {
               </ScrollWordReveal>
             </m.div>
 
-            <div className="grid gap-6 sm:grid-cols-2 sm:gap-10">
+            <div className="grid gap-5 sm:grid-cols-2 sm:gap-10">
               <StaggeredItem scrollYProgress={scrollYProgress} start={0.1}>
                 <InfoItem icon={MapPin} title="Adresse">
                   <address className="mb-3 text-body not-italic text-secondary-blue">

@@ -50,7 +50,7 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
 
   return (
     <m.div
-      className="absolute inset-0 z-10 flex items-start px-container-x pt-[clamp(9rem,36vh,18rem)] md:pt-[clamp(22rem,34vh,28rem)]"
+      className="absolute inset-0 z-10 flex items-start px-container-x pt-[clamp(7rem,25vh,18rem)] sm:pt-[clamp(9rem,36vh,18rem)] md:pt-[clamp(22rem,34vh,28rem)]"
       style={{ opacity: containerOpacity, y: containerY }}
     >
       <div className="w-full">
@@ -62,7 +62,7 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
             scrollYProgress={scrollYProgress}
             revealStart={0.1}
             revealEnd={0.24}
-            className="text-body-xl text-white"
+            className="text-body-lg text-white sm:text-body-xl"
           >
             {`\u201C${FEATURED.quote}\u201D`}
           </ScrollWordReveal>
@@ -170,7 +170,7 @@ export function TestimonialsMobileAnimated() {
         <FeaturedQuote scrollYProgress={scrollYProgress} />
 
         {/* Testimonial parade */}
-        <div className="absolute inset-0 z-10 flex items-start px-container-x pt-[clamp(9rem,36vh,18rem)] md:pt-[clamp(22rem,34vh,28rem)]">
+        <div className="absolute inset-0 z-10 flex items-start px-container-x pt-[clamp(7rem,25vh,18rem)] sm:pt-[clamp(9rem,36vh,18rem)] md:pt-[clamp(22rem,34vh,28rem)]">
           <div className="relative w-full">
             {OTHERS.map((testimonial, i) => (
               <TestimonialSlide
