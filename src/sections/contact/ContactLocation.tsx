@@ -3,6 +3,10 @@ import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 import MapPin from 'lucide-react/dist/esm/icons/map-pin';
 import Car from 'lucide-react/dist/esm/icons/car';
 import Train from 'lucide-react/dist/esm/icons/train';
+import TrainFront from 'lucide-react/dist/esm/icons/train-front';
+import Bus from 'lucide-react/dist/esm/icons/bus';
+import Footprints from 'lucide-react/dist/esm/icons/footprints';
+import Accessibility from 'lucide-react/dist/esm/icons/accessibility';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -41,102 +45,148 @@ function LocationItem({
 }
 
 // ---------------------------------------------------------------------------
-// Desktop — scroll-driven parallax image + staggered content
+// Desktop directory card — single column in the 4-col directory grid
+// ---------------------------------------------------------------------------
+
+function DirectoryCard({
+  icon: Icon,
+  title,
+  children,
+}: {
+  icon: typeof Car;
+  title: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-4">
+      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20">
+        <Icon className="h-6 w-6 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+      </div>
+      <h3 className="text-subtitle text-body-lg !leading-[1] text-white">{title}</h3>
+      <div className="space-y-3 text-body-sm !leading-[1.35] text-secondary-blue">{children}</div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Desktop — scroll-driven parallax image + 4-column editorial directory
 // ---------------------------------------------------------------------------
 
 function LocationDesktop() {
-  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
-  // Parallax image — slow vertical drift
-  const imageY = useTransform(scrollYProgress, [0, 1], ['-8%', '8%']);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.08, 1, 1.02]);
+  // Parallax image — slow vertical drift across the pin
+  const imageY = useTransform(scrollYProgress, [0, 1], ['-6%', '6%']);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1.06, 1, 1.02]);
 
-  const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
-  const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
-  const footer = useScrollEntrance(scrollYProgress, 0.3, 0.48, 30);
+  const title = useScrollEntrance(scrollYProgress, 0.0, 0.08);
+  const cards = useScrollEntrance(scrollYProgress, 0.06, 0.18);
+  const footer = useScrollEntrance(scrollYProgress, 0.12, 0.24, 30);
+
+  // Exit — gentle fade when section unpins
+  const exitOpacity = useTransform(scrollYProgress, [0.75, 0.9], [1, 0]);
+  const exitY = useTransform(scrollYProgress, [0.75, 0.9], [0, -30]);
 
   return (
-    <div ref={ref} className="relative hidden min-h-screen w-full xl:block">
-      {/* Parallax background image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
-          <ResponsiveImage
-            src="/images/contact-informations-boutique-outside.jpg"
-            alt="Façade de La Lunetterie du Coin"
-            className="h-full w-full object-cover"
-            loading="lazy"
-            widths={[640, 1024, 1280, 1920]}
-            sizes="100vw"
-          />
-        </m.div>
-        {/* Dark overlay for readability */}
-        <div className="absolute inset-0 bg-black/60" aria-hidden="true" />
-      </div>
-
-      <div className="relative z-10 flex min-h-screen items-center">
-        <div className="mx-auto max-w-container px-container-x pb-[50vh] pt-[35vh]">
-          <m.div style={{ opacity: title.opacity, y: title.y }}>
-            <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
+    <div ref={ref} className="relative hidden h-[250vh] w-full xl:block">
+      <div className="sticky top-0 h-screen overflow-hidden">
+        {/* Parallax background image */}
+        <div className="absolute inset-0 overflow-hidden">
+          <m.div className="absolute inset-0" style={{ y: imageY, scale: imageScale }}>
+            <ResponsiveImage
+              src="/images/contact-informations-boutique-outside.jpg"
+              alt="Façade de La Lunetterie du Coin"
+              className="h-full w-full object-cover"
+              loading="lazy"
+              widths={[640, 1024, 1280, 1920]}
+              sizes="100vw"
+            />
           </m.div>
-
-          <m.div
-            className="mx-auto grid max-w-4xl gap-12 md:grid-cols-2"
-            style={{ opacity: content.opacity, y: content.y }}
-          >
-            <LocationItem icon={Car} title="En voiture">
-              <div className="space-y-2 text-body text-secondary-blue">
-                <p>
-                  <span className="font-medium text-white">Parking payant</span> : Parking Halles et
-                  Opéra Broglie (environ 10 min à pied)
-                </p>
-              </div>
-            </LocationItem>
-
-            <LocationItem icon={Train} title="En transports">
-              <div className="space-y-2 text-body text-secondary-blue">
-                <p>
-                  <span className="font-medium text-white">Tram B, C, F</span> : arrêt Broglie (7
-                  min à pied)
-                </p>
-                <p>
-                  <span className="font-medium text-white">Tram A, D</span> : arrêt Ancienne
-                  Synagogue / Les Halles (7 min à pied)
-                </p>
-                <p>
-                  <span className="font-medium text-white">Bus C3</span> : arrêt Faubourg de Pierre
-                  (2 min à pied)
-                </p>
-                <p>
-                  <span className="font-medium text-white">Bus C6</span> : arrêt Tribunal (5 min à
-                  pied)
-                </p>
-                <p className="pt-2 text-white">
-                  À 15 minutes à pied de la gare centrale de Strasbourg
-                </p>
-              </div>
-            </LocationItem>
-          </m.div>
-
-          {/* Accessibility + Maps CTA */}
-          <m.div
-            className="mx-auto mt-12 flex max-w-4xl flex-col items-center justify-between gap-6 sm:flex-row"
-            style={{ opacity: footer.opacity, y: footer.y }}
-          >
-            <p className="text-body text-white">
-              <span className="font-medium text-white">Accessibilité :</span> Le magasin est
-              accessible aux personnes à mobilité réduite
-            </p>
-            <LinkCTA
-              href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
-              target="_blank"
-              rel="noopener noreferrer"
-              icon={MapPin}
-              theme="dark"
-            >
-              Voir sur Google Maps
-            </LinkCTA>
-          </m.div>
+          {/* Dark overlay for readability */}
+          <div className="absolute inset-0 bg-black/65" aria-hidden="true" />
         </div>
+
+        <m.div
+          className="relative z-10 flex h-full items-center"
+          style={{ opacity: exitOpacity, y: exitY }}
+        >
+          <div className="mx-auto w-full max-w-6xl px-container-x">
+            <m.div style={{ opacity: title.opacity, y: title.y }}>
+              <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
+            </m.div>
+
+            {/* 4-column directory — equalised content density across modes */}
+            <m.div
+              className="grid grid-cols-4 gap-x-10 gap-y-10 border-y border-white/15 py-10"
+              style={{ opacity: cards.opacity, y: cards.y }}
+            >
+              <DirectoryCard icon={Car} title="En voiture">
+                <p>
+                  <span className="font-medium text-white">Parking Halles &amp; Opéra Broglie</span>
+                </p>
+                <p>~10 min à pied</p>
+              </DirectoryCard>
+
+              <DirectoryCard icon={TrainFront} title="En tram">
+                <p>
+                  <span className="font-medium text-white">B · C · F</span> — arrêt Broglie
+                  <br />
+                  <span className="text-secondary-blue/70">7 min à pied</span>
+                </p>
+                <p>
+                  <span className="font-medium text-white">A · D</span> — Anc. Synagogue / Halles
+                  <br />
+                  <span className="text-secondary-blue/70">7 min à pied</span>
+                </p>
+              </DirectoryCard>
+
+              <DirectoryCard icon={Bus} title="En bus">
+                <p>
+                  <span className="font-medium text-white">C3</span> — Faubourg de Pierre
+                  <br />
+                  <span className="text-secondary-blue/70">2 min à pied</span>
+                </p>
+                <p>
+                  <span className="font-medium text-white">C6</span> — Tribunal
+                  <br />
+                  <span className="text-secondary-blue/70">5 min à pied</span>
+                </p>
+              </DirectoryCard>
+
+              <DirectoryCard icon={Footprints} title="À pied">
+                <p>
+                  <span className="font-medium text-white">Gare centrale de Strasbourg</span>
+                  <br />
+                  <span className="text-secondary-blue/70">15 min à pied</span>
+                </p>
+              </DirectoryCard>
+            </m.div>
+
+            {/* Footer — stacked and centered */}
+            <m.div
+              className="mt-8 flex flex-col items-center gap-4"
+              style={{ opacity: footer.opacity, y: footer.y }}
+            >
+              <p className="flex items-center gap-3 text-body-sm text-white">
+                <Accessibility
+                  className="h-5 w-5 shrink-0 text-secondary-blue"
+                  strokeWidth={1.5}
+                  aria-hidden="true"
+                />
+                <span>Magasin accessible aux personnes à mobilité réduite</span>
+              </p>
+              <LinkCTA
+                href="https://maps.google.com/?q=24+rue+du+Faubourg+de+Pierre+67000+Strasbourg"
+                target="_blank"
+                rel="noopener noreferrer"
+                icon={MapPin}
+                theme="dark"
+              >
+                Voir sur Google Maps
+              </LinkCTA>
+            </m.div>
+          </div>
+        </m.div>
       </div>
     </div>
   );

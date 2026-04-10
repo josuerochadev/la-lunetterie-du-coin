@@ -1,40 +1,29 @@
-import { m } from 'framer-motion';
-
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ContactForm from '@/components/contact/ContactForm';
-import { useScrollEntrance } from '@/hooks/useScrollEntrance';
-import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 
 // ---------------------------------------------------------------------------
-// Desktop — scroll-driven entrance
+// Desktop — IntersectionObserver-based entrance (flow section with form)
 // ---------------------------------------------------------------------------
 
 function FormDesktop() {
-  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
-
-  const title = useScrollEntrance(scrollYProgress, 0.05, 0.22);
-  const sub = useScrollEntrance(scrollYProgress, 0.1, 0.28, 30);
-  const form = useScrollEntrance(scrollYProgress, 0.15, 0.35);
-
   return (
-    <div ref={ref} className="hidden xl:block">
+    <div className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-3xl">
-          <m.div style={{ opacity: title.opacity, y: title.y }}>
+          <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>
-          </m.div>
+          </SimpleAnimation>
 
-          <m.p
-            className="mx-auto mb-12 max-w-lg text-center text-body-lg text-black"
-            style={{ opacity: sub.opacity, y: sub.y }}
-          >
-            Question, remarque ou juste envie de dire bonjour — on lit tout.
-          </m.p>
+          <SimpleAnimation type="slide-up" delay={80}>
+            <p className="mx-auto mb-12 max-w-lg text-center text-body-lg text-black">
+              Question, remarque ou juste envie de dire bonjour — on lit tout.
+            </p>
+          </SimpleAnimation>
 
-          <m.div style={{ opacity: form.opacity, y: form.y }}>
+          <SimpleAnimation type="slide-up" delay={160}>
             <ContactForm />
-          </m.div>
+          </SimpleAnimation>
         </div>
       </div>
     </div>

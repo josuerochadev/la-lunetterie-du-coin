@@ -130,7 +130,7 @@ function OfferCard({
 
   return (
     <m.div
-      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-xl xl:max-w-2xl"
+      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-2xl xl:max-w-3xl"
       style={{
         opacity: cardOpacity,
         y: cardY,
@@ -198,11 +198,14 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={3}
           >
-            <ul className="mb-6 grid max-w-lg grid-cols-2 gap-x-5 gap-y-2">
+            <ul className="mb-6 max-w-xl space-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
-                <li key={i} className="flex gap-2 text-body-sm text-black">
+                <li
+                  key={i}
+                  className="flex items-baseline gap-3 text-body !leading-[1.2] text-black"
+                >
                   <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                    className="mt-2 h-1.5 w-1.5 shrink-0 self-start rounded-full bg-secondary-orange"
                     aria-hidden="true"
                   />
                   <span>{detail}</span>

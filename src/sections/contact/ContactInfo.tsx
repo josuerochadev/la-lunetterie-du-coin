@@ -11,7 +11,6 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { ConvexDome } from '@/components/common/ConvexDome';
 import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
-import { useScrollEntrance } from '@/hooks/useScrollEntrance';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 import { COMPANY_ADDRESS, COMPANY_EMAIL, COMPANY_PHONE } from '@/config/legal';
@@ -44,66 +43,66 @@ function InfoItem({
 }
 
 // ---------------------------------------------------------------------------
-// Desktop — scroll-driven staggered entrance
+// Desktop — IntersectionObserver-based entrance (flow section, not sticky)
 // ---------------------------------------------------------------------------
 
 function InfoDesktop() {
-  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
-
-  const title = useScrollEntrance(scrollYProgress, 0.15, 0.3);
-  const content = useScrollEntrance(scrollYProgress, 0.25, 0.45);
-
   return (
-    <div ref={ref} className="hidden xl:block">
+    <div className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-4xl">
-          <m.div style={{ opacity: title.opacity, y: title.y }}>
+          <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-16 text-center text-white">Les infos utiles</h2>
-          </m.div>
+          </SimpleAnimation>
 
-          <m.div
-            className="grid gap-12 md:grid-cols-2"
-            style={{ opacity: content.opacity, y: content.y }}
-          >
-            <InfoItem icon={MapPin} title="Adresse">
-              <address className="mb-3 text-body not-italic text-secondary-blue">
-                {COMPANY_ADDRESS}
-              </address>
-              <LinkCTA
-                href={STORE_INFO.address.googleMapsSearchUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                icon={MapPin}
-                theme="dark"
-              >
-                Voir sur Google Maps
-              </LinkCTA>
-            </InfoItem>
+          <div className="grid gap-12 md:grid-cols-2">
+            <SimpleAnimation type="slide-up" delay={0}>
+              <InfoItem icon={MapPin} title="Adresse">
+                <address className="mb-3 text-body not-italic text-secondary-blue">
+                  {COMPANY_ADDRESS}
+                </address>
+                <LinkCTA
+                  href={STORE_INFO.address.googleMapsSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  icon={MapPin}
+                  theme="dark"
+                >
+                  Voir sur Google Maps
+                </LinkCTA>
+              </InfoItem>
+            </SimpleAnimation>
 
-            <InfoItem icon={Clock} title="Horaires">
-              <OpeningHoursList />
-            </InfoItem>
+            <SimpleAnimation type="slide-up" delay={80}>
+              <InfoItem icon={Clock} title="Horaires">
+                <OpeningHoursList />
+              </InfoItem>
+            </SimpleAnimation>
 
-            <InfoItem icon={Mail} title="Email">
-              <a
-                href={`mailto:${COMPANY_EMAIL}`}
-                className="text-body text-white transition-colors hover:text-secondary-orange"
-                aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
-              >
-                {COMPANY_EMAIL}
-              </a>
-            </InfoItem>
+            <SimpleAnimation type="slide-up" delay={160}>
+              <InfoItem icon={Mail} title="Email">
+                <a
+                  href={`mailto:${COMPANY_EMAIL}`}
+                  className="text-body text-white transition-colors hover:text-secondary-orange"
+                  aria-label={`Envoyer un email à ${COMPANY_EMAIL}`}
+                >
+                  {COMPANY_EMAIL}
+                </a>
+              </InfoItem>
+            </SimpleAnimation>
 
-            <InfoItem icon={Phone} title="Téléphone">
-              <a
-                href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
-                className="text-body text-white transition-colors hover:text-secondary-orange"
-                aria-label={`Appeler le ${COMPANY_PHONE}`}
-              >
-                {COMPANY_PHONE}
-              </a>
-            </InfoItem>
-          </m.div>
+            <SimpleAnimation type="slide-up" delay={240}>
+              <InfoItem icon={Phone} title="Téléphone">
+                <a
+                  href={`tel:${COMPANY_PHONE.replace(/\s/g, '')}`}
+                  className="text-body text-white transition-colors hover:text-secondary-orange"
+                  aria-label={`Appeler le ${COMPANY_PHONE}`}
+                >
+                  {COMPANY_PHONE}
+                </a>
+              </InfoItem>
+            </SimpleAnimation>
+          </div>
         </div>
       </div>
     </div>

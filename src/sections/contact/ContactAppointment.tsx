@@ -14,14 +14,14 @@ import { BOOKING_URL } from '@/config/endpoints';
 // ---------------------------------------------------------------------------
 
 function CTADesktop() {
-  const { ref, scrollYProgress } = useManualScrollProgress('start-end');
+  const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   const motifScale = useTransform(scrollYProgress, [0, 1], [1, 1.4]);
-  const motifOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 0.2]);
+  const motifOpacity = useTransform(scrollYProgress, [0.0, 0.15], [0, 0.2]);
 
-  const title = useScrollEntrance(scrollYProgress, 0.25, 0.4);
-  const sub = useScrollEntrance(scrollYProgress, 0.3, 0.45, 25);
-  const cta = useScrollEntrance(scrollYProgress, 0.35, 0.5, 20);
+  const title = useScrollEntrance(scrollYProgress, 0.0, 0.12);
+  const sub = useScrollEntrance(scrollYProgress, 0.06, 0.18, 25);
+  const cta = useScrollEntrance(scrollYProgress, 0.12, 0.24, 20);
 
   return (
     <div ref={ref} className="hidden xl:block" style={{ minHeight: '200vh' }}>
@@ -40,8 +40,8 @@ function CTADesktop() {
               <ScrollWordReveal
                 as="h2"
                 scrollYProgress={scrollYProgress}
-                revealStart={0.25}
-                revealEnd={0.4}
+                revealStart={0.0}
+                revealEnd={0.12}
                 className="text-heading text-fluid-cta text-black"
               >
                 ON VOUS ATTEND
