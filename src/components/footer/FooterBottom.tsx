@@ -11,8 +11,8 @@ type FooterBottomProps = {
  */
 export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
   return (
-    <div className="mx-auto mt-10 max-w-7xl pt-6">
-      <div className="flex flex-col items-center justify-between gap-4 text-body-sm text-white sm:flex-row">
+    <div className="mx-auto mt-10 max-w-7xl pt-6 3xl:max-w-[96rem]">
+      <div className="flex flex-col items-center justify-between gap-4 text-body-sm text-white sm:flex-row 3xl:text-body">
         {/* Liens légaux */}
         <div className="flex gap-6">
           {FOOTER_LINKS.map((link) => (

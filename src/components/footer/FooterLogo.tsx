@@ -13,7 +13,10 @@ export default function FooterLogo() {
         className="inline-block text-accent transition-opacity duration-200 hover:opacity-80"
         aria-label="Retour à l'accueil - La Lunetterie Du Coin"
       >
-        <LogoNO className="mx-auto h-28 w-auto fill-accent sm:h-36 lg:h-44" aria-hidden="true" />
+        <LogoNO
+          className="mx-auto h-28 w-auto fill-accent sm:h-36 lg:h-44 3xl:h-56"
+          aria-hidden="true"
+        />
       </Link>
     </div>
   );

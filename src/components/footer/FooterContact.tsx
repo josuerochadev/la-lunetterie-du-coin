@@ -14,8 +14,8 @@ export default function FooterContact() {
     <div>
       {/* Contact */}
       <address className="not-italic" aria-label="Coordonnées">
-        <h3 className="text-subtitle mb-4 text-body-sm text-accent">Contact</h3>
-        <div className="space-y-3 text-body-sm text-white">
+        <h3 className="text-subtitle mb-4 text-body-sm text-accent 3xl:text-body">Contact</h3>
+        <div className="space-y-3 text-body-sm text-white 3xl:text-body">
           <a
             href={STORE_INFO.address.googleMapsUrl}
             target="_blank"
@@ -55,7 +55,7 @@ export default function FooterContact() {
 
       {/* Horaires */}
       <div className="mt-6">
-        <h3 className="text-subtitle mb-4 text-body-sm text-accent">Horaires</h3>
+        <h3 className="text-subtitle mb-4 text-body-sm text-accent 3xl:text-body">Horaires</h3>
         <OpeningHoursList />
       </div>
     </div>
