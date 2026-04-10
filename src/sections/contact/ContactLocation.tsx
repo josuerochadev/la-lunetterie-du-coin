@@ -58,12 +58,12 @@ function DirectoryCard({
   children: ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col gap-4">
-      <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20">
-        <Icon className="h-6 w-6 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+    <div className="flex min-w-0 flex-col gap-5">
+      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20">
+        <Icon className="h-7 w-7 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
       </div>
-      <h3 className="text-subtitle text-body-lg !leading-[1] text-white">{title}</h3>
-      <div className="space-y-3 text-body-sm !leading-[1.35] text-secondary-blue">{children}</div>
+      <h3 className="text-subtitle text-body-xl !leading-[1] text-white">{title}</h3>
+      <div className="space-y-3 text-body !leading-[1.35] text-secondary-blue">{children}</div>
     </div>
   );
 }
@@ -110,14 +110,14 @@ function LocationDesktop() {
           className="relative z-10 flex h-full items-center"
           style={{ opacity: exitOpacity, y: exitY }}
         >
-          <div className="mx-auto w-full max-w-6xl px-container-x">
+          <div className="mx-auto w-full px-container-x">
             <m.div style={{ opacity: title.opacity, y: title.y }}>
               <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
             </m.div>
 
             {/* 4-column directory — equalised content density across modes */}
             <m.div
-              className="grid grid-cols-4 gap-x-10 gap-y-10 border-y border-white/15 py-10"
+              className="grid grid-cols-4 gap-x-[5vw] gap-y-12 border-y border-white/15 py-12"
               style={{ opacity: cards.opacity, y: cards.y }}
             >
               <DirectoryCard icon={Car} title="En voiture">
@@ -167,7 +167,7 @@ function LocationDesktop() {
               className="mt-8 flex flex-col items-center gap-4"
               style={{ opacity: footer.opacity, y: footer.y }}
             >
-              <p className="flex items-center gap-3 text-body-sm text-white">
+              <p className="flex items-center gap-3 text-body text-white">
                 <Accessibility
                   className="h-5 w-5 shrink-0 text-secondary-blue"
                   strokeWidth={1.5}
