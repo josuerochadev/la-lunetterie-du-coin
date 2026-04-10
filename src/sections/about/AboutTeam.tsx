@@ -88,7 +88,7 @@ function TeamDesktop() {
               </ScrollWordReveal>
             </m.div>
 
-            <m.div className="mt-8 max-w-lg 3xl:max-w-xl" style={{ opacity: bioEntrance }}>
+            <m.div className="mt-8 max-w-2xl 3xl:max-w-3xl" style={{ opacity: bioEntrance }}>
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
