@@ -53,7 +53,7 @@ function TeamDesktop() {
     <div ref={sectionRef} className="hidden h-[300vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <m.div
-          className="flex h-full items-center px-16 xl:px-20"
+          className="flex h-full items-center px-16 xl:px-20 3xl:px-28"
           style={{ opacity: exitOpacity, y: exitY }}
         >
           {/* Left — Portrait with contained aspect ratio */}
@@ -74,7 +74,7 @@ function TeamDesktop() {
           </div>
 
           {/* Right — Name + Bio */}
-          <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20">
+          <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20 3xl:pl-28">
             <m.div style={{ y: nameY, opacity: nameEntrance }}>
               <ScrollWordReveal
                 as="h2"
@@ -88,7 +88,7 @@ function TeamDesktop() {
               </ScrollWordReveal>
             </m.div>
 
-            <m.div className="mt-8 max-w-lg" style={{ opacity: bioEntrance }}>
+            <m.div className="mt-8 max-w-lg 3xl:max-w-xl" style={{ opacity: bioEntrance }}>
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}

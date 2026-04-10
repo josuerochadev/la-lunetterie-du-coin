@@ -58,13 +58,18 @@ export default function Footer({
         className,
       )}
     >
-      {/* Convex eyelid curve — enlarged on mobile for the "label" effect.
+      {/* Convex eyelid curve — half-ellipse (top only), same pattern as ConvexDome.
           data-navbar-theme makes IO detect this as footer → hides navbar early */}
       <div
-        className="pointer-events-none absolute -top-[10svh] left-1/2 h-[30svh] w-[160vw] -translate-x-1/2 rounded-[50%] bg-primary sm:-top-[8svh] sm:h-[24svh] lg:-top-[11vw] lg:h-[45vw] lg:w-[140vw]"
+        className="pointer-events-none absolute -top-[10svh] left-0 z-[1] h-[20svh] w-full overflow-hidden sm:-top-[8svh] sm:h-[16svh] lg:-top-[11vw] lg:h-[22vw]"
         aria-hidden="true"
         data-navbar-theme="light"
-      />
+      >
+        <div
+          className="absolute left-1/2 top-0 h-full w-[160vw] -translate-x-1/2 bg-primary sm:w-[160vw] lg:w-[140vw]"
+          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
+        />
+      </div>
 
       {/* Logo sitting on the curve */}
       <div className="absolute -top-[7svh] left-1/2 z-10 -translate-x-1/2 sm:-top-[6svh] lg:-top-[6vw]">

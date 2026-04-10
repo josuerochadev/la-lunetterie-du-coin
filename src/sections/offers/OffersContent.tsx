@@ -130,7 +130,7 @@ function OfferCard({
 
   return (
     <m.div
-      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-2xl xl:max-w-3xl"
+      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-2xl xl:max-w-3xl 3xl:max-w-4xl 4xl:max-w-5xl"
       style={{
         opacity: cardOpacity,
         y: cardY,
@@ -148,7 +148,7 @@ function OfferCard({
           aria-hidden="true"
         />
 
-        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10">
+        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10 4xl:px-14 4xl:py-14">
           {/* Counter */}
           <StaggerChild
             scrollYProgress={scrollYProgress}
@@ -172,7 +172,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={1}
           >
-            <h3 className="text-subtitle mb-4 text-title-sm text-black">{offer.catchphrase}</h3>
+            <h3 className="text-subtitle mb-5 text-title-sm text-black">{offer.catchphrase}</h3>
           </StaggerChild>
 
           {/* Description */}
@@ -184,7 +184,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={2}
           >
-            <p className="mb-6 max-w-md text-body leading-relaxed text-black">
+            <p className="mb-6 max-w-xl text-body-lg !leading-[1.35] text-black 3xl:max-w-2xl">
               {offer.description}
             </p>
           </StaggerChild>
@@ -198,7 +198,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={3}
           >
-            <ul className="mb-6 max-w-xl space-y-2">
+            <ul className="mb-6 max-w-xl space-y-2 3xl:max-w-2xl">
               {offer.details.slice(0, 6).map((detail, i) => (
                 <li
                   key={i}
