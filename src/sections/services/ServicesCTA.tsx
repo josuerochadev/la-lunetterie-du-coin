@@ -33,7 +33,7 @@ function CTADesktop() {
         />
 
         <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
-          <div className="mx-auto max-w-4xl text-center">
+          <div className="text-center">
             <m.div style={{ opacity: title.opacity, y: title.y }}>
               <ScrollWordReveal
                 as="h2"
