@@ -42,7 +42,8 @@ function CTADesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.25}
                 revealEnd={0.4}
-                className="heading-section text-black"
+                className="text-heading text-black"
+                style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
               >
                 C&apos;EST TOUT VU
               </ScrollWordReveal>

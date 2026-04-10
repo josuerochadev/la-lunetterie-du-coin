@@ -42,7 +42,8 @@ function CTADesktop() {
                 scrollYProgress={scrollYProgress}
                 revealStart={0.0}
                 revealEnd={0.12}
-                className="text-heading text-fluid-cta text-black"
+                className="text-heading text-black"
+                style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
               >
                 ON VOUS ATTEND
               </ScrollWordReveal>
