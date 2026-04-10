@@ -31,11 +31,11 @@ function InfoItem({
 }) {
   return (
     <div className="flex gap-5">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
-        <Icon className="h-5 w-5 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/10">
+        <Icon className="h-6 w-6 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
       </div>
-      <div>
-        <h3 className="text-subtitle mb-2 text-title-sm text-white">{title}</h3>
+      <div className="min-w-0">
+        <h3 className="text-subtitle mb-3 text-title-sm text-white">{title}</h3>
         {children}
       </div>
     </div>
@@ -50,12 +50,12 @@ function InfoDesktop() {
   return (
     <div className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
-        <div className="mx-auto max-w-4xl">
+        <div className="mx-auto max-w-6xl">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-16 text-center text-white">Les infos utiles</h2>
           </SimpleAnimation>
 
-          <div className="grid gap-12 md:grid-cols-2">
+          <div className="grid grid-cols-2 gap-x-[6vw] gap-y-16">
             <SimpleAnimation type="slide-up" delay={0}>
               <InfoItem icon={MapPin} title="Adresse">
                 <address className="mb-3 text-body not-italic text-secondary-blue">
