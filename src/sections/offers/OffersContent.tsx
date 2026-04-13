@@ -184,9 +184,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={2}
           >
-            <p className="mb-6 max-w-xl text-body-lg !leading-[1.35] text-black 3xl:max-w-2xl">
-              {offer.description}
-            </p>
+            <p className="mb-6 text-body-lg !leading-[1.35] text-black">{offer.description}</p>
           </StaggerChild>
 
           {/* Details — 2 columns grid with orange bullets */}
@@ -198,7 +196,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={3}
           >
-            <ul className="mb-6 max-w-xl space-y-2 3xl:max-w-2xl">
+            <ul className="mb-6 space-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
                 <li
                   key={i}
