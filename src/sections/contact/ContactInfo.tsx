@@ -50,7 +50,7 @@ function InfoDesktop() {
   return (
     <div className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
-        <div className="mx-auto max-w-6xl">
+        <div className="mx-auto max-w-[1400px]">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-16 text-center text-white">Les infos utiles</h2>
           </SimpleAnimation>

@@ -10,7 +10,7 @@ function FormDesktop() {
   return (
     <div className="hidden xl:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-6xl">
           <SimpleAnimation type="slide-up" delay={0}>
             <h2 className="heading-section mb-4 text-center">Un mot à nous dire ?</h2>
           </SimpleAnimation>

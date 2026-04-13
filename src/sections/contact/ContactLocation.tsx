@@ -33,11 +33,11 @@ function LocationItem({
 }) {
   return (
     <div className="flex gap-5">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/10">
-        <Icon className="h-5 w-5 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
+      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/10">
+        <Icon className="h-6 w-6 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
       </div>
-      <div>
-        <h3 className="text-subtitle mb-2 text-title-sm text-white">{title}</h3>
+      <div className="min-w-0">
+        <h3 className="text-subtitle mb-3 text-title-sm text-white">{title}</h3>
         {children}
       </div>
     </div>
@@ -45,31 +45,7 @@ function LocationItem({
 }
 
 // ---------------------------------------------------------------------------
-// Desktop directory card — single column in the 4-col directory grid
-// ---------------------------------------------------------------------------
-
-function DirectoryCard({
-  icon: Icon,
-  title,
-  children,
-}: {
-  icon: typeof Car;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <div className="flex min-w-0 flex-col gap-5">
-      <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/20">
-        <Icon className="h-7 w-7 text-secondary-blue" strokeWidth={1.5} aria-hidden="true" />
-      </div>
-      <h3 className="text-subtitle text-body-xl !leading-[1] text-white">{title}</h3>
-      <div className="space-y-3 text-body !leading-[1.35] text-secondary-blue">{children}</div>
-    </div>
-  );
-}
-
-// ---------------------------------------------------------------------------
-// Desktop — scroll-driven parallax image + 4-column editorial directory
+// Desktop — scroll-driven parallax image + 2×2 directory (mirrors ContactInfo)
 // ---------------------------------------------------------------------------
 
 function LocationDesktop() {
@@ -110,56 +86,67 @@ function LocationDesktop() {
           className="relative z-10 flex h-full items-center"
           style={{ opacity: exitOpacity, y: exitY }}
         >
-          <div className="mx-auto w-full px-container-x">
+          <div className="mx-auto max-w-[1400px] px-container-x">
             <m.div style={{ opacity: title.opacity, y: title.y }}>
-              <h2 className="heading-section mb-12 text-center text-white">Comment venir</h2>
+              <h2 className="heading-section mb-16 text-center text-white">Comment venir</h2>
             </m.div>
 
-            {/* 4-column directory — equalised content density across modes */}
+            {/* 2×2 directory grid — mirrors ContactInfo layout */}
             <m.div
-              className="grid grid-cols-4 gap-x-[5vw] gap-y-12 border-y border-white/15 py-12"
+              className="grid grid-cols-2 gap-x-[6vw] gap-y-16"
               style={{ opacity: cards.opacity, y: cards.y }}
             >
-              <DirectoryCard icon={Car} title="En voiture">
-                <p>
-                  <span className="font-medium text-white">Parking Halles &amp; Opéra Broglie</span>
-                </p>
-                <p>~10 min à pied</p>
-              </DirectoryCard>
+              <LocationItem icon={Car} title="En voiture">
+                <div className="space-y-2 text-body text-secondary-blue">
+                  <p>
+                    <span className="font-medium text-white">
+                      Parking Halles &amp; Opéra Broglie
+                    </span>
+                    <br />
+                    ~10 min à pied
+                  </p>
+                </div>
+              </LocationItem>
 
-              <DirectoryCard icon={TrainFront} title="En tram">
-                <p>
-                  <span className="font-medium text-white">B · C · F</span> — arrêt Broglie
-                  <br />
-                  <span className="text-secondary-blue/70">7 min à pied</span>
-                </p>
-                <p>
-                  <span className="font-medium text-white">A · D</span> — Anc. Synagogue / Halles
-                  <br />
-                  <span className="text-secondary-blue/70">7 min à pied</span>
-                </p>
-              </DirectoryCard>
+              <LocationItem icon={TrainFront} title="En tram">
+                <div className="space-y-2 text-body text-secondary-blue">
+                  <p>
+                    <span className="font-medium text-white">B · C · F</span> — arrêt Broglie
+                    <br />
+                    <span className="opacity-70">7 min à pied</span>
+                  </p>
+                  <p>
+                    <span className="font-medium text-white">A · D</span> — Anc. Synagogue / Halles
+                    <br />
+                    <span className="opacity-70">7 min à pied</span>
+                  </p>
+                </div>
+              </LocationItem>
 
-              <DirectoryCard icon={Bus} title="En bus">
-                <p>
-                  <span className="font-medium text-white">C3</span> — Faubourg de Pierre
-                  <br />
-                  <span className="text-secondary-blue/70">2 min à pied</span>
-                </p>
-                <p>
-                  <span className="font-medium text-white">C6</span> — Tribunal
-                  <br />
-                  <span className="text-secondary-blue/70">5 min à pied</span>
-                </p>
-              </DirectoryCard>
+              <LocationItem icon={Bus} title="En bus">
+                <div className="space-y-2 text-body text-secondary-blue">
+                  <p>
+                    <span className="font-medium text-white">C3</span> — Faubourg de Pierre
+                    <br />
+                    <span className="opacity-70">2 min à pied</span>
+                  </p>
+                  <p>
+                    <span className="font-medium text-white">C6</span> — Tribunal
+                    <br />
+                    <span className="opacity-70">5 min à pied</span>
+                  </p>
+                </div>
+              </LocationItem>
 
-              <DirectoryCard icon={Footprints} title="À pied">
-                <p>
-                  <span className="font-medium text-white">Gare centrale de Strasbourg</span>
-                  <br />
-                  <span className="text-secondary-blue/70">15 min à pied</span>
-                </p>
-              </DirectoryCard>
+              <LocationItem icon={Footprints} title="À pied">
+                <div className="space-y-2 text-body text-secondary-blue">
+                  <p>
+                    <span className="font-medium text-white">Gare centrale de Strasbourg</span>
+                    <br />
+                    <span className="opacity-70">15 min à pied</span>
+                  </p>
+                </div>
+              </LocationItem>
             </m.div>
 
             {/* Footer — stacked and centered */}
