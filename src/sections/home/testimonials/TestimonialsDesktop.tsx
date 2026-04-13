@@ -14,7 +14,7 @@ import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 function SectionTitle({ scrollYProgress }: { scrollYProgress: MotionValue<number> }) {
-  const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '6vh']);
+  const yRaw = useTransform(scrollYProgress, [0, 0.08], ['40vh', '14vh']);
   const y = useSpring(yRaw, SPRING_CONFIG);
   const opacity = useFadeInOut(scrollYProgress, 0, 0.03, 0.76, 0.8);
 
@@ -48,14 +48,14 @@ function FeaturedQuote({ scrollYProgress }: { scrollYProgress: MotionValue<numbe
 
   return (
     <m.div
-      className="absolute inset-0 z-10 flex items-center justify-center px-container-x"
+      className="absolute inset-0 z-10 flex items-start justify-center px-container-x pt-[44vh]"
       style={{ opacity: containerOpacity, y: containerY }}
     >
-      <div className="max-w-4xl text-center">
+      <div className="max-w-5xl text-center">
         <RatingStars rating={FEATURED.rating} size="h-5 w-5" className="mb-8 justify-center" />
 
         <blockquote>
-          <div style={{ fontSize: 'clamp(1.5rem, 2.5vw, 2.25rem)' }}>
+          <div style={{ fontSize: 'clamp(1.5rem, 2.5vw, 3rem)' }}>
             <ScrollWordReveal
               as="p"
               scrollYProgress={scrollYProgress}
@@ -120,21 +120,21 @@ function TestimonialSlide({
       style={{ opacity, y, pointerEvents }}
     >
       <article
-        className="w-full max-w-3xl text-center"
+        className="w-full max-w-4xl text-center"
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <RatingStars rating={testimonial.rating} size="h-4 w-4" className="mb-6 justify-center" />
 
         <blockquote className="mb-6">
-          <p className="text-white" style={{ fontSize: 'clamp(1.15rem, 2vw, 1.6rem)' }}>
+          <p className="text-white" style={{ fontSize: 'clamp(1.15rem, 2vw, 2.25rem)' }}>
             &ldquo;{testimonial.quote}&rdquo;
           </p>
         </blockquote>
 
         <footer>
           <cite className="not-italic">
-            <div className="text-body-sm font-medium text-white">{testimonial.name}</div>
-            <div className="mt-1 flex items-center justify-center gap-2 text-body-xs text-secondary-blue">
+            <div className="text-body font-medium text-white">{testimonial.name}</div>
+            <div className="mt-1 flex items-center justify-center gap-2 text-body-sm text-secondary-blue">
               <span>{testimonial.role}</span>
               {testimonial.date && (
                 <>
@@ -159,7 +159,7 @@ export function TestimonialsDesktop() {
   const ctaPointer = usePointerEvents(ctaOpacity);
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={ref} className="hidden xl:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         <GiantCounter
           scrollYProgress={scrollYProgress}
@@ -170,8 +170,8 @@ export function TestimonialsDesktop() {
         <SectionTitle scrollYProgress={scrollYProgress} />
         <FeaturedQuote scrollYProgress={scrollYProgress} />
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center px-container-x">
-          <div className="relative w-full max-w-2xl">
+        <div className="absolute inset-0 z-10 flex items-start justify-center px-container-x pt-[44vh]">
+          <div className="relative w-full max-w-4xl">
             {OTHERS.map((testimonial, i) => (
               <TestimonialSlide
                 key={testimonial.id}

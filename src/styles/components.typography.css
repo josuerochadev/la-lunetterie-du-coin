@@ -10,12 +10,16 @@
   line-height: 0.9;
 }
 
-/* Sous-titres - Satoshi Black Caps */
+/* Sous-titres - Satoshi Black Caps
+ * Intentionally does not set line-height: every consumer pairs this with a
+ * text-* size utility (text-body-sm, text-title-sm, text-title-md…) which
+ * ships its own line-height. Setting it here would conflict when @apply-ed
+ * alongside a size utility (seen in .heading-subsection → legal pages) and
+ * produce a different result than the same classes used inline elsewhere. */
 .text-subtitle {
   font-family: 'Satoshi', system-ui, sans-serif;
   font-weight: 900;
   text-transform: uppercase;
-  line-height: 1.3;
   letter-spacing: 0.2em;
 }
 
@@ -39,6 +43,20 @@
 
 @screen sm {
   .heading-section {
+    @apply text-title-xl;
+  }
+}
+
+/* Legal pages — tighter heading on small mobile to avoid long French
+   compound titles (e.g. "Médiation de la consommation") cramping the
+   right edge at 375px width. Custom clamp keeps the h2/h3 hierarchy
+   visually distinct (36px vs 24px → 1.5× ratio) without overflowing. */
+.legal-content .heading-section {
+  font-size: clamp(2.25rem, 1.36rem + 3.8vw, 3.5rem);
+}
+
+@screen sm {
+  .legal-content .heading-section {
     @apply text-title-xl;
   }
 }

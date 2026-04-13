@@ -1,13 +1,49 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring, useMotionValueEvent } from 'framer-motion';
+import { m, useTransform, useSpring, useMotionValueEvent, type MotionValue } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
+import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
+
+/**
+ * Title word on its own block line, with the same scroll-reveal timing as
+ * ScrollWordReveal. Mirrors the helper used in home StoryDesktopAnimated so
+ * the right-aligned title anchors cleanly to the column edge without the
+ * trailing nbsp that ScrollWordReveal would otherwise insert.
+ */
+function StoryTitleWord({
+  children,
+  scrollYProgress,
+  index,
+  total,
+  revealStart,
+  revealEnd,
+}: {
+  children: string;
+  scrollYProgress: MotionValue<number>;
+  index: number;
+  total: number;
+  revealStart: number;
+  revealEnd: number;
+}) {
+  const range = revealEnd - revealStart;
+  const wordStart = revealStart + (index / total) * range;
+  const wordEnd = Math.min(wordStart + range / total + range * 0.2, revealEnd);
+  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0, 1]);
+  const y = useTransform(scrollYProgress, [wordStart, wordEnd], [12, 0]);
+
+  return (
+    <m.span className="block" style={{ opacity, y }}>
+      {children}
+    </m.span>
+  );
+}
 
 const STORY_TITLE = 'Notre Histoire';
 const STORY_BODY =
@@ -32,12 +68,9 @@ const STORY_BODY_2 =
 // ---------------------------------------------------------------------------
 
 function HistoryDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: Photo clipPath reveal + grow (delayed so dome settles first)
   const photoClipProgress = useTransform(scrollYProgress, [0.06, 0.16], [0, 1]);
@@ -66,8 +99,10 @@ function HistoryDesktop() {
   );
 
   // Phase 3: Photo expands fullscreen
-  const photoLeft = useTransform(scrollYProgress, [0.42, 0.54], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.42, 0.54], ['36%', '100%']);
+  // Initial position mirrors the grid middle col: 14vw wide at left 50%
+  // (after 4vw pad + 42vw title col + 4vw gap).
+  const photoLeft = useTransform(scrollYProgress, [0.42, 0.54], ['50%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.42, 0.54], ['14%', '100%']);
   const photoPadding = useTransform(scrollYProgress, [0.42, 0.54], [16, 0]);
   const photoExpandOpacity = useTransform(scrollYProgress, [0.49, 0.58], [1, 0.6]);
 
@@ -94,26 +129,68 @@ function HistoryDesktop() {
   });
 
   return (
-    <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] lg:block">
+    <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
-          {/* Left — title */}
-          <m.div
-            className="w-[28%] pr-8 will-change-transform"
-            style={{ y: titleY, opacity: titleCombinedOpacity }}
-          >
-            <ScrollWordReveal
-              as="h2"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.12}
-              revealEnd={0.22}
-              className="heading-section text-black"
+        <div className="relative h-full">
+          {/* Asymmetric 3-col grid with uniform 4vw spacing:
+              [4vw][title 1.5fr = 42vw][4vw][photo 14vw][4vw][body 1fr = 28vw][4vw]
+              Mirrors the home StoryDesktopAnimated grid — title col wider so
+              heading-section fits at 1280, photo narrower in the middle,
+              body on the right. minmax(0, Xfr) keeps the layout symmetric
+              when the bold title slightly overflows. */}
+          <div className="grid h-full grid-cols-[minmax(0,1.5fr)_14vw_minmax(0,1fr)] items-center gap-x-[4vw] px-[4vw]">
+            {/* Left — title (right-aligned, one word per block line) */}
+            <m.div
+              className="text-right will-change-transform"
+              style={{ y: titleY, opacity: titleCombinedOpacity }}
             >
-              {STORY_TITLE}
-            </ScrollWordReveal>
-          </m.div>
+              <h2 id="histoire-title" className="heading-section text-black">
+                {STORY_TITLE.split(/\s+/).map((word, i, arr) => (
+                  <StoryTitleWord
+                    key={word}
+                    scrollYProgress={scrollYProgress}
+                    index={i}
+                    total={arr.length}
+                    revealStart={0.12}
+                    revealEnd={0.22}
+                  >
+                    {word}
+                  </StoryTitleWord>
+                ))}
+              </h2>
+            </m.div>
 
-          {/* Center — photo with clipPath reveal */}
+            {/* Middle — empty grid cell; photo is absolute-positioned so it
+                can escape the grid to fullscreen during the expand phase. */}
+            <div aria-hidden="true" />
+
+            {/* Right — body text */}
+            <m.div className="will-change-transform" style={{ opacity: textCombinedOpacity }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.16}
+                revealEnd={0.28}
+                className="text-body-xl text-black/60"
+              >
+                {STORY_BODY}
+              </ScrollWordReveal>
+
+              <m.div className="mt-8" style={{ opacity: textCombinedOpacity }}>
+                <ScrollWordReveal
+                  as="p"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.26}
+                  revealEnd={0.32}
+                  className="text-body-lg text-black/40"
+                >
+                  {STORY_BODY_2}
+                </ScrollWordReveal>
+              </m.div>
+            </m.div>
+          </div>
+
+          {/* Photo — absolute, aligns with the middle grid col then expands fullscreen */}
           <m.div
             className="absolute top-1/2 -translate-y-1/2 will-change-transform"
             style={{
@@ -135,38 +212,10 @@ function HistoryDesktop() {
                   alt="Intérieur de La Lunetterie du Coin"
                   className="h-full w-full object-cover"
                   loading="eager"
-                  widths={[640, 768, 1024]}
-                  sizes="(min-width: 1024px) 36vw, 100vw"
+                  widths={[640, 768, 1024, 1280, 1920]}
+                  sizes="14vw"
                 />
               </m.div>
-            </m.div>
-          </m.div>
-
-          {/* Right — body text */}
-          <m.div
-            className="ml-[36%] w-[36%] pl-8 will-change-transform"
-            style={{ opacity: textCombinedOpacity }}
-          >
-            <ScrollWordReveal
-              as="p"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.16}
-              revealEnd={0.28}
-              className="text-body-xl text-black/60"
-            >
-              {STORY_BODY}
-            </ScrollWordReveal>
-
-            <m.div className="mt-8" style={{ opacity: textCombinedOpacity }}>
-              <ScrollWordReveal
-                as="p"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.26}
-                revealEnd={0.32}
-                className="text-body-lg text-black/40"
-              >
-                {STORY_BODY_2}
-              </ScrollWordReveal>
             </m.div>
           </m.div>
         </div>
@@ -217,43 +266,42 @@ function HistoryDesktop() {
 // ---------------------------------------------------------------------------
 // Mobile animated — scroll-driven story + outro + photo dissolve to yellow
 //
-//  250vh container with sticky viewport
-//  Total scroll range: 250vh + 100vh = 350vh (offset start-end / end-start)
+//  350vh container with sticky viewport
+//  Total scroll range: 350vh + 100vh = 450vh (offset start-end / end-start)
 //
 //  Phase 1  (0.04–0.12) : Title "Notre Histoire" slides up + fades in
 //  Phase 2  (0.04–0.16) : Body text 1 ScrollWordReveal
 //  Phase 3  (0.12–0.24) : Body text 2 ScrollWordReveal
-//  Phase 4  (0.12–0.18) : Photo reveals from bottom band (clip 70%)
-//  Phase 5  (0.18–0.28) : Photo expands fullscreen (clip 70%→0%, covers text)
-//  Phase 6  (0.18–0.50) : Photo Ken Burns zoom
-//  Phase 7  (0.12–0.30) : Photo brightens (0.45→0.8)
-//  Phase 8  (0.18–0.26) : CTA fades in
-//  Phase 9  (0.26–0.36) : Title + text + CTA exit upward (behind photo)
-//  Phase 10 (0.32–0.40) : Dark overlay on photo (0→0.6)
-//  Phase 11 (0.36–0.50) : Outro stagger — UNE / VISION / DIFFÉRENTE
-//  Phase 12 (0.42–0.48) : Outro CTA entrance
-//  Phase 13 (0.48–0.56) : Outro + CTA fade out
-//  Phase 14 (0.54–0.66) : Photo dissolves (opacity → 0)
-//  Phase 15 (0.60–0.74) : Yellow overlay fills screen
-//  Phase 16 (0.68+)     : Navbar theme → dark
+//  Phase 4  (0.12–0.28) : Photo reveals from bottom band (clip 70%)
+//  Phase 5  (0.28–0.42) : Photo expands fullscreen (clip 70%→0%, covers text)
+//  Phase 6  (0.28–0.58) : Photo Ken Burns zoom
+//  Phase 7  (0.12–0.38) : Photo brightens (0.45→0.8)
+//  Phase 8  (0.20–0.28) : CTA fades in
+//  Phase 9  (0.36–0.46) : Title exit upward (behind photo)
+//  Phase 10 (0.38–0.48) : Text + CTA exit upward
+//  Phase 11 (0.44–0.52) : Dark overlay on photo (0→0.6)
+//  Phase 12 (0.48–0.53) : Outro stagger — UNE / VISION / DIFFÉRENTE
+//  Phase 13 (0.54–0.60) : Outro CTA entrance
+//  Phase 14 (0.60–0.66) : Outro + CTA fade out
+//  Phase 15 (0.64–0.70) : Photo dissolves (opacity → 0)
+//  Phase 16 (0.68–0.78) : Yellow overlay fills screen
+//  Phase 17 (0.72+)     : Navbar theme → dark
 // ---------------------------------------------------------------------------
 
 function HistoryMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref, scrollYProgress } = useManualScrollProgress('end-start');
 
   // ── Title entrance: slides up + fades in ──
   const titleEntranceOpacity = useTransform(scrollYProgress, [0.04, 0.12], [0, 1]);
   const titleEntranceY = useTransform(scrollYProgress, [0.04, 0.12], [40, 0]);
 
   // ── Title exit: fades out + slides up (behind photo) ──
-  const titleExitOpacity = useTransform(scrollYProgress, [0.32, 0.42], [1, 0]);
-  const titleExitY = useTransform(scrollYProgress, [0.32, 0.42], [0, -250]);
+  const titleExitOpacity = useTransform(scrollYProgress, [0.36, 0.46], [1, 0]);
+  const titleExitY = useTransform(scrollYProgress, [0.36, 0.46], [0, -250]);
 
   // Combined title transforms
   const titleOpacity = useTransform(
@@ -266,29 +314,30 @@ function HistoryMobileAnimated() {
   );
 
   // ── Body text + CTA exit ──
-  const textExitOpacity = useTransform(scrollYProgress, [0.34, 0.44], [1, 0]);
-  const textExitY = useTransform(scrollYProgress, [0.34, 0.46], [0, -200]);
+  const textExitOpacity = useTransform(scrollYProgress, [0.38, 0.48], [1, 0]);
+  const textExitY = useTransform(scrollYProgress, [0.38, 0.5], [0, -200]);
 
   // ── CTA entrance (before exit) ──
   const ctaEntranceOpacity = useTransform(scrollYProgress, [0.2, 0.28], [0, 1]);
 
   // ── Photo: bottom band → fullscreen (grows from bottom to top, covers text) ──
-  const clipTop = useTransform(scrollYProgress, [0.12, 0.2, 0.36], [70, 70, 0]);
+  // Initial band kept low (85%) so it leaves clear breathing room under the CTA.
+  const clipTop = useTransform(scrollYProgress, [0.12, 0.28, 0.42], [85, 85, 0]);
   const photoClip = useTransform(clipTop, (t) => `inset(${t}% 0% 0% 0%)`);
 
   // Ken Burns: gentle zoom only — no vertical drift
-  const photoScale = useTransform(scrollYProgress, [0.24, 0.55], [1, 1.15]);
+  const photoScale = useTransform(scrollYProgress, [0.28, 0.58], [1, 1.15]);
 
   // Photo brightness: starts dim, brightens as it expands
-  const photoBrightness = useTransform(scrollYProgress, [0.12, 0.34], [0.45, 0.8]);
+  const photoBrightness = useTransform(scrollYProgress, [0.12, 0.38], [0.45, 0.8]);
   const photoFilter = useTransform(photoBrightness, (b) => `brightness(${b})`);
 
   // ── Dark overlay for outro ──
-  const overlayOpacity = useTransform(scrollYProgress, [0.38, 0.46], [0, 0.6]);
+  const overlayOpacity = useTransform(scrollYProgress, [0.44, 0.52], [0, 0.6]);
 
   // ── Outro: word-by-word stagger — UNE / VISION / DIFFÉRENTE ──
   const STAGGER = 0.025;
-  const OUTRO_START = 0.42;
+  const OUTRO_START = 0.48;
 
   const word1Opacity = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [0, 1]);
   const word1Y = useTransform(scrollYProgress, [OUTRO_START, OUTRO_START + 0.05], [40, 0]);
@@ -318,25 +367,25 @@ function HistoryMobileAnimated() {
   const outroPointer = usePointerEvents(word1Opacity);
 
   // ── Outro CTA entrance ──
-  const outroCTAOpacity = useTransform(scrollYProgress, [0.48, 0.54], [0, 1]);
+  const outroCTAOpacity = useTransform(scrollYProgress, [0.54, 0.6], [0, 1]);
 
   // ── Outro fade out ──
-  const outroFadeOut = useTransform(scrollYProgress, [0.54, 0.6], [1, 0]);
+  const outroFadeOut = useTransform(scrollYProgress, [0.6, 0.66], [1, 0]);
 
   // ── Photo dissolves on screen — fast fade, no movement ──
-  const photoDissolve = useTransform(scrollYProgress, [0.58, 0.64], [1, 0]);
+  const photoDissolve = useTransform(scrollYProgress, [0.64, 0.7], [1, 0]);
 
   // ── Yellow overlay — transition to Values section ──
-  const yellowOverlay = useTransform(scrollYProgress, [0.62, 0.74], [0, 1]);
+  const yellowOverlay = useTransform(scrollYProgress, [0.68, 0.78], [0, 1]);
 
   // ── Navbar theme: switch to dark when yellow fills ──
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (!navRef.current) return;
-    navRef.current.setAttribute('data-navbar-theme', v >= 0.68 ? 'dark' : 'light');
+    navRef.current.setAttribute('data-navbar-theme', v >= 0.72 ? 'dark' : 'light');
   });
 
   return (
-    <div ref={ref} className="relative h-[250vh] lg:hidden">
+    <div ref={ref} className="relative h-[350vh] xl:hidden">
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
         {/* ── Photo — ABOVE text (z-20), grows upward to cover content ── */}
         <m.div
@@ -499,26 +548,7 @@ export default function AboutHistory() {
       aria-labelledby="histoire-title"
       data-navbar-theme="light"
     >
-      {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
-      <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
-        style={{ height: '12vw' }}
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="rgb(var(--color-yellow-rgb))" />
-      </svg>
-      <div
-        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
-        aria-hidden="true"
-        data-navbar-theme="light"
-      >
-        <div
-          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-accent"
-          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
-        />
-      </div>
+      <ConvexDome color="accent" />
 
       {variant === 'desktop-animated' && <HistoryDesktop />}
       {variant === 'mobile-animated' && <HistoryMobileAnimated />}

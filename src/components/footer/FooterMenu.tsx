@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import SectionContainer from '../common/SectionContainer';
 
 import Logo from '@/components/common/Logo';
+import { OpeningHoursList } from '@/components/common/OpeningHoursList';
 import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS, FOOTER_LINKS } from '@/config/footer';
 import { STORE_INFO } from '@/config/store';
@@ -24,7 +25,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
       <div className="mx-auto flex w-fit flex-col items-center space-y-xs">
         <address
           aria-label="Adresse et horaires de la boutique"
-          className="space-y-1 text-center text-body-sm not-italic"
+          className="space-y-3 text-center text-body-sm not-italic"
         >
           <p>
             {STORE_INFO.address.street} {STORE_INFO.address.postalCode} {STORE_INFO.address.city}
@@ -37,8 +38,7 @@ export default function FooterMenu({ onLinkClick }: FooterMenuProps) {
               {STORE_INFO.phone.display}
             </a>
           </p>
-          <p>{STORE_INFO.hours.weekdays}</p>
-          <p>{STORE_INFO.hours.weekend}</p>
+          <OpeningHoursList centered />
         </address>
 
         <nav

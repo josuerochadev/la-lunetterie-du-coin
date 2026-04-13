@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -24,12 +23,11 @@ const TEAM_BIO =
 // ---------------------------------------------------------------------------
 
 function TeamDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug with
+  // targets nested behind stacked sticky sections — without this the
+  // scrollYProgress gets stuck inside the exit range and the title + bio
+  // render at ~50% opacity permanently.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Portrait — clipPath reveal from bottom, gentle zoom
   const clipProgress = useTransform(scrollYProgress, [0.02, 0.2], [0, 1]);
@@ -52,10 +50,10 @@ function TeamDesktop() {
   const exitY = useTransform(scrollYProgress, [0.65, 0.8], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={sectionRef} className="hidden h-[300vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <m.div
-          className="flex h-full items-center px-16 xl:px-20"
+          className="flex h-full items-center px-16 xl:px-20 3xl:px-28"
           style={{ opacity: exitOpacity, y: exitY }}
         >
           {/* Left — Portrait with contained aspect ratio */}
@@ -76,7 +74,7 @@ function TeamDesktop() {
           </div>
 
           {/* Right — Name + Bio */}
-          <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20">
+          <div className="flex w-[55%] flex-col justify-center pl-16 xl:pl-20 3xl:pl-28">
             <m.div style={{ y: nameY, opacity: nameEntrance }}>
               <ScrollWordReveal
                 as="h2"
@@ -90,7 +88,7 @@ function TeamDesktop() {
               </ScrollWordReveal>
             </m.div>
 
-            <m.div className="mt-8 max-w-lg" style={{ opacity: bioEntrance }}>
+            <m.div className="mt-8 max-w-2xl 3xl:max-w-3xl" style={{ opacity: bioEntrance }}>
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
@@ -109,10 +107,15 @@ function TeamDesktop() {
 }
 
 // ---------------------------------------------------------------------------
-// Mobile animated — internal sticky + scroll-driven animations
+// Mobile animated — full-bleed portrait with overlaid text + gradient scrim
 //
 //  200vh container with sticky viewport
 //  useManualScrollProgress('start-start') — progress 0→1 over 100vh
+//
+//  Layout — photo fills entire sticky viewport, title + bio overlay the
+//  bottom half with a vertical gradient scrim for legibility. This keeps
+//  the full photo visible on short viewports (iPhone SE) instead of being
+//  crushed by a flex-col stack.
 //
 //  0.00 – 0.60  Photo Ken Burns zoom (scale 1 → 1.08)
 //  0.00 – 0.10  Title entrance (opacity + Y 40→0)
@@ -142,52 +145,62 @@ function TeamMobileAnimated() {
   const exitY = useSpring(exitYRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="h-[200vh] lg:hidden">
+    <div ref={ref} className="h-[200vh] xl:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.div
-          className="flex h-full flex-col will-change-transform"
+          className="relative h-full w-full will-change-transform"
           style={{ opacity: exitOpacity, y: exitY }}
         >
-          {/* Portrait — full width with Ken Burns zoom */}
-          <div className="relative aspect-[3/4] w-full overflow-hidden">
-            <m.div className="h-full w-full will-change-transform" style={{ scale: photoScale }}>
-              <ResponsiveImage
-                src="/images/about-team-romain.jpeg"
-                alt="Romain Corato, fondateur de La Lunetterie du Coin"
-                className="h-full w-full object-cover object-top"
-                sizes="100vw"
-              />
-            </m.div>
-          </div>
+          {/* Portrait — absolute full-bleed with Ken Burns zoom */}
+          <m.div className="absolute inset-0 will-change-transform" style={{ scale: photoScale }}>
+            <ResponsiveImage
+              src="/images/about-team-romain.jpeg"
+              alt="Romain Corato, fondateur de La Lunetterie du Coin"
+              className="h-full w-full object-cover object-center"
+              sizes="100vw"
+            />
+          </m.div>
 
-          {/* Text content — below photo on black bg */}
-          <div className="px-container-x pb-section pt-8">
-            {/* Title — entrance gated */}
-            <m.div style={{ opacity: titleEntrance, y: titleY }}>
-              <ScrollWordReveal
-                as="h2"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.0}
-                revealEnd={0.2}
-                className="text-heading text-accent"
-                style={{ fontSize: 'clamp(2.5rem, 10vw, 4.5rem)', lineHeight: '0.95' }}
-              >
-                L&apos;ŒIL DERRIÈRE LA BOUTIQUE
-              </ScrollWordReveal>
-            </m.div>
+          {/* Gradient scrim — smooth fade from transparent top to near-black bottom */}
+          <div
+            className="pointer-events-none absolute inset-x-0 bottom-0 h-[75%]"
+            style={{
+              background:
+                'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 30%, rgba(0,0,0,0.45) 60%, rgba(0,0,0,0.15) 85%, transparent 100%)',
+            }}
+            aria-hidden="true"
+          />
 
-            {/* Bio — entrance gated + word reveal */}
-            <m.div className="mt-8 max-w-md" style={{ opacity: bioEntrance }}>
-              <ScrollWordReveal
-                as="p"
-                scrollYProgress={scrollYProgress}
-                revealStart={0.15}
-                revealEnd={0.5}
-                className="text-body-lg text-white"
-              >
-                {TEAM_BIO}
-              </ScrollWordReveal>
-            </m.div>
+          {/* Text content — overlaid at bottom of viewport */}
+          <div className="absolute inset-x-0 bottom-0 px-container-x pb-section">
+            <div className="max-w-md sm:max-w-xl md:max-w-2xl">
+              {/* Title — entrance gated */}
+              <m.div style={{ opacity: titleEntrance, y: titleY }}>
+                <ScrollWordReveal
+                  as="h2"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.0}
+                  revealEnd={0.2}
+                  className="text-heading text-accent"
+                  style={{ fontSize: 'clamp(2.25rem, 9.5vw, 4.5rem)', lineHeight: '0.95' }}
+                >
+                  L&apos;ŒIL DERRIÈRE LA BOUTIQUE
+                </ScrollWordReveal>
+              </m.div>
+
+              {/* Bio — entrance gated + word reveal */}
+              <m.div className="mt-6" style={{ opacity: bioEntrance }}>
+                <ScrollWordReveal
+                  as="p"
+                  scrollYProgress={scrollYProgress}
+                  revealStart={0.15}
+                  revealEnd={0.5}
+                  className="text-body-lg text-white"
+                >
+                  {TEAM_BIO}
+                </ScrollWordReveal>
+              </m.div>
+            </div>
           </div>
         </m.div>
       </div>
@@ -211,7 +224,7 @@ export default function AboutTeam() {
     >
       {/* Gradient dissolve — long smooth fade from yellow (Values) to black (Team) — desktop only */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] lg:block"
+        className="pointer-events-none absolute inset-x-0 top-0 z-[1] hidden h-[40vh] xl:block"
         style={{
           background: 'linear-gradient(to bottom, rgb(var(--color-yellow-rgb)), transparent)',
         }}

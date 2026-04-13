@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 import Heart from 'lucide-react/dist/esm/icons/heart';
 import Leaf from 'lucide-react/dist/esm/icons/leaf';
 import Award from 'lucide-react/dist/esm/icons/award';
@@ -48,7 +47,7 @@ function ValueCard({
 
   return (
     <m.div
-      className="will-change-transform"
+      className="min-w-0 will-change-transform"
       style={{
         opacity: entrance.opacity,
         y: entrance.y,
@@ -81,12 +80,9 @@ function ValueCard({
 // ---------------------------------------------------------------------------
 
 function ValuesDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections (see hook comment).
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.05], [0, 1]);
@@ -98,7 +94,7 @@ function ValuesDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] lg:block">
+    <div ref={sectionRef} className="hidden h-[300vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
         <m.div
           className="flex h-full flex-col items-center justify-center px-container-x"
@@ -118,7 +114,7 @@ function ValuesDesktop() {
           </m.div>
 
           {/* Cards — 3 columns */}
-          <div className="grid w-full max-w-6xl grid-cols-3 gap-12">
+          <div className="grid w-full grid-cols-3 gap-x-[6vw] gap-y-12">
             {VALUES_DATA.map((value, i) => (
               <ValueCard
                 key={value.title}
@@ -169,13 +165,18 @@ function MobileRevealCard({
   const Icon = iconMap[value.iconName];
 
   return (
-    <m.div className="space-y-4 text-center will-change-transform" style={{ scale, y }}>
+    <m.div
+      className="space-y-3 text-center will-change-transform sm:space-y-4"
+      style={{ scale, y }}
+    >
       <Icon
         className="mx-auto h-8 w-8 text-secondary-orange"
         strokeWidth={1.5}
         aria-hidden="true"
       />
-      <h3 className="text-subtitle text-title-sm text-black">{value.title}</h3>
+      <h3 className="text-subtitle text-title-sm tracking-[0.1em] text-black sm:tracking-[0.2em]">
+        {value.title}
+      </h3>
       <p className="text-body text-black">{value.description}</p>
     </m.div>
   );
@@ -193,19 +194,25 @@ function ValuesMobileAnimated() {
   const titleScale = useSpring(titleScaleRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="relative z-10 h-[250vh] lg:hidden">
-      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[6vh]">
+    <div ref={ref} className="relative z-10 h-[250vh] xl:hidden">
+      <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[5vh] pt-[3vh] sm:pb-[6vh] sm:pt-[4vh]">
         <m.div
           className="w-full px-container-x will-change-[clip-path]"
           style={{ clipPath: contentClip }}
         >
           {/* Title — centered, revealed by clip */}
-          <m.div className="mb-12 text-center will-change-transform" style={{ scale: titleScale }}>
+          <m.div
+            className="mb-6 text-center will-change-transform sm:mb-8"
+            style={{ scale: titleScale }}
+          >
             <h2 className="heading-section text-black">Une lunetterie qui a du cœur</h2>
           </m.div>
 
-          {/* Cards grid — staggered micro-movements */}
-          <div className="grid gap-10 sm:grid-cols-2">
+          {/* Cards grid — staggered micro-movements.
+              The last card, when alone on its row (odd count), is centered
+              across the two columns while keeping a half-column width so it
+              visually matches the cards above. */}
+          <div className="grid gap-5 sm:grid-cols-2 sm:gap-10 sm:[&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:mx-auto sm:[&>*:last-child:nth-child(odd)]:max-w-[calc(50%-1.25rem)]">
             {VALUES_DATA.map((value, i) => (
               <MobileRevealCard
                 key={value.title}

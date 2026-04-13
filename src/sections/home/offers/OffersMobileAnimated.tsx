@@ -7,13 +7,13 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { SPRING_CONFIG } from '@/lib/motion';
 
-const SCROLL_HEIGHT_VH = 200;
+const SCROLL_HEIGHT_VH = 180;
 const OFFER_COUNT = HOMEPAGE_OFFERS.length;
 
 /**
  * Mobile-animated offers — sticky viewport with layered images + cards.
  *
- * Timeline (scroll progress 0→1 over 200vh):
+ * Timeline (scroll progress 0→1 over 180vh):
  *   0.00–0.10  Image 1 fade-in + scale
  *   0.08–0.18  Card 1 slide-up + micro-stagger
  *   0.18–0.38  Hold offer 1
@@ -21,8 +21,9 @@ const OFFER_COUNT = HOMEPAGE_OFFERS.length;
  *   0.48–0.58  Card 2 slide-up + micro-stagger
  *   0.58–0.75  Hold offer 2
  *   0.75–0.82  Card 2 exit + title fade-out
- *   0.82–0.92  Outro phrase "UNE PAIRE QUI A DU CHIEN"
- *   0.90–0.97  CTA "Voir nos offres"
+ *   0.82–0.87  Outro phrase reveal "UNE PAIRE QUI A DU CHIEN"
+ *   0.87–0.91  CTA slide-up
+ *   0.91–1.00  Hold (no fade-out — next section covers)
  */
 export function OffersMobileAnimated() {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -101,12 +102,12 @@ export function OffersMobileAnimated() {
   // ── Title ───────────────────────────────────────────────────────
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.06, 0.75, 0.82], [0, 1, 1, 0]);
 
-  // ── Outro phrase ──────────────────────────────────────────────
-  const outroOpacity = useTransform(scrollYProgress, [0.82, 0.88, 0.96, 1.0], [0, 1, 1, 0]);
+  // ── Outro phrase — no fade-out, next StickySection covers naturally ──
+  const outroOpacity = useTransform(scrollYProgress, [0.82, 0.87], [0, 1]);
 
   // ── Section CTA ────────────────────────────────────────────────
-  const sectionCtaOpacity = useTransform(scrollYProgress, [0.88, 0.93, 0.96, 1.0], [0, 1, 1, 0]);
-  const sectionCtaYRaw = useTransform(scrollYProgress, [0.88, 0.93], [20, 0]);
+  const sectionCtaOpacity = useTransform(scrollYProgress, [0.87, 0.91], [0, 1]);
+  const sectionCtaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const sectionCtaY = useSpring(sectionCtaYRaw, SPRING_CONFIG);
 
   const imgTransforms = [
@@ -120,7 +121,7 @@ export function OffersMobileAnimated() {
   ];
 
   return (
-    <div ref={sectionRef} className="lg:hidden" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={sectionRef} className="xl:hidden" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="pointer-events-auto sticky top-0 flex h-screen flex-col overflow-hidden">
         {/* ── Image layer (faded backdrop) ── */}
         <div className="absolute inset-0 z-0">
@@ -231,7 +232,7 @@ export function OffersMobileAnimated() {
               as="h3"
               scrollYProgress={scrollYProgress}
               revealStart={0.82}
-              revealEnd={0.88}
+              revealEnd={0.87}
               className="text-heading text-fluid-outro text-black"
             >
               UNE PAIRE QUI A DU CHIEN

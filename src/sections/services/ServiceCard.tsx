@@ -101,7 +101,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={0}
       >
-        <span className="mb-4 block text-body-sm font-medium uppercase tracking-widest text-white">
+        <span className="mb-3 block text-body-xs font-medium uppercase tracking-widest text-secondary-orange">
           {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
         </span>
       </StaggerChild>
@@ -114,12 +114,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={1}
       >
-        <h3
-          className="text-heading mb-5 text-accent"
-          style={{ fontSize: 'clamp(1.8rem, 3vw, 3.2rem)', lineHeight: '1.05' }}
-        >
-          {service.title}
-        </h3>
+        <h3 className="text-heading mb-5 text-title-md text-accent">{service.title}</h3>
       </StaggerChild>
 
       <StaggerChild
@@ -130,7 +125,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={2}
       >
-        <p className="mb-8 max-w-lg text-body-lg leading-relaxed text-secondary-blue">
+        <p className="mb-6 max-w-2xl text-body-xl !leading-[1.2] text-secondary-blue">
           {service.description}
         </p>
       </StaggerChild>
@@ -143,11 +138,11 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={3}
       >
-        <ul className="mb-8 grid max-w-lg grid-cols-2 gap-x-6 gap-y-2.5">
+        <ul className="mb-6 max-w-2xl space-y-2">
           {service.details.slice(0, 6).map((detail, i) => (
-            <li key={i} className="flex gap-2.5 text-body-sm text-white">
+            <li key={i} className="flex items-baseline gap-3 text-body !leading-[1.2] text-white">
               <span
-                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                className="mt-2 h-1.5 w-1.5 shrink-0 self-start rounded-full bg-secondary-orange"
                 aria-hidden="true"
               />
               <span>{detail}</span>
@@ -165,11 +160,11 @@ export function ServiceCard({
           exitEnd={stExitEnd}
           staggerIndex={4}
         >
-          <div className="mb-8 max-w-lg border-l-2 border-accent/30 pl-5">
-            <h4 className="mb-2 text-body-sm font-medium text-white">
+          <div className="mb-6 max-w-2xl border-l-2 border-accent/30 pl-5">
+            <h4 className="mb-1.5 text-body font-medium !leading-[1.2] text-white">
               Conditions pour un examen en magasin
             </h4>
-            <ul className="space-y-1 text-body-sm text-white">
+            <ul className="space-y-1 text-body-sm !leading-[1.25] text-white/85">
               <li>
                 Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
               </li>

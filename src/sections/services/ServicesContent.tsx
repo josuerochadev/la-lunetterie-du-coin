@@ -1,6 +1,3 @@
-import { useRef } from 'react';
-import { useScroll } from 'framer-motion';
-
 import { SERVICE_COUNT, SERVICES_START, SERVICES_END } from './constants';
 import { PhotoStack } from './PhotoStack';
 import { ServiceCard } from './ServiceCard';
@@ -9,18 +6,18 @@ import { ServicesMobileAnimated } from './ServicesMobileAnimated';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import { ProgressDots } from '@/components/motion/ProgressDots';
+import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SERVICES_DATA } from '@/data/services';
 import { ACCENT_HEX } from '@/config/design';
 
 export default function ServicesContent() {
   const variant = useResponsiveMotion();
-  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: variant === 'desktop-animated' ? sectionRef : undefined,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
     <section
@@ -30,26 +27,7 @@ export default function ServicesContent() {
       className="relative"
       style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
     >
-      {/* Convex dome — SVG on desktop, CSS border-radius on mobile */}
-      <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full lg:block"
-        style={{ height: '12vw' }}
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
-      </svg>
-      <div
-        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden lg:hidden"
-        aria-hidden="true"
-        data-navbar-theme="light"
-      >
-        <div
-          className="absolute left-1/2 top-0 h-full w-[140vw] -translate-x-1/2 bg-black"
-          style={{ borderRadius: '50% 50% 0 0 / 100% 100% 0 0' }}
-        />
-      </div>
+      <ConvexDome color="black" />
 
       {/* Static fallback (reduced motion) */}
       {variant === 'static' && (
@@ -88,7 +66,7 @@ export default function ServicesContent() {
                     end={SERVICES_END}
                   />
 
-                  <div className="relative flex w-[45%] flex-col justify-center">
+                  <div className="relative flex flex-1 flex-col justify-center px-[3vw]">
                     {SERVICES_DATA.map((service, i) => (
                       <ServiceCard
                         key={service.id}

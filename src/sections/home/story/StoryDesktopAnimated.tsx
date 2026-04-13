@@ -1,20 +1,54 @@
 import { useRef } from 'react';
-import { m, useScroll, useSpring, useTransform, useMotionValueEvent } from 'framer-motion';
+import { m, useSpring, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import { useFadeInOut } from '@/hooks/useFadeInOut';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG, SPRING_CONFIG_SLOW } from '@/lib/motion';
 
+/**
+ * Title word on its own block line, with the same scroll-reveal timing as
+ * ScrollWordReveal. Block display lets each word anchor independently to the
+ * right edge of a `text-right` parent — unlike ScrollWordReveal which wraps
+ * words in inline-block spans and carries a trailing nbsp that offsets the
+ * first word leftward on the line.
+ */
+function StoryTitleWord({
+  children,
+  scrollYProgress,
+  index,
+  total,
+  revealStart,
+  revealEnd,
+}: {
+  children: string;
+  scrollYProgress: MotionValue<number>;
+  index: number;
+  total: number;
+  revealStart: number;
+  revealEnd: number;
+}) {
+  const range = revealEnd - revealStart;
+  const wordStart = revealStart + (index / total) * range;
+  const wordEnd = Math.min(wordStart + range / total + range * 0.2, revealEnd);
+  const opacity = useTransform(scrollYProgress, [wordStart, wordEnd], [0, 1]);
+  const y = useTransform(scrollYProgress, [wordStart, wordEnd], [12, 0]);
+
+  return (
+    <m.span className="block" style={{ opacity, y }}>
+      {children}
+    </m.span>
+  );
+}
+
 export function StoryDesktopAnimated() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: photo appears alone — starts at ~60% height, grows + zooms continuously
   const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);
@@ -26,8 +60,10 @@ export function StoryDesktopAnimated() {
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // End sequence: photo expands fullscreen
-  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['28%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['36%', '100%']);
+  // Initial position mirrors the grid middle col: 14vw wide at left 50%
+  // (after 4vw pad + 42vw title col + 4vw gap).
+  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['50%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['14%', '100%']);
   const photoPadding = useTransform(scrollYProgress, [0.5, 0.6], [16, 0]);
   const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.62], [1, 0.7]);
 
@@ -69,24 +105,52 @@ export function StoryDesktopAnimated() {
   const textCombinedOpacity = useFadeInOut(scrollYProgress, 0.15, 0.25, 0.45, 0.5);
 
   return (
-    <div ref={sectionRef} className="hidden min-h-[450vh] lg:block">
+    <div ref={sectionRef} className="hidden min-h-[450vh] xl:block">
       <div className="sticky top-0 h-screen overflow-hidden">
-        <div className="relative flex h-full items-start px-16 pt-[12vh] xl:px-20">
-          {/* Left — title */}
-          <m.div className="w-[28%] pr-8" style={{ y: titleY, opacity: titleCombinedOpacity }}>
-            <ScrollWordReveal
-              as="h2"
-              id="story-title"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.15}
-              revealEnd={0.28}
-              className="heading-section text-white"
-            >
-              {STORY_TITLE}
-            </ScrollWordReveal>
-          </m.div>
+        <div className="relative h-full">
+          {/* Asymmetric 3-col grid with uniform 4vw spacing:
+              [4vw][title 1.5fr = 42vw][4vw][photo 14vw][4vw][body 1fr = 28vw][4vw]
+              Title col gets 1.5× the body col so title-xl fits at 1280 without
+              clipping the viewport. minmax(0, Xfr) prevents fr cols from
+              expanding when the bold title slightly overflows. */}
+          <div className="grid h-full grid-cols-[minmax(0,1.5fr)_14vw_minmax(0,1fr)] items-center gap-x-[4vw] px-[4vw]">
+            {/* Left — title (right-aligned, one word per block line) */}
+            <m.div className="text-right" style={{ y: titleY, opacity: titleCombinedOpacity }}>
+              <h2 id="story-title" className="heading-section text-white">
+                {STORY_TITLE.split(/\s+/).map((word, i, arr) => (
+                  <StoryTitleWord
+                    key={word}
+                    scrollYProgress={scrollYProgress}
+                    index={i}
+                    total={arr.length}
+                    revealStart={0.15}
+                    revealEnd={0.28}
+                  >
+                    {word}
+                  </StoryTitleWord>
+                ))}
+              </h2>
+            </m.div>
 
-          {/* Center — photo: starts ~60% height, grows to full + continuous zoom */}
+            {/* Middle — empty grid cell; photo is absolute-positioned so it can
+                escape the grid to fullscreen during the expand phase. */}
+            <div aria-hidden="true" />
+
+            {/* Right — body + CTA */}
+            <m.div style={{ opacity: textCombinedOpacity }}>
+              <ScrollWordReveal
+                as="p"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.17}
+                revealEnd={0.32}
+                className="text-body-xl text-secondary-blue"
+              >
+                {STORY_BODY}
+              </ScrollWordReveal>
+            </m.div>
+          </div>
+
+          {/* Photo — absolute, aligns with the middle grid col then expands fullscreen */}
           <m.div
             className="absolute top-1/2 -translate-y-1/2"
             style={{
@@ -107,19 +171,6 @@ export function StoryDesktopAnimated() {
                 style={{ scale: photoScale }}
               />
             </m.div>
-          </m.div>
-
-          {/* Right — body + CTA */}
-          <m.div className="ml-[36%] w-[36%] pl-8" style={{ opacity: textCombinedOpacity }}>
-            <ScrollWordReveal
-              as="p"
-              scrollYProgress={scrollYProgress}
-              revealStart={0.17}
-              revealEnd={0.32}
-              className="text-body-xl text-secondary-blue"
-            >
-              {STORY_BODY}
-            </ScrollWordReveal>
           </m.div>
         </div>
 
@@ -144,11 +195,14 @@ export function StoryDesktopAnimated() {
                 >
                   GRAND
                 </span>
-                {/* Actual GRAND — oversized font for crisp zoom rasterization */}
+                {/* Actual GRAND — oversized font for crisp zoom rasterization.
+                    The inner clamp must match the title-xl tailwind token so
+                    GRAND's starting size (fontSize * 1/RASTER_BOOST) lines up
+                    with VOYEZ and PAYEZ PETIT on either side. */}
                 <m.span
                   className="text-heading absolute inset-0 flex items-center justify-center overflow-visible whitespace-nowrap text-accent"
                   style={{
-                    fontSize: 'calc(clamp(2.5rem, 5vw, 15rem) * 10)',
+                    fontSize: 'calc(clamp(3.5rem, 2.2rem + 5.45vw, 15rem) * 10)',
                     lineHeight: '0.9',
                     scale: grandScaleSpring,
                   }}

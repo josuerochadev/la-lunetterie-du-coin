@@ -19,7 +19,7 @@ export function OfferImage({ image, title }: OfferImageProps): ReactNode {
           alt={title}
           className="h-full w-full object-cover"
           loading="lazy"
-          widths={[384, 640]}
+          widths={[640, 768, 1024, 1280]}
           sizes="(min-width: 1024px) 33vw, 50vw"
         />
       </div>

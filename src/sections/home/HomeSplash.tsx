@@ -3,7 +3,7 @@ import { m, useScroll, useSpring, useTransform } from 'framer-motion';
 
 import LogoNO from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
 import ResponsiveImage from '@/components/common/ResponsiveImage';
-import { useIsLg } from '@/hooks/useIsLg';
+import { useIsXl } from '@/hooks/useIsXl';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { SPRING_CONFIG } from '@/lib/motion';
 
@@ -34,7 +34,7 @@ function getVideoFormat(): VideoFormat {
  */
 export default function HomeSplash() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const isLg = useIsLg();
+  const isXl = useIsXl();
   const videoRef = useRef<HTMLVideoElement>(null);
   const [format, setFormat] = useState<VideoFormat>(() =>
     typeof window !== 'undefined' ? getVideoFormat() : 'landscape',
@@ -126,7 +126,7 @@ export default function HomeSplash() {
     <div className="pointer-events-none fixed inset-0 z-[9]" aria-hidden="true">
       <div className="relative flex h-screen w-full items-center justify-center overflow-hidden bg-accent">
         {/* ── Desktop layout: centred video ── */}
-        {isLg && (
+        {isXl && (
           <>
             {!videoFailed && (
               <m.video
@@ -150,7 +150,7 @@ export default function HomeSplash() {
         )}
 
         {/* ── Mobile/Tablet layout — fully scroll-driven ── */}
-        {!isLg && (
+        {!isXl && (
           <>
             {/* Logo video — centred at scroll 0, lifts to top half on scroll */}
             <m.div
@@ -190,7 +190,7 @@ export default function HomeSplash() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   sizes="54vw"
-                  widths={[384, 640]}
+                  widths={[640, 768, 1024, 1280, 1920]}
                 />
               </m.div>
             </m.div>
@@ -210,7 +210,7 @@ export default function HomeSplash() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   sizes="54vw"
-                  widths={[384, 640]}
+                  widths={[640, 768, 1024, 1280, 1920]}
                 />
               </m.div>
             </m.div>

@@ -45,7 +45,7 @@ export default function LinkCTA({
   ...props
 }: LinkCTAProps) {
   const classes = cn(
-    'group/cta relative inline-flex w-fit items-center gap-2 text-body font-normal transition-[font-weight] duration-300 hover:font-semibold',
+    'group/cta relative inline-flex w-fit items-center gap-2 text-body font-normal transition-[font-weight] duration-300 hover:font-semibold md:text-body-lg',
     textColorMap[theme],
     className,
   );

@@ -115,39 +115,44 @@ function ServiceSlide({
         style={{ opacity: combinedTitle }}
         aria-hidden={index > 0 ? true : undefined}
       >
-        <m.h3
-          className="text-subtitle text-title-sm text-white"
-          style={{ opacity: combinedTitle, y: titleY }}
-        >
-          {service.title}
-        </m.h3>
-        <m.p
-          className="mt-3 max-w-[32ch] text-body text-white/85"
-          style={{ opacity: combinedDesc, y: descY }}
-        >
-          {service.description}
-        </m.p>
-        <m.div className="mt-4 flex flex-wrap items-center gap-4" style={{ opacity: combinedCta }}>
-          <LinkCTA
-            to={service.link}
-            theme="dark"
-            aria-label={`En savoir plus sur ${service.title}`}
+        <div className="max-w-md sm:max-w-xl md:max-w-2xl">
+          <m.h3
+            className="text-subtitle text-title-sm text-white"
+            style={{ opacity: combinedTitle, y: titleY }}
           >
-            En savoir plus
-          </LinkCTA>
-          {service.title === 'Examens de vue' && (
+            {service.title}
+          </m.h3>
+          <m.p
+            className="mt-3 text-body text-white/85 md:text-body-lg"
+            style={{ opacity: combinedDesc, y: descY }}
+          >
+            {service.description}
+          </m.p>
+          <m.div
+            className="mt-4 flex flex-wrap items-center gap-4"
+            style={{ opacity: combinedCta }}
+          >
             <LinkCTA
-              href={BOOKING_URL}
-              target="_blank"
-              rel="noopener noreferrer"
+              to={service.link}
               theme="dark"
-              icon={ExternalLink}
-              aria-label="Prendre rendez-vous pour un examen de vue"
+              aria-label={`En savoir plus sur ${service.title}`}
             >
-              Prendre RDV
+              En savoir plus
             </LinkCTA>
-          )}
-        </m.div>
+            {service.title === 'Examens de vue' && (
+              <LinkCTA
+                href={BOOKING_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                theme="dark"
+                icon={ExternalLink}
+                aria-label="Prendre rendez-vous pour un examen de vue"
+              >
+                Prendre RDV
+              </LinkCTA>
+            )}
+          </m.div>
+        </div>
       </m.div>
     </>
   );
@@ -466,7 +471,7 @@ export function ServicesMobileAnimated() {
   );
 
   return (
-    <div className="lg:hidden">
+    <div className="xl:hidden">
       <div ref={sectionRef} className="relative" style={{ height: `${TOTAL_VH * 100}vh` }}>
         <div className="sticky top-0 h-[100dvh] overflow-hidden">
           {/* Photo layers */}

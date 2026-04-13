@@ -1,5 +1,4 @@
-import { useRef } from 'react';
-import { m, useScroll, useTransform, useSpring } from 'framer-motion';
+import { m, useTransform, useSpring } from 'framer-motion';
 
 import { SCROLL_HEIGHT_VH, OFFERS_TIMELINE, IMAGE_LAYOUT } from './constants';
 
@@ -7,14 +6,13 @@ import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_OFFERS, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 export function OffersDesktop() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start start', 'end end'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('start-start');
 
   // Title
   const titleOpacity = useTransform(scrollYProgress, [0.0, 0.03, 0.78, 0.83], [0, 1, 1, 0]);
@@ -179,8 +177,8 @@ export function OffersDesktop() {
   const card1Pointer = usePointerEvents(card1Opacity);
 
   // --- Outro ---
-  const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.95, 0.98], [0, 1, 1, 0]);
-  const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.95, 0.98], [0, 1, 1, 0]);
+  const phraseOpacity = useTransform(scrollYProgress, [0.82, 0.87, 0.97, 1.0], [0, 1, 1, 0]);
+  const ctaOpacity = useTransform(scrollYProgress, [0.87, 0.91, 0.97, 1.0], [0, 1, 1, 0]);
   const ctaYRaw = useTransform(scrollYProgress, [0.87, 0.91], [20, 0]);
   const ctaY = useSpring(ctaYRaw, SPRING_CONFIG);
   const ctaPointer = usePointerEvents(ctaOpacity);
@@ -221,7 +219,7 @@ export function OffersDesktop() {
   ];
 
   return (
-    <div ref={sectionRef} className="hidden lg:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
+    <div ref={sectionRef} className="hidden xl:block" style={{ height: `${SCROLL_HEIGHT_VH}vh` }}>
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
         {/* Title */}
         <m.div
@@ -273,7 +271,7 @@ export function OffersDesktop() {
           {HOMEPAGE_OFFERS.map((offer, i) => (
             <m.div
               key={offer.id}
-              className="absolute w-full max-w-2xl px-container-x"
+              className="absolute w-full max-w-3xl px-container-x 3xl:max-w-4xl 4xl:max-w-5xl"
               style={{
                 opacity: cardTransforms[i].opacity,
                 y: cardTransforms[i].y,
@@ -288,9 +286,11 @@ export function OffersDesktop() {
                   className="absolute bottom-0 left-0 top-0 w-1.5 bg-secondary-blue transition-all duration-300 ease-out group-hover/card:w-2.5"
                   aria-hidden="true"
                 />
-                <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12">
+                <div className="relative z-10 px-10 py-10 xl:px-14 xl:py-12 4xl:px-20 4xl:py-16">
                   <h3 className="text-subtitle text-title-sm text-accent">{offer.catchphrase}</h3>
-                  <p className="mt-5 max-w-md text-body-lg text-white">{offer.summary}</p>
+                  <p className="mt-5 max-w-md text-body-lg text-white 3xl:max-w-lg 4xl:max-w-2xl">
+                    {offer.summary}
+                  </p>
                   <LinkCTA
                     to={offer.link}
                     theme="dark"

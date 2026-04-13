@@ -50,19 +50,42 @@ const config: Config = {
         sans: ['"Satoshi"', 'system-ui', 'sans-serif'], // Default
       },
       fontSize: {
-        /* ===== HIERARCHIE STANDARDISEE ===== */
+        /* ===== HIERARCHIE STANDARDISEE =====
+         *
+         * Toutes les clamps sont calibrées sur deux points d'ancrage :
+         *   - min (anchor mobile) = taille cible à 375px (iPhone SE)
+         *   - max (anchor 4K)     = plafond bold maximaliste
+         *   - préféré linéaire    = a*rem + b*vw, calibré pour atteindre la
+         *                           valeur cible à 1920px (FHD) sans plateau.
+         *
+         * Hiérarchie stricte garantie à toutes les tailles d'écran :
+         *   title-xl > title-lg > title-md > title-sm
+         *     > body-xl > body-lg > body > body-sm > body-xs
+         *
+         * Repères (px) : 375 / 768 / 1280 / 1920 / 2560
+         *   title-xl : 56  /  77 / 105 / 140 / 175
+         *   title-lg : 44  /  58 /  77 / 100 / 123
+         *   title-md : 32  /  43 /  58 /  76 /  94
+         *   title-sm : 24  /  31 /  39 /  50 /  61
+         *   body-xl  : 26  /  29 /  34 /  39 /  44
+         *   body-lg  : 22  /  25 /  28 /  33 /  37
+         *   body     : 18  /  21 /  24 /  28 /  32
+         *   body-sm  : 16  /  17 /  18 /  19 /  20
+         *   body-xs  : 14  /  15 /  15 /  16 /  17
+         */
+
         // Titres - line-height serré pour impact (charte 0.9)
-        'title-xl': ['clamp(3.5rem, 5vw, 15rem)', '0.9'],
-        'title-lg': ['clamp(2.75rem, 3vw, 10rem)', '0.9'],
-        'title-md': ['clamp(2rem, 2.5vw, 5rem)', '0.9'],
-        'title-sm': ['clamp(1.5rem, 2vw, 3.5rem)', '0.9'],
+        'title-xl': ['clamp(3.5rem, 2.2rem + 5.45vw, 15rem)', '0.9'],
+        'title-lg': ['clamp(2.75rem, 1.9rem + 3.63vw, 10rem)', '0.9'],
+        'title-md': ['clamp(2rem, 1.33rem + 2.85vw, 7.5rem)', '0.9'],
+        'title-sm': ['clamp(1.5rem, 1.1rem + 1.68vw, 5rem)', '0.9'],
 
         // Corps de texte - line-height 1.3
-        'body-xl': ['clamp(1.5rem, 1.8vw, 3rem)', '1.3'],
-        'body-lg': ['clamp(1.25rem, 1.5vw, 2.5rem)', '1.3'],
-        body: ['clamp(1rem, 1.5vw, 3.5rem)', '1.3'],
-        'body-sm': ['clamp(0.9rem, 1.1vw, 2.5rem)', '1.3'],
-        'body-xs': ['clamp(0.75rem, 1vw, 1.75rem)', '1.3'],
+        'body-xl': ['clamp(1.625rem, 1.43rem + 0.84vw, 3rem)', '1.3'],
+        'body-lg': ['clamp(1.375rem, 1.21rem + 0.71vw, 2.5rem)', '1.3'],
+        body: ['clamp(1.125rem, 0.97rem + 0.65vw, 2.5rem)', '1.3'],
+        'body-sm': ['clamp(1rem, 0.95rem + 0.2vw, 1.5rem)', '1.3'],
+        'body-xs': ['clamp(0.875rem, 0.84rem + 0.13vw, 1.25rem)', '1.3'],
       },
 
       /* ====== LAYOUT ====== */

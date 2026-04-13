@@ -4,12 +4,16 @@ import { getSocialIcon } from '@/lib/iconRegistry';
 import { FOOTER_SOCIALS } from '@/config/footer';
 import { BOOKING_URL } from '@/config/endpoints';
 
+type FooterSocialProps = {
+  className?: string;
+};
+
 /**
  * FooterSocial - Prendre RDV + Réseaux sociaux
  */
-export default function FooterSocial() {
+export default function FooterSocial({ className }: FooterSocialProps = {}) {
   return (
-    <div>
+    <div className={className}>
       {/* CTA Prendre RDV — le titre sert de lien */}
       <a
         href={BOOKING_URL}
@@ -17,7 +21,7 @@ export default function FooterSocial() {
         rel="noopener noreferrer"
         className="group/cta focus-style relative inline-flex items-center gap-2"
       >
-        <h3 className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black">
+        <h3 className="text-subtitle text-body-sm text-accent transition-[font-weight] duration-300 group-hover/cta:font-black 3xl:text-body">
           Prendre RDV
         </h3>
         <ExternalLink
@@ -28,8 +32,8 @@ export default function FooterSocial() {
 
       {/* Réseaux sociaux */}
       <div className="mt-6">
-        <h3 className="text-subtitle mb-4 text-body-sm text-accent">Suivez-nous</h3>
-        <div className="flex gap-4">
+        <h3 className="text-subtitle mb-4 text-body-sm text-accent 3xl:text-body">Suivez-nous</h3>
+        <div className="flex gap-4 3xl:gap-5">
           {FOOTER_SOCIALS.map((social) => {
             const Icon = getSocialIcon(social.iconName);
             return (
@@ -41,7 +45,7 @@ export default function FooterSocial() {
                 rel="noopener noreferrer"
                 aria-label={social.label}
               >
-                <Icon className="h-5 w-5" aria-hidden="true" />
+                <Icon className="h-5 w-5 3xl:h-6 3xl:w-6" aria-hidden="true" />
               </a>
             );
           })}

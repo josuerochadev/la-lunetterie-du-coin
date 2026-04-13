@@ -1,8 +1,10 @@
 import { type ReactNode } from 'react';
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
+import { ConvexDome } from '@/components/common/ConvexDome';
 import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 import { OFFERS_DATA, type OfferData } from '@/data/offers';
 import { ACCENT_HEX } from '@/config/design';
@@ -128,7 +130,7 @@ function OfferCard({
 
   return (
     <m.div
-      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-xl xl:max-w-2xl"
+      className="absolute inset-x-0 top-1/2 mx-auto w-full max-w-2xl xl:max-w-3xl 3xl:max-w-4xl 4xl:max-w-5xl"
       style={{
         opacity: cardOpacity,
         y: cardY,
@@ -146,7 +148,7 @@ function OfferCard({
           aria-hidden="true"
         />
 
-        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10">
+        <div className="relative z-10 px-8 py-8 xl:px-10 xl:py-10 4xl:px-14 4xl:py-14">
           {/* Counter */}
           <StaggerChild
             scrollYProgress={scrollYProgress}
@@ -170,7 +172,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={1}
           >
-            <h3 className="text-subtitle mb-4 text-title-sm text-black">{offer.catchphrase}</h3>
+            <h3 className="text-subtitle mb-5 text-title-sm text-black">{offer.catchphrase}</h3>
           </StaggerChild>
 
           {/* Description */}
@@ -182,9 +184,7 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={2}
           >
-            <p className="mb-6 max-w-md text-body leading-relaxed text-black">
-              {offer.description}
-            </p>
+            <p className="mb-6 text-body-lg !leading-[1.35] text-black">{offer.description}</p>
           </StaggerChild>
 
           {/* Details — 2 columns grid with orange bullets */}
@@ -196,11 +196,14 @@ function OfferCard({
             exitEnd={stExitEnd}
             staggerIndex={3}
           >
-            <ul className="mb-6 grid max-w-lg grid-cols-2 gap-x-5 gap-y-2">
+            <ul className="mb-6 space-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
-                <li key={i} className="flex gap-2 text-body-sm text-black">
+                <li
+                  key={i}
+                  className="flex items-baseline gap-3 text-body !leading-[1.2] text-black"
+                >
                   <span
-                    className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
+                    className="mt-2 h-1.5 w-1.5 shrink-0 self-start rounded-full bg-secondary-orange"
                     aria-hidden="true"
                   />
                   <span>{detail}</span>
@@ -305,7 +308,7 @@ function OffersDesktop() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden xl:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
@@ -488,9 +491,13 @@ function OfferSlide({
     [photoOpacity, exitOpacity] as const,
     ([enter, exit]: number[]) => Math.min(enter, exit),
   );
+  const slidePointerEvents = usePointerEvents(slideOpacity);
 
   return (
-    <m.div className="absolute inset-0 will-change-[opacity]" style={{ opacity: slideOpacity }}>
+    <m.div
+      className="absolute inset-0 will-change-[opacity]"
+      style={{ opacity: slideOpacity, pointerEvents: slidePointerEvents }}
+    >
       {/* Full-viewport photo */}
       <m.img
         src={offer.image}
@@ -543,7 +550,7 @@ function OfferSlide({
 
           {/* Title */}
           <m.h3
-            className="text-subtitle mb-4 text-title-sm text-white"
+            className="text-subtitle mb-3 text-title-sm text-white sm:mb-4"
             style={{ opacity: titleOpacity, y: titleY }}
           >
             {offer.catchphrase}
@@ -551,7 +558,7 @@ function OfferSlide({
 
           {/* Description */}
           <m.p
-            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            className="mb-4 text-body leading-snug text-white/85 sm:mb-5 sm:text-body-lg sm:leading-relaxed"
             style={{ opacity: descOpacity, y: descY }}
           >
             {offer.description}
@@ -559,11 +566,11 @@ function OfferSlide({
 
           {/* Details list */}
           <m.ul
-            className="mb-5 grid grid-cols-1 gap-y-1.5 sm:grid-cols-2 sm:gap-x-6"
+            className="mb-4 grid grid-cols-1 gap-y-1.5 sm:mb-5 sm:grid-cols-2 sm:gap-x-6"
             style={{ opacity: detailsOpacity }}
           >
             {offer.details.slice(0, 6).map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body text-white/70">
+              <li key={i} className="flex gap-2 text-body-sm text-white/70 sm:text-body">
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -573,17 +580,22 @@ function OfferSlide({
             ))}
           </m.ul>
 
-          {/* Conditions box */}
-          <m.div
-            className="mb-5 border-l-2 border-secondary-blue/40 pl-4"
-            style={{ opacity: condOpacity }}
-          >
-            <h4 className="mb-2 text-body font-medium text-white">Conditions</h4>
-            <ul className="space-y-1 text-body text-white/70">
-              {offer.conditions.map((condition, i) => (
-                <li key={i}>{condition}</li>
-              ))}
-            </ul>
+          {/* Conditions disclosure — collapsed by default to fit short viewports */}
+          <m.div className="mb-4 w-full sm:mb-5" style={{ opacity: condOpacity }}>
+            <details className="group border-l-2 border-secondary-blue/40 pl-4">
+              <summary className="flex cursor-pointer list-none items-center gap-2 text-body font-medium text-white marker:hidden [&::-webkit-details-marker]:hidden">
+                <span>Conditions</span>
+                <ChevronDown
+                  className="h-4 w-4 text-secondary-orange transition-transform duration-200 group-open:rotate-180"
+                  aria-hidden="true"
+                />
+              </summary>
+              <ul className="mt-3 space-y-1.5 text-body-sm text-white/85">
+                {offer.conditions.map((condition, i) => (
+                  <li key={i}>{condition}</li>
+                ))}
+              </ul>
+            </details>
           </m.div>
 
           {/* CTA */}
@@ -606,7 +618,7 @@ function OffersMobileAnimated() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="lg:hidden" style={{ height: '400vh' }}>
+    <div ref={ref} className="xl:hidden" style={{ height: '400vh' }}>
       <div className="sticky top-0 h-svh overflow-hidden bg-black">
         {/* Offer slides (layered, crossfading) */}
         <div className="absolute inset-0 z-10">
@@ -702,16 +714,7 @@ export default function OffersContent() {
       }}
       data-navbar-theme="light"
     >
-      {/* Convex dome — black dome with transparent corners revealing the hero behind */}
-      <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] w-full"
-        style={{ height: '12vw' }}
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        aria-hidden="true"
-      >
-        <path d="M0,120 Q720,-120 1440,120 Z" fill="#000" />
-      </svg>
+      <ConvexDome color="black" />
 
       {variant === 'desktop-animated' && <OffersDesktop />}
       {variant === 'mobile-animated' && <OffersMobileAnimated />}

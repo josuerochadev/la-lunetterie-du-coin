@@ -22,7 +22,7 @@ function CTADesktop() {
   const cta = useScrollEntrance(scrollYProgress, 0.38, 0.5, 20);
 
   return (
-    <div ref={ref} className="hidden lg:block" style={{ minHeight: '200vh' }}>
+    <div ref={ref} className="hidden xl:block" style={{ minHeight: '200vh' }}>
       <div className="sticky top-0 flex min-h-screen w-full items-center overflow-hidden bg-accent">
         <m.img
           src="/images/motif-cercle.png"
@@ -33,14 +33,15 @@ function CTADesktop() {
         />
 
         <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
-          <div className="mx-auto max-w-4xl text-center">
+          <div className="text-center">
             <m.div style={{ opacity: title.opacity, y: title.y }}>
               <ScrollWordReveal
                 as="h2"
                 scrollYProgress={scrollYProgress}
                 revealStart={0.25}
                 revealEnd={0.4}
-                className="text-heading text-fluid-cta text-black"
+                className="text-heading text-black"
+                style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
               >
                 VOYEZ LA DIFFÉRENCE
               </ScrollWordReveal>
@@ -92,7 +93,7 @@ function CTAMobile() {
   const ctaY = useTransform(scrollYProgress, [0.24, 0.32], [24, 0]);
 
   return (
-    <div ref={ref} className="h-[250vh] lg:hidden">
+    <div ref={ref} className="h-[250vh] xl:hidden">
       <div className="sticky top-0 h-svh overflow-hidden bg-accent">
         <m.img
           src="/images/motif-eye-pattern.svg"

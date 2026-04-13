@@ -1,22 +1,21 @@
 import { useRef } from 'react';
-import { m, useScroll, useTransform, useMotionValueEvent } from 'framer-motion';
+import { m, useTransform, useMotionValueEvent } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
+import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { ACCENT_HEX } from '@/config/design';
 
 export function StoryMobileAnimated() {
-  const ref = useRef<HTMLDivElement>(null);
   const navRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
+  // useManualScrollProgress bypasses framer-motion's useScroll bug for
+  // targets behind stacked sticky sections.
+  const { ref, scrollYProgress } = useManualScrollProgress('end-start');
 
   // ──────────────────────────────────────────────────────────────────────
   // Scroll math: h-[300vh] + offset ['start end','end start']
@@ -136,7 +135,7 @@ export function StoryMobileAnimated() {
   });
 
   return (
-    <div ref={ref} className="relative h-[300vh] lg:hidden">
+    <div ref={ref} className="relative h-[300vh] xl:hidden">
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
         {/* ── Photo — below CTA, grows upward, darkened for readability ── */}
         <m.div
@@ -183,7 +182,7 @@ export function StoryMobileAnimated() {
             {STORY_BODY}
           </ScrollWordReveal>
           <div className="mt-6">
-            <LinkCTA to="/a-propos" theme="dark" className="text-body-sm !text-white">
+            <LinkCTA to="/a-propos" theme="dark" className="!text-white">
               Nous découvrir
             </LinkCTA>
           </div>

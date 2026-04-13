@@ -1,4 +1,5 @@
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
+import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { SERVICE_COUNT } from './constants';
@@ -7,6 +8,7 @@ import LinkCTA from '@/components/common/LinkCTA';
 import { SERVICES_DATA, type ServiceData } from '@/data/services';
 import { BOOKING_URL } from '@/config/endpoints';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
+import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 
 // ── Scroll budget (normalised 0–1) ─────────────────────────────
@@ -171,11 +173,15 @@ function ServiceSlide({
     [photoOpacity, exitOpacity] as const,
     ([enter, exit]: number[]) => Math.min(enter, exit),
   );
+  const slidePointerEvents = usePointerEvents(slideOpacity);
 
   const isExamens = service.id === 'examens';
 
   return (
-    <m.div className="absolute inset-0 will-change-[opacity]" style={{ opacity: slideOpacity }}>
+    <m.div
+      className="absolute inset-0 will-change-[opacity]"
+      style={{ opacity: slideOpacity, pointerEvents: slidePointerEvents }}
+    >
       {/* Full-viewport photo */}
       <m.img
         src={service.image}
@@ -189,15 +195,15 @@ function ServiceSlide({
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-[30%]"
         style={{
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 100%)',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.45) 0%, transparent 100%)',
         }}
         aria-hidden="true"
       />
       <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[65%]"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-[85%]"
         style={{
           background:
-            'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 50%, transparent 100%)',
+            'linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.82) 30%, rgba(0,0,0,0.55) 60%, rgba(0,0,0,0.2) 85%, transparent 100%)',
         }}
         aria-hidden="true"
       />
@@ -209,10 +215,10 @@ function ServiceSlide({
       >
         {/* Blur scrim — sized by content, behind text (z-0) */}
         <div
-          className="pointer-events-none absolute inset-0 -top-8 z-0 backdrop-blur-[6px]"
+          className="pointer-events-none absolute inset-0 -top-12 z-0 bg-black/20 backdrop-blur-[12px]"
           style={{
-            mask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
-            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 25%)',
+            mask: 'linear-gradient(to bottom, transparent 0%, black 22%)',
+            WebkitMask: 'linear-gradient(to bottom, transparent 0%, black 22%)',
           }}
           aria-hidden="true"
         />
@@ -220,7 +226,7 @@ function ServiceSlide({
         <div className="relative z-10 flex flex-col items-start">
           {/* Counter */}
           <m.span
-            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/70"
+            className="mb-3 block text-body font-medium uppercase tracking-widest text-white/85"
             style={{ opacity: counterOpacity }}
           >
             {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
@@ -236,7 +242,7 @@ function ServiceSlide({
 
           {/* Description */}
           <m.p
-            className="mb-5 text-body-lg leading-relaxed text-white/85"
+            className="mb-5 text-body-lg leading-relaxed text-white/95"
             style={{ opacity: descOpacity, y: descY }}
           >
             {service.description}
@@ -248,7 +254,7 @@ function ServiceSlide({
             style={{ opacity: detailsOpacity }}
           >
             {service.details.map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body text-white/70">
+              <li key={i} className="flex gap-2 text-body text-white/85">
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -258,22 +264,25 @@ function ServiceSlide({
             ))}
           </m.ul>
 
-          {/* Examens: conditions box */}
+          {/* Examens: conditions disclosure — collapsed by default to fit short viewports */}
           {isExamens && (
-            <m.div
-              className="mb-5 border-l-2 border-accent/30 pl-4"
-              style={{ opacity: detailsOpacity }}
-            >
-              <h4 className="mb-2 text-body font-medium text-white">
-                Conditions pour un examen en magasin
-              </h4>
-              <ul className="space-y-1 text-body text-white/70">
-                <li>
-                  Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
-                </li>
-                <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
-                <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
-              </ul>
+            <m.div className="mb-5 w-full" style={{ opacity: detailsOpacity }}>
+              <details className="group border-l-2 border-accent/30 pl-4">
+                <summary className="flex cursor-pointer list-none items-center gap-2 text-body font-medium text-white marker:hidden [&::-webkit-details-marker]:hidden">
+                  <span>Conditions et éligibilité</span>
+                  <ChevronDown
+                    className="h-4 w-4 text-secondary-orange transition-transform duration-200 group-open:rotate-180"
+                    aria-hidden="true"
+                  />
+                </summary>
+                <ul className="mt-3 space-y-1.5 text-body-sm text-white/85">
+                  <li>
+                    Ordonnance {'<'} 5 ans (16-42 ans) ou {'<'} 3 ans (42+)
+                  </li>
+                  <li>Pas de mention contre-indiquant l&apos;examen hors cabinet</li>
+                  <li>Non autorisé : diabète, kératocône, glaucome, cataracte</li>
+                </ul>
+              </details>
             </m.div>
           )}
 
@@ -314,7 +323,7 @@ export function ServicesMobileAnimated() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="lg:hidden" style={{ height: '800vh' }}>
+    <div ref={ref} className="xl:hidden" style={{ height: '800vh' }}>
       <h2 id="services-content-title" className="sr-only">
         Nos services en détail
       </h2>
