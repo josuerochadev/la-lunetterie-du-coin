@@ -112,7 +112,7 @@ function HomeServices() {
                     <div className="mx-auto flex w-full max-w-container items-center gap-12 xl:gap-16">
                       <PhotoStack scrollYProgress={scrollYProgress} />
                       <ServiceProgressIndicator scrollYProgress={scrollYProgress} />
-                      <div className="relative flex w-[45%] flex-col justify-center">
+                      <div className="relative flex flex-1 flex-col justify-center px-[3vw]">
                         {HOMEPAGE_SERVICES.map((service, i) => (
                           <ServiceText
                             key={service.title}

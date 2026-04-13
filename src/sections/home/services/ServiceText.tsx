@@ -53,7 +53,7 @@ export function ServiceText({
 
       <h3 className="text-subtitle mb-5 text-title-sm text-black">{service.title}</h3>
 
-      <p className="mb-8 max-w-lg text-body-lg text-black">{service.description}</p>
+      <p className="mb-8 max-w-2xl text-body-lg text-black">{service.description}</p>
 
       <div className="flex flex-col items-start gap-4">
         <LinkCTA to={service.link} theme="light" aria-label={`En savoir plus sur ${service.title}`}>
