@@ -66,7 +66,7 @@ export default function ServicesContent() {
                     end={SERVICES_END}
                   />
 
-                  <div className="relative flex w-[45%] flex-col justify-center">
+                  <div className="relative flex flex-1 flex-col justify-center px-[3vw]">
                     {SERVICES_DATA.map((service, i) => (
                       <ServiceCard
                         key={service.id}

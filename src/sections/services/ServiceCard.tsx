@@ -125,7 +125,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={2}
       >
-        <p className="mb-6 max-w-xl text-body-xl !leading-[1.2] text-secondary-blue">
+        <p className="mb-6 max-w-2xl text-body-xl !leading-[1.2] text-secondary-blue">
           {service.description}
         </p>
       </StaggerChild>
@@ -138,7 +138,7 @@ export function ServiceCard({
         exitEnd={stExitEnd}
         staggerIndex={3}
       >
-        <ul className="mb-6 max-w-xl space-y-2">
+        <ul className="mb-6 max-w-2xl space-y-2">
           {service.details.slice(0, 6).map((detail, i) => (
             <li key={i} className="flex items-baseline gap-3 text-body !leading-[1.2] text-white">
               <span
@@ -160,7 +160,7 @@ export function ServiceCard({
           exitEnd={stExitEnd}
           staggerIndex={4}
         >
-          <div className="mb-6 max-w-xl border-l-2 border-accent/30 pl-5">
+          <div className="mb-6 max-w-2xl border-l-2 border-accent/30 pl-5">
             <h4 className="mb-1.5 text-body font-medium !leading-[1.2] text-white">
               Conditions pour un examen en magasin
             </h4>
