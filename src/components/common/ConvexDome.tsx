@@ -31,10 +31,14 @@ const COLOR_BG: Record<NonNullable<ConvexDomeProps['color']>, string> = {
 export function ConvexDome({ color = 'black' }: ConvexDomeProps = {}) {
   return (
     <>
-      {/* Desktop: SVG quadratic curve */}
+      {/* Desktop: SVG quadratic curve.
+          Height adds +1px so the SVG bottom edge overlaps 1px into the section's
+          solid-color gradient stop (at 12vw). Without this overlap, subpixel
+          anti-aliasing at the SVG's bottom edge can leave a 1px seam where the
+          hero color behind the transparent gradient bleeds through. */}
       <svg
         className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full xl:block"
-        style={{ height: '12vw' }}
+        style={{ height: 'calc(12vw + 1px)' }}
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
         aria-hidden="true"
