@@ -80,7 +80,7 @@ export default function LegalPageLayout({
           <section className="relative bg-background" data-navbar-theme="dark">
             <EyePattern variant="blanc" opacity={0.03} />
 
-            <div className="relative z-10 mx-auto max-w-container px-container-x pb-[max(30svh,20vw)] pt-section print:pb-0 print:pt-8">
+            <div className="relative z-10 mx-auto max-w-container px-container-x pb-[max(30svh,26vw)] pt-section print:pb-0 print:pt-8">
               <article className="legal-content mx-auto max-w-content-readable space-y-16 print:space-y-8 print:[&>*>section]:break-inside-avoid">
                 {children}
               </article>
