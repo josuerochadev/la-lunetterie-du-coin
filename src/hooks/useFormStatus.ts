@@ -31,11 +31,7 @@ interface UseFormStatusReturn {
   messageRef: React.RefObject<HTMLDivElement | null>;
   /** Réinitialise l'état avant une nouvelle soumission. */
   handleSubmissionStart: () => void;
-  /** Met à jour l'état selon le résultat de la soumission. */
-  // eslint-disable-next-line no-unused-vars
   handleSubmissionResult: (result: SubmissionResult) => void;
-  /** Efface l'erreur d'un champ spécifique (ex: quand l'utilisateur corrige). */
-  // eslint-disable-next-line no-unused-vars
   clearFieldError: (field: keyof FormErrors) => void;
 }
 
