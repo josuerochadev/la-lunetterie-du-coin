@@ -38,6 +38,7 @@ export default tseslint.config(
 			...a11y.configs.recommended.rules,
 
 			/* extras úteis */
+			"no-console": ["error", { allow: ["warn", "error"] }],
 			"react/jsx-key": "error",
 			"import/order": ["error", { "newlines-between": "always" }],
 			"react-refresh/only-export-components": [

@@ -17,7 +17,7 @@ interface PlausibleOptions {
 export function initPlausible(options: PlausibleOptions) {
   // Only in production
   if (import.meta.env.DEV) {
-    console.log('📊 Plausible Analytics: Skipped in development');
+    console.warn('📊 Plausible Analytics: Skipped in development');
     return;
   }
 
