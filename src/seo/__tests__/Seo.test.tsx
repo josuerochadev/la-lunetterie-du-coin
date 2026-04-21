@@ -3,6 +3,7 @@ import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { Helmet } from '@dr.pogodin/react-helmet';
 
 import { Seo } from '../Seo';
+import { findChildByType, findMeta, findLink } from '../test-utils/helmet-helpers';
 
 // Mock Helmet
 vi.mock('@dr.pogodin/react-helmet', () => ({
@@ -40,8 +41,7 @@ describe('Seo', () => {
     it('should render with default props', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      expect(helmetCall).toBeDefined();
+      expect(mockHelmet.mock.calls[0][0]).toBeDefined();
     });
   });
 
@@ -49,37 +49,29 @@ describe('Seo', () => {
     it('should use default title when no title provided', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe('Test Default Title');
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe('Test Default Title');
     });
 
     it('should use template when custom title provided', () => {
       render(<Seo title="Custom Page" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe('Custom Page · Test Brand');
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe('Custom Page · Test Brand');
     });
 
     it('should not use template when title matches default', () => {
       render(<Seo title={'Test Default Title'} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe('Test Default Title');
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe('Test Default Title');
     });
 
     it('should handle empty title', () => {
       render(<Seo title="" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe('Test Default Title');
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe('Test Default Title');
     });
   });
 
@@ -87,35 +79,23 @@ describe('Seo', () => {
     it('should use default description when none provided', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
-
-      expect(descriptionMeta?.props?.content).toBe('Test default description');
+      const desc = findMeta(mockHelmet, 'name', 'description');
+      expect(desc?.props?.content).toBe('Test default description');
     });
 
     it('should use custom description when provided', () => {
       const customDescription = 'Custom description for this page';
       render(<Seo description={customDescription} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
-
-      expect(descriptionMeta?.props?.content).toBe(customDescription);
+      const desc = findMeta(mockHelmet, 'name', 'description');
+      expect(desc?.props?.content).toBe(customDescription);
     });
 
     it('should handle empty description', () => {
       render(<Seo description="" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
-
-      expect(descriptionMeta?.props?.content).toBe('');
+      const desc = findMeta(mockHelmet, 'name', 'description');
+      expect(desc?.props?.content).toBe('');
     });
   });
 
@@ -123,23 +103,15 @@ describe('Seo', () => {
     it('should use site URL as canonical when no path provided', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const linkElements = helmetCall.children.filter((child: any) => child?.type === 'link');
-
-      const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
-
-      expect(canonicalLink?.props?.href).toBe('https://example.com');
+      const canonical = findLink(mockHelmet, 'canonical');
+      expect(canonical?.props?.href).toBe('https://example.com');
     });
 
     it('should construct proper canonical URL with path', () => {
       render(<Seo canonicalPath="/about" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const linkElements = helmetCall.children.filter((child: any) => child?.type === 'link');
-
-      const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
-
-      expect(canonicalLink?.props?.href).toBe('https://example.com/about');
+      const canonical = findLink(mockHelmet, 'canonical');
+      expect(canonical?.props?.href).toBe('https://example.com/about');
     });
 
     it('should handle trailing slash in site URL', () => {
@@ -155,23 +127,15 @@ describe('Seo', () => {
 
       render(<Seo canonicalPath="/contact" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const linkElements = helmetCall.children.filter((child: any) => child?.type === 'link');
-
-      const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
-
-      expect(canonicalLink?.props?.href).toBe('https://example.com/contact');
+      const canonical = findLink(mockHelmet, 'canonical');
+      expect(canonical?.props?.href).toBe('https://example.com/contact');
     });
 
     it('should handle root path correctly', () => {
       render(<Seo canonicalPath="/" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const linkElements = helmetCall.children.filter((child: any) => child?.type === 'link');
-
-      const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
-
-      expect(canonicalLink?.props?.href).toBe('https://example.com/');
+      const canonical = findLink(mockHelmet, 'canonical');
+      expect(canonical?.props?.href).toBe('https://example.com/');
     });
   });
 
@@ -179,45 +143,28 @@ describe('Seo', () => {
     it('should not include robots meta by default', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const robotsMeta = metaElements.find((meta: any) => meta.props.name === 'robots');
-
-      expect(robotsMeta).toBeUndefined();
+      const robots = findMeta(mockHelmet, 'name', 'robots');
+      expect(robots).toBeUndefined();
     });
 
     it('should include noindex robots meta when noIndex is true', () => {
       render(<Seo noIndex={true} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const robotsMeta = metaElements.find((meta: any) => meta.props.name === 'robots');
-
-      expect(robotsMeta?.props?.content).toBe('noindex,nofollow');
+      const robots = findMeta(mockHelmet, 'name', 'robots');
+      expect(robots?.props?.content).toBe('noindex,nofollow');
     });
 
     it('should not include robots meta when noIndex is false', () => {
       render(<Seo noIndex={false} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const robotsMeta = metaElements.find((meta: any) => meta.props.name === 'robots');
-
-      expect(robotsMeta).toBeUndefined();
+      const robots = findMeta(mockHelmet, 'name', 'robots');
+      expect(robots).toBeUndefined();
     });
   });
 
   describe('Open Graph tags', () => {
     it('should include all required OG meta tags', () => {
       render(<Seo />);
-
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const ogElements = metaElements.filter((meta: any) => meta.props.property?.startsWith('og:'));
 
       const expectedOgProperties = [
         'og:type',
@@ -231,7 +178,7 @@ describe('Seo', () => {
       ];
 
       expectedOgProperties.forEach((property) => {
-        const ogElement = ogElements.find((meta: any) => meta.props.property === property);
+        const ogElement = findMeta(mockHelmet, 'property', property);
         expect(ogElement).toBeDefined();
       });
     });
@@ -240,33 +187,21 @@ describe('Seo', () => {
       const customImage = 'https://example.com/custom-og.jpg';
       render(<Seo ogImage={customImage} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const ogImage = metaElements.find((meta: any) => meta.props.property === 'og:image');
-
+      const ogImage = findMeta(mockHelmet, 'property', 'og:image');
       expect(ogImage?.props?.content).toBe(customImage);
     });
 
     it('should use correct OG title fallback', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const ogTitle = metaElements.find((meta: any) => meta.props.property === 'og:title');
-
+      const ogTitle = findMeta(mockHelmet, 'property', 'og:title');
       expect(ogTitle?.props?.content).toBe('Test Default Title');
     });
 
     it('should use custom title in OG tags', () => {
       render(<Seo title="Custom Title" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const ogTitle = metaElements.find((meta: any) => meta.props.property === 'og:title');
-
+      const ogTitle = findMeta(mockHelmet, 'property', 'og:title');
       expect(ogTitle?.props?.content).toBe('Custom Title');
     });
   });
@@ -274,13 +209,6 @@ describe('Seo', () => {
   describe('Twitter Card tags', () => {
     it('should include all required Twitter meta tags', () => {
       render(<Seo />);
-
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const twitterElements = metaElements.filter((meta: any) =>
-        meta.props.name?.startsWith('twitter:'),
-      );
 
       const expectedTwitterProperties = [
         'twitter:card',
@@ -290,7 +218,7 @@ describe('Seo', () => {
       ];
 
       expectedTwitterProperties.forEach((property) => {
-        const twitterElement = twitterElements.find((meta: any) => meta.props.name === property);
+        const twitterElement = findMeta(mockHelmet, 'name', property);
         expect(twitterElement).toBeDefined();
       });
     });
@@ -298,11 +226,7 @@ describe('Seo', () => {
     it('should use correct Twitter card type', () => {
       render(<Seo />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const twitterCard = metaElements.find((meta: any) => meta.props.name === 'twitter:card');
-
+      const twitterCard = findMeta(mockHelmet, 'name', 'twitter:card');
       expect(twitterCard?.props?.content).toBe('summary_large_image');
     });
   });
@@ -311,15 +235,13 @@ describe('Seo', () => {
     it('should handle undefined title gracefully', () => {
       render(<Seo title={undefined} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe('Test Default Title');
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe('Test Default Title');
     });
 
     it('should handle null values gracefully', () => {
       expect(() => {
-        render(<Seo title={null as any} description={null as any} />);
+        render(<Seo title={null as unknown as string} description={null as unknown as string} />);
       }).not.toThrow();
     });
 
@@ -327,33 +249,23 @@ describe('Seo', () => {
       const longTitle = 'A'.repeat(200);
       render(<Seo title={longTitle} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const titleElement = helmetCall.children.find((child: any) => child?.type === 'title');
-
-      expect(titleElement?.props?.children).toBe(`${longTitle} · Test Brand`);
+      const titleEl = findChildByType(mockHelmet, 'title');
+      expect(titleEl?.props?.children).toBe(`${longTitle} · Test Brand`);
     });
 
     it('should handle special characters in meta content', () => {
       const specialDescription = 'Description with "quotes" & ampersands <tags>';
       render(<Seo description={specialDescription} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
-
-      const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
-
-      expect(descriptionMeta?.props?.content).toBe(specialDescription);
+      const desc = findMeta(mockHelmet, 'name', 'description');
+      expect(desc?.props?.content).toBe(specialDescription);
     });
 
     it('should handle empty canonicalPath', () => {
       render(<Seo canonicalPath="" />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const linkElements = helmetCall.children.filter((child: any) => child?.type === 'link');
-
-      const canonicalLink = linkElements.find((link: any) => link.props.rel === 'canonical');
-
-      expect(canonicalLink?.props?.href).toBe('https://example.com');
+      const canonical = findLink(mockHelmet, 'canonical');
+      expect(canonical?.props?.href).toBe('https://example.com');
     });
   });
 
@@ -382,14 +294,11 @@ describe('Seo', () => {
 
       render(<Seo {...customProps} />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const metaElements = helmetCall.children.filter((child: any) => child?.type === 'meta');
+      const desc = findMeta(mockHelmet, 'name', 'description');
+      const ogImage = findMeta(mockHelmet, 'property', 'og:image');
 
-      const descriptionMeta = metaElements.find((meta: any) => meta.props.name === 'description');
-      const ogImageMeta = metaElements.find((meta: any) => meta.props.property === 'og:image');
-
-      expect(descriptionMeta?.props?.content).toBe(customProps.description);
-      expect(ogImageMeta?.props?.content).toBe(customProps.ogImage);
+      expect(desc?.props?.content).toBe(customProps.description);
+      expect(ogImage?.props?.content).toBe(customProps.ogImage);
     });
   });
 });

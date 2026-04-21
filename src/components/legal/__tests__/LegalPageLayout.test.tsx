@@ -25,7 +25,15 @@ vi.mock('@/components/common/EyePattern', () => ({
 }));
 
 vi.mock('@/components/motion/SimpleAnimation', () => ({
-  SimpleAnimation: ({ children, type, delay }: any) => (
+  SimpleAnimation: ({
+    children,
+    type,
+    delay,
+  }: {
+    children: React.ReactNode;
+    type?: string;
+    delay?: number;
+  }) => (
     <div data-testid="simple-animation" data-type={type} data-delay={delay}>
       {children}
     </div>
@@ -33,7 +41,17 @@ vi.mock('@/components/motion/SimpleAnimation', () => ({
 }));
 
 vi.mock('@/components/motion/TextReveal', () => ({
-  default: ({ children, as: Tag = 'div', className, style }: any) => (
+  default: ({
+    children,
+    as: Tag = 'div',
+    className,
+    style,
+  }: {
+    children: React.ReactNode;
+    as?: React.ElementType;
+    className?: string;
+    style?: React.CSSProperties;
+  }) => (
     <Tag data-testid="text-reveal" className={className} style={style}>
       {children}
     </Tag>
@@ -41,11 +59,19 @@ vi.mock('@/components/motion/TextReveal', () => ({
 }));
 
 vi.mock('@/assets/logo/Logo_LLDC_NO_Noir.svg?react', () => ({
-  default: (props: any) => <svg data-testid="logo-noir" {...props} />,
+  default: (props: React.SVGProps<SVGSVGElement>) => <svg data-testid="logo-noir" {...props} />,
 }));
 
 vi.mock('@/seo/Seo', () => ({
-  Seo: ({ title, description, canonicalPath }: any) => (
+  Seo: ({
+    title,
+    description,
+    canonicalPath,
+  }: {
+    title?: string;
+    description?: string;
+    canonicalPath?: string;
+  }) => (
     <div
       data-testid="seo"
       data-title={title}
