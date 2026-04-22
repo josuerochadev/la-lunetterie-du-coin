@@ -2,6 +2,34 @@ import { useRef } from 'react';
 import { m, useSpring, useTransform, useMotionValueEvent, type MotionValue } from 'framer-motion';
 
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
+import {
+  PHOTO_ENTRANCE_START,
+  PHOTO_ENTRANCE_END,
+  PHOTO_GROWTH_END,
+  PHOTO_ZOOM_END,
+  TITLE_ENTER_START,
+  TITLE_ENTER_END,
+  TEXT_REVEAL_START,
+  TEXT_REVEAL_END,
+  TITLE_TEXT_FADE_IN,
+  TITLE_TEXT_VISIBLE,
+  TITLE_TEXT_FADE_OUT_START,
+  TITLE_TEXT_FADE_OUT_END,
+  EXPAND_START,
+  EXPAND_END,
+  EXPAND_OPACITY_START,
+  EXPAND_OPACITY_END,
+  PHRASE_FADE_IN_START,
+  PHRASE_FADE_IN_END,
+  RASTER_BOOST,
+  GRAND_ZOOM_START,
+  GRAND_ZOOM_END,
+  SURROUNDING_FADE_START,
+  SURROUNDING_FADE_END,
+  YELLOW_OVERLAY_START,
+  YELLOW_OVERLAY_END,
+  NAVBAR_THEME_SWITCH,
+} from './StoryDesktopAnimated.timeline';
 
 import LinkCTA from '@/components/common/LinkCTA';
 import ScrollWordReveal from '@/components/motion/ScrollWordReveal';
@@ -51,46 +79,74 @@ export function StoryDesktopAnimated() {
   const { ref: sectionRef, scrollYProgress } = useManualScrollProgress('end-start');
 
   // Phase 1: photo appears alone — starts at ~60% height, grows + zooms continuously
-  const photoEntranceOpacity = useTransform(scrollYProgress, [0.05, 0.12], [0, 1]);
-  const photoHeight = useTransform(scrollYProgress, [0.05, 0.5], ['60%', '100%']);
-  const photoScale = useTransform(scrollYProgress, [0.05, 0.6], [1, 1.12]);
+  const photoEntranceOpacity = useTransform(
+    scrollYProgress,
+    [PHOTO_ENTRANCE_START, PHOTO_ENTRANCE_END],
+    [0, 1],
+  );
+  const photoHeight = useTransform(
+    scrollYProgress,
+    [PHOTO_ENTRANCE_START, PHOTO_GROWTH_END],
+    ['60%', '100%'],
+  );
+  const photoScale = useTransform(
+    scrollYProgress,
+    [PHOTO_ENTRANCE_START, PHOTO_ZOOM_END],
+    [1, 1.12],
+  );
 
   // Phase 2: title & text enter
-  const titleYRaw = useTransform(scrollYProgress, [0.17, 0.28], [150, 0]);
+  const titleYRaw = useTransform(scrollYProgress, [TITLE_ENTER_START, TITLE_ENTER_END], [150, 0]);
   const titleY = useSpring(titleYRaw, SPRING_CONFIG);
 
   // End sequence: photo expands fullscreen
   // Initial position mirrors the grid middle col: 14vw wide at left 50%
   // (after 4vw pad + 42vw title col + 4vw gap).
-  const photoLeft = useTransform(scrollYProgress, [0.5, 0.6], ['50%', '0%']);
-  const photoWidth = useTransform(scrollYProgress, [0.5, 0.6], ['14%', '100%']);
-  const photoPadding = useTransform(scrollYProgress, [0.5, 0.6], [16, 0]);
-  const photoExpandOpacity = useTransform(scrollYProgress, [0.55, 0.62], [1, 0.7]);
+  const photoLeft = useTransform(scrollYProgress, [EXPAND_START, EXPAND_END], ['50%', '0%']);
+  const photoWidth = useTransform(scrollYProgress, [EXPAND_START, EXPAND_END], ['14%', '100%']);
+  const photoPadding = useTransform(scrollYProgress, [EXPAND_START, EXPAND_END], [16, 0]);
+  const photoExpandOpacity = useTransform(
+    scrollYProgress,
+    [EXPAND_OPACITY_START, EXPAND_OPACITY_END],
+    [1, 0.7],
+  );
 
   // Transition phrase — appears, then "GRAND" zooms to fill screen
-  const phraseOpacity = useTransform(scrollYProgress, [0.58, 0.66], [0, 1]);
-  const phraseY = useTransform(scrollYProgress, [0.58, 0.66], [40, 0]);
+  const phraseOpacity = useTransform(
+    scrollYProgress,
+    [PHRASE_FADE_IN_START, PHRASE_FADE_IN_END],
+    [0, 1],
+  );
+  const phraseY = useTransform(
+    scrollYProgress,
+    [PHRASE_FADE_IN_START, PHRASE_FADE_IN_END],
+    [40, 0],
+  );
   const phraseYSpring = useSpring(phraseY, SPRING_CONFIG);
 
   // "GRAND" zoom-out phase — boosted rasterization for crisp scaling
-  // The browser rasterizes text at its layout size then scales the bitmap.
-  // By rendering GRAND at RASTER_BOOST× font-size and starting scale at
-  // 1/BOOST, the bitmap is high-res so the zoom stays sharp.
-  const RASTER_BOOST = 10;
   const grandScale = useTransform(
     scrollYProgress,
-    [0.76, 0.88],
+    [GRAND_ZOOM_START, GRAND_ZOOM_END],
     [1 / RASTER_BOOST, 50 / RASTER_BOOST],
   );
   const grandScaleSpring = useSpring(grandScale, SPRING_CONFIG_SLOW);
-  const surroundingFade = useTransform(scrollYProgress, [0.75, 0.8], [1, 0]);
-  const yellowOverlay = useTransform(scrollYProgress, [0.82, 0.9], [0, 1]);
+  const surroundingFade = useTransform(
+    scrollYProgress,
+    [SURROUNDING_FADE_START, SURROUNDING_FADE_END],
+    [1, 0],
+  );
+  const yellowOverlay = useTransform(
+    scrollYProgress,
+    [YELLOW_OVERLAY_START, YELLOW_OVERLAY_END],
+    [0, 1],
+  );
 
   // Navbar theme strip — switch to dark when GRAND fills screen with yellow
   const storyStripRef = useRef<HTMLDivElement>(null);
   useMotionValueEvent(scrollYProgress, 'change', (v) => {
     if (!storyStripRef.current) return;
-    if (v >= 0.78) {
+    if (v >= NAVBAR_THEME_SWITCH) {
       storyStripRef.current.setAttribute('data-navbar-theme', 'dark');
     } else {
       storyStripRef.current.removeAttribute('data-navbar-theme');
@@ -101,8 +157,20 @@ export function StoryDesktopAnimated() {
   const phrasePointer = usePointerEvents(phraseOpacity);
 
   // Combined opacities — fade in with text entrance, fade out before expand
-  const titleCombinedOpacity = useFadeInOut(scrollYProgress, 0.15, 0.25, 0.45, 0.5);
-  const textCombinedOpacity = useFadeInOut(scrollYProgress, 0.15, 0.25, 0.45, 0.5);
+  const titleCombinedOpacity = useFadeInOut(
+    scrollYProgress,
+    TITLE_TEXT_FADE_IN,
+    TITLE_TEXT_VISIBLE,
+    TITLE_TEXT_FADE_OUT_START,
+    TITLE_TEXT_FADE_OUT_END,
+  );
+  const textCombinedOpacity = useFadeInOut(
+    scrollYProgress,
+    TITLE_TEXT_FADE_IN,
+    TITLE_TEXT_VISIBLE,
+    TITLE_TEXT_FADE_OUT_START,
+    TITLE_TEXT_FADE_OUT_END,
+  );
 
   return (
     <div ref={sectionRef} className="hidden min-h-[450vh] xl:block">
@@ -123,8 +191,8 @@ export function StoryDesktopAnimated() {
                     scrollYProgress={scrollYProgress}
                     index={i}
                     total={arr.length}
-                    revealStart={0.15}
-                    revealEnd={0.28}
+                    revealStart={TITLE_TEXT_FADE_IN}
+                    revealEnd={TITLE_ENTER_END}
                   >
                     {word}
                   </StoryTitleWord>
@@ -141,8 +209,8 @@ export function StoryDesktopAnimated() {
               <ScrollWordReveal
                 as="p"
                 scrollYProgress={scrollYProgress}
-                revealStart={0.17}
-                revealEnd={0.32}
+                revealStart={TEXT_REVEAL_START}
+                revealEnd={TEXT_REVEAL_END}
                 className="text-body-xl text-secondary-blue"
               >
                 {STORY_BODY}
