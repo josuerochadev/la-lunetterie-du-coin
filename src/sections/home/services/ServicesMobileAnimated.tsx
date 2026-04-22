@@ -4,32 +4,25 @@ import ExternalLink from 'lucide-react/dist/esm/icons/external-link';
 
 import { GrainOverlay } from './GrainOverlay';
 import { SERVICE_COUNT, OUTRO_WORDS } from './constants';
+import {
+  TOTAL_VH,
+  CURTAIN_END,
+  SERVICES_START,
+  SERVICES_END,
+  SERVICE_RANGE,
+  OUTRO_START,
+  OUTRO_REVEAL_START,
+  OUTRO_REVEAL_END,
+  OUTRO_EXIT_START,
+  OUTRO_EXIT_STAGGER,
+  OUTRO_LOGO_IN,
+} from './ServicesMobileAnimated.timeline';
 
 import ResponsiveImage from '@/components/common/ResponsiveImage';
 import LinkCTA from '@/components/common/LinkCTA';
 import { HOMEPAGE_SERVICES, HOMEPAGE_SECTIONS } from '@/data/homepage';
 import { BOOKING_URL } from '@/config/endpoints';
 import { SPRING_CONFIG } from '@/lib/motion';
-
-// ── Scroll budget ──
-// Total height = (SERVICE_COUNT + 3) viewports
-// 0.00–0.03 → curtain lift (accent overlay slides up)
-// 0.03–0.68 → services crossfade (equally divided), title persists
-// 0.68–0.95 → outro phrase + logo (yellow bg)
-// 0.95–1.00 → final CTA
-const TOTAL_VH = SERVICE_COUNT + 3;
-const CURTAIN_END = 0.03;
-const SERVICES_START = 0.05;
-const SERVICES_END = 0.68;
-const SERVICE_RANGE = (SERVICES_END - SERVICES_START) / SERVICE_COUNT;
-
-// Outro budget
-const OUTRO_START = 0.7;
-const OUTRO_REVEAL_START = 0.72;
-const OUTRO_REVEAL_END = 0.8;
-const OUTRO_EXIT_START = 0.83;
-const OUTRO_EXIT_STAGGER = 0.015;
-const OUTRO_LOGO_IN = 0.86;
 
 function getServiceRange(index: number) {
   const start = SERVICES_START + index * SERVICE_RANGE;
