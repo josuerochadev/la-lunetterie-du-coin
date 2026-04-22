@@ -9,8 +9,8 @@
 ## État courant
 
 - **Phase active** : Phase 5 — Découpage composants monstres (en cours)
-- **Branche** : `refactor/split-contact-location`
-- **Dernière session** : 2026-04-21 (Phase 5.2 — ContactLocation split en MapBlock + DirectionsBlock)
+- **Branche** : `refactor/split-fullscreen-menu`
+- **Dernière session** : 2026-04-21 (Phase 5.1 — FullScreenMenu split en MobileMenuLayout + DesktopMenuLayout)
 
 ---
 
@@ -115,8 +115,8 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Règle stricte** : ne pas démarrer une section sans la PR Phase 4 correspondante mergée.
 
-- [ ] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
-- [x] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
+- [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
+- [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
 - [ ] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
 - [ ] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split desktop/mobile en 2 fichiers
 - [ ] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
@@ -168,4 +168,3 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 | 2026-04-21 | 3b    | `refactor/services-mobile-timeline-constants` | —   | Extraction constantes timeline ServicesMobileAnimated → fichier dédié                |
 | 2026-04-21 | 3c    | `refactor/misc-magic-numbers`                 | —   | HOVER_ZONE_HEIGHT_PX, TOAST_DURATION_MS, StoryDesktopAnimated.timeline.ts            |
 | 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                            |
-| 2026-04-21 | 5.2   | `refactor/split-contact-location`             | —   | ContactLocation (478l) → MapBlock (149l) + DirectionsBlock (266l) + parent (93l)     |
