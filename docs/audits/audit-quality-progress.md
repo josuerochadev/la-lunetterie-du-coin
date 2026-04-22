@@ -9,8 +9,8 @@
 ## État courant
 
 - **Phase active** : Phase 5 — Découpage composants monstres (en cours)
-- **Branche** : `refactor/split-about-history`
-- **Dernière session** : 2026-04-22 (Phase 5.4 — AboutHistory split en HistoryDesktop + HistoryMobile + HistoryStatic)
+- **Branche** : `refactor/split-offers-content`
+- **Dernière session** : 2026-04-22 (Phase 5.6 — OffersContent split en OffersDesktop + OffersMobile + OffersStatic)
 
 ---
 
@@ -117,10 +117,10 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 - [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
 - [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
-- [ ] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
+- [x] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
 - [x] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split en HistoryDesktop + HistoryMobile + HistoryStatic
-- [ ] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
-- [ ] **5.6** `src/sections/offers/OffersContent.tsx` (750l) — **LE PLUS RISQUÉ, en dernier**
+- [x] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
+- [x] **5.6** `src/sections/offers/OffersContent.tsx` (750l) → split en OffersDesktop + OffersMobile + OffersStatic
 
 ---
 
@@ -168,3 +168,4 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 | 2026-04-21 | 3b    | `refactor/services-mobile-timeline-constants` | —   | Extraction constantes timeline ServicesMobileAnimated → fichier dédié                |
 | 2026-04-21 | 3c    | `refactor/misc-magic-numbers`                 | —   | HOVER_ZONE_HEIGHT_PX, TOAST_DURATION_MS, StoryDesktopAnimated.timeline.ts            |
 | 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                            |
+| 2026-04-22 | 5.6   | `refactor/split-offers-content`               | —   | OffersContent (730l) → OffersDesktop + OffersMobile + OffersStatic + parent slim     |
