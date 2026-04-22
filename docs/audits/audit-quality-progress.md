@@ -8,9 +8,9 @@
 
 ## État courant
 
-- **Phase active** : Phase 3 — Magic numbers (terminée)
-- **Branches** : `refactor/offers-timeline-constants`, `refactor/services-mobile-timeline-constants`, `refactor/misc-magic-numbers`
-- **Dernière session** : 2026-04-21 (Phase 3 complétée)
+- **Phase active** : Phase 4 — Tests filet (terminée)
+- **Branche** : `test/coverage-phase4`
+- **Dernière session** : 2026-04-21 (Phase 4 complétée — 6 sections couvertes en 1 PR)
 
 ---
 
@@ -100,12 +100,14 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Avant** tout découpage Phase 5. Tests comportementaux minimaux : rendu sans crash, CTA présents, variants responsive.
 
-- [ ] `test/coverage-fullscreen-menu` → couvre Phase 5.1
-- [ ] `test/coverage-contact-location` → couvre Phase 5.2
-- [ ] `test/coverage-about-engagement` → couvre Phase 5.3
-- [ ] `test/coverage-about-history` → couvre Phase 5.4
-- [ ] `test/coverage-services-mobile` → couvre Phase 5.5
-- [ ] `test/coverage-offers-content` → couvre Phase 5.6
+- [x] FullScreenMenu — 10 tests (nav links, CTA, close, store info)
+- [x] ContactLocation — 8 tests (transports, accessibilité, Maps CTA)
+- [x] AboutEngagement — 8 tests (titre, stats, body, highlight)
+- [x] AboutHistory — 9 tests (titre, body, CTA services, photo)
+- [x] ServicesMobileAnimated — 8 tests (slides, outro, progress bar)
+- [x] OffersContent — 9 tests (catchphrases, counters, CTAs, conditions)
+
+**Branche unique** : `test/coverage-phase4` (52 tests total)
 
 ---
 
@@ -165,3 +167,4 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 | 2026-04-21 | 3a    | `refactor/offers-timeline-constants`          | —   | Extraction constantes timeline OffersContent → fichier dédié                         |
 | 2026-04-21 | 3b    | `refactor/services-mobile-timeline-constants` | —   | Extraction constantes timeline ServicesMobileAnimated → fichier dédié                |
 | 2026-04-21 | 3c    | `refactor/misc-magic-numbers`                 | —   | HOVER_ZONE_HEIGHT_PX, TOAST_DURATION_MS, StoryDesktopAnimated.timeline.ts            |
+| 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                            |
