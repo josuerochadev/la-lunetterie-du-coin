@@ -8,9 +8,9 @@
 
 ## État courant
 
-- **Phase active** : Phase 4 — Tests filet (terminée)
-- **Branche** : `test/coverage-phase4`
-- **Dernière session** : 2026-04-21 (Phase 4 complétée — 6 sections couvertes en 1 PR)
+- **Phase active** : Phase 5 — Découpage composants monstres (en cours)
+- **Branche** : `refactor/split-fullscreen-menu`
+- **Dernière session** : 2026-04-21 (Phase 5.1 — FullScreenMenu split en MobileMenuLayout + DesktopMenuLayout)
 
 ---
 
@@ -115,7 +115,7 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Règle stricte** : ne pas démarrer une section sans la PR Phase 4 correspondante mergée.
 
-- [ ] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
+- [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
 - [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
 - [ ] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
 - [ ] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split desktop/mobile en 2 fichiers
