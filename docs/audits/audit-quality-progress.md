@@ -8,9 +8,9 @@
 
 ## État courant
 
-- **Phase active** : Phase 5 — Découpage composants monstres (en cours)
-- **Branche** : `refactor/split-offers-content`
-- **Dernière session** : 2026-04-22 (Phase 5.6 — OffersContent split en OffersDesktop + OffersMobile + OffersStatic)
+- **Phase active** : Phase 5 — Découpage composants monstres (terminée)
+- **Branche** : `chore/audit-tracker-5.2-done`
+- **Dernière session** : 2026-04-22 (Phase 5.2 déjà splitée — ContactLocation 93l + MapBlock 149l + DirectionsBlock 264l)
 
 ---
 
@@ -116,7 +116,7 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 **Règle stricte** : ne pas démarrer une section sans la PR Phase 4 correspondante mergée.
 
 - [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
-- [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
+- [x] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → déjà splitée : `<MapBlock>` (149l), `<DirectionsBlock>` (264l), parent (93l)
 - [x] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
 - [x] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split en HistoryDesktop + HistoryMobile + HistoryStatic
 - [x] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
@@ -158,14 +158,15 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                                       | PR  | Notes                                                                                |
-| ---------- | ----- | --------------------------------------------- | --- | ------------------------------------------------------------------------------------ |
-| 2026-04-16 | —     | —                                             | —   | Plan créé                                                                            |
-| 2026-04-21 | 1     | `chore/cleanup-quick-wins`                    | —   | Quick wins : no-console ESLint, console.log→warn, imports @/, suppression SentryTest |
-| 2026-04-21 | 2a    | `chore/typing-tests-any`                      | —   | Suppression de tous les `any` dans 9 fichiers de tests, helper typé Helmet créé      |
-| 2026-04-21 | 2b    | `chore/typing-eslint-disable`                 | —   | Suppression 17 eslint-disable no-unused-vars, désactivation règle base JS            |
-| 2026-04-21 | 3a    | `refactor/offers-timeline-constants`          | —   | Extraction constantes timeline OffersContent → fichier dédié                         |
-| 2026-04-21 | 3b    | `refactor/services-mobile-timeline-constants` | —   | Extraction constantes timeline ServicesMobileAnimated → fichier dédié                |
-| 2026-04-21 | 3c    | `refactor/misc-magic-numbers`                 | —   | HOVER_ZONE_HEIGHT_PX, TOAST_DURATION_MS, StoryDesktopAnimated.timeline.ts            |
-| 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                            |
-| 2026-04-22 | 5.6   | `refactor/split-offers-content`               | —   | OffersContent (730l) → OffersDesktop + OffersMobile + OffersStatic + parent slim     |
+| Date       | Phase | Branche                                       | PR  | Notes                                                                                   |
+| ---------- | ----- | --------------------------------------------- | --- | --------------------------------------------------------------------------------------- |
+| 2026-04-16 | —     | —                                             | —   | Plan créé                                                                               |
+| 2026-04-21 | 1     | `chore/cleanup-quick-wins`                    | —   | Quick wins : no-console ESLint, console.log→warn, imports @/, suppression SentryTest    |
+| 2026-04-21 | 2a    | `chore/typing-tests-any`                      | —   | Suppression de tous les `any` dans 9 fichiers de tests, helper typé Helmet créé         |
+| 2026-04-21 | 2b    | `chore/typing-eslint-disable`                 | —   | Suppression 17 eslint-disable no-unused-vars, désactivation règle base JS               |
+| 2026-04-21 | 3a    | `refactor/offers-timeline-constants`          | —   | Extraction constantes timeline OffersContent → fichier dédié                            |
+| 2026-04-21 | 3b    | `refactor/services-mobile-timeline-constants` | —   | Extraction constantes timeline ServicesMobileAnimated → fichier dédié                   |
+| 2026-04-21 | 3c    | `refactor/misc-magic-numbers`                 | —   | HOVER_ZONE_HEIGHT_PX, TOAST_DURATION_MS, StoryDesktopAnimated.timeline.ts               |
+| 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                               |
+| 2026-04-22 | 5.6   | `refactor/split-offers-content`               | —   | OffersContent (730l) → OffersDesktop + OffersMobile + OffersStatic + parent slim        |
+| 2026-04-22 | 5.2   | `chore/audit-tracker-5.2-done`                | —   | ContactLocation déjà splitée (93l + MapBlock 149l + DirectionsBlock 264l) — case cochée |
