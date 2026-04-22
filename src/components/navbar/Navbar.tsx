@@ -20,7 +20,7 @@ import { cn } from '@/lib/cn';
  *
  * Uses IntersectionObserver to detect which section is at the top of the viewport.
  */
-const HOVER_ZONE_HEIGHT = 80;
+const HOVER_ZONE_HEIGHT_PX = 80;
 
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
   // Desktop: show navbar when mouse enters top zone
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      setHovered(e.clientY <= HOVER_ZONE_HEIGHT);
+      setHovered(e.clientY <= HOVER_ZONE_HEIGHT_PX);
     };
     const handleMouseLeave = () => setHovered(false);
 

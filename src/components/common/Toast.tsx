@@ -13,11 +13,11 @@ interface ToastItem {
   type: ToastType;
 }
 
-const TOAST_DURATION = 3500;
+const TOAST_DURATION_MS = 3500;
 
 function ToastEntry({ item, onDismiss }: { item: ToastItem; onDismiss: () => void }) {
   useEffect(() => {
-    const timer = setTimeout(onDismiss, TOAST_DURATION);
+    const timer = setTimeout(onDismiss, TOAST_DURATION_MS);
     return () => clearTimeout(timer);
   }, [onDismiss]);
 
