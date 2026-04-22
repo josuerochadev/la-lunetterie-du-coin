@@ -2,6 +2,26 @@ import { type ReactNode } from 'react';
 import { m, useTransform, useSpring, type MotionValue } from 'framer-motion';
 import ChevronDown from 'lucide-react/dist/esm/icons/chevron-down';
 
+import {
+  OFFER_COUNT,
+  OFFERS_TIMELINE,
+  BLACK_FADE_START,
+  BLACK_FADE_END,
+  STAGGER_OFFSET,
+  SLICE,
+  ENTER_OFFSET,
+  ENTER_DUR,
+  TEXT_COUNTER,
+  TEXT_TITLE,
+  TEXT_DESC,
+  TEXT_DETAILS,
+  TEXT_CONDITIONS,
+  TEXT_CTA,
+  TEXT_STAGGER,
+  EXIT_START,
+  EXIT_END,
+} from './OffersContent.timeline';
+
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
 import LinkCTA from '@/components/common/LinkCTA';
 import { ConvexDome } from '@/components/common/ConvexDome';
@@ -12,30 +32,6 @@ import { useFadeInOut } from '@/hooks/useFadeInOut';
 import { usePointerEvents } from '@/hooks/usePointerEvents';
 import { SPRING_CONFIG } from '@/lib/motion';
 import { useManualScrollProgress } from '@/hooks/useManualScrollProgress';
-const OFFER_COUNT = OFFERS_DATA.length;
-
-// Per-offer scroll windows (normalised 0–1)
-// Phase layout:  photo1 + card1  →  photo2 + card2  →  fade-to-black
-const OFFERS_TIMELINE = [
-  {
-    imgIn: [0.0, 0.08],
-    hold: [0.08, 0.38],
-    imgOut: [0.38, 0.48],
-    cardIn: [0.06, 0.16],
-    cardOut: [0.38, 0.46],
-  },
-  {
-    imgIn: [0.46, 0.54],
-    hold: [0.54, 0.76],
-    imgOut: [0.76, 0.86],
-    cardIn: [0.5, 0.6],
-    cardOut: [0.76, 0.84],
-  },
-] as const;
-
-// Fade-to-black after second offer (transition to gradient → CTA)
-const BLACK_FADE_START = 0.84;
-const BLACK_FADE_END = 0.96;
 
 // ---------------------------------------------------------------------------
 // StaggerChild — micro-delayed entrance for each element within a card
@@ -58,7 +54,6 @@ function StaggerChild({
   exitEnd: number;
   staggerIndex: number;
 }) {
-  const STAGGER_OFFSET = 0.012;
   const offset = staggerIndex * STAGGER_OFFSET;
 
   const opacity = useFadeInOut(
@@ -331,22 +326,6 @@ function OffersDesktop() {
 // ---------------------------------------------------------------------------
 // Mobile — immersive sticky slideshow (matches Services pattern)
 // ---------------------------------------------------------------------------
-
-// ── Scroll budget (normalised 0–1) ─────────────────────────────
-const SLICE = 1 / OFFER_COUNT; // 0.50 per offer
-
-// ── Per-slide phase offsets (relative to slice start) ───────────
-const ENTER_OFFSET = 0.02;
-const ENTER_DUR = 0.04;
-const TEXT_COUNTER = 0.04;
-const TEXT_TITLE = 0.06;
-const TEXT_DESC = 0.09;
-const TEXT_DETAILS = 0.12;
-const TEXT_CONDITIONS = 0.15;
-const TEXT_CTA = 0.18;
-const TEXT_STAGGER = 0.04;
-const EXIT_START = 0.4;
-const EXIT_END = SLICE;
 
 function OfferProgressSegment({
   progress,
