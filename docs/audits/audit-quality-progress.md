@@ -9,8 +9,8 @@
 ## État courant
 
 - **Phase active** : Phase 5 — Découpage composants monstres (en cours)
-- **Branche** : `refactor/split-fullscreen-menu`
-- **Dernière session** : 2026-04-21 (Phase 5.1 — FullScreenMenu split en MobileMenuLayout + DesktopMenuLayout)
+- **Branche** : `refactor/split-about-history`
+- **Dernière session** : 2026-04-22 (Phase 5.4 — AboutHistory split en HistoryDesktop + HistoryMobile + HistoryStatic)
 
 ---
 
@@ -118,7 +118,7 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 - [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
 - [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
 - [ ] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
-- [ ] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split desktop/mobile en 2 fichiers
+- [x] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split en HistoryDesktop + HistoryMobile + HistoryStatic
 - [ ] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
 - [ ] **5.6** `src/sections/offers/OffersContent.tsx` (750l) — **LE PLUS RISQUÉ, en dernier**
 
