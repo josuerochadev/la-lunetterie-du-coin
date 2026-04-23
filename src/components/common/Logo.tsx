@@ -1,7 +1,7 @@
 import type React from 'react';
 import { Link } from 'react-router-dom';
-import { clsx } from 'clsx';
 
+import { cn } from '@/lib/cn';
 import LogoFullNoir from '@/assets/logo/Logo_LLDC_Noir.svg?react';
 import LogoFullBlanc from '@/assets/logo/Logo_LLDC_Blanc.svg?react';
 import LogoFullJaune from '@/assets/logo/Logo_LLDC_Jaune.svg?react';
@@ -62,14 +62,14 @@ const Logo: React.FC<LogoProps> = ({
   return (
     <Link
       to="/"
-      className={clsx(
+      className={cn(
         'focus-style inline-flex items-center transition-opacity duration-200 hover:opacity-80',
         className,
       )}
       aria-label="Retour à l'accueil - La Lunetterie Du Coin"
       onClick={onClick}
     >
-      <SvgComponent className={clsx(sizeClasses[size], 'flex-shrink-0')} aria-hidden="true" />
+      <SvgComponent className={cn(sizeClasses[size], 'flex-shrink-0')} aria-hidden="true" />
     </Link>
   );
 };

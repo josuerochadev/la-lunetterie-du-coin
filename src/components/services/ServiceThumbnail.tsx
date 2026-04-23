@@ -1,9 +1,10 @@
 // src/components/services/ServiceThumbnail.tsx
 import type React from 'react';
 import { useRef, useEffect } from 'react';
-import clsx from 'clsx';
 
 import Picture from '../common/Picture';
+
+import { cn } from '@/lib/cn';
 
 interface ServiceThumbnailProps {
   /** base path sans extension, ex: /illustrations/eyeframe */
@@ -75,7 +76,7 @@ export default function ServiceThumbnail({
       tabIndex={isActive ? 0 : -1}
       onClick={onClick}
       onKeyDown={handleKeyDown}
-      className={clsx(
+      className={cn(
         'focus-style cursor-pointer transition-all duration-300 hover:scale-105',
         isActive ? 'scale-110 opacity-100' : 'opacity-70 hover:opacity-90',
       )}
@@ -85,7 +86,7 @@ export default function ServiceThumbnail({
           srcBase={imageBase}
           alt={title}
           sizes="96px"
-          className={clsx(
+          className={cn(
             'h-24 w-24 object-contain transition-all duration-300',
             isActive ? 'brightness-110' : 'brightness-95 hover:brightness-105',
           )}
