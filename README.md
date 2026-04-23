@@ -9,10 +9,10 @@
 
 - 🎨 **Design moderne** avec animations fluides respectant l'accessibilité
 - ♿ **Accessibilité WCAG 2.1 AA** avec 0 violations détectées
-- ⚡ **Performance optimisée** (Lighthouse Score 90+)
+- ⚡ **Performance optimisée** (Lighthouse 70+ mobile / 80+ desktop)
 - 📱 **Responsive Design** pour tous les appareils
 - 🔧 **TypeScript** pour une base de code robuste
-- 🧪 **Tests complets** (95.49% de couverture)
+- 🧪 **Tests complets** (632 tests, 70%+ de couverture)
 
 ## 🚀 Démarrage Rapide
 
@@ -34,6 +34,8 @@ pnpm install
 # Démarrer le serveur de développement
 pnpm run dev
 ```
+
+Copier `.env.example` en `.env.local` puis ajuster les valeurs si besoin (voir [docs/environment-setup.md](./docs/environment-setup.md)).
 
 L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 
@@ -57,13 +59,13 @@ L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
 
 ## 📊 Métriques de Qualité
 
-| Métrique                   | Valeur Actuelle | Objectif |
-| -------------------------- | --------------- | -------- |
-| **Test Coverage**          | 95.49%          | ≥ 10%    |
-| **Lighthouse Performance** | 90+             | ≥ 90     |
-| **Bundle Size**            | ~300kb          | ≤ 10MB   |
-| **A11y Violations**        | 0               | 0        |
-| **ESLint Warnings**        | 0               | 0        |
+| Métrique                   | Valeur Actuelle              | Objectif |
+| -------------------------- | ---------------------------- | -------- |
+| **Test Coverage**          | ~70%                         | ≥ 10%    |
+| **Lighthouse Performance** | 70+ (mobile) / 80+ (desktop) | ≥ 70     |
+| **Bundle Size**            | ~800kb (JS)                  | ≤ 10MB   |
+| **A11y Violations**        | 0                            | 0        |
+| **ESLint Warnings**        | 0                            | 0        |
 
 ## 🧪 Tests
 
@@ -147,6 +149,7 @@ Nous accueillons les contributions ! Consultez notre [Guide de Contribution](./C
 - [Configuration environnement](./docs/environment-setup.md) - Variables d'environnement
 - [Standards icones](./docs/standards/icons.md) - Patterns d'import Lucide
 - [Audits qualite](./docs/audits/) - Resultats des audits (KISS, SOLID, lisibilite, architecture)
+- [Integrations externes](./docs/integrations.md) - Formspree, Sentry, Analytics, Calendly
 - [Strategie de tests](./docs/testing-suite.md) - Tests unitaires, E2E, visuels
 
 ## 📝 Licence

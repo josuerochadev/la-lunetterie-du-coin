@@ -11,6 +11,13 @@ import {
   handleError,
 } from '@/lib/formSubmissionHelpers';
 
+/**
+ * Hook encapsulant la logique de soumission du formulaire de contact via Formspree.
+ *
+ * Gère : protection anti-spam (honeypot), feedback haptique mobile,
+ * retry automatique (3 tentatives avec backoff), et timeout réseau.
+ */
+
 interface UseFormSubmissionReturn {
   // eslint-disable-next-line no-unused-vars
   submitForm: (e: React.FormEvent<HTMLFormElement>) => Promise<SubmissionResult>;

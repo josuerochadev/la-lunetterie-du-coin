@@ -15,6 +15,7 @@ interface ToastItem {
 
 const TOAST_DURATION_MS = 3500;
 
+/** Toast unitaire avec auto-dismiss et icône contextuelle. */
 function ToastEntry({ item, onDismiss }: { item: ToastItem; onDismiss: () => void }) {
   useEffect(() => {
     const timer = setTimeout(onDismiss, TOAST_DURATION_MS);
@@ -48,6 +49,7 @@ function ToastEntry({ item, onDismiss }: { item: ToastItem; onDismiss: () => voi
 
 let toastId = 0;
 
+/** Provider de notifications toast. Utiliser via `useToast()`. */
 export function ToastProvider({ children }: { children: React.ReactNode }) {
   const [toasts, setToasts] = useState<ToastItem[]>([]);
 

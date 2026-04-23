@@ -2,6 +2,14 @@ import type React from 'react';
 
 import type { FormErrors } from '@/types/forms';
 
+/**
+ * Hook gérant la validation native HTML du formulaire de contact.
+ *
+ * Fournit des messages de validation personnalisés en français via
+ * `setCustomValidity`, et réinitialise la validité quand l'utilisateur
+ * corrige un champ.
+ */
+
 interface ValidationMessages {
   name: string;
   email: string;

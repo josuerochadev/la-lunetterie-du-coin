@@ -257,14 +257,17 @@ test('should submit contact form', async ({ page }) => {
 
 ```css
 /* Couleurs sémantiques */
---color-brand: /* Couleur principale */ --color-accent: /* Couleur d'accentuation */
-  --color-success: /* Succès */ --color-warning: /* Avertissement */ --color-error: /* Erreur */;
+--color-brand: /* Couleur principale */;
+--color-accent: /* Couleur d'accentuation */;
+--color-success: /* Succès */;
+--color-warning: /* Avertissement */;
+--color-error: /* Erreur */;
 ```
 
 ### Animations
 
 - Respecter `prefers-reduced-motion`
-- Utiliser `ConditionalMotion` pour les animations
+- Utiliser le hook `usePrefersReducedMotion()` pour conditionner les animations
 - Durées cohérentes : 200ms, 300ms, 500ms
 
 ## ♿ Accessibilité
@@ -286,7 +289,7 @@ pnpm run a11y
 
 ### Objectifs
 
-- Lighthouse Performance > 90
+- Lighthouse Performance ≥ 70 (mobile) / ≥ 80 (desktop)
 - Bundle JS critique < 100kb
 - Images optimisées (AVIF/WebP)
 
@@ -334,7 +337,7 @@ pnpm run img:optimize    # Optimiser images
 ## 🐛 Signaler un Bug
 
 1. Vérifier que le bug n'existe pas déjà dans les Issues
-2. Créer une nouvelle Issue avec le template Bug Report
+2. Créer une nouvelle Issue GitHub
 3. Inclure :
    - **Steps to reproduce**
    - **Expected behavior**
@@ -344,7 +347,7 @@ pnpm run img:optimize    # Optimiser images
 
 ## 💡 Proposer une Fonctionnalité
 
-1. Créer une Issue avec le template Feature Request
+1. Créer une Issue GitHub
 2. Expliquer le **problème** que ça résout
 3. Décrire la **solution** proposée
 4. Considérer les **alternatives**
@@ -358,7 +361,7 @@ pnpm run img:optimize    # Optimiser images
 - [Tailwind CSS](https://tailwindcss.com/)
 - [Framer Motion](https://www.framer.com/motion/)
 
-## 🤝 Code de Conduite
+## 🤝 Bonnes Pratiques de Collaboration
 
 - Soyez respectueux et constructifs
 - Accueillez les nouveaux contributeurs

@@ -21,10 +21,13 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - Redesign complet des pages Services, Offres et Contact avec design system unifie
 - Reecriture du copy pour le nouveau ton de marque (Home, About, Services, Offres, Contact)
 - Decomposition de HomeStory, HomeServices, HomeOffers en sous-composants modulaires
+- Decomposition de AboutHistory et AboutEngagement en sous-composants Desktop/Mobile/Static
+- Decomposition de OffersContent et ServicesMobileAnimated en sous-composants focuses
+- Centralisation des spring configs et documentation des scroll hooks
 - Centralisation des constantes dans `config/design.ts`
 - Centralisation des types formulaire dans `types/forms.ts`
 - Remplacement de Calendly par lien de reservation generique
-- Migration vers Vite 7.1, React 19.1, Framer Motion 12.23
+- Migration vers Vite 7.3, React 19.2, Framer Motion 12.38
 
 ### Fixed
 
@@ -38,6 +41,7 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 - Nettoyage analytics et suppression du monitoring de performance inutilise
 - Suppression des dependances deprecated (@studio-freight/lenis)
+- Suppression du hook mort `useScrollProgress`
 
 ## [1.0.0] - 2024-12-09
 
@@ -47,9 +51,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 - Interface moderne avec React 19, TypeScript et Vite
 - Design system complet basé sur Tailwind CSS
 - Système d'accessibilité avec 0 violations axe-core
-- Suite de tests complète (95.49% de couverture)
+- Suite de tests complète (632+ tests)
 - Pipeline CI/CD avec contrôles qualité automatisés
-- Optimisations de performance (Lighthouse Score 90+)
+- Optimisations de performance (Lighthouse ≥ 70 mobile / ≥ 80 desktop)
 - Support complet de l'internationalisation
 - Animations fluides respectant prefers-reduced-motion
 - SEO optimisé avec structured data JSON-LD
@@ -64,9 +68,9 @@ et ce projet adhère au [Semantic Versioning](https://semver.org/lang/fr/).
 
 ### Performance & Quality Metrics
 
-- ✅ Test Coverage: 95.49%
-- ✅ Lighthouse Performance: 90+
-- ✅ Bundle Size: ~300kb
+- ✅ Test Coverage: ~70% (quality gate ≥ 10%)
+- ✅ Lighthouse Performance: ≥ 70 (mobile) / ≥ 80 (desktop)
+- ✅ Bundle Size: ~800kb (JS)
 - ✅ A11y Violations: 0
 - ✅ ESLint Warnings: 0
 - ✅ Build Time: <3s
