@@ -115,13 +115,13 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Le `Navbar.tsx` (287 lignes) cumule 5 `useEffect`. La logique de détection de thème par IntersectionObserver (lignes 77-158, ~81 lignes) est un hook auto-contenu.
 
-- [ ] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
+- [x] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
   - Input : `location.pathname`
   - Output : `{ theme: 'dark' | 'light', hiddenByFooter: boolean }`
-- [ ] Modifier `Navbar.tsx` pour consommer le hook
-- [ ] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
-- [ ] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] Modifier `Navbar.tsx` pour consommer le hook
+- [x] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
+- [x] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 - [ ] **Validation visuelle** : naviguer sur toutes les pages, vérifier les transitions de thème navbar
 
 <details>
