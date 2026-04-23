@@ -9,8 +9,8 @@
 
 ## État courant
 
-- **Phase active** : Phase 1 — partielle (Picture.tsx conservé, voir notes)
-- **Branche** : `refactor/dead-code-cleanup`
+- **Phase active** : Phase 4 — terminée (useBreakpoint fusionné)
+- **Branche** : `refactor/merge-breakpoint-hooks`
 - **Dernière session** : 2026-04-23
 
 ---
@@ -173,12 +173,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Les deux hooks sont quasi-identiques (seul le seuil en px change).
 
-- [ ] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
-- [ ] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
-- [ ] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
-- [ ] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
-- [ ] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
-- [ ] `pnpm build` + `pnpm lint` + `pnpm test:run`
+- [x] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
+- [x] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
+- [x] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
+- [x] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
+- [x] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
+- [x] `pnpm build` + `pnpm lint` + `pnpm test:run`
 
 <details>
 <summary><strong>Prompt Phase 4</strong> (copier/coller)</summary>
@@ -369,7 +369,8 @@ Avant chaque merge, vérifier manuellement sur les 3 breakpoints :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                      | PR  | Notes                                                                                                         |
-| ---------- | ----- | ---------------------------- | --- | ------------------------------------------------------------------------------------------------------------- |
-| 2026-04-22 | —     | —                            | —   | Plan créé depuis audit architecture                                                                           |
-| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| Date       | Phase | Branche                           | PR  | Notes                                                                                                                         |
+| ---------- | ----- | --------------------------------- | --- | ----------------------------------------------------------------------------------------------------------------------------- |
+| 2026-04-22 | —     | —                                 | —   | Plan créé depuis audit architecture                                                                                           |
+| 2026-04-23 | 1     | `refactor/dead-code-cleanup`      | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné                 |
+| 2026-04-23 | 4     | `refactor/merge-breakpoint-hooks` | —   | useBreakpoint(minWidth) créé ; useIsLg/useIsXl deviennent des réexports ; tests ajoutés ; 0 changement d'import consommateurs |
