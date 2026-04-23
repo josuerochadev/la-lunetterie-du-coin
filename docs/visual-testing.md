@@ -1,5 +1,7 @@
 # 📸 Tests de Régression Visuelle
 
+> **⚠️ Statut : non implémenté.** Ce document décrit l'architecture prévue pour les tests de régression visuelle. Les fichiers `e2e/visual-regression.spec.ts` et `.github/workflows/visual-regression.yml` ne sont pas encore créés.
+
 Ce document explique comment utiliser les tests de régression visuelle dans le projet La Lunetterie du Coin.
 
 ## Qu'est-ce que la régression visuelle ?
@@ -12,13 +14,13 @@ Les tests de régression visuelle permettent de détecter automatiquement les ch
 
 ```bash
 # Exécuter les tests visuels
-npm run e2e:visual
+pnpm run e2e:visual
 
 # Mettre à jour les screenshots de référence (après changements intentionnels)
-npm run e2e:visual:update
+pnpm run e2e:visual:update
 
 # Tests E2E complets (incluant les visuels)
-npm run e2e
+pnpm run e2e
 ```
 
 ### Fichiers de test
@@ -29,17 +31,20 @@ npm run e2e
 ## Tests implémentés
 
 ### 1. Tests de pages complètes
+
 - **Homepage complète** : Capture de la page d'accueil entière
 - **Version mobile** : Test responsive sur viewport mobile (375x667)
 - **Version tablette** : Test responsive sur viewport tablette (768x1024)
 
 ### 2. Tests de composants
+
 - **Section Hero** : Zone principale d'accroche
 - **Navigation** : Barre de navigation
 - **Formulaire de contact** : Zone de contact
 - **Footer** : Pied de page
 
 ### 3. Tests d'états interactifs
+
 - **États du formulaire** :
   - Formulaire vide (état initial)
   - Formulaire avec focus
@@ -77,7 +82,7 @@ Quand des différences sont détectées :
 Lors de la première exécution, Playwright génère les screenshots de référence :
 
 ```bash
-npm run e2e:visual:update
+pnpm run e2e:visual:update
 ```
 
 Ces images doivent être committées dans le repo comme référence.
@@ -87,16 +92,19 @@ Ces images doivent être committées dans le repo comme référence.
 Si vous modifiez l'interface intentionnellement :
 
 1. Exécutez les tests pour voir les différences :
+
 ```bash
-npm run e2e:visual
+pnpm run e2e:visual
 ```
 
 2. Si les changements sont corrects, mettez à jour les références :
+
 ```bash
-npm run e2e:visual:update
+pnpm run e2e:visual:update
 ```
 
 3. Committez les nouveaux screenshots :
+
 ```bash
 git add test-results/
 git commit -m "update: visual regression baselines"
@@ -108,7 +116,7 @@ Quand un test échoue :
 
 1. **Vérifiez les artifacts** dans GitHub Actions
 2. **Analysez les différences** avec les images `*-diff.png`
-3. **Testez localement** avec `npm run e2e:visual --headed`
+3. **Testez localement** avec `pnpm run e2e:visual --headed`
 
 ## Configuration avancée
 
@@ -131,7 +139,9 @@ expect: {
 Les tests désactivent automatiquement les animations pour des captures cohérentes :
 
 ```css
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   animation-duration: 0s !important;
   transition-duration: 0s !important;
 }
@@ -151,20 +161,24 @@ test('custom viewport', async ({ page }) => {
 ## Bonnes pratiques
 
 ### 1. Stabilité des captures
+
 - Toujours attendre le chargement complet avec `waitForLoadState('networkidle')`
 - Désactiver les animations
 - Masquer les éléments dynamiques (curseurs, horodatages)
 
 ### 2. Granularité des tests
+
 - Tester les composants individuellement pour des diagnostics précis
 - Éviter les captures trop larges qui masquent les petits changements
 
 ### 3. Maintenance
+
 - Réviser régulièrement les screenshots de référence
 - Nettoyer les anciens fichiers de test
 - Documenter les changements visuels intentionnels
 
 ### 4. Performance
+
 - Utiliser des viewports cohérents
 - Limiter le nombre de browsers pour les tests visuels (Chromium suffisant)
 - Optimiser les timeouts
@@ -174,16 +188,19 @@ test('custom viewport', async ({ page }) => {
 ### Problèmes courants
 
 **1. Screenshots différents entre local et CI**
+
 - Vérifiez les polices système
 - Utilisez des conteneurs Docker identiques
 - Désactivez les fonctionnalités système (scrollbars, etc.)
 
 **2. Tests instables**
+
 - Augmentez les timeouts
 - Améliorez les sélecteurs
 - Vérifiez les animations résiduelles
 
 **3. Fichiers volumineux**
+
 - Utilisez Git LFS pour les images
 - Limitez la résolution des captures
 - Nettoyez régulièrement les anciens screenshots

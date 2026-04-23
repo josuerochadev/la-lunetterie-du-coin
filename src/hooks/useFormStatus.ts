@@ -5,18 +5,36 @@ import { TIMING } from '@/config/design';
 import type { NetworkError } from '@/lib/networkErrors';
 import type { FormErrors, SubmissionResult } from '@/types/forms';
 
+/**
+ * Hook gérant l'état complet d'une soumission de formulaire :
+ * statut (idle → sending → success/error → idle), erreurs par champ,
+ * erreurs réseau, compteur de retry, et focus accessible post-soumission.
+ *
+ * Les messages de succès/erreur se réinitialisent automatiquement
+ * après un délai configurable (voir `TIMING` dans `config/design`).
+ */
+
 type FormSubmissionStatus = 'idle' | 'sending' | 'success' | 'error';
 
 interface UseFormStatusReturn {
+  /** État courant de la soumission. */
   status: FormSubmissionStatus;
+  /** Message d'erreur global. */
   error: string;
+  /** Erreurs de validation par champ. */
   fieldErrors: FormErrors;
+  /** Détails de l'erreur réseau (null si pas d'erreur réseau). */
   networkError: NetworkError | null;
+  /** Nombre de tentatives effectuées. */
   retryCount: number;
+  /** Ref vers le message de statut pour focus a11y. */
   messageRef: React.RefObject<HTMLDivElement | null>;
+  /** Réinitialise l'état avant une nouvelle soumission. */
   handleSubmissionStart: () => void;
+  /** Met à jour l'état selon le résultat de la soumission. */
   // eslint-disable-next-line no-unused-vars
   handleSubmissionResult: (result: SubmissionResult) => void;
+  /** Efface l'erreur d'un champ spécifique (ex: quand l'utilisateur corrige). */
   // eslint-disable-next-line no-unused-vars
   clearFieldError: (field: keyof FormErrors) => void;
 }

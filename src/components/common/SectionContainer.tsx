@@ -14,32 +14,16 @@ type SectionContainerProps = {
   as?: keyof JSX.IntrinsicElements; // "div" | "section" | ...
 };
 /**
- * Composant de conteneur de section standardisé, gérant la largeur, les espacements, et l’accessibilité des grandes zones du site.
+ * Conteneur de section réutilisable gérant largeur, espacements, accessibilité,
+ * image de fond optionnelle avec overlay, et choix de l’élément HTML.
  *
- * @component
- * @param {object} props
- * @param {string} [props.id] - ID unique pour l’ancre et l’accessibilité.
- * @param {string} [props.className] - Classes CSS additionnelles.
- * @param {React.ReactNode} props.children - Contenu de la section.
- * @returns {JSX.Element}
- */
-
-/**
- * Composant SectionContainer
- *
- * Ce composant permet de créer une section réutilisable avec des options de style avancées,
- * notamment la gestion d'une image de fond, d'une superposition (overlay), et d'espacements personnalisables.
- * Il accepte également un type d'élément HTML à utiliser comme conteneur principal.
- *
- * @param id - Identifiant unique de la section, utilisé notamment pour l'accessibilité ou le ciblage CSS.
- * @param className - Classes CSS additionnelles à appliquer au conteneur principal.
- * @param children - Contenu à afficher à l'intérieur de la section.
- * @param backgroundImage - URL de l'image de fond à appliquer à la section (optionnel).
- * @param overlayClassName - Classes CSS pour la superposition (overlay) appliquée sur l'image de fond (par défaut : 'bg-white/40 backdrop-blur-sm').
- * @param noSpacing - Si vrai, supprime les espacements internes par défaut (padding).
- * @param as - Type d'élément HTML à utiliser pour le conteneur principal (par défaut : 'section').
- *
- * @returns Un conteneur de section stylisé, avec gestion optionnelle de l'image de fond et de la superposition.
+ * @param id - Identifiant unique pour l’ancre et l’accessibilité.
+ * @param className - Classes CSS additionnelles.
+ * @param children - Contenu de la section.
+ * @param backgroundImage - URL de l’image de fond (optionnel).
+ * @param overlayClassName - Classes de l’overlay sur l’image (défaut : ‘bg-white/40 backdrop-blur-sm’).
+ * @param noSpacing - Supprime les espacements internes par défaut.
+ * @param as - Élément HTML du conteneur (défaut : ‘section’).
  */
 export default function SectionContainer({
   id,

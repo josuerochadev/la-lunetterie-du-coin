@@ -9,25 +9,29 @@
 L'application doit être performante sur tous types d'appareils et connexions pour offrir une expérience utilisateur optimale et améliorer le SEO.
 
 ### Objectifs performance :
-- Lighthouse Performance Score > 90
-- First Contentful Paint < 1.5s
-- Largest Contentful Paint < 2.5s
+
+- Lighthouse Performance Score ≥ 70 (mobile) / ≥ 80 (desktop)
+- First Contentful Paint < 3s (mobile) / < 2s (desktop)
+- Largest Contentful Paint < 4s (mobile) / < 2.5s (desktop)
 - Cumulative Layout Shift < 0.1
 - Bundle size optimisé
 
 ## Options considérées
 
 ### Option A: Optimisations basiques
+
 - Minification et compression
 - Images optimisées
 
 ### Option B: Optimisations avancées
+
 - Code splitting
 - Lazy loading
 - Tree shaking poussé
 - Image formats modernes
 
 ### Option C: Optimisations expertes
+
 - Bundle analysis détaillé
 - Custom optimizations
 - Performance monitoring
@@ -39,6 +43,7 @@ L'application doit être performante sur tous types d'appareils et connexions po
 ### Techniques implémentées :
 
 #### 1. **Bundle Optimization**
+
 ```javascript
 // vite.config.ts - optimizeDeps spécifique
 optimizeDeps: {
@@ -48,6 +53,7 @@ optimizeDeps: {
 ```
 
 #### 2. **Images Responsives**
+
 ```typescript
 // Picture component avec formats modernes
 <picture>
@@ -58,11 +64,13 @@ optimizeDeps: {
 ```
 
 #### 3. **Code Splitting Intelligent**
+
 - Lazy loading des routes non-critiques
 - Dynamic imports pour les composants lourds
 - Vendor chunking optimisé
 
 #### 4. **Tree Shaking Poussé**
+
 ```javascript
 // ESLint rule pour imports Lucide spécifiques
 "no-restricted-imports": ["error", {
@@ -76,24 +84,28 @@ optimizeDeps: {
 ## Conséquences
 
 ### Positives ✅
-- **Performance**: Scores Lighthouse > 90 sur mobile et desktop
+
+- **Performance**: Scores Lighthouse ≥ 70 (mobile) / ≥ 80 (desktop)
 - **SEO**: Amélioration du ranking Google
 - **UX**: Chargement rapide même sur 3G
 - **Bundle**: Réduction ~60% vs approche classique
 - **Monitoring**: Tracking continu avec Lighthouse CI
 
 ### Négatives ⚠️
+
 - Complexité de build augmentée
 - Imports Lucide plus verbeux
 - Maintenance des optimizations
 
 ### Métriques surveillées
-- **Build size**: dist/ < 500kb total
+
+- **Build size**: JS bundle < 1MB
 - **First Load**: < 100kb JS critique
 - **Images**: Formats modernes > 80% du trafic
 - **Core Web Vitals**: Tous en vert
 
 ### Outils de monitoring
+
 - Lighthouse CI dans GitHub Actions
 - Bundle analyzer dans le build
 - Performance API pour métriques temps réel

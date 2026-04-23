@@ -9,7 +9,8 @@
 Le projet nécessite une stratégie de tests robuste pour assurer la qualité, la maintenabilité et la confiance dans les déploiements.
 
 ### Objectifs qualité :
-- Test coverage > 85%
+
+- Test coverage > 85% (objectif aspirationnel — quality gate CI/CD : ≥ 10%)
 - Tests automatisés dans CI/CD
 - Détection précoce des régressions
 - Tests de non-régression visuelle
@@ -18,25 +19,33 @@ Le projet nécessite une stratégie de tests robuste pour assurer la qualité, l
 ## Options considérées
 
 ### Option A: Tests unitaires uniquement
+
 **Avantages:**
+
 - Rapide à implémenter
 - Feedback instantané
 
 **Inconvénients:**
+
 - Pas de test d'intégration
 - Manque de confiance
 
 ### Option B: Tests E2E uniquement
+
 **Avantages:**
+
 - Tests proche utilisateur final
 - Détection bugs UI
 
 **Inconvénients:**
+
 - Lent et fragile
 - Debug difficile
 
 ### Option C: Stratégie pyramidale
+
 **Avantages:**
+
 - Équilibre optimal
 - Couverture complète
 - Performance acceptable
@@ -48,6 +57,7 @@ Le projet nécessite une stratégie de tests robuste pour assurer la qualité, l
 ### Architecture de test :
 
 #### 1. **Tests Unitaires** (Vitest + Testing Library)
+
 ```typescript
 // 70% de la couverture - Tests rapides et isolés
 describe('Button component', () => {
@@ -59,31 +69,35 @@ describe('Button component', () => {
 ```
 
 #### 2. **Tests d'Intégration** (Vitest + MSW)
+
 ```typescript
 // 20% de la couverture - Tests interactions composants
 describe('ContactForm integration', () => {
   it('should submit form and show success message', async () => {
     // Test avec mock API
-  })
-})
+  });
+});
 ```
 
 #### 3. **Tests E2E** (Playwright)
+
 ```typescript
 // 10% de la couverture - Parcours critiques utilisateur
 test('should complete contact flow', async ({ page }) => {
-  await page.goto('/')
-  await page.click('text=Contact')
+  await page.goto('/');
+  await page.click('text=Contact');
   // Test parcours complet
-})
+});
 ```
 
 #### 4. **Tests Spécialisés**
+
 - **Accessibilité**: axe-core automatisé
 - **Performance**: Lighthouse CI
 - **Visuel**: Playwright visual comparisons
 
 ### Stack technique :
+
 - **Unit**: Vitest + @testing-library/react
 - **E2E**: Playwright (Chrome, Firefox, Safari)
 - **A11y**: @axe-core/playwright
@@ -93,24 +107,28 @@ test('should complete contact flow', async ({ page }) => {
 ## Conséquences
 
 ### Positives ✅
-- **Couverture**: 95.49% de code coverage atteint
-- **Confiance**: Déploiements sereins avec 51 tests
+
+- **Couverture**: ~70% de code coverage (quality gate ≥ 10%)
+- **Confiance**: Déploiements sereins avec 632+ tests
 - **Performance**: Tests unitaires < 3s, E2E < 2min
 - **Qualité**: 0 violations accessibilité détectées
 - **Maintenabilité**: Tests lisibles et maintenables
 
 ### Négatives ⚠️
+
 - Setup initial complexe (4 types de tests)
 - Temps CI augmenté (~8min total)
 - Maintenance des tests E2E
 
 ### Métriques de succès
-- **Coverage**: Maintenir > 85% statements
+
+- **Coverage**: Objectif > 85% statements (quality gate CI : ≥ 10%)
 - **Flakiness**: < 2% de tests flaky E2E
 - **Vitesse**: Tests unitaires < 5s
 - **CI**: Pipeline complète < 10min
 
 ### Évolution prévue
+
 - Tests de charge avec k6
 - Tests de sécurité OWASP
 - Tests d'intégration API réelles

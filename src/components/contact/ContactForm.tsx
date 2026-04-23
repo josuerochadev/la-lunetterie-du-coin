@@ -9,6 +9,10 @@ import { useFormSubmission } from '@/hooks/useFormSubmission';
 import { useFormStatus } from '@/hooks/useFormStatus';
 import { useFormValidation } from '@/hooks/useFormValidation';
 
+/**
+ * Formulaire de contact avec validation HTML native, protection anti-spam (honeypot),
+ * consentement RGPD, feedback réseau avec retry, et focus accessible post-soumission.
+ */
 export default function ContactForm() {
   const { submitForm } = useFormSubmission();
   const {

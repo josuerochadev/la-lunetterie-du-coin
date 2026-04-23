@@ -151,10 +151,10 @@ The application automatically validates required environment variables on startu
 ### Debug Commands
 
 ```bash
-# Check current environment variables
-pnpm dev --debug
+# Validate environment variables
+pnpm env:validate
 
-# Validate environment setup
+# Check loaded VITE_ variables at runtime
 node -e "console.log(process.env)" | grep VITE_
 ```
 

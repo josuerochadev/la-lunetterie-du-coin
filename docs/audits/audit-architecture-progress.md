@@ -9,8 +9,8 @@
 
 ## État courant
 
-- **Phase active** : Phase 2 — terminée (clsx → cn standardisé)
-- **Branche** : `refactor/standardize-cn`
+- **Phase active** : Phase 6 — terminée (spring configs centralisées + JSDoc hooks scroll)
+- **Branche** : `refactor/spring-config-consistency`
 - **Dernière session** : 2026-04-23
 
 ---
@@ -286,10 +286,10 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 **Branche** : `refactor/spring-config-consistency`
 
-- [ ] `src/components/common/CursorFollower.tsx:28` — remplacer le `springConfig` local par une constante nommée dans `@/lib/motion` (ex: `SPRING_CONFIG_CURSOR`) ou ajouter un commentaire expliquant pourquoi les valeurs diffèrent de `SPRING_CONFIG`
-- [ ] `src/hooks/useScrollAnimation.ts:59` — le fallback `{ stiffness: 100, damping: 30 }` diffère de `SPRING_CONFIG` (`{ stiffness: 80, damping: 30, mass: 0.5 }`) — aligner sur `SPRING_CONFIG` ou extraire en constante nommée
-- [ ] Ajouter un JSDoc en tête de `src/hooks/useManualScrollProgress.ts` expliquant quand l'utiliser vs `useScrollAnimation` (workaround framer-motion bug sur éléments deep-page sous sticky transforms)
-- [ ] `pnpm build` + `pnpm lint` + `pnpm test:run`
+- [x] `src/components/common/CursorFollower.tsx:28` — remplacer le `springConfig` local par une constante nommée dans `@/lib/motion` (ex: `SPRING_CONFIG_CURSOR`) ou ajouter un commentaire expliquant pourquoi les valeurs diffèrent de `SPRING_CONFIG`
+- [x] `src/hooks/useScrollAnimation.ts:59` — le fallback `{ stiffness: 100, damping: 30 }` diffère de `SPRING_CONFIG` (`{ stiffness: 80, damping: 30, mass: 0.5 }`) — aligner sur `SPRING_CONFIG` ou extraire en constante nommée
+- [x] Ajouter un JSDoc en tête de `src/hooks/useManualScrollProgress.ts` expliquant quand l'utiliser vs `useScrollAnimation` (workaround framer-motion bug sur éléments deep-page sous sticky transforms)
+- [x] `pnpm build` + `pnpm lint` + `pnpm test:run`
 
 <details>
 <summary><strong>Prompt Phase 6</strong> (copier/coller)</summary>
@@ -369,8 +369,8 @@ Avant chaque merge, vérifier manuellement sur les 3 breakpoints :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                      | PR  | Notes                                                                                                         |
-| ---------- | ----- | ---------------------------- | --- | ------------------------------------------------------------------------------------------------------------- |
-| 2026-04-22 | —     | —                            | —   | Plan créé depuis audit architecture                                                                           |
-| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | #86 | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
-| 2026-04-23 | 2     | `refactor/standardize-cn`    | —   | 4 fichiers migrés clsx → cn() (ServiceThumbnail, Logo, Footer, EyePattern) — 7 appels standardisés            |
+| Date       | Phase | Branche                              | PR  | Notes                                                                                                             |
+| ---------- | ----- | ------------------------------------ | --- | ----------------------------------------------------------------------------------------------------------------- |
+| 2026-04-22 | —     | —                                    | —   | Plan créé depuis audit architecture                                                                               |
+| 2026-04-23 | 1     | `refactor/dead-code-cleanup`         | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné     |
+| 2026-04-23 | 6     | `refactor/spring-config-consistency` | —   | SPRING_CONFIG_CURSOR exporté ; useScrollAnimation aligné sur SPRING_CONFIG ; JSDoc useManualScrollProgress ajouté |
