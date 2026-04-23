@@ -173,12 +173,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Les deux hooks sont quasi-identiques (seul le seuil en px change).
 
-- [ ] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
-- [ ] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
-- [ ] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
-- [ ] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
-- [ ] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
-- [ ] `pnpm build` + `pnpm lint` + `pnpm test:run`
+- [x] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
+- [x] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
+- [x] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
+- [x] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
+- [x] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
+- [x] `pnpm build` + `pnpm lint` + `pnpm test:run`
 
 <details>
 <summary><strong>Prompt Phase 4</strong> (copier/coller)</summary>
