@@ -9,8 +9,8 @@
 
 ## État courant
 
-- **Phase active** : Phase 4 — terminée (useBreakpoint fusionné)
-- **Branche** : `refactor/merge-breakpoint-hooks`
+- **Phase active** : Phase 2 — terminée (clsx → cn standardisé)
+- **Branche** : `refactor/standardize-cn`
 - **Dernière session** : 2026-04-23
 
 ---
@@ -71,12 +71,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 4 fichiers importent `clsx` directement au lieu de `cn()` (`clsx` + `tailwind-merge`). Ils perdent la résolution de conflits Tailwind.
 
-- [ ] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 
 <details>
 <summary><strong>Prompt Phase 2</strong> (copier/coller)</summary>
@@ -115,13 +115,13 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Le `Navbar.tsx` (287 lignes) cumule 5 `useEffect`. La logique de détection de thème par IntersectionObserver (lignes 77-158, ~81 lignes) est un hook auto-contenu.
 
-- [ ] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
+- [x] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
   - Input : `location.pathname`
   - Output : `{ theme: 'dark' | 'light', hiddenByFooter: boolean }`
-- [ ] Modifier `Navbar.tsx` pour consommer le hook
-- [ ] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
-- [ ] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] Modifier `Navbar.tsx` pour consommer le hook
+- [x] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
+- [x] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 - [ ] **Validation visuelle** : naviguer sur toutes les pages, vérifier les transitions de thème navbar
 
 <details>
@@ -369,8 +369,8 @@ Avant chaque merge, vérifier manuellement sur les 3 breakpoints :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                           | PR  | Notes                                                                                                                         |
-| ---------- | ----- | --------------------------------- | --- | ----------------------------------------------------------------------------------------------------------------------------- |
-| 2026-04-22 | —     | —                                 | —   | Plan créé depuis audit architecture                                                                                           |
-| 2026-04-23 | 1     | `refactor/dead-code-cleanup`      | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné                 |
-| 2026-04-23 | 4     | `refactor/merge-breakpoint-hooks` | —   | useBreakpoint(minWidth) créé ; useIsLg/useIsXl deviennent des réexports ; tests ajoutés ; 0 changement d'import consommateurs |
+| Date       | Phase | Branche                      | PR  | Notes                                                                                                         |
+| ---------- | ----- | ---------------------------- | --- | ------------------------------------------------------------------------------------------------------------- |
+| 2026-04-22 | —     | —                            | —   | Plan créé depuis audit architecture                                                                           |
+| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | #86 | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| 2026-04-23 | 2     | `refactor/standardize-cn`    | —   | 4 fichiers migrés clsx → cn() (ServiceThumbnail, Logo, Footer, EyePattern) — 7 appels standardisés            |

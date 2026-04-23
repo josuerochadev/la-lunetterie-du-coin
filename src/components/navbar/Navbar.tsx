@@ -9,6 +9,7 @@ import FullScreenMenu from '@/components/navbar/FullScreenMenu';
 import { MENU_ANIMATION_DURATION } from '@/config/menu';
 import { BOOKING_URL } from '@/config/endpoints';
 import { TIMING } from '@/config/design';
+import { useNavbarTheme } from '@/hooks/useNavbarTheme';
 import { cn } from '@/lib/cn';
 
 /**
@@ -25,13 +26,12 @@ const HOVER_ZONE_HEIGHT_PX = 80;
 const Navbar: React.FC = () => {
   const [menuActive, setMenuActive] = useState(false);
   const [menuRendered, setMenuRendered] = useState(false);
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
   const [hovered, setHovered] = useState(false);
   const [hiddenByScroll, setHiddenByScroll] = useState(true);
-  const [hiddenByFooter, setHiddenByFooter] = useState(false);
   const lastScrollY = useRef(0);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
+  const { theme, hiddenByFooter } = useNavbarTheme(location.pathname);
 
   const isLight = theme === 'light';
 
@@ -70,92 +70,6 @@ const Navbar: React.FC = () => {
   }, []);
 
   const isVisible = !hiddenByFooter && (!hiddenByScroll || hovered || menuActive);
-
-  // Detect navbar theme via IntersectionObserver on a thin band at the top
-  // of the viewport. Unlike elementFromPoint, IO detects elements regardless
-  // of pointer-events, so decorative curves and overlays are properly handled.
-  useEffect(() => {
-    const BAND_TOP = 40;
-    const BAND_BOTTOM = 80;
-
-    const intersecting = new Set<Element>();
-
-    const resolveTheme = () => {
-      // Check if footer is in the detection band
-      for (const el of intersecting) {
-        if (el.closest('#footer')) {
-          setHiddenByFooter(true);
-          return;
-        }
-      }
-      setHiddenByFooter(false);
-
-      // Collect themed elements with their current attribute value
-      const themed: { el: Element; theme: string }[] = [];
-      for (const el of intersecting) {
-        const t = (el as HTMLElement).dataset.navbarTheme;
-        if (t) themed.push({ el, theme: t });
-      }
-
-      if (themed.length === 0) {
-        setTheme('dark');
-        return;
-      }
-
-      // Last in document order = visually on top (StickySection z-index pattern)
-      // Descendants also come after their ancestors, so nested overrides win.
-      themed.sort((a, b) => {
-        const pos = a.el.compareDocumentPosition(b.el);
-        return pos & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
-      });
-
-      setTheme(themed[themed.length - 1].theme === 'light' ? 'light' : 'dark');
-    };
-
-    const createObserver = () => {
-      const bottomMargin = Math.max(0, window.innerHeight - BAND_BOTTOM);
-      return new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) intersecting.add(entry.target);
-            else intersecting.delete(entry.target);
-          }
-          resolveTheme();
-        },
-        { rootMargin: `-${BAND_TOP}px 0px -${bottomMargin}px 0px` },
-      );
-    };
-
-    let observer = createObserver();
-
-    const observeAll = () => {
-      observer.disconnect();
-      intersecting.clear();
-      observer = createObserver();
-      document
-        .querySelectorAll('[data-navbar-theme], [data-navbar-theme-dynamic], #footer')
-        .forEach((el) => {
-          observer.observe(el);
-        });
-    };
-
-    // Small delay to ensure DOM is ready after route change
-    const timer = setTimeout(observeAll, 50);
-
-    // Re-read attributes on scroll (handles dynamic data-navbar-theme changes)
-    window.addEventListener('scroll', resolveTheme, { passive: true });
-
-    // Recreate observer on resize (rootMargin depends on viewport height)
-    const onResize = () => observeAll();
-    window.addEventListener('resize', onResize, { passive: true });
-
-    return () => {
-      clearTimeout(timer);
-      observer.disconnect();
-      window.removeEventListener('scroll', resolveTheme);
-      window.removeEventListener('resize', onResize);
-    };
-  }, [location.pathname]);
 
   useEffect(() => {
     if (menuActive) {

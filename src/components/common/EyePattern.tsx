@@ -1,6 +1,6 @@
 import type React from 'react';
-import { clsx } from 'clsx';
 
+import { cn } from '@/lib/cn';
 import motifUrl from '@/assets/patterns/motif-eye-pattern.svg';
 
 type EyePatternVariant = 'noir' | 'blanc' | 'jaune';
@@ -31,10 +31,7 @@ const colorMap: Record<EyePatternVariant, string> = {
 const EyePattern: React.FC<EyePatternProps> = ({ variant = 'noir', opacity = 0.05, className }) => {
   return (
     <div
-      className={clsx(
-        'pointer-events-none absolute inset-0 overflow-hidden print:hidden',
-        className,
-      )}
+      className={cn('pointer-events-none absolute inset-0 overflow-hidden print:hidden', className)}
       aria-hidden="true"
       style={{
         opacity,
