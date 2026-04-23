@@ -9,8 +9,8 @@
 
 ## État courant
 
-- **Phase active** : Phase 1 — partielle (Picture.tsx conservé, voir notes)
-- **Branche** : `refactor/dead-code-cleanup`
+- **Phase active** : Phase 2 — terminée (clsx → cn standardisé)
+- **Branche** : `refactor/standardize-cn`
 - **Dernière session** : 2026-04-23
 
 ---
@@ -71,12 +71,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 4 fichiers importent `clsx` directement au lieu de `cn()` (`clsx` + `tailwind-merge`). Ils perdent la résolution de conflits Tailwind.
 
-- [ ] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 
 <details>
 <summary><strong>Prompt Phase 2</strong> (copier/coller)</summary>
@@ -372,4 +372,5 @@ Avant chaque merge, vérifier manuellement sur les 3 breakpoints :
 | Date       | Phase | Branche                      | PR  | Notes                                                                                                         |
 | ---------- | ----- | ---------------------------- | --- | ------------------------------------------------------------------------------------------------------------- |
 | 2026-04-22 | —     | —                            | —   | Plan créé depuis audit architecture                                                                           |
-| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | #86 | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| 2026-04-23 | 2     | `refactor/standardize-cn`    | —   | 4 fichiers migrés clsx → cn() (ServiceThumbnail, Logo, Footer, EyePattern) — 7 appels standardisés            |
