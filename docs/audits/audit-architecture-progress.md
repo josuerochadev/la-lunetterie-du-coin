@@ -71,12 +71,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 4 fichiers importent `clsx` directement au lieu de `cn()` (`clsx` + `tailwind-merge`). Ils perdent la résolution de conflits Tailwind.
 
-- [ ] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
-- [ ] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] `src/components/services/ServiceThumbnail.tsx:4` — `import clsx` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/Logo.tsx:3` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/sections/shared/Footer.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] `src/components/common/EyePattern.tsx:2` — `import { clsx }` → `import { cn } from '@/lib/cn'`
+- [x] Renommer chaque appel `clsx(...)` → `cn(...)` dans ces 4 fichiers
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 
 <details>
 <summary><strong>Prompt Phase 2</strong> (copier/coller)</summary>
@@ -115,13 +115,13 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Le `Navbar.tsx` (287 lignes) cumule 5 `useEffect`. La logique de détection de thème par IntersectionObserver (lignes 77-158, ~81 lignes) est un hook auto-contenu.
 
-- [ ] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
+- [x] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
   - Input : `location.pathname`
   - Output : `{ theme: 'dark' | 'light', hiddenByFooter: boolean }`
-- [ ] Modifier `Navbar.tsx` pour consommer le hook
-- [ ] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
-- [ ] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] Modifier `Navbar.tsx` pour consommer le hook
+- [x] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
+- [x] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 - [ ] **Validation visuelle** : naviguer sur toutes les pages, vérifier les transitions de thème navbar
 
 <details>
@@ -173,12 +173,12 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Les deux hooks sont quasi-identiques (seul le seuil en px change).
 
-- [ ] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
-- [ ] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
-- [ ] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
-- [ ] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
-- [ ] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
-- [ ] `pnpm build` + `pnpm lint` + `pnpm test:run`
+- [x] Créer `src/hooks/useBreakpoint.ts` — `useBreakpoint(minWidth: number): boolean`
+- [x] Refactorer `useIsLg.ts` → réexport : `export const useIsLg = () => useBreakpoint(1024)`
+- [x] Refactorer `useIsXl.ts` → réexport : `export const useIsXl = () => useBreakpoint(1280)`
+- [x] Migrer les tests existants (si présents) ou créer un test pour `useBreakpoint`
+- [x] Vérifier que tous les consommateurs de `useIsLg` / `useIsXl` fonctionnent sans changement d'import
+- [x] `pnpm build` + `pnpm lint` + `pnpm test:run`
 
 <details>
 <summary><strong>Prompt Phase 4</strong> (copier/coller)</summary>
