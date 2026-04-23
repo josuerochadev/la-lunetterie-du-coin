@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef } from 'react';
-import { clsx } from 'clsx';
 
+import { cn } from '@/lib/cn';
 import SectionContainer from '@/components/common/SectionContainer';
 import FooterLogo from '@/components/footer/FooterLogo';
 import FooterNavigation from '@/components/footer/FooterNavigation';
@@ -38,7 +38,7 @@ export default function Footer({
       <footer
         id="footer"
         {...rest}
-        className={clsx(
+        className={cn(
           'relative z-10 w-full bg-transparent py-2 text-center text-primary',
           className,
         )}
@@ -53,7 +53,7 @@ export default function Footer({
     <footer
       id="footer"
       {...rest}
-      className={clsx(
+      className={cn(
         'relative z-20 -mt-[12svh] w-full bg-primary text-accent [overflow-x:clip] sm:-mt-[10svh] lg:-mt-[8vw] print:hidden',
         className,
       )}
