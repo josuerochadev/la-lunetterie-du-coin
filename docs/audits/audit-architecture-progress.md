@@ -9,8 +9,8 @@
 
 ## État courant
 
-- **Phase active** : Phase 1 — partielle (Picture.tsx conservé, voir notes)
-- **Branche** : `refactor/dead-code-cleanup`
+- **Phase active** : Phase 3 — terminée (useNavbarTheme extrait)
+- **Branche** : `refactor/extract-navbar-theme-hook`
 - **Dernière session** : 2026-04-23
 
 ---
@@ -115,13 +115,13 @@ Quand c'est fait, mets à jour docs/audits/audit-architecture-progress.md (cases
 
 Le `Navbar.tsx` (287 lignes) cumule 5 `useEffect`. La logique de détection de thème par IntersectionObserver (lignes 77-158, ~81 lignes) est un hook auto-contenu.
 
-- [ ] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
+- [x] Créer `src/hooks/useNavbarTheme.ts` — extraire la logique IO de `Navbar.tsx:77-158`
   - Input : `location.pathname`
   - Output : `{ theme: 'dark' | 'light', hiddenByFooter: boolean }`
-- [ ] Modifier `Navbar.tsx` pour consommer le hook
-- [ ] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
-- [ ] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
-- [ ] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
+- [x] Modifier `Navbar.tsx` pour consommer le hook
+- [x] Vérifier que le comportement est identique : thème light/dark selon `data-navbar-theme`, masquage footer
+- [x] Créer un test minimal pour `useNavbarTheme` (rendu sans crash + valeur par défaut `dark`)
+- [x] Vérifier que `pnpm build` + `pnpm lint` + `pnpm test:run` passent
 - [ ] **Validation visuelle** : naviguer sur toutes les pages, vérifier les transitions de thème navbar
 
 <details>
@@ -369,7 +369,8 @@ Avant chaque merge, vérifier manuellement sur les 3 breakpoints :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                      | PR  | Notes                                                                                                         |
-| ---------- | ----- | ---------------------------- | --- | ------------------------------------------------------------------------------------------------------------- |
-| 2026-04-22 | —     | —                            | —   | Plan créé depuis audit architecture                                                                           |
-| 2026-04-23 | 1     | `refactor/dead-code-cleanup` | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| Date       | Phase | Branche                              | PR  | Notes                                                                                                         |
+| ---------- | ----- | ------------------------------------ | --- | ------------------------------------------------------------------------------------------------------------- |
+| 2026-04-22 | —     | —                                    | —   | Plan créé depuis audit architecture                                                                           |
+| 2026-04-23 | 1     | `refactor/dead-code-cleanup`         | —   | useScrollProgress supprimé ; Picture conservé (2 consommateurs actifs) ; package-lock.json déjà non-versionné |
+| 2026-04-23 | 3     | `refactor/extract-navbar-theme-hook` | —   | useNavbarTheme extrait de Navbar.tsx (287→201 lignes) — logique IO thème + footer dans hook dédié             |
