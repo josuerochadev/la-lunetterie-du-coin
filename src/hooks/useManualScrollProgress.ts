@@ -4,11 +4,19 @@ import { useMotionValue, type MotionValue } from 'framer-motion';
 type ScrollOffset = 'start-start' | 'start-end' | 'end-end' | 'end-start';
 
 /**
- * Manual scroll progress — bypasses framer-motion useScroll bug.
+ * Manual scroll progress — bypasses framer-motion `useScroll` bug.
  *
- * useScroll({ target, offset }) returns broken values (~0.02 max instead
- * of 0→1) for deep-page elements behind stacked sticky sections.
- * This hook computes progress from getBoundingClientRect + global scroll.
+ * **When to use this hook:**
+ * When the tracked element is deep in the page behind stacked sticky sections
+ * or ancestors with CSS transforms (`translateZ(0)`, `will-change: transform`).
+ * In these cases, framer-motion's `useScroll({ target, offset })` returns broken
+ * values (~0.02 max instead of the expected 0→1 range).
+ *
+ * **When to use `useScrollAnimation` instead:**
+ * For standard elements in normal document flow that don't sit behind sticky
+ * transforms. `useScrollAnimation` wraps framer-motion's `useScroll` with
+ * `useTransform` + optional `useSpring`, and is the simpler choice when the
+ * framer-motion bug doesn't apply.
  *
  * @param offset - Scroll mapping:
  *   'start-start': progress 0 when element top = viewport top, 1 when element bottom = viewport bottom

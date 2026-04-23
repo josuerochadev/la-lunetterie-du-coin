@@ -2,6 +2,7 @@ import { type RefObject, useRef } from 'react';
 import { useScroll, useTransform, useSpring, type MotionValue, motionValue } from 'framer-motion';
 
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG } from '@/lib/motion';
 
 type ScrollOffset = [string, string];
 
@@ -51,12 +52,12 @@ export function useScrollAnimation(
 
   const springConfig =
     spring === true
-      ? { stiffness: 100, damping: 30, mass: 1 }
+      ? SPRING_CONFIG
       : typeof spring === 'object'
-        ? { stiffness: 100, damping: 30, mass: 1, ...spring }
+        ? { ...SPRING_CONFIG, ...spring }
         : undefined;
 
-  const sprung = useSpring(transformed, springConfig ?? { stiffness: 100, damping: 30 });
+  const sprung = useSpring(transformed, springConfig ?? SPRING_CONFIG);
 
   if (prefersReducedMotion) {
     return {

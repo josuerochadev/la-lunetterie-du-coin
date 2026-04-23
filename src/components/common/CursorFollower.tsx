@@ -3,6 +3,7 @@ import { m, useSpring, useMotionValue } from 'framer-motion';
 
 import LogoEye from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
+import { SPRING_CONFIG_CURSOR } from '@/lib/motion';
 
 /**
  * Composant CursorFollower
@@ -24,10 +25,8 @@ export default function CursorFollower() {
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  // Spring config pour un suivi fluide et naturel
-  const springConfig = { damping: 25, stiffness: 150, mass: 0.5 };
-  const x = useSpring(cursorX, springConfig);
-  const y = useSpring(cursorY, springConfig);
+  const x = useSpring(cursorX, SPRING_CONFIG_CURSOR);
+  const y = useSpring(cursorY, SPRING_CONFIG_CURSOR);
 
   useEffect(() => {
     // Vérifier si on est sur desktop (largeur > 1024px)
