@@ -129,17 +129,6 @@
   transform: scale(1.02);
 }
 
-.simple-hover-lift {
-  transition:
-    transform 0.2s var(--animation-easing),
-    box-shadow 0.2s var(--animation-easing);
-}
-
-.simple-hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-}
-
 /* ========================================
    RESPONSIVE ET ACCESSIBILITÉ
    ======================================== */
@@ -166,8 +155,7 @@
   .simple-slide-in-left,
   .simple-slide-in-right,
   .simple-fade-in,
-  .simple-hover-scale,
-  .simple-hover-lift {
+  .simple-hover-scale {
     animation: none !important;
     transition: none !important;
     opacity: 1 !important;
@@ -193,16 +181,4 @@
 
 .animate-slide-in-up {
   animation: slide-in-up-toast 0.3s ease-out;
-}
-
-/* Classes pour appliquer rapidement */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all var(--animation-duration) var(--animation-easing);
-}
-
-.animate-on-scroll.visible {
-  opacity: 1;
-  transform: translateY(0);
 }
