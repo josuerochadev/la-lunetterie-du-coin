@@ -129,6 +129,8 @@ export function HeroDesktopAnimated() {
           loading="eager"
           sizes="25vw"
           widths={[640, 768, 1024, 1280, 1920]}
+          width={1920}
+          height={1280}
         />
       </m.div>
 
@@ -143,6 +145,8 @@ export function HeroDesktopAnimated() {
           loading="eager"
           sizes="30vw"
           widths={[640, 768, 1024, 1280, 1920]}
+          width={1920}
+          height={1280}
         />
       </m.div>
 

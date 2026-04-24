@@ -15,6 +15,8 @@ export default function HistoryStatic() {
             className="max-h-[80vh] min-h-[50vh] w-full object-cover"
             widths={[640, 768, 1024]}
             sizes="100vw"
+            width={1024}
+            height={683}
           />
         </SimpleAnimation>
 

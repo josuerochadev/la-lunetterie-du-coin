@@ -176,6 +176,8 @@ export function HeroMobileContent({ titleId }: { titleId?: string }) {
             loading="eager"
             sizes="100vw"
             widths={[640, 768, 1024]}
+            width={1024}
+            height={683}
           />
         </m.div>
         <m.div
