@@ -74,6 +74,9 @@ git commit -m "docs: update API documentation"
 - `refactor`: refactoring sans ajout de feature
 - `test`: ajout ou modification de tests
 - `chore`: tâches de maintenance
+- `ci`: changements CI/CD (workflows, pipelines)
+- `perf`: amélioration de performance
+- `revert`: annulation d'un commit précédent
 
 ### 4. **Pull Request**
 
@@ -81,6 +84,18 @@ git commit -m "docs: update API documentation"
 2. Créer une PR sur GitHub
 3. Remplir le template de PR
 4. Attendre la review
+
+### 5. **Ne pas contourner les hooks**
+
+Les hooks pre-commit garantissent la qualite du code. Ne les contournez pas sauf raison exceptionnelle documentee.
+
+```bash
+# Interdit en temps normal :
+git commit --no-verify   # Contourne tous les hooks pre-commit
+HUSKY=0 git commit       # Desactive Husky entierement
+```
+
+Si vous devez exceptionnellement contourner un hook (ex : commit WIP temporaire), documentez la raison dans le message de commit et corrigez au prochain commit. Le pipeline CI valide egalement les messages de commit via commitlint, donc les violations seront detectees sur la PR.
 
 ## 🏗️ Architecture & Standards
 
@@ -247,7 +262,7 @@ test('should submit contact form', async ({ page }) => {
 
 ### Couverture de Tests
 
-- **Objectif**: Maintenir >= 10% de couverture (quality gate CI/CD)
+- **Objectif**: Maintenir >= 30% de couverture (quality gate CI/CD)
 - **Focus**: Logique métier et interactions critiques
 - **Éviter**: Tests sur des détails d'implémentation
 
