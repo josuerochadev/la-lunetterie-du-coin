@@ -3,7 +3,8 @@
  */
 
 const requiredEnvVars = {
-  // Add truly required environment variables here
+  VITE_APP_ENV: import.meta.env.VITE_APP_ENV,
+  VITE_SITE_LIVE: import.meta.env.VITE_SITE_LIVE,
 } as const;
 
 const optionalEnvVars = {
