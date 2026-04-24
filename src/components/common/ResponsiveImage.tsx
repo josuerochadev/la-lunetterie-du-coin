@@ -82,7 +82,7 @@ export default function ResponsiveImage({
 
       {/* Fallback img element */}
       <img
-        src={`/images-optimized/${baseName}-1920w.jpg`}
+        src={`/images-optimized/${baseName}-${widths[widths.length - 1]}w.jpg`}
         alt={alt}
         loading={loading}
         decoding="async"

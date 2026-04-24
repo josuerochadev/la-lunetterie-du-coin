@@ -12,10 +12,12 @@ describe('useClickOutside', () => {
   let mockRef: React.RefObject<HTMLDivElement>;
   let mockElement: HTMLDivElement;
 
-  // Helper function to get mousedown event handler
-  const getMousedownHandler = () => {
-    const mousedownCall = mockAddEventListener.mock.calls.find((call) => call[0] === 'mousedown');
-    return mousedownCall?.[1];
+  // Helper function to get pointerdown event handler
+  const getPointerdownHandler = () => {
+    const pointerdownCall = mockAddEventListener.mock.calls.find(
+      (call) => call[0] === 'pointerdown',
+    );
+    return pointerdownCall?.[1];
   };
 
   beforeEach(() => {
@@ -42,67 +44,69 @@ describe('useClickOutside', () => {
   });
 
   describe('event listener management', () => {
-    it('should add mousedown event listener when active is true', () => {
+    it('should add pointerdown event listener when active is true', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      // Filter for mousedown events only
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      // Filter for pointerdown events only
+      const pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(1);
-      expect(mockAddEventListener).toHaveBeenCalledWith('mousedown', expect.any(Function));
+      expect(pointerdownCalls).toHaveLength(1);
+      expect(mockAddEventListener).toHaveBeenCalledWith('pointerdown', expect.any(Function));
     });
 
     it('should not add event listener when active is false', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, false));
 
-      // Filter for mousedown events only
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      // Filter for pointerdown events only
+      const pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(0);
+      expect(pointerdownCalls).toHaveLength(0);
     });
 
     it('should remove event listener on unmount', () => {
       const { unmount } = renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      // Find the mousedown handler
-      const addedHandler = getMousedownHandler()!;
+      // Find the pointerdown handler
+      const addedHandler = getPointerdownHandler()!;
 
       unmount();
 
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      const pointerdownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownRemoveCalls).toHaveLength(1);
-      expect(mockRemoveEventListener).toHaveBeenCalledWith('mousedown', addedHandler);
+      expect(pointerdownRemoveCalls).toHaveLength(1);
+      expect(mockRemoveEventListener).toHaveBeenCalledWith('pointerdown', addedHandler);
     });
 
     it('should add/remove listener when active changes', () => {
       let active = false;
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, active));
 
-      // Initially inactive - no mousedown listeners
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      // Initially inactive - no pointerdown listeners
+      let pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(0);
+      expect(pointerdownCalls).toHaveLength(0);
 
       // Activate
       active = true;
       rerender();
 
-      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
-      expect(mousedownCalls).toHaveLength(1);
+      pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
+      );
+      expect(pointerdownCalls).toHaveLength(1);
 
       // Deactivate
       active = false;
       rerender();
 
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      const pointerdownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownRemoveCalls).toHaveLength(1);
+      expect(pointerdownRemoveCalls).toHaveLength(1);
     });
   });
 
@@ -110,13 +114,13 @@ describe('useClickOutside', () => {
     it('should call handler when clicking outside the element', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Create a click event on a different element
       const outsideElement = document.createElement('div');
       const mockEvent = {
         target: outsideElement,
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
 
@@ -126,12 +130,12 @@ describe('useClickOutside', () => {
     it('should not call handler when clicking inside the element', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Create a click event on the tracked element
       const mockEvent = {
         target: mockElement,
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
 
@@ -145,12 +149,12 @@ describe('useClickOutside', () => {
 
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Click on child element
       const mockEvent = {
         target: childElement,
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
 
@@ -163,12 +167,12 @@ describe('useClickOutside', () => {
 
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Click on sibling element
       const mockEvent = {
         target: siblingElement,
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
 
@@ -184,10 +188,10 @@ describe('useClickOutside', () => {
         renderHook(() => useClickOutside(nullRef, mockHandler, true));
       }).not.toThrow();
 
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      const pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(1);
+      expect(pointerdownCalls).toHaveLength(1);
     });
 
     it('should call handler when ref.current is null', () => {
@@ -195,11 +199,11 @@ describe('useClickOutside', () => {
 
       renderHook(() => useClickOutside(nullRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       const mockEvent = {
         target: document.createElement('div'),
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
 
@@ -210,11 +214,11 @@ describe('useClickOutside', () => {
     it('should handle event with null target', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       const mockEvent = {
         target: null,
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       expect(() => {
         eventHandler(mockEvent);
@@ -226,11 +230,11 @@ describe('useClickOutside', () => {
     it('should handle event with non-Node target', () => {
       renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       const mockEvent = {
         target: 'not a node',
-      } as unknown as MouseEvent;
+      } as unknown as PointerEvent;
 
       expect(() => {
         eventHandler(mockEvent);
@@ -247,11 +251,11 @@ describe('useClickOutside', () => {
 
       const { rerender } = renderHook(() => useClickOutside(mockRef, currentHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Test first handler
       const outsideElement = document.createElement('div');
-      const mockEvent = { target: outsideElement } as unknown as MouseEvent;
+      const mockEvent = { target: outsideElement } as unknown as PointerEvent;
 
       eventHandler(mockEvent);
       expect(firstHandler).toHaveBeenCalledTimes(1);
@@ -272,10 +276,10 @@ describe('useClickOutside', () => {
 
       const { rerender } = renderHook(() => useClickOutside(currentRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Click on current element (should not trigger)
-      let mockEvent = { target: mockElement } as unknown as MouseEvent;
+      let mockEvent = { target: mockElement } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).not.toHaveBeenCalled();
 
@@ -286,13 +290,13 @@ describe('useClickOutside', () => {
       rerender();
 
       // Click on old element (should now trigger since it's no longer tracked)
-      mockEvent = { target: mockElement } as unknown as MouseEvent;
+      mockEvent = { target: mockElement } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).toHaveBeenCalledTimes(1);
 
       // Click on new element (should not trigger)
       mockHandler.mockClear();
-      mockEvent = { target: newElement } as unknown as MouseEvent;
+      mockEvent = { target: newElement } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).not.toHaveBeenCalled();
     });
@@ -302,14 +306,14 @@ describe('useClickOutside', () => {
 
       const { rerender } = renderHook(() => useClickOutside(currentRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Change ref to null
       currentRef = { current: null };
       rerender();
 
       // Any click should trigger handler when ref is null
-      const mockEvent = { target: document.createElement('div') } as unknown as MouseEvent;
+      const mockEvent = { target: document.createElement('div') } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).toHaveBeenCalledTimes(1);
     });
@@ -319,32 +323,34 @@ describe('useClickOutside', () => {
     it('should not recreate event listener unnecessarily', () => {
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, true));
 
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      let pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(1);
+      expect(pointerdownCalls).toHaveLength(1);
 
       // Re-render without changing dependencies
       rerender();
 
       // Should not add another event listener
-      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
-      expect(mousedownCalls).toHaveLength(1);
-
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownRemoveCalls).toHaveLength(0);
+      expect(pointerdownCalls).toHaveLength(1);
+
+      const pointerdownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
+      );
+      expect(pointerdownRemoveCalls).toHaveLength(0);
     });
 
     it('should handle rapid active state changes', () => {
       let active = true;
       const { rerender } = renderHook(() => useClickOutside(mockRef, mockHandler, active));
 
-      let mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      let pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(1);
+      expect(pointerdownCalls).toHaveLength(1);
 
       // Rapidly toggle active state
       for (let i = 0; i < 5; i++) {
@@ -353,13 +359,15 @@ describe('useClickOutside', () => {
       }
 
       // Should end up with listener active (active = false after loop)
-      mousedownCalls = mockAddEventListener.mock.calls.filter((call) => call[0] === 'mousedown');
-      expect(mousedownCalls).toHaveLength(3); // 1 + 2 toggles back to true
-
-      const mousedownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownRemoveCalls).toHaveLength(3); // 3 toggles to false
+      expect(pointerdownCalls).toHaveLength(3); // 1 + 2 toggles back to true
+
+      const pointerdownRemoveCalls = mockRemoveEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
+      );
+      expect(pointerdownRemoveCalls).toHaveLength(3); // 3 toggles to false
     });
   });
 
@@ -374,18 +382,18 @@ describe('useClickOutside', () => {
       // Second hook
       renderHook(() => useClickOutside(secondRef, secondHandler, true));
 
-      // Verify we have 2 mousedown listeners and get both event handlers
-      const mousedownCalls = mockAddEventListener.mock.calls.filter(
-        (call) => call[0] === 'mousedown',
+      // Verify we have 2 pointerdown listeners and get both event handlers
+      const pointerdownCalls = mockAddEventListener.mock.calls.filter(
+        (call) => call[0] === 'pointerdown',
       );
-      expect(mousedownCalls).toHaveLength(2);
+      expect(pointerdownCalls).toHaveLength(2);
 
-      const firstEventHandler = mousedownCalls[0][1];
-      const secondEventHandler = mousedownCalls[1][1];
+      const firstEventHandler = pointerdownCalls[0][1];
+      const secondEventHandler = pointerdownCalls[1][1];
 
       // Create click outside both elements
       const outsideElement = document.createElement('div');
-      const mockEvent = { target: outsideElement } as unknown as MouseEvent;
+      const mockEvent = { target: outsideElement } as unknown as PointerEvent;
 
       // Both handlers should be called
       firstEventHandler(mockEvent);
@@ -403,16 +411,16 @@ describe('useClickOutside', () => {
 
       renderHook(() => useClickOutside(buttonRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Click on button should not trigger handler
-      let mockEvent = { target: button } as unknown as MouseEvent;
+      let mockEvent = { target: button } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).not.toHaveBeenCalled();
 
       // Click outside should trigger
       const outsideElement = document.createElement('div');
-      mockEvent = { target: outsideElement } as unknown as MouseEvent;
+      mockEvent = { target: outsideElement } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).toHaveBeenCalledTimes(1);
     });
@@ -426,10 +434,10 @@ describe('useClickOutside', () => {
 
       renderHook(() => useClickOutside(formRef, mockHandler, true));
 
-      const eventHandler = getMousedownHandler()!;
+      const eventHandler = getPointerdownHandler()!;
 
       // Click on input (child of form) should not trigger
-      const mockEvent = { target: input } as unknown as MouseEvent;
+      const mockEvent = { target: input } as unknown as PointerEvent;
       eventHandler(mockEvent);
       expect(mockHandler).not.toHaveBeenCalled();
     });
