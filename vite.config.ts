@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
     },
     build: {
-      sourcemap: true, // Important pour Sentry
+      sourcemap: 'hidden', // Hidden source maps for Sentry (not publicly accessible)
       target: 'es2020', // Support moderne pour bundles plus petits
       minify: 'esbuild', // Minification plus agressive
       rollupOptions: {
