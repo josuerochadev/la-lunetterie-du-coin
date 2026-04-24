@@ -184,6 +184,7 @@ jobs:
         run: pnpm build
         env:
           VITE_SITE_LIVE: 'true'
+          VITE_APP_ENV: 'production'
         
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -303,6 +304,9 @@ jobs:
           fi
           
       - name: 🚪 Bundle Size Quality Gate (<= 10MB)
+        env:
+          VITE_SITE_LIVE: 'true'
+          VITE_APP_ENV: 'production'
         run: |
           pnpm build
           # Calculer la taille du JS/CSS seulement (excluant source maps et assets statiques)
