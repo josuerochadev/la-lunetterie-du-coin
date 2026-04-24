@@ -4,10 +4,8 @@
 @import './components.a11y.css';
 @import './components.typography.css';
 @import './components.layout.css';
-@import './components.buttons.css';
 @import './components.forms.css';
 @import './simple-animations.css';
-@import './responsive-improvements.css';
 @import './components.menu-toggle.css';
 
 @tailwind base;
