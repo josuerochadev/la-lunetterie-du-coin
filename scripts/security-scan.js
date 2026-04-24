@@ -234,50 +234,51 @@ function validateSecurityHeaders() {
   
   const issues = [];
   
-  // Check _headers file
-  const headersFile = path.join(ROOT_DIR, 'public', '_headers');
-  if (!fs.existsSync(headersFile)) {
-    issues.push('Missing _headers file for security configuration');
+  // Check vercel.json for security headers
+  const vercelFile = path.join(ROOT_DIR, 'vercel.json');
+  if (!fs.existsSync(vercelFile)) {
+    issues.push('Missing vercel.json for security configuration');
     return { passed: false, issues };
   }
-  
-  const headersContent = fs.readFileSync(headersFile, 'utf8');
-  
+
+  const vercelConfig = JSON.parse(fs.readFileSync(vercelFile, 'utf8'));
+
+  if (!vercelConfig.headers) {
+    issues.push('vercel.json missing security headers configuration');
+    return { passed: false, issues };
+  }
+
+  // Find the catch-all headers rule
+  const catchAllRule = vercelConfig.headers.find(h => h.source === '/(.*)');
+  if (!catchAllRule) {
+    issues.push('vercel.json missing catch-all header rule');
+    return { passed: false, issues };
+  }
+
+  const headerMap = {};
+  for (const h of catchAllRule.headers) {
+    headerMap[h.key] = h.value;
+  }
+
   // Check required headers
   for (const header of SECURITY_CONFIG.requiredHeaders) {
-    if (!headersContent.includes(header)) {
+    if (!headerMap[header]) {
       issues.push(`Missing required security header: ${header}`);
     }
   }
-  
+
   // Validate CSP configuration
-  if (headersContent.includes('Content-Security-Policy')) {
-    // Check for unsafe-eval or unsafe-inline (should be limited)
-    const cspMatches = headersContent.match(/Content-Security-Policy: (.+)/);
-    if (cspMatches) {
-      const csp = cspMatches[1];
-      
-      if (csp.includes("'unsafe-eval'") && !csp.includes('script-src')) {
-        issues.push('CSP allows unsafe-eval globally - should be restricted to script-src');
-      }
-      
-      // Check for missing important directives
-      const importantDirectives = ['default-src', 'script-src', 'object-src', 'frame-ancestors'];
-      for (const directive of importantDirectives) {
-        if (!csp.includes(directive)) {
-          issues.push(`CSP missing important directive: ${directive}`);
-        }
-      }
+  const csp = headerMap['Content-Security-Policy'];
+  if (csp) {
+    if (csp.includes("'unsafe-eval'") && !csp.includes('script-src')) {
+      issues.push('CSP allows unsafe-eval globally - should be restricted to script-src');
     }
-  }
-  
-  // Check vercel.json security headers
-  const vercelFile = path.join(ROOT_DIR, 'vercel.json');
-  if (fs.existsSync(vercelFile)) {
-    const vercelConfig = JSON.parse(fs.readFileSync(vercelFile, 'utf8'));
-    
-    if (!vercelConfig.headers) {
-      issues.push('vercel.json missing security headers configuration');
+
+    const importantDirectives = ['default-src', 'script-src', 'object-src', 'frame-ancestors'];
+    for (const directive of importantDirectives) {
+      if (!csp.includes(directive)) {
+        issues.push(`CSP missing important directive: ${directive}`);
+      }
     }
   }
   
