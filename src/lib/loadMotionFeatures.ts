@@ -1,20 +1,7 @@
-// src/lib/loadMotionFeatures.ts
-
 /**
- * Load motion features only if user hasn't requested reduced motion
- * This prevents loading heavy animation libraries for users who prefer static content
+ * Load motion features for LazyMotion.
+ * Reduced-motion preferences are handled at the component level
+ * via usePrefersReducedMotion, not here.
  */
-export const loadFeatures = () => {
-  // Check if user prefers reduced motion
-  if (typeof window !== 'undefined') {
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReducedMotion) {
-      // Import domAnimation anyway but won't be used by components
-      return import('@/components/motion/motionFeatures').then((res) => res.default);
-    }
-  }
-
-  // Load full motion features for users who want animations
-  return import('@/components/motion/motionFeatures').then((res) => res.default);
-};
+export const loadFeatures = () =>
+  import('@/components/motion/motionFeatures').then((res) => res.default);
