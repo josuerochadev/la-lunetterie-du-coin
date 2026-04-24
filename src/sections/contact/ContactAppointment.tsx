@@ -34,40 +34,51 @@ function CTADesktop() {
           style={{ scale: motifScale, opacity: motifOpacity }}
         />
 
-        <div className="relative z-10 mx-auto max-w-container px-container-x py-section">
-          <div className="mx-auto max-w-4xl text-center">
-            <m.div style={{ opacity: title.opacity, y: title.y }}>
+        <div className="relative z-10 mx-auto max-w-container px-container-x py-section text-center">
+          <m.div style={{ opacity: title.opacity, y: title.y }}>
+            <h2
+              className="text-heading text-black"
+              style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
+            >
               <ScrollWordReveal
-                as="h2"
+                as="span"
                 scrollYProgress={scrollYProgress}
                 revealStart={0.0}
-                revealEnd={0.12}
-                className="text-heading text-black"
-                style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
+                revealEnd={0.07}
+                className="block"
               >
-                ON VOUS ATTEND
+                ON VOUS
               </ScrollWordReveal>
-            </m.div>
-
-            <m.p
-              className="mt-8 text-body-lg text-black"
-              style={{ opacity: sub.opacity, y: sub.y }}
-            >
-              Examen de vue, essayage ou juste un conseil.
-            </m.p>
-
-            <m.div className="mt-10 flex justify-center" style={{ opacity: cta.opacity, y: cta.y }}>
-              <LinkCTA
-                href={BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                theme="accent"
-                icon={ExternalLink}
+              <ScrollWordReveal
+                as="span"
+                scrollYProgress={scrollYProgress}
+                revealStart={0.05}
+                revealEnd={0.12}
+                className="block"
               >
-                Prendre rendez-vous
-              </LinkCTA>
-            </m.div>
-          </div>
+                ATTEND
+              </ScrollWordReveal>
+            </h2>
+          </m.div>
+
+          <m.p
+            className="mx-auto mt-8 max-w-4xl text-body-lg text-black"
+            style={{ opacity: sub.opacity, y: sub.y }}
+          >
+            Examen de vue, essayage ou juste un conseil.
+          </m.p>
+
+          <m.div className="mt-10 flex justify-center" style={{ opacity: cta.opacity, y: cta.y }}>
+            <LinkCTA
+              href={BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              theme="accent"
+              icon={ExternalLink}
+            >
+              Prendre rendez-vous
+            </LinkCTA>
+          </m.div>
         </div>
       </div>
     </div>

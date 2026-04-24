@@ -67,11 +67,11 @@ const config: Config = {
          *   title-lg : 44  /  58 /  77 / 100 / 123
          *   title-md : 32  /  43 /  58 /  76 /  94
          *   title-sm : 24  /  31 /  39 /  50 /  61
-         *   body-xl  : 26  /  29 /  34 /  39 /  44
-         *   body-lg  : 22  /  25 /  28 /  33 /  37
-         *   body     : 18  /  21 /  24 /  28 /  32
-         *   body-sm  : 16  /  17 /  18 /  19 /  20
-         *   body-xs  : 14  /  15 /  15 /  16 /  17
+         *   body-xl  : 24  /  27 /  30 /  34 /  36
+         *   body-lg  : 20  /  22 /  25 /  28 /  30
+         *   body     : 17  /  19 /  21 /  24 /  26
+         *   body-sm  : 15  /  16 /  17 /  18 /  19
+         *   body-xs  : 13  /  14 /  15 /  15 /  16
          */
 
         // Titres - line-height serré pour impact (charte 0.9)
@@ -81,11 +81,12 @@ const config: Config = {
         'title-sm': ['clamp(1.5rem, 1.1rem + 1.68vw, 5rem)', '0.9'],
 
         // Corps de texte - line-height 1.3
-        'body-xl': ['clamp(1.625rem, 1.43rem + 0.84vw, 3rem)', '1.3'],
-        'body-lg': ['clamp(1.375rem, 1.21rem + 0.71vw, 2.5rem)', '1.3'],
-        body: ['clamp(1.125rem, 0.97rem + 0.65vw, 2.5rem)', '1.3'],
-        'body-sm': ['clamp(1rem, 0.95rem + 0.2vw, 1.5rem)', '1.3'],
-        'body-xs': ['clamp(0.875rem, 0.84rem + 0.13vw, 1.25rem)', '1.3'],
+        // Plafonds réduits vs titres pour lisibilité laptop/tablette
+        'body-xl': ['clamp(1.5rem, 1.35rem + 0.55vw, 2.25rem)', '1.3'],
+        'body-lg': ['clamp(1.25rem, 1.13rem + 0.46vw, 1.875rem)', '1.3'],
+        body: ['clamp(1.0625rem, 0.96rem + 0.39vw, 1.625rem)', '1.3'],
+        'body-sm': ['clamp(0.9375rem, 0.89rem + 0.18vw, 1.1875rem)', '1.3'],
+        'body-xs': ['clamp(0.8125rem, 0.78rem + 0.13vw, 1rem)', '1.3'],
       },
 
       /* ====== LAYOUT ====== */

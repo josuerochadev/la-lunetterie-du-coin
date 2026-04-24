@@ -13,8 +13,8 @@ import { useEffect, useCallback, useRef } from 'react';
  * useClickOutside(ref, () => setOpen(false), open);
  *
  * @remarks
- * Ce hook ajoute un écouteur d'événement 'mousedown' sur le document lorsque `active` est vrai.
- * Lorsque l'utilisateur clique en dehors de l'élément référencé, la fonction `handler` est appelée.
+ * Ce hook ajoute un écouteur d'événement 'pointerdown' sur le document lorsque `active` est vrai.
+ * Lorsque l'utilisateur clique ou touche en dehors de l'élément référencé, la fonction `handler` est appelée.
  * L'écouteur est automatiquement retiré lors du démontage du composant ou lorsque `active` devient faux.
  */
 export function useClickOutside(
@@ -29,7 +29,7 @@ export function useClickOutside(
   handlerRef.current = handler;
   refRef.current = ref;
 
-  const handleClick = useCallback((event: MouseEvent) => {
+  const handleClick = useCallback((event: PointerEvent) => {
     // Guard against non-Node targets
     const target = event.target;
     if (!target || !(target instanceof Node)) {
@@ -52,7 +52,7 @@ export function useClickOutside(
   useEffect(() => {
     if (!active) return;
 
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('pointerdown', handleClick);
+    return () => document.removeEventListener('pointerdown', handleClick);
   }, [active, handleClick]);
 }

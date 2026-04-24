@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react';
 
 import { SimpleAnimation } from '@/components/motion/SimpleAnimation';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 type TableOfContentsProps = {
   sections: Array<{
@@ -10,11 +11,16 @@ type TableOfContentsProps = {
 };
 
 export default function TableOfContents({ sections }: TableOfContentsProps) {
+  const prefersReducedMotion = usePrefersReducedMotion();
+
   const handleClick = (e: MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     const element = document.getElementById(sectionId);
     if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      element.scrollIntoView({
+        behavior: prefersReducedMotion ? 'auto' : 'smooth',
+        block: 'start',
+      });
       element.focus({ preventScroll: true });
     }
   };
