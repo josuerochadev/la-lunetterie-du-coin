@@ -1,223 +1,78 @@
-# 📸 Tests de Régression Visuelle
+# Tests de Regression Visuelle
 
-> **⚠️ Statut : non implémenté.** Ce document décrit l'architecture prévue pour les tests de régression visuelle. Les fichiers `e2e/visual-regression.spec.ts` et `.github/workflows/visual-regression.yml` ne sont pas encore créés.
+## Statut actuel
 
-Ce document explique comment utiliser les tests de régression visuelle dans le projet La Lunetterie du Coin.
+**DESACTIVES** - Retires du projet pour simplifier la maintenance.
 
-## Qu'est-ce que la régression visuelle ?
+### Raison
 
-Les tests de régression visuelle permettent de détecter automatiquement les changements d'apparence de votre interface utilisateur en comparant des captures d'écran avant et après modification.
+Les tests de regression visuelle echouent en CI en raison de differences de rendu entre :
 
-## Configuration
+- Environnement local (macOS)
+- Environnement CI (Ubuntu Linux)
 
-### Scripts disponibles
+### Corrections tentees
 
-```bash
-# Exécuter les tests visuels
-pnpm run e2e:visual
+1. **Configuration Playwright plus tolerante** - `threshold: 0.3`, `maxDiffPixels: 500`
+2. **Screenshots multi-plateforme** - Darwin et Linux generes via `scripts/generate-visual-baselines.js`
+3. **Pipeline CI separe** - Tests visuels isoles des E2E, Chromium uniquement
 
-# Mettre à jour les screenshots de référence (après changements intentionnels)
-pnpm run e2e:visual:update
+### Reimplementation future
 
-# Tests E2E complets (incluant les visuels)
-pnpm run e2e
+Deux approches recommandees :
+
+**Option A - Service externe (Percy / Chromatic)**
+
+- Rendu cross-platform coherent, gestion automatique des baselines
+- Interface de review visuelle integree aux PRs
+- Cout supplementaire
+
+**Option B - Docker avec display virtuel**
+
+- Environnement Linux reproductible localement et en CI
+- Complexite CI accrue, performance reduite
+
+### Fichiers a recreer
+
+```
+e2e/visual-regression.spec.ts    # Tests Playwright
+scripts/visual-baselines.js      # Generateur de baselines
 ```
 
-### Fichiers de test
+### Architecture prevue (pour reimplementation)
 
-- `e2e/visual-regression.spec.ts` - Tests de régression visuelle principaux
-- `test-results/` - Dossier généré avec les résultats et différences
+**Pages a tester :**
 
-## Tests implémentés
+- Homepage complete (desktop, mobile 375x667, tablette 768x1024)
 
-### 1. Tests de pages complètes
+**Composants a tester :**
 
-- **Homepage complète** : Capture de la page d'accueil entière
-- **Version mobile** : Test responsive sur viewport mobile (375x667)
-- **Version tablette** : Test responsive sur viewport tablette (768x1024)
+- Section Hero, Navigation, Formulaire de contact, Footer
 
-### 2. Tests de composants
+**Etats interactifs :**
 
-- **Section Hero** : Zone principale d'accroche
-- **Navigation** : Barre de navigation
-- **Formulaire de contact** : Zone de contact
-- **Footer** : Pied de page
+- Formulaire : vide, focus, rempli, erreur validation
 
-### 3. Tests d'états interactifs
-
-- **États du formulaire** :
-  - Formulaire vide (état initial)
-  - Formulaire avec focus
-  - Formulaire rempli
-  - État d'erreur (validation)
-
-## Workflow CI/CD
-
-### GitHub Actions
-
-Deux workflows gèrent les tests visuels :
-
-1. **Quality Pipeline** (`quality-pipeline.yml`) - Pipeline principal incluant tous les tests
-2. **Visual Regression** (`visual-regression.yml`) - Pipeline dédié aux tests visuels
-
-### Gestion des échecs
-
-Quand des différences sont détectées :
-
-1. **Artifacts générés** :
-   - `screenshot-diffs/` - Images montrant les différences
-   - `*-actual.png` - Capture actuelle
-   - `*-expected.png` - Capture de référence
-   - `*-diff.png` - Visualisation des différences
-
-2. **Comment sur PR** : Le bot commente automatiquement avec :
-   - Nombre de fichiers avec différences
-   - Instructions pour résoudre
-   - Lien vers les artifacts
-
-## Utilisation pratique
-
-### Première exécution
-
-Lors de la première exécution, Playwright génère les screenshots de référence :
-
-```bash
-pnpm run e2e:visual:update
-```
-
-Ces images doivent être committées dans le repo comme référence.
-
-### Après modifications intentionnelles
-
-Si vous modifiez l'interface intentionnellement :
-
-1. Exécutez les tests pour voir les différences :
-
-```bash
-pnpm run e2e:visual
-```
-
-2. Si les changements sont corrects, mettez à jour les références :
-
-```bash
-pnpm run e2e:visual:update
-```
-
-3. Committez les nouveaux screenshots :
-
-```bash
-git add test-results/
-git commit -m "update: visual regression baselines"
-```
-
-### Debugging des échecs
-
-Quand un test échoue :
-
-1. **Vérifiez les artifacts** dans GitHub Actions
-2. **Analysez les différences** avec les images `*-diff.png`
-3. **Testez localement** avec `pnpm run e2e:visual --headed`
-
-## Configuration avancée
-
-### Tolérance aux différences
-
-Dans `playwright.config.ts`, ajustez le seuil de tolérance :
+**Configuration recommandee :**
 
 ```typescript
 expect: {
   toHaveScreenshot: {
-    threshold: 0.2, // 20% de différence tolérée
+    threshold: 0.2,
     animations: 'disabled',
     caret: 'hide',
   }
 }
 ```
 
-### Désactivation des animations
+**Bonnes pratiques :**
 
-Les tests désactivent automatiquement les animations pour des captures cohérentes :
+- `waitForLoadState('networkidle')` avant capture
+- Desactiver animations CSS
+- Masquer elements dynamiques (curseurs, horodatages)
+- Limiter a Chromium pour les tests visuels
+- Utiliser Git LFS si screenshots commites
 
-```css
-*,
-*::before,
-*::after {
-  animation-duration: 0s !important;
-  transition-duration: 0s !important;
-}
-```
+---
 
-### Viewports personnalisés
-
-Ajoutez des tailles d'écran spécifiques dans les tests :
-
-```typescript
-test('custom viewport', async ({ page }) => {
-  await page.setViewportSize({ width: 1920, height: 1080 });
-  // ... test
-});
-```
-
-## Bonnes pratiques
-
-### 1. Stabilité des captures
-
-- Toujours attendre le chargement complet avec `waitForLoadState('networkidle')`
-- Désactiver les animations
-- Masquer les éléments dynamiques (curseurs, horodatages)
-
-### 2. Granularité des tests
-
-- Tester les composants individuellement pour des diagnostics précis
-- Éviter les captures trop larges qui masquent les petits changements
-
-### 3. Maintenance
-
-- Réviser régulièrement les screenshots de référence
-- Nettoyer les anciens fichiers de test
-- Documenter les changements visuels intentionnels
-
-### 4. Performance
-
-- Utiliser des viewports cohérents
-- Limiter le nombre de browsers pour les tests visuels (Chromium suffisant)
-- Optimiser les timeouts
-
-## Dépannage
-
-### Problèmes courants
-
-**1. Screenshots différents entre local et CI**
-
-- Vérifiez les polices système
-- Utilisez des conteneurs Docker identiques
-- Désactivez les fonctionnalités système (scrollbars, etc.)
-
-**2. Tests instables**
-
-- Augmentez les timeouts
-- Améliorez les sélecteurs
-- Vérifiez les animations résiduelles
-
-**3. Fichiers volumineux**
-
-- Utilisez Git LFS pour les images
-- Limitez la résolution des captures
-- Nettoyez régulièrement les anciens screenshots
-
-## Intégration continue
-
-### Stratégie de branches
-
-- **main/prod** : Screenshots stables, tolérance faible
-- **dev** : Développement actif, tolérance plus élevée
-- **feature/** : Tests optionnels, mise à jour fréquente
-
-### Revue de code
-
-Lors des PR incluant des changements visuels :
-
-1. Vérifiez les artifacts des tests
-2. Validez que les changements sont intentionnels
-3. Assurez-vous que les nouvelles références sont committées
-4. Testez sur différents navigateurs si nécessaire
+_Derniere mise a jour: Avril 2026_

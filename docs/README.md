@@ -17,10 +17,17 @@ Les ADR documentent les decisions architecturales importantes. Voir [docs/adr/RE
 ## Autres documents
 
 - [Configuration environnement](./environment-setup.md) - Variables d'environnement par plateforme
-- [Strategie de tests](./testing-suite.md) - Tests unitaires, E2E, visuels
-- [Tests visuels](./visual-testing.md) - Tests de regression visuelle
+- [Deploiement](./deployment.md) - Deploiement Vercel, staging, rollback
+- [Integrations](./integrations.md) - Services externes (Formspree, Calendly, Sentry, Analytics)
+- [Strategie de tests](./testing-suite.md) - Tests unitaires, E2E, accessibilite
+- [Tests visuels](./visual-testing.md) - Tests de regression visuelle (desactives, plan futur)
 - [Standards icones](./standards/icons.md) - Patterns d'import Lucide
-- [Audits qualite](./audits/) - Resultats et historique des audits
+
+## Qualite et ameliorations
+
+- [TODO - Ameliorations futures](./TODO-future-improvements.md) - Backlog d'ameliorations avec prompts prets a l'emploi
+- [Audits qualite](./audits/) - Plan de remediation actif et historique des audits
+- [Ancien TODO (archive)](./audits/TODO-ameliorations.md) - Suivi des recommandations initiales (97% complete)
 
 ## Ajouter une ADR
 
