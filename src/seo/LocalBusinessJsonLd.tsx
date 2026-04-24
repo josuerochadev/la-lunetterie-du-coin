@@ -12,7 +12,7 @@ export const COMPANY_SIRET = '81765775200017';
 export const COMPANY_RCS = '817 657 752 RCS Strasbourg';
 export const PUBLICATION_DIRECTOR = 'CORATO Romain-Guy';
 
-const TELEPHONE = '+33 03 88 51 24 40';
+const TELEPHONE = '+33388512440';
 
 export function LocalBusinessJsonLd() {
   const streetAddress = '24 rue du Faubourg de Pierre';

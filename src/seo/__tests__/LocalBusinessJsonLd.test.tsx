@@ -109,7 +109,7 @@ describe('LocalBusinessJsonLd', () => {
     });
 
     it('should include telephone information', () => {
-      expect(parsedJsonLd.telephone).toBe('+33 03 88 51 24 40');
+      expect(parsedJsonLd.telephone).toBe('+33388512440');
     });
 
     it('should include price range', () => {
@@ -309,7 +309,7 @@ describe('LocalBusinessJsonLd', () => {
       const parsedJsonLd = JSON.parse(jsonContent);
 
       expect(parsedJsonLd.telephone).toMatch(/^\+33/); // French country code
-      expect(parsedJsonLd.telephone).toContain('03 88'); // Strasbourg area code
+      expect(parsedJsonLd.telephone).toBe('+33388512440'); // E.164 format
     });
 
     it('should reference real business information', () => {

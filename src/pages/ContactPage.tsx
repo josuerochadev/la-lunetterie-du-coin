@@ -7,6 +7,7 @@ import ContactLocation from '@/sections/contact/ContactLocation';
 import ContactAppointment from '@/sections/contact/ContactAppointment';
 import { useNativeScroll } from '@/hooks/useNativeScroll';
 import { Seo } from '@/seo/Seo';
+import { LocalBusinessJsonLd } from '@/seo/LocalBusinessJsonLd';
 
 export default function ContactPage() {
   useNativeScroll();
@@ -18,6 +19,7 @@ export default function ContactPage() {
         description="Passez nous voir au 24 rue du Faubourg de Pierre à Strasbourg. Prise de rendez-vous, horaires et plan d'accès."
         canonicalPath="/contact"
       />
+      <LocalBusinessJsonLd />
       <Layout>
         {/* Hero — sticky, Info monte par-dessus */}
         <StickySection zIndex={11} enableSticky>

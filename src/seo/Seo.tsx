@@ -47,6 +47,9 @@ export function Seo({
       <meta property="og:description" content={description} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta property="og:image:type" content="image/jpeg" />
       <meta property="og:image:alt" content={title ?? DEFAULT_TITLE} />
 
       {/* Twitter */}
