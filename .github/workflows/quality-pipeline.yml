@@ -28,6 +28,36 @@ env:
   CACHE_KEY: 'node-modules'
 
 jobs:
+  # 📝 Validation des messages de commit
+  commitlint:
+    name: 📝 Commit Messages
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 📋 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 📝 Validate commit messages
+        run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
   # 🔍 Analyse statique et linting
   lint-and-format:
     name: 🔍 Lint & Format
@@ -154,6 +184,7 @@ jobs:
         run: pnpm build
         env:
           VITE_SITE_LIVE: 'true'
+          VITE_APP_ENV: 'production'
         
       - name: 📦 Upload build artifacts
         uses: actions/upload-artifact@v4
@@ -273,6 +304,9 @@ jobs:
           fi
           
       - name: 🚪 Bundle Size Quality Gate (<= 10MB)
+        env:
+          VITE_SITE_LIVE: 'true'
+          VITE_APP_ENV: 'production'
         run: |
           pnpm build
           # Calculer la taille du JS/CSS seulement (excluant source maps et assets statiques)
@@ -307,8 +341,8 @@ jobs:
       - name: ✅ Quality Gates Passed
         run: |
           echo "🎉 Toutes les quality gates sont passées avec succès!"
-          echo "📊 Coverage: >= 10%"
-          echo "📦 Bundle: <= 10MB" 
+          echo "📊 Coverage: >= 30%"
+          echo "📦 Bundle: <= 10MB"
           echo "♿ A11y: 0 violations"
 
   # 🚨 Lighthouse CI - Performance
