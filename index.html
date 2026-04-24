@@ -5,11 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="theme-color" content="#FEEB09" />
 
-  <!-- Preload critical fonts -->
-  <link rel="preload" as="font" href="/src/assets/fonts/Satoshi-Regular.woff2" type="font/woff2" crossorigin />
-  <link rel="preload" as="font" href="/src/assets/fonts/Satoshi-Medium.woff2" type="font/woff2" crossorigin />
-  <link rel="preload" as="font" href="/src/assets/fonts/Please-Heavy.woff2" type="font/woff2" crossorigin />
+  <!-- Preconnect to analytics -->
+  <link rel="preconnect" href="https://plausible.io" />
+
+  <!-- Preload LCP hero image (AVIF with fallback) -->
+  <link rel="preload" as="image" type="image/avif" href="/images-optimized/hero-eyeglasses-left-1920w.avif" />
 
   <!-- Critical CSS inline pour éviter render blocking -->
   <style>
