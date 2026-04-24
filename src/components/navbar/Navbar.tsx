@@ -10,6 +10,7 @@ import { MENU_ANIMATION_DURATION } from '@/config/menu';
 import { BOOKING_URL } from '@/config/endpoints';
 import { TIMING } from '@/config/design';
 import { useNavbarTheme } from '@/hooks/useNavbarTheme';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { cn } from '@/lib/cn';
 
 /**
@@ -32,6 +33,7 @@ const Navbar: React.FC = () => {
   const buttonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const { theme, hiddenByFooter } = useNavbarTheme(location.pathname);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   const isLight = theme === 'light';
 
@@ -46,6 +48,8 @@ const Navbar: React.FC = () => {
       const currentY = window.scrollY;
       if (currentY > lastScrollY.current && currentY > 50) {
         setHiddenByScroll(true);
+      } else if (currentY < lastScrollY.current) {
+        setHiddenByScroll(false);
       }
       lastScrollY.current = currentY;
     };
@@ -122,7 +126,9 @@ const Navbar: React.FC = () => {
           {/* Logo symbole */}
           <Link
             to="/"
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            onClick={() =>
+              window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+            }
             aria-label="Accueil — La Lunetterie du Coin"
             className={cn(
               'rounded-full p-1.5 transition-transform duration-300 hover:scale-110',
@@ -167,7 +173,7 @@ const Navbar: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Prendre rendez-vous (s'ouvre dans un nouvel onglet)"
             className={cn(
-              'group/nav relative hidden items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold sm:inline-flex',
+              'group/nav relative inline-flex items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}

@@ -205,7 +205,7 @@ export default function HistoryDesktop() {
                   alt="Intérieur de La Lunetterie du Coin"
                   className="h-full w-full object-cover"
                   loading="eager"
-                  widths={[640, 768, 1024, 1280, 1920]}
+                  widths={[640, 768, 1024]}
                   sizes="(min-width: 1280px) 100vw, 14vw"
                 />
               </m.div>
