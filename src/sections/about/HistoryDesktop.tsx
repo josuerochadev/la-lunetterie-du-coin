@@ -206,7 +206,7 @@ export default function HistoryDesktop() {
                   className="h-full w-full object-cover"
                   loading="eager"
                   widths={[640, 768, 1024, 1280, 1920]}
-                  sizes="14vw"
+                  sizes="(min-width: 1280px) 100vw, 14vw"
                 />
               </m.div>
             </m.div>
