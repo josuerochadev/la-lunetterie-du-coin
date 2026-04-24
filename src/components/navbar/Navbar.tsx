@@ -54,16 +54,21 @@ const Navbar: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Desktop: show navbar when mouse enters top zone
+  // Desktop: show navbar when mouse enters top zone (RAF-throttled)
   useEffect(() => {
+    let rafId = 0;
     const handleMouseMove = (e: MouseEvent) => {
-      setHovered(e.clientY <= HOVER_ZONE_HEIGHT_PX);
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        setHovered(e.clientY <= HOVER_ZONE_HEIGHT_PX);
+      });
     };
     const handleMouseLeave = () => setHovered(false);
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true });
     document.documentElement.addEventListener('mouseleave', handleMouseLeave);
     return () => {
+      cancelAnimationFrame(rafId);
       window.removeEventListener('mousemove', handleMouseMove);
       document.documentElement.removeEventListener('mouseleave', handleMouseLeave);
     };

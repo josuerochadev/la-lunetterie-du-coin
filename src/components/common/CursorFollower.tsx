@@ -1,27 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { m, useSpring, useMotionValue } from 'framer-motion';
 
 import LogoEye from '@/assets/logo/Logo_LLDC_Symbole_Noir.svg?react';
+import { useIsLg } from '@/hooks/useIsLg';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { SPRING_CONFIG_CURSOR } from '@/lib/motion';
 
-/**
- * Composant CursorFollower
- *
- * Affiche le logo de l'œil qui suit le curseur avec un effet smooth.
- * Activé uniquement sur desktop et respecte les préférences de mouvement réduit.
- *
- * @component
- * @example
- * <CursorFollower />
- *
- * @returns {JSX.Element | null} Le logo suiveur ou null si désactivé
- */
 export default function CursorFollower() {
-  const [isDesktop, setIsDesktop] = useState(false);
+  const isDesktop = useIsLg();
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  // Motion values pour la position du curseur
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
@@ -29,22 +17,9 @@ export default function CursorFollower() {
   const y = useSpring(cursorY, SPRING_CONFIG_CURSOR);
 
   useEffect(() => {
-    // Vérifier si on est sur desktop (largeur > 1024px)
-    const checkIsDesktop = () => {
-      setIsDesktop(window.innerWidth >= 1024);
-    };
-
-    checkIsDesktop();
-    window.addEventListener('resize', checkIsDesktop);
-
-    return () => window.removeEventListener('resize', checkIsDesktop);
-  }, []);
-
-  useEffect(() => {
     if (!isDesktop || prefersReducedMotion) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Offset pour centrer le logo sur le curseur (ajuster selon taille du logo)
       cursorX.set(e.clientX - 12);
       cursorY.set(e.clientY - 12);
     };
@@ -54,7 +29,6 @@ export default function CursorFollower() {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, [isDesktop, prefersReducedMotion, cursorX, cursorY]);
 
-  // Ne rien afficher sur mobile/tablette ou si motion réduit activé
   if (!isDesktop || prefersReducedMotion) return null;
 
   return (
