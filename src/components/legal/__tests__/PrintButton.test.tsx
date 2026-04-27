@@ -1,3 +1,4 @@
+import type React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
@@ -5,7 +6,12 @@ import PrintButton from '../PrintButton';
 
 // Mock Button component
 vi.mock('@/components/common/Button', () => ({
-  default: ({ children, onClick, type, ...props }: any) => (
+  default: ({
+    children,
+    onClick,
+    type,
+    ...props
+  }: React.ButtonHTMLAttributes<HTMLButtonElement> & { children: React.ReactNode }) => (
     <button type={type} onClick={onClick} data-testid="button" {...props}>
       {children}
     </button>
@@ -14,8 +20,8 @@ vi.mock('@/components/common/Button', () => ({
 
 // Mock Lucide icon
 vi.mock('lucide-react/dist/esm/icons/printer', () => ({
-  default: ({ className, ...props }: any) => (
-    <svg data-testid="printer-icon" className={className} {...props} aria-hidden="true">
+  default: (props: React.SVGProps<SVGSVGElement>) => (
+    <svg data-testid="printer-icon" {...props} aria-hidden="true">
       <path />
     </svg>
   ),

@@ -1,3 +1,4 @@
+import type React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 
@@ -22,8 +23,23 @@ vi.mock('@/hooks/useFormValidation', () => ({
 }));
 
 // Mock the child components to focus on ContactForm logic
+interface MockFormFieldProps {
+  name: string;
+  label: string;
+  type: string;
+  placeholder: string;
+  required: boolean;
+  minLength?: number;
+  maxLength?: number;
+  rows?: number;
+  onInput: React.FormEventHandler;
+  onInvalid: React.FormEventHandler;
+  hasError: boolean;
+  errorMessage?: string;
+}
+
 vi.mock('../FormField', () => ({
-  default: ({ name, onInput, onInvalid, hasError, errorMessage, ...props }: any) => (
+  default: ({ name, onInput, onInvalid, hasError, errorMessage, ...props }: MockFormFieldProps) => (
     <div data-testid={`form-field-${name}`}>
       <label htmlFor={name}>{props.label}</label>
       <input
@@ -44,8 +60,15 @@ vi.mock('../FormField', () => ({
   ),
 }));
 
+interface MockFormStatusMessageProps {
+  status: string;
+  error?: string;
+  networkError?: { message: string };
+  retryCount: number;
+}
+
 vi.mock('../FormStatusMessage', () => ({
-  default: ({ status, error, networkError, retryCount }: any) => (
+  default: ({ status, error, networkError, retryCount }: MockFormStatusMessageProps) => (
     <div data-testid="form-status-message">
       <span data-status={status}>{status}</span>
       {error && <span data-error={error}>{error}</span>}
@@ -58,7 +81,7 @@ vi.mock('../FormStatusMessage', () => ({
 }));
 
 vi.mock('../FormSubmitButton', () => ({
-  default: ({ status }: any) => (
+  default: ({ status }: { status: string }) => (
     <button type="submit" data-status={status} data-testid="submit-button">
       {status === 'sending' ? 'Envoi...' : 'Envoyer'}
     </button>

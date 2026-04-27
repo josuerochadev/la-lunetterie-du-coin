@@ -8,13 +8,16 @@ const mockObserve = vi.fn();
 const mockUnobserve = vi.fn();
 const mockDisconnect = vi.fn();
 
-const MockIntersectionObserver = vi.fn(function (callback: () => void, options?: any) {
-  this.callback = callback;
-  this.options = options;
+const MockIntersectionObserver = vi.fn(function (
+  this: Record<string, unknown>,
+  ...args: unknown[]
+) {
+  this.callback = args[0];
+  this.options = args[1];
   this.observe = mockObserve;
   this.unobserve = mockUnobserve;
   this.disconnect = mockDisconnect;
-}) as any;
+}) as unknown as typeof IntersectionObserver;
 
 describe('useIntersectionObserver', () => {
   beforeEach(() => {
@@ -310,7 +313,7 @@ describe('useIntersectionObserver', () => {
 
       expect(() => {
         act(() => {
-          observerCallback([mockEntry as any]);
+          observerCallback([mockEntry as { isIntersecting: boolean | undefined; target: Element }]);
         });
       }).not.toThrow();
     });
@@ -320,7 +323,7 @@ describe('useIntersectionObserver', () => {
     it('should handle missing IntersectionObserver gracefully', () => {
       // Remove IntersectionObserver
       const originalIntersectionObserver = window.IntersectionObserver;
-      delete (window as any).IntersectionObserver;
+      (window as unknown as Record<string, unknown>).IntersectionObserver = undefined;
 
       expect(() => {
         const { result, rerender } = renderHook((threshold) => useIntersectionObserver(threshold), {

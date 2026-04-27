@@ -1,3 +1,4 @@
+import type React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 
@@ -5,7 +6,15 @@ import TableOfContents from '../TableOfContents';
 
 // Mock SimpleAnimation
 vi.mock('@/components/motion/SimpleAnimation', () => ({
-  SimpleAnimation: ({ children, type, delay }: any) => (
+  SimpleAnimation: ({
+    children,
+    type,
+    delay,
+  }: {
+    children: React.ReactNode;
+    type?: string;
+    delay?: number;
+  }) => (
     <div data-testid="simple-animation" data-type={type} data-delay={delay}>
       {children}
     </div>

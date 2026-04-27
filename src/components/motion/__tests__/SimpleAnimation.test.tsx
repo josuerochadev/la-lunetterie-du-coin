@@ -9,7 +9,7 @@ const mockUsePrefersReducedMotion = vi.fn();
 
 // Mock cn utility
 vi.mock('@/lib/cn', () => ({
-  cn: (...args: any[]) => args.filter(Boolean).join(' '),
+  cn: (...args: unknown[]) => args.filter(Boolean).join(' '),
 }));
 
 // Mock usePrefersReducedMotion
@@ -22,13 +22,16 @@ const mockObserve = vi.fn();
 const mockUnobserve = vi.fn();
 const mockDisconnect = vi.fn();
 
-const MockIntersectionObserver = vi.fn(function (callback: any, options?: any) {
-  this.callback = callback;
-  this.options = options;
+const MockIntersectionObserver = vi.fn(function (
+  this: Record<string, unknown>,
+  ...args: unknown[]
+) {
+  this.callback = args[0];
+  this.options = args[1];
   this.observe = mockObserve;
   this.unobserve = mockUnobserve;
   this.disconnect = mockDisconnect;
-}) as any;
+}) as unknown as typeof IntersectionObserver;
 
 describe('SimpleAnimation', () => {
   beforeEach(() => {

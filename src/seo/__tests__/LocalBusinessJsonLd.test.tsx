@@ -11,6 +11,7 @@ import {
   COMPANY_RCS,
   PUBLICATION_DIRECTOR,
 } from '../LocalBusinessJsonLd';
+import { getHelmetProps } from '../test-utils/helmet-helpers';
 
 // Mock Helmet
 vi.mock('@dr.pogodin/react-helmet', () => ({
@@ -25,6 +26,61 @@ vi.mock('@/config/seo', () => ({
   DEFAULT_OG_IMAGE: 'https://example.com/og-default.jpg',
   BRAND: 'Test Brand',
 }));
+
+// ---------------------------------------------------------------------------
+// Types for parsed JSON-LD
+// ---------------------------------------------------------------------------
+
+interface PostalAddress {
+  '@type': string;
+  streetAddress: string;
+  postalCode: string;
+  addressLocality: string;
+  addressRegion: string;
+  addressCountry: string;
+}
+
+interface OpeningHoursSpec {
+  '@type': string;
+  dayOfWeek: string;
+  opens: string;
+  closes: string;
+}
+
+interface PropertyValue {
+  '@type': string;
+  name: string;
+  value: string;
+}
+
+interface LocalBusinessJsonLdSchema {
+  '@context': string;
+  '@type': string[];
+  name: string;
+  url: string;
+  image: string;
+  legalName: string;
+  brand: string;
+  telephone: string;
+  priceRange: string;
+  address: PostalAddress;
+  openingHoursSpecification: OpeningHoursSpec[];
+  identifier: PropertyValue[];
+}
+
+// ---------------------------------------------------------------------------
+// Helper to parse JSON-LD from Helmet mock
+// ---------------------------------------------------------------------------
+
+function parseJsonLd(): LocalBusinessJsonLdSchema {
+  const helmetCall = getHelmetProps(mockHelmet);
+  // LocalBusinessJsonLd renders a single <script> child (not an array)
+  const scriptElement = helmetCall.children as unknown as {
+    type: string;
+    props: { type: string; children: string };
+  };
+  return JSON.parse(scriptElement.props.children);
+}
 
 describe('LocalBusinessJsonLd', () => {
   beforeEach(() => {
@@ -41,8 +97,11 @@ describe('LocalBusinessJsonLd', () => {
 
       expect(mockHelmet).toHaveBeenCalledTimes(1);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
+      const helmetCall = getHelmetProps(mockHelmet);
+      const scriptElement = helmetCall.children as unknown as {
+        type: string;
+        props: { type: string };
+      };
 
       expect(scriptElement?.type).toBe('script');
       expect(scriptElement?.props?.type).toBe('application/ld+json');
@@ -51,15 +110,9 @@ describe('LocalBusinessJsonLd', () => {
     it('should generate valid JSON-LD structure', () => {
       render(<LocalBusinessJsonLd />);
 
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-
-      expect(() => JSON.parse(jsonContent)).not.toThrow();
-
-      const parsedJson = JSON.parse(jsonContent);
-      expect(parsedJson['@context']).toBe('https://schema.org');
-      expect(parsedJson['@type']).toEqual(['Optician', 'LocalBusiness']);
+      const parsed = parseJsonLd();
+      expect(parsed['@context']).toBe('https://schema.org');
+      expect(parsed['@type']).toEqual(['Optician', 'LocalBusiness']);
     });
   });
 
@@ -85,14 +138,11 @@ describe('LocalBusinessJsonLd', () => {
   });
 
   describe('JSON-LD schema structure', () => {
-    let parsedJsonLd: any;
+    let parsedJsonLd: LocalBusinessJsonLdSchema;
 
     beforeEach(() => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      parsedJsonLd = JSON.parse(jsonContent);
+      parsedJsonLd = parseJsonLd();
     });
 
     it('should have correct schema context and type', () => {
@@ -118,15 +168,11 @@ describe('LocalBusinessJsonLd', () => {
   });
 
   describe('postal address structure', () => {
-    let address: any;
+    let address: PostalAddress;
 
     beforeEach(() => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
-      address = parsedJsonLd.address;
+      address = parseJsonLd().address;
     });
 
     it('should have correct address schema type', () => {
@@ -148,15 +194,11 @@ describe('LocalBusinessJsonLd', () => {
   });
 
   describe('opening hours specification', () => {
-    let openingHours: any[];
+    let openingHours: OpeningHoursSpec[];
 
     beforeEach(() => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
-      openingHours = parsedJsonLd.openingHoursSpecification;
+      openingHours = parseJsonLd().openingHoursSpecification;
     });
 
     it('should include opening hours for all working days', () => {
@@ -186,9 +228,9 @@ describe('LocalBusinessJsonLd', () => {
       const afternoonSession = mondayHours.find((spec) => spec.opens === '15:00');
 
       expect(morningSession).toBeDefined();
-      expect(morningSession.closes).toBe('14:00');
+      expect(morningSession!.closes).toBe('14:00');
       expect(afternoonSession).toBeDefined();
-      expect(afternoonSession.closes).toBe('19:00');
+      expect(afternoonSession!.closes).toBe('19:00');
     });
 
     it('should not include Sunday hours (closed on Sunday)', () => {
@@ -207,36 +249,32 @@ describe('LocalBusinessJsonLd', () => {
   });
 
   describe('business identifiers', () => {
-    let identifiers: any[];
+    let identifiers: PropertyValue[];
 
     beforeEach(() => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
-      identifiers = parsedJsonLd.identifier;
+      identifiers = parseJsonLd().identifier;
     });
 
     it('should include SIRET identifier', () => {
       const siretId = identifiers.find((id) => id.name === 'SIRET');
       expect(siretId).toBeDefined();
-      expect(siretId['@type']).toBe('PropertyValue');
-      expect(siretId.value).toBe(COMPANY_SIRET);
+      expect(siretId!['@type']).toBe('PropertyValue');
+      expect(siretId!.value).toBe(COMPANY_SIRET);
     });
 
     it('should include RCS identifier', () => {
       const rcsId = identifiers.find((id) => id.name === 'RCS');
       expect(rcsId).toBeDefined();
-      expect(rcsId['@type']).toBe('PropertyValue');
-      expect(rcsId.value).toBe(COMPANY_RCS);
+      expect(rcsId!['@type']).toBe('PropertyValue');
+      expect(rcsId!.value).toBe(COMPANY_RCS);
     });
 
     it('should include publication director', () => {
       const pubDirector = identifiers.find((id) => id.name === 'Directeur de la Publication');
       expect(pubDirector).toBeDefined();
-      expect(pubDirector['@type']).toBe('PropertyValue');
-      expect(pubDirector.value).toBe(PUBLICATION_DIRECTOR);
+      expect(pubDirector!['@type']).toBe('PropertyValue');
+      expect(pubDirector!.value).toBe(PUBLICATION_DIRECTOR);
     });
 
     it('should have correct schema type for all identifiers', () => {
@@ -251,36 +289,36 @@ describe('LocalBusinessJsonLd', () => {
   describe('schema.org compliance', () => {
     it('should use Optician type for optical services', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
-
-      expect(parsedJsonLd['@type']).toEqual(['Optician', 'LocalBusiness']);
+      const parsed = parseJsonLd();
+      expect(parsed['@type']).toEqual(['Optician', 'LocalBusiness']);
     });
 
     it('should include all required LocalBusiness properties', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
+      const parsed = parseJsonLd();
 
-      const requiredProperties = ['name', 'address', 'telephone', 'url'];
+      const requiredProperties: (keyof LocalBusinessJsonLdSchema)[] = [
+        'name',
+        'address',
+        'telephone',
+        'url',
+      ];
 
       requiredProperties.forEach((prop) => {
-        expect(parsedJsonLd[prop]).toBeDefined();
+        expect(parsed[prop]).toBeDefined();
       });
     });
 
     it('should have valid JSON-LD syntax', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
+
+      const helmetCall = getHelmetProps(mockHelmet);
+      const scriptElement = helmetCall.children as unknown as {
+        props: { children: string };
+      };
 
       expect(() => {
-        const parsed = JSON.parse(jsonContent);
+        const parsed = JSON.parse(scriptElement.props.children);
         expect(parsed).toBeDefined();
         expect(typeof parsed).toBe('object');
       }).not.toThrow();
@@ -290,11 +328,7 @@ describe('LocalBusinessJsonLd', () => {
   describe('data accuracy', () => {
     it('should match French business format for addresses', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
-      const address = parsedJsonLd.address;
+      const address = parseJsonLd().address;
 
       expect(address.postalCode).toMatch(/^67\d{3}$/); // Strasbourg postal code
       expect(address.addressCountry).toBe('FR');
@@ -303,13 +337,10 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should use correct French phone number format', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
-      const parsedJsonLd = JSON.parse(jsonContent);
+      const parsed = parseJsonLd();
 
-      expect(parsedJsonLd.telephone).toMatch(/^\+33/); // French country code
-      expect(parsedJsonLd.telephone).toBe('+33388512440'); // E.164 format
+      expect(parsed.telephone).toMatch(/^\+33/); // French country code
+      expect(parsed.telephone).toBe('+33388512440'); // E.164 format
     });
 
     it('should reference real business information', () => {
@@ -335,8 +366,11 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should produce minified JSON-LD (no unnecessary whitespace)', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
+
+      const helmetCall = getHelmetProps(mockHelmet);
+      const scriptElement = helmetCall.children as unknown as {
+        props: { children: string };
+      };
       const jsonContent = scriptElement.props.children;
 
       // Should be minified JSON without pretty-printing
@@ -346,23 +380,21 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should handle special characters in business data', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = scriptElement.props.children;
 
-      expect(() => JSON.parse(jsonContent)).not.toThrow();
-
-      const parsedJson = JSON.parse(jsonContent);
+      const parsed = parseJsonLd();
       // Should preserve French characters and punctuation
-      expect(parsedJson.name).toContain('&'); // Ampersand in name
+      expect(parsed.name).toContain('&'); // Ampersand in name
     });
   });
 
   describe('SEO and discoverability', () => {
     it('should include structured data for search engines', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
+
+      const helmetCall = getHelmetProps(mockHelmet);
+      const scriptElement = helmetCall.children as unknown as {
+        props: { type: string; children: string };
+      };
 
       expect(scriptElement.props.type).toBe('application/ld+json');
 
@@ -372,14 +404,12 @@ describe('LocalBusinessJsonLd', () => {
 
     it('should support local SEO with complete location data', () => {
       render(<LocalBusinessJsonLd />);
-      const helmetCall = mockHelmet.mock.calls[0][0];
-      const scriptElement = helmetCall.children;
-      const jsonContent = JSON.parse(scriptElement.props.children);
+      const parsed = parseJsonLd();
 
-      expect(jsonContent.address.addressLocality).toBe('Strasbourg');
-      expect(jsonContent.address.addressRegion).toBe('Grand Est');
-      expect(jsonContent.address.addressCountry).toBe('FR');
-      expect(jsonContent.telephone).toBeTruthy();
+      expect(parsed.address.addressLocality).toBe('Strasbourg');
+      expect(parsed.address.addressRegion).toBe('Grand Est');
+      expect(parsed.address.addressCountry).toBe('FR');
+      expect(parsed.telephone).toBeTruthy();
     });
   });
 });
