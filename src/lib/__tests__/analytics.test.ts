@@ -20,7 +20,7 @@ describe('analytics', () => {
     // log and return early. We test that dev-mode behavior.
 
     it('should skip initialization in development mode', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+      const consoleSpy = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
 
       initPlausible({ domain: 'example.com' });
 

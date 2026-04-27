@@ -6,9 +6,8 @@ import { BrowserRouter } from 'react-router-dom';
 import { HelmetProvider } from '@dr.pogodin/react-helmet';
 import { LazyMotion } from 'framer-motion';
 
-import App from './App';
-import { TIMING } from './config/design';
-
+import App from '@/App';
+import { TIMING } from '@/config/design';
 import { MotionProvider } from '@/a11y/MotionProvider';
 import ScrollToTop from '@/components/routing/ScrollToTop';
 import { loadFeatures } from '@/lib/loadMotionFeatures';

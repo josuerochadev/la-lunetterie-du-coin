@@ -57,12 +57,12 @@ export function useFormSubmission(): UseFormSubmissionReturn {
           onRetryAttempt: (attemptNumber, delay) => {
             retryCount = attemptNumber;
             if (import.meta.env.DEV) {
-              console.log(`Retry attempt ${attemptNumber} in ${delay}ms`);
+              console.warn(`Retry attempt ${attemptNumber} in ${delay}ms`);
             }
           },
           onMaxAttemptsReached: () => {
             if (import.meta.env.DEV) {
-              console.log('Max retry attempts reached');
+              console.warn('Max retry attempts reached');
             }
           },
         },

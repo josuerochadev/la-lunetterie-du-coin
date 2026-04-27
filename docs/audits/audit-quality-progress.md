@@ -48,12 +48,21 @@
 
 **Branche** : `chore/typing-tests-any`
 
+<<<<<<< HEAD
 - [x] `src/seo/__tests__/Seo.test.tsx` (47 occurrences) — helper typé `src/seo/test-utils/helmet-helpers.ts`
 - [x] `src/seo/__tests__/LocalBusinessJsonLd.test.tsx` (4 occurrences) — interfaces JSON-LD typées
 - [x] `src/components/contact/__tests__/ContactForm.test.tsx` — interfaces MockFormFieldProps etc.
 - [x] `src/components/legal/__tests__/*` — types inline sur mocks
 - [x] `src/hooks/__tests__/useIntersectionObserver.test.ts` — MockIntersectionObserver typé
 - [x] `src/components/motion/__tests__/SimpleAnimation.test.tsx` — MockIntersectionObserver typé
+=======
+- [ ] `src/seo/__tests__/Seo.test.tsx` (47 occurrences) — créer helper typé `_helpers.ts`
+- [ ] `src/seo/__tests__/LocalBusinessJsonLd.test.tsx` (4 occurrences)
+- [ ] `src/components/contact/__tests__/ContactForm.test.tsx` (mocks `props: any`)
+- [ ] `src/components/legal/__tests__/*` (mocks `props: any`)
+- [ ] `src/hooks/__tests__/useIntersectionObserver.test.ts:11`
+- [ ] `src/components/motion/__tests__/SimpleAnimation.test.tsx`
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ### Phase 2b — `eslint-disable no-unused-vars`
 
@@ -61,12 +70,20 @@
 
 Remplacer par préfixe `_` sur les params callbacks. Fichiers concernés :
 
+<<<<<<< HEAD
 - [x] `src/lib/{analytics.ts, toastContext.ts, retryLogic.ts}` — supprimé eslint-disable
 - [x] `src/components/contact/FormField.tsx` — supprimé eslint-disable
 - [x] `src/components/services/ServiceThumbnail.tsx`, `src/components/offers/OfferCard.tsx` — supprimé eslint-disable
 - [x] `src/hooks/{useFormStatus.ts, useFormValidation.ts, useFormSubmission.ts}` — supprimé eslint-disable
 - [x] `src/components/motion/GiantCounter.tsx` — supprimé eslint-disable
 - [x] Désactivé `no-unused-vars` base au profit de `@typescript-eslint/no-unused-vars`
+=======
+- [ ] `src/lib/{analytics.ts:48, toastContext.ts:6, retryLogic.ts:16,60}`
+- [ ] `src/components/contact/FormField.tsx:16,18`
+- [ ] `src/components/services/ServiceThumbnail.tsx:16`, `src/components/offers/OfferCard.tsx:21`
+- [ ] `src/hooks/{useFormStatus.ts:18,20, useFormValidation.ts:13,16,18,20,49, useFormSubmission.ts:15}`
+- [ ] `src/components/motion/GiantCounter.tsx:13`
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ---
 
@@ -78,21 +95,35 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Branche** : `refactor/offers-timeline-constants`
 
+<<<<<<< HEAD
 - [x] Extraire `OFFERS_TIMELINE`, `STAGGER_OFFSET`, `SLICE`, `ENTER_OFFSET`, `TEXT_*` de `src/sections/offers/OffersContent.tsx:21-38, 61, 336, 339-349`
+=======
+- [ ] Extraire `OFFERS_TIMELINE`, `STAGGER_OFFSET`, `SLICE`, `ENTER_OFFSET`, `TEXT_*` de `src/sections/offers/OffersContent.tsx:21-38, 61, 336, 339-349`
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ### Phase 3b — Services Mobile
 
 **Branche** : `refactor/services-mobile-timeline-constants`
 
+<<<<<<< HEAD
 - [x] Extraire `TOTAL_VH`, phases de `src/sections/home/services/ServicesMobileAnimated.tsx:21-33`
+=======
+- [ ] Extraire `TOTAL_VH`, phases de `src/sections/home/services/ServicesMobileAnimated.tsx:21-33`
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ### Phase 3c — Petites sections (groupées)
 
 **Branche** : `refactor/misc-magic-numbers`
 
+<<<<<<< HEAD
 - [x] `src/components/navbar/Navbar.tsx:23` — `HOVER_ZONE_HEIGHT` → `HOVER_ZONE_HEIGHT_PX`
 - [x] `src/components/common/Toast.tsx:16` — `TOAST_DURATION` → `TOAST_DURATION_MS`
 - [x] `src/sections/home/story/StoryDesktopAnimated.tsx:76` — phases inline → `StoryDesktopAnimated.timeline.ts`
+=======
+- [ ] `src/components/navbar/Navbar.tsx:23` — `HOVER_ZONE_HEIGHT`
+- [ ] `src/components/common/Toast.tsx:16` — `TOAST_DURATION` (suffixe `_MS`)
+- [ ] `src/sections/home/story/StoryDesktopAnimated.tsx:76` — phases inline
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ---
 
@@ -100,6 +131,7 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Avant** tout découpage Phase 5. Tests comportementaux minimaux : rendu sans crash, CTA présents, variants responsive.
 
+<<<<<<< HEAD
 - [x] FullScreenMenu — 10 tests (nav links, CTA, close, store info)
 - [x] ContactLocation — 8 tests (transports, accessibilité, Maps CTA)
 - [x] AboutEngagement — 8 tests (titre, stats, body, highlight)
@@ -108,6 +140,14 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 - [x] OffersContent — 9 tests (catchphrases, counters, CTAs, conditions)
 
 **Branche unique** : `test/coverage-phase4` (52 tests total)
+=======
+- [ ] `test/coverage-fullscreen-menu` → couvre Phase 5.1
+- [ ] `test/coverage-contact-location` → couvre Phase 5.2
+- [ ] `test/coverage-about-engagement` → couvre Phase 5.3
+- [ ] `test/coverage-about-history` → couvre Phase 5.4
+- [ ] `test/coverage-services-mobile` → couvre Phase 5.5
+- [ ] `test/coverage-offers-content` → couvre Phase 5.6
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ---
 
@@ -115,12 +155,21 @@ Pour chaque section, créer un fichier voisin `<section>.timeline.ts` avec const
 
 **Règle stricte** : ne pas démarrer une section sans la PR Phase 4 correspondante mergée.
 
+<<<<<<< HEAD
 - [x] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
 - [x] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → déjà splitée : `<MapBlock>` (149l), `<DirectionsBlock>` (264l), parent (93l)
 - [x] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
 - [x] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split en HistoryDesktop + HistoryMobile + HistoryStatic
 - [x] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
 - [x] **5.6** `src/sections/offers/OffersContent.tsx` (750l) → split en OffersDesktop + OffersMobile + OffersStatic
+=======
+- [ ] **5.1** `src/components/navbar/FullScreenMenu.tsx` (370l) → `<MobileMenuLayout>` + `<DesktopMenuLayout>`
+- [ ] **5.2** `src/sections/contact/ContactLocation.tsx` (478l) → `<MapBlock>`, `<DirectionsBlock>`
+- [ ] **5.3** `src/sections/about/AboutEngagement.tsx` (368l) → extraire états timeline
+- [ ] **5.4** `src/sections/about/AboutHistory.tsx` (590l) → split desktop/mobile en 2 fichiers
+- [ ] **5.5** `src/sections/home/services/ServicesMobileAnimated.tsx` (538l) → `<ServiceSlide>` + déplacer phases
+- [ ] **5.6** `src/sections/offers/OffersContent.tsx` (750l) — **LE PLUS RISQUÉ, en dernier**
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)
 
 ---
 
@@ -158,6 +207,7 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 
 ## Journal des sessions
 
+<<<<<<< HEAD
 | Date       | Phase | Branche                                       | PR  | Notes                                                                                   |
 | ---------- | ----- | --------------------------------------------- | --- | --------------------------------------------------------------------------------------- |
 | 2026-04-16 | —     | —                                             | —   | Plan créé                                                                               |
@@ -170,3 +220,9 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 | 2026-04-21 | 4     | `test/coverage-phase4`                        | —   | 52 tests filet sur 6 sections critiques (1 branche, 1 PR)                               |
 | 2026-04-22 | 5.6   | `refactor/split-offers-content`               | —   | OffersContent (730l) → OffersDesktop + OffersMobile + OffersStatic + parent slim        |
 | 2026-04-22 | 5.2   | `chore/audit-tracker-5.2-done`                | —   | ContactLocation déjà splitée (93l + MapBlock 149l + DirectionsBlock 264l) — case cochée |
+=======
+| Date       | Phase | Branche                    | PR  | Notes                                                                                |
+| ---------- | ----- | -------------------------- | --- | ------------------------------------------------------------------------------------ |
+| 2026-04-16 | —     | —                          | —   | Plan créé                                                                            |
+| 2026-04-21 | 1     | `chore/cleanup-quick-wins` | —   | Quick wins : no-console ESLint, console.log→warn, imports @/, suppression SentryTest |
+>>>>>>> 4a71b4b (chore(quality): phase 1 quick wins — no-console rule, cleanup logs, fix imports)

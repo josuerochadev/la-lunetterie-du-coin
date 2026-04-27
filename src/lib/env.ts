@@ -62,7 +62,7 @@ export function validateEnvironment() {
 
   // Success message (dev only)
   if (missingRequired.length === 0 && missingOptional.length === 0 && import.meta.env.DEV) {
-    console.log('✅ All environment variables are properly configured');
+    console.warn('✅ All environment variables are properly configured');
   }
 }
 

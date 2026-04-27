@@ -48,7 +48,7 @@ export default defineConfig({
         'src/components/services/**/*', // Composants présentationnels (testés en E2E)
         'src/components/routing/**/*', // Scroll behavior (testé en E2E)
         'src/components/footer/**/*', // Composants présentationnels (testés en E2E)
-        'src/components/debug/**/*', // Outils de debug (SentryTest)
+        'src/components/debug/**/*', // Outils de debug (supprimé)
         'src/components/motion/**/*', // Wrappers framer-motion (testés visuellement)
         'src/components/legal/HighlightBox.tsx', // Présentationnel
         'src/components/legal/PageHeader.tsx', // Présentationnel

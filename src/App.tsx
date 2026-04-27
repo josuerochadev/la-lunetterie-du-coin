@@ -2,18 +2,18 @@
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import HomePage from './pages/HomePage';
-import ComingSoon from './pages/ComingSoon';
-import { withSuspense } from './components/common/withSuspense';
+import HomePage from '@/pages/HomePage';
+import ComingSoon from '@/pages/ComingSoon';
+import { withSuspense } from '@/components/common/withSuspense';
 
 // Lazy-loaded pages avec Suspense HOC
-const AboutPage = withSuspense(lazy(() => import('./pages/AboutPage')));
-const ServicesPage = withSuspense(lazy(() => import('./pages/ServicesPage')));
-const OffersPage = withSuspense(lazy(() => import('./pages/OffersPage')));
-const ContactPage = withSuspense(lazy(() => import('./pages/ContactPage')));
-const MentionsLegales = withSuspense(lazy(() => import('./pages/MentionsLegales')));
-const ConditionsDeVente = withSuspense(lazy(() => import('./pages/ConditionsDeVente')));
-const NotFound = withSuspense(lazy(() => import('./pages/NotFound')));
+const AboutPage = withSuspense(lazy(() => import('@/pages/AboutPage')));
+const ServicesPage = withSuspense(lazy(() => import('@/pages/ServicesPage')));
+const OffersPage = withSuspense(lazy(() => import('@/pages/OffersPage')));
+const ContactPage = withSuspense(lazy(() => import('@/pages/ContactPage')));
+const MentionsLegales = withSuspense(lazy(() => import('@/pages/MentionsLegales')));
+const ConditionsDeVente = withSuspense(lazy(() => import('@/pages/ConditionsDeVente')));
+const NotFound = withSuspense(lazy(() => import('@/pages/NotFound')));
 
 const isSiteLive = import.meta.env.VITE_SITE_LIVE === 'true';
 
