@@ -10,7 +10,7 @@ interface GiantCounterProps {
   /** [from, to] — numeric values to count between. */
   countValues: [number, number];
   /** How to format the displayed number. */
-  formatValue?: (value: number) => string; // eslint-disable-line no-unused-vars
+  formatValue?: (value: number) => string;
   /** [fadeIn, peakIn, peakOut, fadeOut] — opacity keyframes over scroll. */
   opacityRange: [number, number, number, number];
   /** Peak opacity value (default 0.18). */

@@ -13,7 +13,6 @@ import { analyzeNetworkError, shouldRetryError, getRetryDelay } from './networkE
 export class FetchErrorWithResponse extends Error {
   constructor(
     message: string,
-    // eslint-disable-next-line no-unused-vars
     public readonly response: Response,
   ) {
     super(message);
@@ -57,7 +56,6 @@ export class FetchErrorWithResponse extends Error {
 
 export interface RetryConfig {
   maxAttempts: number;
-  // eslint-disable-next-line no-unused-vars
   onRetryAttempt?: (attemptNumber: number, delay: number) => void;
   onMaxAttemptsReached?: () => void;
 }

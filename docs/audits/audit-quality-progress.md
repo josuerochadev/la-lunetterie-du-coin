@@ -8,9 +8,9 @@
 
 ## État courant
 
-- **Phase active** : Phase 2a — `any` dans tests (terminée)
-- **Branche en cours** : `chore/typing-tests-any`
-- **Dernière session** : 2026-04-21 (Phase 2a complétée)
+- **Phase active** : Phase 2b — eslint-disable no-unused-vars (terminée)
+- **Branche en cours** : `chore/typing-eslint-disable`
+- **Dernière session** : 2026-04-21 (Phase 2b complétée)
 
 ---
 
@@ -61,11 +61,12 @@
 
 Remplacer par préfixe `_` sur les params callbacks. Fichiers concernés :
 
-- [ ] `src/lib/{analytics.ts:48, toastContext.ts:6, retryLogic.ts:16,60}`
-- [ ] `src/components/contact/FormField.tsx:16,18`
-- [ ] `src/components/services/ServiceThumbnail.tsx:16`, `src/components/offers/OfferCard.tsx:21`
-- [ ] `src/hooks/{useFormStatus.ts:18,20, useFormValidation.ts:13,16,18,20,49, useFormSubmission.ts:15}`
-- [ ] `src/components/motion/GiantCounter.tsx:13`
+- [x] `src/lib/{analytics.ts, toastContext.ts, retryLogic.ts}` — supprimé eslint-disable
+- [x] `src/components/contact/FormField.tsx` — supprimé eslint-disable
+- [x] `src/components/services/ServiceThumbnail.tsx`, `src/components/offers/OfferCard.tsx` — supprimé eslint-disable
+- [x] `src/hooks/{useFormStatus.ts, useFormValidation.ts, useFormSubmission.ts}` — supprimé eslint-disable
+- [x] `src/components/motion/GiantCounter.tsx` — supprimé eslint-disable
+- [x] Désactivé `no-unused-vars` base au profit de `@typescript-eslint/no-unused-vars`
 
 ---
 
@@ -155,8 +156,9 @@ Pas de PR dédiée — à faire quand on touche le fichier de toute façon :
 
 ## Journal des sessions
 
-| Date       | Phase | Branche                    | PR  | Notes                                                                                |
-| ---------- | ----- | -------------------------- | --- | ------------------------------------------------------------------------------------ |
-| 2026-04-16 | —     | —                          | —   | Plan créé                                                                            |
-| 2026-04-21 | 1     | `chore/cleanup-quick-wins` | —   | Quick wins : no-console ESLint, console.log→warn, imports @/, suppression SentryTest |
-| 2026-04-21 | 2a    | `chore/typing-tests-any`   | —   | Suppression de tous les `any` dans 9 fichiers de tests, helper typé Helmet créé      |
+| Date       | Phase | Branche                       | PR  | Notes                                                                                |
+| ---------- | ----- | ----------------------------- | --- | ------------------------------------------------------------------------------------ |
+| 2026-04-16 | —     | —                             | —   | Plan créé                                                                            |
+| 2026-04-21 | 1     | `chore/cleanup-quick-wins`    | —   | Quick wins : no-console ESLint, console.log→warn, imports @/, suppression SentryTest |
+| 2026-04-21 | 2a    | `chore/typing-tests-any`      | —   | Suppression de tous les `any` dans 9 fichiers de tests, helper typé Helmet créé      |
+| 2026-04-21 | 2b    | `chore/typing-eslint-disable` | —   | Suppression 17 eslint-disable no-unused-vars, désactivation règle base JS            |

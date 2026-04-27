@@ -18,7 +18,6 @@ type Offer = {
 type OfferCardProps = {
   offer: Offer;
   isOpen: boolean;
-  // eslint-disable-next-line no-unused-vars
   onToggle: (id: number) => void;
 };
 

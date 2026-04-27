@@ -19,7 +19,6 @@ import {
  */
 
 interface UseFormSubmissionReturn {
-  // eslint-disable-next-line no-unused-vars
   submitForm: (e: React.FormEvent<HTMLFormElement>) => Promise<SubmissionResult>;
 }
 

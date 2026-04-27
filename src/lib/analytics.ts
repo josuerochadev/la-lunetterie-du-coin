@@ -45,7 +45,6 @@ export function trackEvent(
 ) {
   if (import.meta.env.DEV) return;
 
-  // eslint-disable-next-line no-unused-vars
   const plausible = (window as Window & { plausible?: (...args: unknown[]) => void }).plausible;
   if (plausible) {
     plausible(eventName, options);

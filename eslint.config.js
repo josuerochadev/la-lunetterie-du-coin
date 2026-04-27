@@ -39,6 +39,7 @@ export default tseslint.config(
 
 			/* extras úteis */
 			"no-console": ["error", { allow: ["warn", "error"] }],
+			"no-unused-vars": "off", // handled by @typescript-eslint/no-unused-vars
 			"react/jsx-key": "error",
 			"import/order": ["error", { "newlines-between": "always" }],
 			"react-refresh/only-export-components": [

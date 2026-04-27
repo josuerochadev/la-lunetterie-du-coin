@@ -18,14 +18,10 @@ interface ValidationMessages {
 
 interface UseFormValidationReturn {
   getValidationMessages: () => ValidationMessages;
-  // eslint-disable-next-line no-unused-vars
   handleInvalidInput: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   handleInputChange: (
-    // eslint-disable-next-line no-unused-vars
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
-    // eslint-disable-next-line no-unused-vars
     fieldName: keyof FormErrors,
-    // eslint-disable-next-line no-unused-vars
     clearFieldError: (field: keyof FormErrors) => void,
   ) => void;
 }
@@ -54,7 +50,6 @@ export function useFormValidation(): UseFormValidationReturn {
     e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>,
 
     fieldName: keyof FormErrors,
-    // eslint-disable-next-line no-unused-vars
     clearFieldError: (field: keyof FormErrors) => void,
   ) => {
     const target = e.currentTarget;

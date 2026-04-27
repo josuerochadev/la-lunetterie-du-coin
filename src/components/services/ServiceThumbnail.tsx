@@ -14,7 +14,6 @@ interface ServiceThumbnailProps {
   index: number;
   totalCount: number;
   onClick: () => void;
-  // eslint-disable-next-line no-unused-vars
   onNavigate: (index: number) => void;
 }
 

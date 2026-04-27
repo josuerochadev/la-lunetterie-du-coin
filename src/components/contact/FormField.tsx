@@ -13,9 +13,7 @@ interface BaseFieldProps {
   animationIndex: number;
   hasError?: boolean;
   errorMessage?: string;
-  // eslint-disable-next-line no-unused-vars
   onInvalid: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-  // eslint-disable-next-line no-unused-vars
   onInput: (e: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   className?: string;
 }
