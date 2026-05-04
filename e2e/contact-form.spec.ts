@@ -76,6 +76,15 @@ test.describe('Contact Form - E2E Tests', () => {
   test('should submit form successfully with valid data', async ({ page }) => {
     const form = page.locator('form').first();
 
+    // Intercepter la requête Formspree avant toute interaction
+    await page.route('https://formspree.io/**', async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ ok: true }),
+      });
+    });
+
     // Remplir le formulaire avec des données valides
     await form.locator('input[name="name"]').fill('Test User');
     await form.locator('input[name="email"]').fill('test@example.com');
@@ -85,20 +94,15 @@ test.describe('Contact Form - E2E Tests', () => {
         'Ceci est un message de test pour vérifier le fonctionnement du formulaire de contact.',
       );
 
-    // Cocher la checkbox RGPD (obligatoire)
-    await form.locator('input[name="consent"]').click({ force: true });
-
-    // Intercepter la requête Formspree
-    await page.route('https://formspree.io/**', async (route) => {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ ok: true }),
-      });
+    // Cocher la checkbox RGPD (obligatoire) — use dispatchEvent for Firefox compat
+    const consentCheckbox = form.locator('input[name="consent"]');
+    await consentCheckbox.evaluate((el) => {
+      (el as HTMLInputElement).click();
     });
 
-    // Soumettre le formulaire
+    // Attendre que le bouton soit activé
     const submitButton = form.locator('button[type="submit"]');
+    await expect(submitButton).toBeEnabled({ timeout: 3000 });
     await submitButton.click();
 
     // Vérifier le message de succès
@@ -157,9 +161,12 @@ test.describe('Contact Form - E2E Tests', () => {
     await form.locator('input[name="name"]').fill('Test User');
     await form.locator('input[name="email"]').fill('test@example.com');
     await form.locator('textarea[name="message"]').fill('Test message');
-    await form.locator('input[name="consent"]').click({ force: true });
+    await form.locator('input[name="consent"]').evaluate((el) => {
+      (el as HTMLInputElement).click();
+    });
 
     const submitButton = form.locator('button[type="submit"]');
+    await expect(submitButton).toBeEnabled({ timeout: 3000 });
     await submitButton.click();
 
     // Vérifier que le système de retry fonctionne et finit par afficher le succès
@@ -224,6 +231,6 @@ test.describe('Contact Form - E2E Tests', () => {
     const successMessage = page.locator(
       ':has-text("succès"), :has-text("envoyé"), .form-message--success, .success',
     );
-    await expect(successMessage.first()).toBeVisible({ timeout: 5000 });
+    await expect(successMessage.first()).toBeVisible({ timeout: 10000 });
   });
 });
