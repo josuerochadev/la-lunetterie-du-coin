@@ -67,10 +67,12 @@ export default function ResponsiveImage({
   imgProps = {},
 }: ResponsiveImageProps) {
   // Extract base filename without extension, directory, and size suffix
+  const hasAlpha = /\.webp$/i.test(src) || /\.png$/i.test(src);
   const baseName = src
     .replace(/^\/(images|images-optimized)\//, '')
     .replace(/-\d+w\.(jpg|jpeg|png|webp|avif)$/i, '')
     .replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+  const fallbackFormat = hasAlpha ? 'webp' : 'jpg';
 
   return (
     <picture>
@@ -80,12 +82,14 @@ export default function ResponsiveImage({
       {/* WebP - Good compression with wider browser support */}
       <source type="image/webp" srcSet={generateSrcSet(baseName, widths, 'webp')} sizes={sizes} />
 
-      {/* JPG - Fallback for older browsers */}
-      <source type="image/jpeg" srcSet={generateSrcSet(baseName, widths, 'jpg')} sizes={sizes} />
+      {/* JPG - Fallback for older browsers (skipped for transparent images) */}
+      {!hasAlpha && (
+        <source type="image/jpeg" srcSet={generateSrcSet(baseName, widths, 'jpg')} sizes={sizes} />
+      )}
 
       {/* Fallback img element */}
       <img
-        src={`/images-optimized/${baseName}-${widths[widths.length - 1]}w.jpg`}
+        src={`/images-optimized/${baseName}-${widths[widths.length - 1]}w.${fallbackFormat}`}
         alt={alt}
         loading={loading}
         decoding="async"

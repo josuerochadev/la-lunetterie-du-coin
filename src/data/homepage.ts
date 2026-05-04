@@ -60,7 +60,7 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 1,
     title: 'Recyclage',
-    image: '/images-optimized/homepage-offer-recyclage-1920w.jpg',
+    image: '/images-optimized/homepage-offer-recyclage-1920w.webp',
     catchphrase: 'DU PASSÉ FAITES TABLE RASE',
     summary: "Ramenez vos anciennes paires, repartez avec jusqu'à 70€ de remise.",
     link: '/offres#recyclage',
@@ -68,7 +68,7 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 2,
     title: 'Deuxième paire',
-    image: '/images-optimized/homepage-offer-second-pair-1920w.jpg',
+    image: '/images-optimized/homepage-offer-second-pair-1920w.webp',
     catchphrase: 'LE COUP DE FOUDRE ×2',
     summary: 'Une deuxième paire à partir de 59€. Solaires, lecture, secours — à vous de voir.',
     link: '/offres#deuxieme-paire',
