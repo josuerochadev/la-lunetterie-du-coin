@@ -149,7 +149,7 @@ Nous accueillons les contributions ! Consultez notre [Guide de Contribution](./C
 - [Configuration environnement](./docs/environment-setup.md) - Variables d'environnement
 - [Standards icones](./docs/standards/icons.md) - Patterns d'import Lucide
 - [Audits qualite](./docs/audits/) - Resultats des audits (KISS, SOLID, lisibilite, architecture)
-- [Integrations externes](./docs/integrations.md) - Formspree, Sentry, Analytics, Calendly
+- [Integrations externes](./docs/integrations.md) - Formspree, Sentry, Analytics, ZeroSix
 - [Strategie de tests](./docs/testing-suite.md) - Tests unitaires, E2E, visuels
 
 ## 📝 Licence

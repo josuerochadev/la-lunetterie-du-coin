@@ -31,11 +31,11 @@ Documentation des services tiers consommés par l'application.
 
 ---
 
-## Calendly — Prise de rendez-vous
+## ZeroSix — Prise de rendez-vous
 
-- **URL** : configurée dans `src/config/endpoints.ts` (`BOOKING_URL`)
+- **URL** : configurée via `VITE_BOOKING_URL` (fallback dans `src/config/endpoints.ts`)
 - **Usage** : lien externe, pas d'intégration API
-- **Comportement** : ouvre Calendly dans un nouvel onglet
+- **Comportement** : ouvre ZeroSix dans un nouvel onglet
 
 ---
 

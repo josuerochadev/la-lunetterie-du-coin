@@ -166,7 +166,7 @@ const Navbar: React.FC = () => {
             />
           </button>
 
-          {/* CTA Prendre RDV — lien externe vers Calendly */}
+          {/* CTA Prendre RDV — lien externe vers ZeroSix */}
           <a
             href={BOOKING_URL}
             target="_blank"
