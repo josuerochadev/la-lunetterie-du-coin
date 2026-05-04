@@ -10,8 +10,8 @@ import { fetchWithRetry } from '@/lib/retryLogic';
 import type { NetworkError } from '@/lib/networkErrors';
 
 // Mock external dependencies
-vi.mock('@/config/constants', () => ({
-  FORMSPREE_ENDPOINT: 'https://formspree.io/test',
+vi.mock('@/config/endpoints', () => ({
+  FORMSPREE_ENDPOINT: 'https://formspree.io/f/test',
 }));
 
 vi.mock('@/lib/networkErrors');
@@ -176,7 +176,7 @@ describe('useFormSubmission', () => {
         });
 
         expect(mockFetchWithRetry).toHaveBeenCalledWith(
-          'https://formspree.io/f/xanbvzql',
+          'https://formspree.io/f/test',
           {
             method: 'POST',
             body: mockFormData,
