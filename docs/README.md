@@ -18,7 +18,7 @@ Les ADR documentent les decisions architecturales importantes. Voir [docs/adr/RE
 
 - [Configuration environnement](./environment-setup.md) - Variables d'environnement par plateforme
 - [Deploiement](./deployment.md) - Deploiement Vercel, staging, rollback
-- [Integrations](./integrations.md) - Services externes (Formspree, Calendly, Sentry, Analytics)
+- [Integrations](./integrations.md) - Services externes (Formspree, ZeroSix, Sentry, Analytics)
 - [Strategie de tests](./testing-suite.md) - Tests unitaires, E2E, accessibilite
 - [Tests visuels](./visual-testing.md) - Tests de regression visuelle (desactives, plan futur)
 - [Standards icones](./standards/icons.md) - Patterns d'import Lucide

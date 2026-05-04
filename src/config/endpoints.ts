@@ -4,4 +4,6 @@
 
 export const FORMSPREE_ENDPOINT =
   import.meta.env.VITE_FORMSPREE_ENDPOINT || 'https://formspree.io/f/xanbvzql';
-export const BOOKING_URL = 'https://calendly.com/lalunetterieducoin';
+export const BOOKING_URL =
+  import.meta.env.VITE_BOOKING_URL ||
+  'https://la-lunetterie-du-coin-faubourg-store.zerosix.com/rendez-vous';
