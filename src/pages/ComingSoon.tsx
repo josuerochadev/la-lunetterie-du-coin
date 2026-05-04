@@ -1,9 +1,11 @@
 // src/pages/ComingSoon.tsx
 import LogoFull from '@/assets/logo/Logo_LLDC_NO_Noir.svg?react';
+import { Seo } from '@/seo/Seo';
 
 export default function ComingSoon() {
   return (
     <>
+      <Seo title="Bientôt disponible - La Lunetterie du Coin" noIndex />
       <style>{`
         @keyframes reveal-up {
           from { opacity: 0; transform: translateY(40px); }

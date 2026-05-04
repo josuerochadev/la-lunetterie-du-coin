@@ -22,7 +22,7 @@ export const SERVICES_DATA: ServiceData[] = [
   {
     id: 'neuves',
     title: 'Lunettes neuves',
-    image: '/images/services-new-glasses-sun.jpg',
+    image: '/images-optimized/services-new-glasses-sun-1920w.jpg',
     description: 'Créateurs indépendants, marques pointues. Que du style.',
     details: [
       'Large choix de montures contemporaines et intemporelles',
@@ -37,7 +37,7 @@ export const SERVICES_DATA: ServiceData[] = [
   {
     id: 'occasion',
     title: "Lunettes d'occasion",
-    image: '/images/services-second-hand-glasses.jpg',
+    image: '/images-optimized/services-second-hand-glasses-1920w.jpg',
     description: "Restaurées avec soin, vendues à petit prix. L'occasion fait le style.",
     details: [
       'Montures vintage authentiques',
@@ -52,7 +52,7 @@ export const SERVICES_DATA: ServiceData[] = [
   {
     id: 'examens',
     title: 'Examens de vue',
-    image: '/images/services-exams-machine.png',
+    image: '/images-optimized/services-exams-machine-1280w.jpg',
     description:
       'Un contrôle complet par Romain, opticien depuis plus de 15 ans. Vos yeux sont entre de bonnes mains.',
     details: [
@@ -68,7 +68,7 @@ export const SERVICES_DATA: ServiceData[] = [
   {
     id: 'lentilles',
     title: 'Lentilles de contact',
-    image: '/images/services-contact-lenses-shop-mirror.png',
+    image: '/images-optimized/services-contact-lenses-shop-mirror-1024w.jpg',
     description: 'Toutes les marques, essai en magasin, adaptation sur mesure. On gère.',
     details: [
       'Revendeurs de toutes marques (Alcon, Acuvue, CooperVision, etc.)',
@@ -83,7 +83,7 @@ export const SERVICES_DATA: ServiceData[] = [
   {
     id: 'reparations',
     title: 'Réparations & Ajustements',
-    image: '/images/services-reparations.jpg',
+    image: '/images-optimized/services-reparations-1920w.jpg',
     description: 'Un pépin ? On répare, on ajuste, on nettoie. Souvent dans la foulée.',
     details: [
       'Ajustements gratuits à vie pour nos clients',

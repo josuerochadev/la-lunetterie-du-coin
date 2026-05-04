@@ -39,8 +39,9 @@ type WithSuspenseOptions = {
  * Simple indicateur de chargement accessible et discret.
  */
 const DEFAULT_FALLBACK = (
-  <div className="flex min-h-screen items-center justify-center p-4" aria-live="polite">
+  <main className="flex min-h-screen items-center justify-center p-4" aria-live="polite">
     <div className="w-full max-w-4xl space-y-8 px-container-x">
+      <h1 className="sr-only">Chargement…</h1>
       {/* Skeleton title */}
       <div className="mx-auto h-10 w-2/3 animate-pulse rounded-sm bg-black/5" />
       {/* Skeleton subtitle */}
@@ -51,9 +52,8 @@ const DEFAULT_FALLBACK = (
         <div className="h-4 w-5/6 animate-pulse rounded-sm bg-black/5" />
         <div className="h-4 w-4/6 animate-pulse rounded-sm bg-black/5" />
       </div>
-      <span className="sr-only">Chargement…</span>
     </div>
-  </div>
+  </main>
 );
 
 /**

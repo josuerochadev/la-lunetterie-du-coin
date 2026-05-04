@@ -56,6 +56,16 @@ export function LocalBusinessJsonLd() {
         value: PUBLICATION_DIRECTOR,
       },
     ],
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: 48.5823394,
+      longitude: 7.7479026,
+    },
+    hasMap: 'https://maps.app.goo.gl/wNiTx6KzzzcVE8MCA',
+    sameAs: [
+      'https://www.instagram.com/lalunetterieducoin/',
+      'https://www.facebook.com/LaLunetterieDuCoinStrasbourg/',
+    ],
     priceRange: '€€',
     brand: BRAND,
   };

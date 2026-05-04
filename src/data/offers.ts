@@ -24,7 +24,7 @@ export const OFFERS_DATA: OfferData[] = [
   {
     id: 'recyclage',
     title: 'Programme de recyclage',
-    image: '/images/offers-recyclage-sunglasses.jpg',
+    image: '/images-optimized/offers-recyclage-sunglasses-1920w.jpg',
     catchphrase: "Vos anciennes lunettes valent de l'or",
     description:
       "Ramenez vos anciennes paires, repartez avec jusqu'à 70€ de remise. Bon pour vous, bon pour la planète.",
@@ -47,7 +47,7 @@ export const OFFERS_DATA: OfferData[] = [
   {
     id: 'deuxieme-paire',
     title: 'Deuxième paire',
-    image: '/images/offers-second-sunglasses-clip.jpg',
+    image: '/images-optimized/offers-second-sunglasses-clip-1920w.jpg',
     catchphrase: 'Deux paires, deux styles, un prix imbattable',
     description: 'Une deuxième paire à partir de 59€. Solaires, lecture, secours — à vous de voir.',
     details: [

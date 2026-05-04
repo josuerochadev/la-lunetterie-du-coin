@@ -66,8 +66,11 @@ export default function ResponsiveImage({
   height,
   imgProps = {},
 }: ResponsiveImageProps) {
-  // Extract base filename without extension and directory
-  const baseName = src.replace(/^\/images\//, '').replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
+  // Extract base filename without extension, directory, and size suffix
+  const baseName = src
+    .replace(/^\/(images|images-optimized)\//, '')
+    .replace(/-\d+w\.(jpg|jpeg|png|webp|avif)$/i, '')
+    .replace(/\.(jpg|jpeg|png|webp|avif)$/i, '');
 
   return (
     <picture>

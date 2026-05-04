@@ -1,6 +1,7 @@
 import { STORY_TITLE, STORY_BODY, STORY_IMAGE, STORY_IMAGE_ALT } from './constants';
 
 import LinkCTA from '@/components/common/LinkCTA';
+import ResponsiveImage from '@/components/common/ResponsiveImage';
 
 export function StoryDesktopStatic() {
   return (
@@ -21,11 +22,12 @@ export function StoryDesktopStatic() {
             </h2>
 
             <div className="h-[60%] w-full overflow-hidden">
-              <img
+              <ResponsiveImage
                 src={STORY_IMAGE}
                 alt={STORY_IMAGE_ALT}
                 className="h-full w-full object-cover"
                 loading="lazy"
+                sizes="14vw"
               />
             </div>
 
