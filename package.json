@@ -8,13 +8,6 @@
     "node": ">=20.0.0 <23.0.0",
     "pnpm": ">=8.0.0"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "@sentry/cli",
-      "esbuild",
-      "sharp"
-    ]
-  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -64,6 +57,11 @@
     "tailwind-merge": "^3.5.0"
   },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "@sentry/cli",
+      "esbuild",
+      "sharp"
+    ],
     "overrides": {
       "axios": ">=1.13.5",
       "tmp": ">=0.2.4",
