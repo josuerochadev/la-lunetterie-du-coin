@@ -2,11 +2,11 @@
 import { lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import HomePage from '@/pages/HomePage';
 import ComingSoon from '@/pages/ComingSoon';
 import { withSuspense } from '@/components/common/withSuspense';
 
 // Lazy-loaded pages avec Suspense HOC
+const HomePage = withSuspense(lazy(() => import('@/pages/HomePage')));
 const AboutPage = withSuspense(lazy(() => import('@/pages/AboutPage')));
 const ServicesPage = withSuspense(lazy(() => import('@/pages/ServicesPage')));
 const OffersPage = withSuspense(lazy(() => import('@/pages/OffersPage')));

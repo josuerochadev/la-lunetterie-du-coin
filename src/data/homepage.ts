@@ -29,26 +29,26 @@ export const HOMEPAGE_SERVICES: HomepageService[] = [
     title: 'Lunettes neuves',
     description:
       "Créateurs indépendants, marques pointues. Des montures qui ne ressemblent qu'à vous.",
-    image: '/images/homepage-services-new-glasses.jpg',
+    image: '/images-optimized/homepage-services-new-glasses-1920w.jpg',
     link: '/services#neuves',
   },
   {
     title: "Lunettes d'occasion",
     description: 'Du vintage rare au modèle récent, restauré avec soin. Le style sans le prix.',
-    image: '/images/homepage-services-second-hand.jpg',
+    image: '/images-optimized/homepage-services-second-hand-1920w.jpg',
     link: '/services#occasion',
   },
   {
     title: 'Examens de vue',
     description:
       'Un contrôle complet par Romain, opticien depuis plus de 15 ans. Vos yeux sont entre de bonnes mains.',
-    image: '/images/homepage-services-exam.jpg',
+    image: '/images-optimized/homepage-services-exam-1920w.jpg',
     link: '/services#examens',
   },
   {
     title: 'Lentilles de contact',
     description: "Toutes les marques, essai et adaptation sur mesure. On s'occupe de tout.",
-    image: '/images/homepage-services-contact-lenses.jpg',
+    image: '/images-optimized/homepage-services-contact-lenses-1920w.jpg',
     link: '/services#lentilles',
   },
 ];
@@ -60,7 +60,7 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 1,
     title: 'Recyclage',
-    image: '/images/homepage-offer-recyclage.webp',
+    image: '/images-optimized/homepage-offer-recyclage-1920w.jpg',
     catchphrase: 'DU PASSÉ FAITES TABLE RASE',
     summary: "Ramenez vos anciennes paires, repartez avec jusqu'à 70€ de remise.",
     link: '/offres#recyclage',
@@ -68,7 +68,7 @@ export const HOMEPAGE_OFFERS: HomepageOffer[] = [
   {
     id: 2,
     title: 'Deuxième paire',
-    image: '/images/homepage-offer-second-pair.webp',
+    image: '/images-optimized/homepage-offer-second-pair-1920w.jpg',
     catchphrase: 'LE COUP DE FOUDRE ×2',
     summary: 'Une deuxième paire à partir de 59€. Solaires, lecture, secours — à vous de voir.',
     link: '/offres#deuxieme-paire',

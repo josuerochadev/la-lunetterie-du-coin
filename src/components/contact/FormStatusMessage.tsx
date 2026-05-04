@@ -23,7 +23,13 @@ export default function FormStatusMessage({
   }
 
   return (
-    <div ref={messageRef} tabIndex={-1} aria-live="polite" className="mb-flow outline-none">
+    <div
+      ref={messageRef}
+      tabIndex={-1}
+      role="status"
+      aria-live="polite"
+      className="mb-flow outline-none"
+    >
       {status === 'success' && (
         <div className="form-message--success">
           ✅ <strong>Message envoyé avec succès !</strong>

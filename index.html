@@ -10,15 +10,18 @@
   <!-- Preconnect to analytics -->
   <link rel="preconnect" href="https://plausible.io" />
 
-  <!-- Preload LCP hero image (AVIF with fallback) -->
-  <link rel="preload" as="image" type="image/avif" href="/images-optimized/hero-eyeglasses-left-1920w.avif" />
+  <!-- Preload LCP hero image (AVIF with responsive srcset) -->
+  <link rel="preload" as="image" type="image/avif"
+    imagesrcset="/images-optimized/hero-eyeglasses-left-640w.avif 640w, /images-optimized/hero-eyeglasses-left-768w.avif 768w, /images-optimized/hero-eyeglasses-left-1024w.avif 1024w, /images-optimized/hero-eyeglasses-left-1280w.avif 1280w, /images-optimized/hero-eyeglasses-left-1920w.avif 1920w, /images-optimized/hero-eyeglasses-left-2560w.avif 2560w"
+    imagesizes="100vw" />
 
   <!-- Critical CSS inline pour éviter render blocking -->
   <style>
     *,*::before,*::after{box-sizing:border-box}html,body,#root{position:relative;height:100%;min-height:100dvh;background-color:#fff}body{font-family:'Satoshi',system-ui,sans-serif;line-height:1.5;color:#000;-webkit-font-smoothing:antialiased;overflow-x:hidden;margin:0;padding:0}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
   </style>
   
-  <title>La Lunetterie du Coin</title>
+  <meta name="description" content="Opticien indépendant à Strasbourg — lunettes neuves et d'occasion, examens de vue, lentilles. Créateurs, vintage, prix accessibles." />
+  <title>La Lunetterie du Coin — Opticien Strasbourg Neuf & Occasion</title>
 
 </head>
 
