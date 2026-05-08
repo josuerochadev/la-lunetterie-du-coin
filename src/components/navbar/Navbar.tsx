@@ -149,13 +149,13 @@ const Navbar: React.FC = () => {
             aria-expanded={menuActive}
             aria-controls="main-menu"
             className={cn(
-              'group/nav relative cursor-pointer text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold',
+              'group/nav relative cursor-pointer text-body-sm font-normal transition-[font-weight] duration-300 hover:font-bold',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
           >
             {/* Invisible bold duplicate to reserve width and prevent layout shift */}
-            <span className="invisible block h-0 font-semibold" aria-hidden="true">
+            <span className="invisible block h-0 font-bold" aria-hidden="true">
               Menu
             </span>
             Menu
@@ -175,7 +175,7 @@ const Navbar: React.FC = () => {
             rel="noopener noreferrer"
             aria-label="Prendre rendez-vous (s'ouvre dans un nouvel onglet)"
             className={cn(
-              'group/nav relative inline-flex items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-semibold',
+              'group/nav relative inline-flex items-center gap-1.5 text-body-sm font-normal transition-[font-weight] duration-300 hover:font-bold',
               textColor,
               `focus-visible:outline-2 focus-visible:outline-offset-4 ${outlineColor}`,
             )}
@@ -187,7 +187,7 @@ const Navbar: React.FC = () => {
             />
             {/* Invisible bold duplicate to reserve width */}
             <span
-              className="invisible absolute inset-0 flex items-center gap-1.5 font-semibold"
+              className="invisible absolute inset-0 flex items-center gap-1.5 font-bold"
               aria-hidden="true"
             >
               <span>Prendre RDV</span>

@@ -11,14 +11,7 @@ export default function OffersContent() {
   const variant = useResponsiveMotion();
 
   return (
-    <section
-      id="offers-content"
-      className="relative"
-      style={{
-        background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)',
-      }}
-      data-navbar-theme="light"
-    >
+    <section id="offers-content" className="bg-dome-black relative" data-navbar-theme="light">
       <ConvexDome color="black" />
 
       {variant === 'desktop-animated' && <OffersDesktop />}

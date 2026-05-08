@@ -41,7 +41,7 @@ export default function Button({
     <button
       type={props.type ?? 'button'}
       className={cn(
-        'group/cta relative inline-flex cursor-pointer items-center gap-2 border-none bg-transparent text-body font-normal transition-[font-weight] duration-300 hover:font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
+        'group/cta relative inline-flex cursor-pointer items-center gap-2 border-none bg-transparent text-body font-normal transition-[font-weight] duration-300 hover:font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2',
         textColorMap[theme],
         className,
       )}

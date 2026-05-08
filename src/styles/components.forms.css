@@ -38,12 +38,12 @@
 
   /* État d'erreur */
   .form-input--error {
-    border-color: rgb(239 68 68); /* red-500 */
+    border-color: rgb(var(--color-error-rgb));
     background: transparent;
   }
 
   .form-input--error:focus {
-    border-color: rgb(239 68 68);
+    border-color: rgb(var(--color-error-rgb));
     background: transparent;
   }
 
@@ -58,7 +58,7 @@
   }
 
   .form-error {
-    @apply mt-2 text-body-sm font-medium text-red-600;
+    @apply mt-2 text-body-sm font-medium text-error;
   }
 
   /* Messages de statut */
@@ -67,7 +67,7 @@
   }
 
   .form-message--error {
-    @apply font-medium text-red-700;
+    @apply font-medium text-error;
   }
 
   .form-message--info {

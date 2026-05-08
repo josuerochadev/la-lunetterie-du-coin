@@ -7,6 +7,7 @@
   --color-blue-rgb: 185, 203, 234; /* #B9CBEA - Secondaire */
   --color-stone-rgb: 243, 243, 243; /* #F3F3F3 - Fond neutre */
   --color-orange-rgb: 240, 132, 79; /* #F0844F - Secondaire/CTA */
+  --color-error-rgb: 220, 38, 38; /* #DC2626 - États d'erreur (red-600) */
 }
 
 /* ====== BASE ====== */

@@ -102,7 +102,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                 Si le problème persiste, contactez-nous au{' '}
                 <a
                   href="tel:+33388512440"
-                  className="focus-style font-semibold text-orange hover:underline"
+                  className="focus-style font-bold text-orange hover:underline"
                 >
                   03 88 51 24 40
                 </a>

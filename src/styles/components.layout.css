@@ -1,5 +1,10 @@
 /* ====== LAYOUT ====== */
 @layer components {
+  /* Fond noir sous un dôme convexe transparent */
+  .bg-dome-black {
+    background: linear-gradient(to bottom, transparent 12vw, rgb(var(--color-black-rgb)) 12vw);
+  }
+
   /* Firefox performance optimizations */
   @supports (-moz-appearance: none) {
     /* Optimize animations for Firefox */
