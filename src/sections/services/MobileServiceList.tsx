@@ -39,7 +39,7 @@ export function MobileServiceList() {
 
                 <ul className="mb-6 grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
                   {service.details.map((detail, i) => (
-                    <li key={i} className="flex gap-2.5 text-body-sm text-white">
+                    <li key={`${i}-${detail}`} className="flex gap-2.5 text-body-sm text-white">
                       <span
                         className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                         aria-hidden="true"

@@ -64,7 +64,7 @@ export function OfferEditorialCard({ offer, imagePosition, index = 0 }: OfferEdi
         <div className={`border border-black p-6 ${isImageLeft ? '' : 'text-left'}`}>
           <ul className="space-y-2">
             {offer.details.map((detail, i) => (
-              <li key={i} className="flex gap-3 text-body text-black">
+              <li key={`${i}-${detail}`} className="flex gap-3 text-body text-black">
                 <span className="text-accent" aria-hidden="true">
                   •
                 </span>
@@ -81,7 +81,7 @@ export function OfferEditorialCard({ offer, imagePosition, index = 0 }: OfferEdi
           <h4 className="mb-3 text-body font-medium text-text">Conditions :</h4>
           <ul className="space-y-2 text-body-sm text-black">
             {offer.conditions.map((condition, i) => (
-              <li key={i} className="flex gap-2">
+              <li key={`${i}-${condition}`} className="flex gap-2">
                 <span>•</span>
                 <span>{condition}</span>
               </li>

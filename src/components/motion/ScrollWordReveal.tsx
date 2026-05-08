@@ -53,7 +53,7 @@ export default function ScrollWordReveal({
   return (
     <Tag className={className} id={id} style={style}>
       {words.map((word, i) => (
-        <span key={i} className="inline-block">
+        <span key={`${i}-${word}`} className="inline-block">
           <ScrollWord
             scrollYProgress={scrollYProgress}
             index={i}

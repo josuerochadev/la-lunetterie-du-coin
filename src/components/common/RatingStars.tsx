@@ -47,7 +47,7 @@ export function RatingStars({ rating, size = 'h-5 w-5', className = '' }: Rating
     >
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
-          key={i}
+          key={`star-${i}`}
           className={`${size} ${i < clampedRating ? 'fill-accent text-accent' : 'text-black'}`}
           aria-hidden="true"
         />
