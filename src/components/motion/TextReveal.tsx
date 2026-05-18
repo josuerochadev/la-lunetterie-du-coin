@@ -114,7 +114,7 @@ export default function TextReveal({
     return (
       <MTag ref={ref} className={className} style={{ ...style, flexWrap: 'wrap' as const }}>
         {units.map((unit, i) => (
-          <span key={i} className={isWords ? 'inline-block' : undefined}>
+          <span key={`${i}-${unit}`} className={isWords ? 'inline-block' : undefined}>
             <ScrollWord scrollYProgress={scrollYProgress} index={i} total={units.length}>
               {unit}
             </ScrollWord>
@@ -132,7 +132,7 @@ export default function TextReveal({
   return (
     <MTag ref={ref} className={className} style={style}>
       {units.map((unit, i) => (
-        <span key={i} className={isWords ? 'inline-block' : undefined}>
+        <span key={`${i}-${unit}`} className={isWords ? 'inline-block' : undefined}>
           <m.span
             className="inline-block"
             initial={{ opacity: 0, y: 12 }}

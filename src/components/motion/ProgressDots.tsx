@@ -52,7 +52,7 @@ export function ProgressDots({
       aria-hidden="true"
     >
       {Array.from({ length: count }, (_, i) => (
-        <ProgressDot key={i} index={i} progress={progress} />
+        <ProgressDot key={`dot-${i}`} index={i} progress={progress} />
       ))}
     </m.div>
   );

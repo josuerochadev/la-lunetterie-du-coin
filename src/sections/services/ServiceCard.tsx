@@ -140,7 +140,10 @@ export function ServiceCard({
       >
         <ul className="mb-6 max-w-2xl space-y-2">
           {service.details.slice(0, 6).map((detail, i) => (
-            <li key={i} className="flex items-baseline gap-3 text-body !leading-[1.2] text-white">
+            <li
+              key={`${i}-${detail}`}
+              className="flex items-baseline gap-3 text-body !leading-[1.2] text-white"
+            >
               <span
                 className="mt-2 h-1.5 w-1.5 shrink-0 self-start rounded-full bg-secondary-orange"
                 aria-hidden="true"

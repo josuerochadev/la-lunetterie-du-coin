@@ -51,7 +51,7 @@ export function OpeningHoursList({ centered = false }: Props = {}) {
             <dd className={`flex flex-wrap gap-1.5 ${centered ? 'justify-center' : ''}`}>
               {slots.map((slot, i) => (
                 <span
-                  key={i}
+                  key={`${i}-${slot}`}
                   className={`inline-flex items-center rounded-full px-3 py-1 text-body-sm tabular-nums ${
                     isClosed ? 'bg-white/5 text-white/60' : 'bg-white/[0.08] text-white'
                   }`}

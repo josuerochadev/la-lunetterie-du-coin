@@ -177,7 +177,7 @@ function OfferCard({
             <ul className="mb-6 space-y-2">
               {offer.details.slice(0, 6).map((detail, i) => (
                 <li
-                  key={i}
+                  key={`${i}-${detail}`}
                   className="flex items-baseline gap-3 text-body !leading-[1.2] text-black"
                 >
                   <span

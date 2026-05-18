@@ -83,9 +83,9 @@ function ProgressBar({ scrollYProgress }: { scrollYProgress: MotionValue<number>
       style={{ opacity: barOpacity }}
       aria-hidden="true"
     >
-      {SERVICES_DATA.map((_, i) => (
+      {SERVICES_DATA.map((service, i) => (
         <ProgressSegment
-          key={i}
+          key={service.id}
           index={i}
           progress={progress}
           segStart={i / SERVICE_COUNT}
@@ -254,7 +254,7 @@ function ServiceSlide({
             style={{ opacity: detailsOpacity }}
           >
             {service.details.map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body text-white/85">
+              <li key={`${i}-${detail}`} className="flex gap-2 text-body text-white/85">
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"

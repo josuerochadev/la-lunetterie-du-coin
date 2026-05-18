@@ -28,7 +28,7 @@ export default function OfferStaticBlock({ offer, index }: { offer: OfferData; i
 
           <ul className="grid grid-cols-1 gap-y-2 sm:grid-cols-2 sm:gap-x-6">
             {offer.details.map((detail, i) => (
-              <li key={i} className="flex gap-2.5 text-body-sm text-black">
+              <li key={`${i}-${detail}`} className="flex gap-2.5 text-body-sm text-black">
                 <span
                   className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -47,7 +47,7 @@ export default function OfferStaticBlock({ offer, index }: { offer: OfferData; i
               <h4 className="mb-2 text-body-sm font-medium text-black">Conditions</h4>
               <ul className="space-y-1">
                 {offer.conditions.map((condition, i) => (
-                  <li key={i} className="text-body-sm text-black">
+                  <li key={`${i}-${condition}`} className="text-body-sm text-black">
                     {condition}
                   </li>
                 ))}
