@@ -49,6 +49,7 @@ const config: Config = {
       /* ====== TYPO ====== */
       fontFamily: {
         display: ['"Please"', 'system-ui', 'sans-serif'], // Titres (Please Heavy)
+        serif: ['"Please"', 'system-ui', 'sans-serif'], // Alias display (usage legacy)
         body: ['"Satoshi"', 'system-ui', 'sans-serif'], // Corps de texte
         sans: ['"Satoshi"', 'system-ui', 'sans-serif'], // Default
       },
@@ -144,6 +145,11 @@ const config: Config = {
       },
       zIndex: {
         base: '10',
+        story: '12',
+        offers: '13',
+        services: '14',
+        testimonials: '15',
+        contact: '16',
         navbar: '40',
         menu: '50',
       },
