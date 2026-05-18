@@ -1,165 +1,112 @@
-# 🥽 La Lunetterie du Coin
+<div align="center">
 
-> Application web moderne pour une lunetterie française, construite avec React 19, TypeScript et Vite
+# La Lunetterie du Coin
 
-[![Quality Pipeline](https://github.com/josuerochadev/la-lunetterie-du-coin/actions/workflows/quality-pipeline.yml/badge.svg)](https://github.com/josuerochadev/la-lunetterie-du-coin/actions/workflows/quality-pipeline.yml)
-[![codecov](https://codecov.io/gh/josuerochadev/la-lunetterie-du-coin/branch/main/graph/badge.svg)](https://codecov.io/gh/josuerochadev/la-lunetterie-du-coin)
+**Site vitrine pour un opticien indépendant strasbourgeois — lunettes neuves et d'occasion, examens de vue, lentilles.**
 
-## ✨ Fonctionnalités
+![React](https://img.shields.io/badge/React-19-61DAFB?style=flat&logo=react)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?style=flat&logo=typescript)
+![Vite](https://img.shields.io/badge/Vite-7-646CFF?style=flat&logo=vite)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-06B6D4?style=flat&logo=tailwindcss)
+![Framer Motion](https://img.shields.io/badge/Framer_Motion-12-0055FF?style=flat&logo=framer)
 
-- 🎨 **Design moderne** avec animations fluides respectant l'accessibilité
-- ♿ **Accessibilité WCAG 2.1 AA** avec 0 violations détectées
-- ⚡ **Performance optimisée** (Lighthouse 70+ mobile / 80+ desktop)
-- 📱 **Responsive Design** pour tous les appareils
-- 🔧 **TypeScript** pour une base de code robuste
-- 🧪 **Tests complets** (632 tests, 70%+ de couverture)
+[Portfolio](https://josuerocha.dev) · [Signaler un bug](https://github.com/josuerochadev/la-lunetterie-du-coin/issues)
 
-## 🚀 Démarrage Rapide
+</div>
+
+---
+
+## À propos
+
+La Lunetterie du Coin est un opticien indépendant installé à Strasbourg depuis 2016, qui propose des montures neuves et de seconde main, des examens de vue et des lentilles de contact. Ce site a été conçu et développé dans le cadre de mon activité freelance sous la structure Jurema, avec une attention particulière portée à la performance, à l'accessibilité et à l'expérience utilisateur sur mobile.
+
+L'interface intègre des animations au défilement, un système de préférences de mouvement (reduced motion), un formulaire de contact avec validation, et un pipeline qualité complet incluant Lighthouse CI, tests E2E et audit axe-core.
+
+## Fonctionnalités
+
+- Page d'accueil avec intro animée, héro en défilement parallaxe et sections collantes
+- Pages dédiées aux services, aux offres en cours et à la boutique
+- Formulaire de contact avec validation côté client (react-hook-form)
+- SEO structuré — balises canoniques, JSON-LD LocalBusiness, Open Graph
+- Respect des préférences de mouvement (`prefers-reduced-motion`)
+- Images responsive en AVIF/WebP avec fallback JPEG/PNG
+- Suivi des erreurs en production via Sentry
+- Pages légales (Mentions légales, Conditions générales de vente)
+
+## Stack technique
+
+| Catégorie     | Outils                                           |
+| ------------- | ------------------------------------------------ |
+| Framework     | React 19, TypeScript 5.7                         |
+| Build         | Vite 7, SVGR                                     |
+| Styles        | Tailwind CSS 3, Framer Motion 12                 |
+| Routage       | React Router DOM v7                              |
+| Formulaires   | react-hook-form                                  |
+| SEO           | @dr.pogodin/react-helmet, JSON-LD                |
+| Monitoring    | Sentry (@sentry/react)                           |
+| Tests         | Vitest, Testing Library, Playwright              |
+| Qualité       | ESLint, Prettier, Husky, lint-staged, commitlint |
+| Accessibilité | axe-core CLI, Lighthouse CI                      |
+
+## Démarrer
 
 ### Prérequis
 
-- Node.js 20+
-- PNPM (recommandé)
+- Node.js >= 20 < 23
+- pnpm >= 8
 
 ### Installation
 
 ```bash
-# Cloner le repository
 git clone https://github.com/josuerochadev/la-lunetterie-du-coin.git
 cd la-lunetterie-du-coin
-
-# Installer les dépendances
 pnpm install
-
-# Démarrer le serveur de développement
-pnpm run dev
+pnpm dev
 ```
 
-Copier `.env.example` en `.env.local` puis ajuster les valeurs si besoin (voir [docs/environment-setup.md](./docs/environment-setup.md)).
+### Scripts disponibles
 
-L'application sera disponible sur [http://localhost:5173](http://localhost:5173)
+| Commande                  | Description                                |
+| ------------------------- | ------------------------------------------ |
+| `pnpm dev`                | Serveur de développement                   |
+| `pnpm build`              | Build de production (typecheck + Vite)     |
+| `pnpm preview`            | Prévisualisation du build sur le port 4173 |
+| `pnpm typecheck`          | Vérification TypeScript sans émission      |
+| `pnpm lint`               | ESLint, zéro warning toléré                |
+| `pnpm format`             | Formatage Prettier                         |
+| `pnpm test:run`           | Tests unitaires (Vitest, exécution unique) |
+| `pnpm test:coverage`      | Rapport de couverture                      |
+| `pnpm e2e`                | Tests end-to-end (Playwright)              |
+| `pnpm a11y`               | Audit accessibilité axe-core               |
+| `pnpm lighthouse`         | Audit Lighthouse mobile                    |
+| `pnpm lighthouse:desktop` | Audit Lighthouse desktop                   |
+| `pnpm img:optimize`       | Optimisation des images via Sharp          |
+| `pnpm deploy:check`       | Pipeline complet avant déploiement         |
 
-## 🏗️ Stack Technique
+## Architecture
 
-### Frontend
-
-- **React 19** - Framework UI moderne
-- **TypeScript** - Typage statique
-- **Vite** - Build tool ultra-rapide
-- **Tailwind CSS** - Framework CSS utility-first
-- **Framer Motion** - Animations performantes
-
-### Outils de Qualité
-
-- **Vitest** + **Testing Library** - Tests unitaires
-- **Playwright** - Tests E2E
-- **ESLint** + **Prettier** - Linting et formatting
-- **Lighthouse CI** - Audit performance automatisé
-- **axe-core** - Tests d'accessibilité
-
-## 📊 Métriques de Qualité
-
-| Métrique                   | Valeur Actuelle              | Objectif |
-| -------------------------- | ---------------------------- | -------- |
-| **Test Coverage**          | ~70%                         | ≥ 10%    |
-| **Lighthouse Performance** | 70+ (mobile) / 80+ (desktop) | ≥ 70     |
-| **Bundle Size**            | ~800kb (JS)                  | ≤ 10MB   |
-| **A11y Violations**        | 0                            | 0        |
-| **ESLint Warnings**        | 0                            | 0        |
-
-## 🧪 Tests
-
-```bash
-# Tests unitaires
-pnpm run test              # Mode watch
-pnpm run test:run          # Une fois
-pnpm run test:coverage     # Avec coverage
-
-# Tests E2E
-pnpm run e2e               # Headless
-pnpm run e2e:headed        # Avec navigateur
-pnpm run e2e:ui            # Interface Playwright
-
-# Tests accessibilité
-pnpm run a11y
-
-# Suite complète de qualité
-pnpm run quality:check
 ```
-
-## 🏗️ Build & Déploiement
-
-```bash
-# Build de production
-pnpm run build
-
-# Preview local du build
-pnpm run preview
-
-# Audit performance
-pnpm run lighthouse:mobile
-pnpm run lighthouse:desktop
+src/
+├── a11y/               # Gestion des préférences de mouvement
+├── components/
+│   ├── common/         # Composants génériques (Button, Layout, Picture...)
+│   ├── contact/        # Composants du formulaire de contact
+│   ├── footer/         # Pied de page
+│   ├── motion/         # Composants d'animation
+│   ├── navbar/         # Navigation
+│   ├── offers/         # Cartes d'offres
+│   └── services/       # Carte de service
+├── config/             # Constantes (menu, footer, store, SEO, design)
+├── data/               # Données statiques (avis, équipe, contenu About)
+├── hooks/              # Hooks React personnalisés
+├── lib/                # Utilitaires (cn, keyboard, form helpers...)
+├── pages/              # Composants de route (HomePage, AboutPage...)
+├── sections/           # Sections par page (home/, about/, contact/...)
+├── seo/                # Composants SEO et JSON-LD
+├── styles/             # Fichiers CSS par composant/section
+└── types/              # Déclarations TypeScript
 ```
-
-## 🎨 Design System
-
-Le projet utilise un design system basé sur Tailwind CSS avec :
-
-- **Couleurs sémantiques** : `brand`, `accent`, `success`, `warning`, `error`
-- **Typographie fluide** avec clamp() pour la responsivité
-- **Animations accessibles** respectant `prefers-reduced-motion`
-- **Composants réutilisables** : Button, Picture, Cards
-
-## ♿ Accessibilité
-
-L'accessibilité est une priorité absolue :
-
-- ✅ Support complet du clavier
-- ✅ Lecteurs d'écran compatibles
-- ✅ Contrastes WCAG AA (4.5:1)
-- ✅ Respect des préférences de mouvement
-- ✅ Structure HTML sémantique
-
-## 📈 Performance
-
-Optimisations implémentées :
-
-- **Code splitting** intelligent
-- **Lazy loading** des images et composants
-- **Bundle analysis** et tree shaking
-- **Formats d'images modernes** (AVIF, WebP)
-- **Critical CSS** inliné
-
-## 🤝 Contribution
-
-Nous accueillons les contributions ! Consultez notre [Guide de Contribution](./CONTRIBUTING.md) pour commencer.
-
-### Workflow de contribution
-
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feat/amazing-feature`)
-3. Commit des changements (`git commit -m 'feat: add amazing feature'`)
-4. Push sur la branche (`git push origin feat/amazing-feature`)
-5. Ouvrir une Pull Request
-
-## 📚 Documentation
-
-- [Guide de contribution](./CONTRIBUTING.md) - Installation, workflow, standards de code
-- [Architecture Decision Records](./docs/adr/) - Decisions techniques documentees
-- [Configuration environnement](./docs/environment-setup.md) - Variables d'environnement
-- [Standards icones](./docs/standards/icons.md) - Patterns d'import Lucide
-- [Audits qualite](./docs/audits/) - Resultats des audits (KISS, SOLID, lisibilite, architecture)
-- [Integrations externes](./docs/integrations.md) - Formspree, Sentry, Analytics, ZeroSix
-- [Strategie de tests](./docs/testing-suite.md) - Tests unitaires, E2E, visuels
-
-## 📝 Licence
-
-Projet prive.
-
-## 👥 Équipe
-
-- **Développeur Principal** : [@josuerochadev](https://github.com/josuerochadev)
 
 ---
 
-**Developpe avec soin pour La Lunetterie du Coin**
+Construit par **[Josué Rocha](https://josuerocha.dev)** · [LinkedIn](https://linkedin.com/in/josuerocha) · [GitHub](https://github.com/josuerochadev)
