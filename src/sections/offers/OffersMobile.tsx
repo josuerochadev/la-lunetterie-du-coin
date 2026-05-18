@@ -82,9 +82,9 @@ function OfferProgressBar({ scrollYProgress }: { scrollYProgress: MotionValue<nu
       style={{ opacity: barOpacity }}
       aria-hidden="true"
     >
-      {OFFERS_DATA.map((_, i) => (
+      {OFFERS_DATA.map((offer, i) => (
         <OfferProgressSegment
-          key={i}
+          key={offer.id}
           index={i}
           progress={progress}
           segStart={i / OFFER_COUNT}
@@ -257,7 +257,10 @@ function OfferSlide({
             style={{ opacity: detailsOpacity }}
           >
             {offer.details.slice(0, 6).map((detail, i) => (
-              <li key={i} className="flex gap-2 text-body-sm text-white/70 sm:text-body">
+              <li
+                key={`${i}-${detail}`}
+                className="flex gap-2 text-body-sm text-white/70 sm:text-body"
+              >
                 <span
                   className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-secondary-orange"
                   aria-hidden="true"
@@ -279,7 +282,7 @@ function OfferSlide({
               </summary>
               <ul className="mt-3 space-y-1.5 text-body-sm text-white/85">
                 {offer.conditions.map((condition, i) => (
-                  <li key={i}>{condition}</li>
+                  <li key={`${i}-${condition}`}>{condition}</li>
                 ))}
               </ul>
             </details>
