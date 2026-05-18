@@ -65,10 +65,10 @@ describe('ServicesMobileAnimated', () => {
     }).not.toThrow();
   });
 
-  it('should render within xl:hidden container', () => {
+  it('should render within desk:hidden container', () => {
     const { container } = render(<ServicesMobileAnimated />);
     const wrapper = container.firstElementChild;
-    expect(wrapper?.className).toContain('xl:hidden');
+    expect(wrapper?.className).toContain('desk:hidden');
   });
 
   it('should render section title', () => {

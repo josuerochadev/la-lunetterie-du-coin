@@ -53,7 +53,7 @@ function HomeTestimonials() {
       {variant === 'desktop-animated' && <TestimonialsDesktop />}
 
       {variant === 'mobile-animated' && (
-        <div className="pointer-events-auto xl:hidden">
+        <div className="pointer-events-auto desk:hidden">
           <TestimonialsMobileAnimated />
         </div>
       )}

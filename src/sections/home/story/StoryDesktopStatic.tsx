@@ -5,7 +5,7 @@ import ResponsiveImage from '@/components/common/ResponsiveImage';
 
 export function StoryDesktopStatic() {
   return (
-    <div className="hidden min-h-[450vh] xl:block">
+    <div className="hidden min-h-[450vh] desk:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full">
           {/* Asymmetric 3-col grid with uniform 4vw spacing:

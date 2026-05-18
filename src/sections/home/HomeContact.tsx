@@ -38,7 +38,7 @@ function ContactDesktop() {
   const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
 
   return (
-    <div ref={ref} className="hidden h-[300vh] xl:block">
+    <div ref={ref} className="hidden h-[300vh] desk:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-accent">
         {/* Circle motif — scale grows through hold phase */}
         <m.img
@@ -118,7 +118,7 @@ function ContactMobileAnimated() {
   const ctaOpacity = useTransform(scrollYProgress, [0.3, 0.38], [0, 1]);
 
   return (
-    <div ref={ref} className="h-[250vh] xl:hidden">
+    <div ref={ref} className="h-[250vh] desk:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         {/* Black overlay — matches Testimonials bg, fades to reveal yellow */}
         <m.div

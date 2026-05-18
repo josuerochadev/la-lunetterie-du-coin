@@ -19,7 +19,7 @@ function HeroDesktop() {
   const exitY = useTransform(scrollY, [100, 400], [0, -60]);
 
   return (
-    <div className="hidden xl:block">
+    <div className="hidden desk:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <EyePattern variant="blanc" opacity={0.03} />
 
@@ -85,8 +85,8 @@ export default function AboutHero() {
     >
       {!prefersReducedMotion && <HeroDesktop />}
 
-      {/* Mobile: xl:hidden when desktop animated is active, full-width for reduced-motion */}
-      <HeroMobile className={prefersReducedMotion ? '' : 'xl:hidden'} />
+      {/* Mobile: desk:hidden when desktop animated is active, full-width for reduced-motion */}
+      <HeroMobile className={prefersReducedMotion ? '' : 'desk:hidden'} />
     </section>
   );
 }

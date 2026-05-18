@@ -8,7 +8,7 @@ import { useResponsiveMotion } from '@/hooks/useResponsiveMotion';
 
 function FormDesktop() {
   return (
-    <div className="hidden xl:block">
+    <div className="hidden desk:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,6rem)]">
         <div className="mx-auto max-w-6xl">
           <SimpleAnimation type="slide-up" delay={0}>
@@ -40,7 +40,7 @@ function FormDesktop() {
 
 function FormMobile() {
   return (
-    <div className="xl:hidden">
+    <div className="desk:hidden">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(10vh,5rem)]">
         <div className="mx-auto max-w-3xl">
           <SimpleAnimation type="slide-up" delay={0}>

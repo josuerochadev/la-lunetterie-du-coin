@@ -72,7 +72,7 @@ export function DirectionsBlockAnimated() {
   const exitY = useTransform(scrollYProgress, [0.78, 0.92], [0, -30]);
 
   return (
-    <div ref={ref} className="relative h-[220vh] w-full xl:hidden">
+    <div ref={ref} className="relative h-[220vh] w-full desk:hidden">
       <div className="sticky top-0 h-svh w-full overflow-hidden">
         {/* Pinned parallax background */}
         <div className="absolute inset-0 overflow-hidden">

@@ -40,7 +40,7 @@ export function OfferMobileBlock({
   const barScaleY = useTransform(scrollYProgress, [0.12, 0.34], [0, 1]);
 
   return (
-    <article ref={ref} className="py-10 xl:hidden">
+    <article ref={ref} className="py-10 desk:hidden">
       {/* Image with scale entrance */}
       <div className="px-container-x">
         <m.div style={{ scale: imgScale, opacity: imgOpacity, y: imgY }}>

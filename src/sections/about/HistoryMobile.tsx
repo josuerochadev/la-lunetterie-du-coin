@@ -131,7 +131,7 @@ export default function HistoryMobile() {
   });
 
   return (
-    <div ref={ref} className="relative h-[350vh] xl:hidden">
+    <div ref={ref} className="relative h-[350vh] desk:hidden">
       <div className="sticky top-0 flex h-svh flex-col overflow-hidden">
         {/* ── Photo — ABOVE text (z-20), grows upward to cover content ── */}
         <m.div

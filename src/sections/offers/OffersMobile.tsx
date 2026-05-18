@@ -308,7 +308,7 @@ export default function OffersMobileAnimated() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="xl:hidden" style={{ height: '400vh' }}>
+    <div ref={ref} className="desk:hidden" style={{ height: '400vh' }}>
       <div className="sticky top-0 h-svh overflow-hidden bg-black">
         {/* Offer slides (layered, crossfading) */}
         <div className="absolute inset-0 z-10">

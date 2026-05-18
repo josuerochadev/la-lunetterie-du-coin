@@ -94,6 +94,7 @@ const config: Config = {
 
       /* ====== LAYOUT ====== */
       screens: {
+        desk: '1100px', // Switch mobile ↔ desktop components (above iPad Pro landscape 1024px)
         '3xl': '1920px',
         '4xl': '2560px',
         '5xl': '3840px',

@@ -122,7 +122,7 @@ export default function HistoryDesktop() {
   });
 
   return (
-    <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] xl:block">
+    <div ref={sectionRef} className="relative z-10 hidden min-h-[400vh] desk:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <div className="relative h-full">
           {/* Asymmetric 3-col grid with uniform 4vw spacing:

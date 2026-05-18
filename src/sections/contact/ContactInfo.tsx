@@ -48,7 +48,7 @@ function InfoItem({
 
 function InfoDesktop() {
   return (
-    <div className="hidden xl:block">
+    <div className="hidden desk:block">
       <div className="mx-auto max-w-container px-container-x pb-section pt-[max(12vh,12vw)]">
         <div className="mx-auto max-w-[1400px]">
           <SimpleAnimation type="slide-up" delay={0}>
@@ -159,7 +159,7 @@ function InfoMobileAnimated() {
   const exitY = useTransform(scrollYProgress, [0.78, 0.92], [0, -30]);
 
   return (
-    <div ref={ref} className="relative h-[200vh] xl:hidden">
+    <div ref={ref} className="relative h-[200vh] desk:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.div
           className="flex h-full flex-col items-center justify-center px-container-x pt-[10vw] sm:pt-[14vw]"
