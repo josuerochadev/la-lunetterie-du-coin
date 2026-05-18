@@ -3,20 +3,10 @@
  *
  * Prefer CSS variables in Tailwind classes. Use these constants only
  * when a hex value is needed in JS (e.g. inline gradient strings).
+ *
+ * SYNC: this value must match --color-yellow-rgb in base.css (254, 235, 9).
  */
 export const ACCENT_HEX = '#FEEB09';
-
-/**
- * z-index scale for the HomePage sticky section stack.
- * Each section must sit above the previous one.
- */
-export const Z_INDEX = {
-  story: 12,
-  offers: 13,
-  services: 14,
-  testimonials: 15,
-  contact: 16,
-} as const;
 
 /**
  * Named timeouts (ms) used across the app.
