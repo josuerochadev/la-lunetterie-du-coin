@@ -33,7 +33,7 @@ export default function MapBlock() {
   const exitY = useTransform(scrollYProgress, [0.75, 0.9], [0, -30]);
 
   return (
-    <div ref={ref} className="relative hidden h-[250vh] w-full xl:block">
+    <div ref={ref} className="relative hidden h-[250vh] w-full desk:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Parallax background image */}
         <div className="absolute inset-0 overflow-hidden">

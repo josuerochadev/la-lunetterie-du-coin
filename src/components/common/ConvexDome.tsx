@@ -19,7 +19,7 @@ const COLOR_BG: Record<NonNullable<ConvexDomeProps['color']>, string> = {
 /**
  * Shared convex dome that smooths the visual transition between a hero
  * section and the next section. Renders an SVG quadratic curve on desktop
- * (`xl:block`) and a CSS border-radius half-ellipse on mobile (`xl:hidden`).
+ * (`desk:block`) and a CSS border-radius half-ellipse on mobile (`desk:hidden`).
  *
  * Used by AboutHistory, ServicesContent, OffersContent and ContactInfo so
  * the dome stays consistent across pages.
@@ -37,7 +37,7 @@ export function ConvexDome({ color = 'black' }: ConvexDomeProps = {}) {
           anti-aliasing at the SVG's bottom edge can leave a 1px seam where the
           hero color behind the transparent gradient bleeds through. */}
       <svg
-        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full xl:block"
+        className="pointer-events-none absolute left-0 top-0 z-[1] hidden w-full desk:block"
         style={{ height: 'calc(12vw + 1px)' }}
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
@@ -47,7 +47,7 @@ export function ConvexDome({ color = 'black' }: ConvexDomeProps = {}) {
       </svg>
       {/* Mobile: CSS border-radius half-ellipse, oversized for a pronounced curve */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden xl:hidden"
+        className="pointer-events-none absolute inset-x-0 -top-[11vw] z-[1] h-[24vw] overflow-hidden desk:hidden"
         aria-hidden="true"
         data-navbar-theme="light"
       >

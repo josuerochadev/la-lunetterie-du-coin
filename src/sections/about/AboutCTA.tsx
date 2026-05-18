@@ -33,7 +33,7 @@ function CTADesktop() {
   const cta = useScrollEntrance(scrollYProgress, 0.26, 0.34, 30);
 
   return (
-    <div ref={ref} className="hidden h-[300vh] xl:block">
+    <div ref={ref} className="hidden h-[300vh] desk:block">
       <div className="sticky top-0 h-screen overflow-hidden bg-accent">
         {/* Circle motif */}
         <m.img
@@ -104,7 +104,7 @@ function CTAMobile() {
   const ctaY = useTransform(scrollYProgress, [0.28, 0.36], [24, 0]);
 
   return (
-    <div ref={ref} className="h-[250vh] xl:hidden">
+    <div ref={ref} className="h-[250vh] desk:hidden">
       <div className="sticky top-0 h-svh overflow-hidden">
         <m.img
           src="/images/motif-eye-pattern.svg"

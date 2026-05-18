@@ -55,7 +55,7 @@ function HomeServices() {
 
       {/* Concave dome — desktop/static only (mobile uses internal curtain) */}
       <div
-        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent xl:block"
+        className="pointer-events-none absolute -top-[1px] left-1/2 z-20 hidden h-[12vw] w-[140vw] -translate-x-1/2 rounded-b-[50%] bg-accent desk:block"
         aria-hidden="true"
       />
 
@@ -63,7 +63,7 @@ function HomeServices() {
       {variant === 'mobile-animated' ? (
         <ServicesMobileAnimated />
       ) : (
-        <div className="pointer-events-auto bg-white px-container-x py-section xl:hidden">
+        <div className="pointer-events-auto bg-white px-container-x py-section desk:hidden">
           <div className="relative z-10 mx-auto max-w-container">
             <h2 id="services-title" className="heading-section mb-12 text-black">
               {HOMEPAGE_SECTIONS.services.title}

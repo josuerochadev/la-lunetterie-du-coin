@@ -56,7 +56,7 @@ function HeroDesktop({
   const exitY = useTransform(scrollY, [100, 400], [0, -60]);
 
   return (
-    <div className="hidden xl:block">
+    <div className="hidden desk:block">
       <div className="sticky top-0 h-screen overflow-hidden">
         <EyePattern variant={eyeVariant} opacity={0.03} />
 
@@ -109,7 +109,7 @@ export default function PageHero({
         />
       )}
 
-      <div className={prefersReducedMotion ? '' : 'xl:hidden'}>
+      <div className={prefersReducedMotion ? '' : 'desk:hidden'}>
         <div className="relative flex min-h-svh items-center py-section">
           <EyePattern variant={eyeVariant} opacity={0.03} />
 

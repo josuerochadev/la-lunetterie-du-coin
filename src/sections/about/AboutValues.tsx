@@ -94,7 +94,7 @@ function ValuesDesktop() {
   const exitY = useTransform(scrollYProgress, [0.7, 0.85], [0, -40]);
 
   return (
-    <div ref={sectionRef} className="hidden h-[300vh] xl:block">
+    <div ref={sectionRef} className="hidden h-[300vh] desk:block">
       <div className="sticky top-0 h-screen overflow-hidden" style={{ perspective: '800px' }}>
         <m.div
           className="flex h-full flex-col items-center justify-center px-container-x"
@@ -194,7 +194,7 @@ function ValuesMobileAnimated() {
   const titleScale = useSpring(titleScaleRaw, SPRING_CONFIG);
 
   return (
-    <div ref={ref} className="relative z-10 h-[250vh] xl:hidden">
+    <div ref={ref} className="relative z-10 h-[250vh] desk:hidden">
       <div className="sticky top-0 flex h-svh items-center overflow-hidden pb-[5vh] pt-[3vh] sm:pb-[6vh] sm:pt-[4vh]">
         <m.div
           className="w-full px-container-x will-change-[clip-path]"

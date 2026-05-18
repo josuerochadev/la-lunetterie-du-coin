@@ -286,7 +286,7 @@ export default function OffersDesktop() {
   const { ref, scrollYProgress } = useManualScrollProgress('start-start');
 
   return (
-    <div ref={ref} className="hidden xl:block" style={{ height: '500vh' }}>
+    <div ref={ref} className="hidden desk:block" style={{ height: '500vh' }}>
       <div className="sticky top-0 h-screen overflow-hidden">
         {/* Full-bleed photo layer */}
         <div className="absolute inset-0 z-0">
