@@ -189,7 +189,7 @@ export function OffersMobileAnimated() {
                     />
 
                     <div className="relative z-10 px-6 py-8 sm:px-8 sm:py-10">
-                      <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white/70">
+                      <span className="mb-2 block text-body-sm font-medium uppercase tracking-widest text-white/70">
                         {number} / {String(OFFER_COUNT).padStart(2, '0')}
                       </span>
 

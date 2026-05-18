@@ -65,7 +65,7 @@ export function OfferMobileBlock({
               aria-hidden="true"
             />
             <div className="relative z-10 px-6 py-8">
-              <span className="mb-2 block text-sm font-medium uppercase tracking-widest text-white">
+              <span className="mb-2 block text-body-sm font-medium uppercase tracking-widest text-white">
                 {number} / {String(OFFER_COUNT).padStart(2, '0')}
               </span>
               <m.h3

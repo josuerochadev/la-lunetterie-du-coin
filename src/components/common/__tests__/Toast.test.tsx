@@ -106,8 +106,8 @@ describe('ToastProvider', () => {
     const errorToast = statusElements.find((el) => el.textContent?.includes('Error message'));
     expect(errorToast).toBeDefined();
 
-    // The X icon (error) renders an SVG with text-red-600
-    const svg = errorToast!.querySelector('svg.text-red-600');
+    // The X icon (error) renders an SVG with text-error
+    const svg = errorToast!.querySelector('svg.text-error');
     expect(svg).toBeInTheDocument();
   });
 

@@ -24,8 +24,7 @@ export default function ServicesContent() {
       id="services-content"
       aria-labelledby="services-content-title"
       data-navbar-theme="light"
-      className="relative"
-      style={{ background: 'linear-gradient(to bottom, transparent 12vw, #000 12vw)' }}
+      className="bg-dome-black relative"
     >
       <ConvexDome color="black" />
 

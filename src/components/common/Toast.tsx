@@ -24,7 +24,7 @@ function ToastEntry({ item, onDismiss }: { item: ToastItem; onDismiss: () => voi
 
   const iconMap = {
     success: <Check className="h-4 w-4 text-secondary-green" aria-hidden="true" />,
-    error: <X className="h-4 w-4 text-red-600" aria-hidden="true" />,
+    error: <X className="h-4 w-4 text-error" aria-hidden="true" />,
     info: null,
   };
 

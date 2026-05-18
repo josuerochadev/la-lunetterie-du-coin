@@ -35,7 +35,7 @@ export default function FooterContact() {
             <Phone className="h-4 w-4 flex-shrink-0 text-secondary-blue" aria-hidden="true" />
             <a
               href={`tel:${STORE_INFO.phone.tel}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-secondary-orange"
+              className="focus-style font-bold transition-colors duration-300 hover:text-secondary-orange"
             >
               {STORE_INFO.phone.display}
             </a>
@@ -45,7 +45,7 @@ export default function FooterContact() {
             <Mail className="h-4 w-4 flex-shrink-0 text-secondary-blue" aria-hidden="true" />
             <a
               href={`mailto:${COMPANY_EMAIL}`}
-              className="focus-style font-semibold transition-colors duration-300 hover:text-secondary-orange"
+              className="focus-style font-bold transition-colors duration-300 hover:text-secondary-orange"
             >
               {COMPANY_EMAIL}
             </a>

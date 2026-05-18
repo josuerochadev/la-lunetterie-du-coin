@@ -122,14 +122,14 @@ export default function OfferCard({ offer, isOpen, onToggle }: OfferCardProps) {
             >
               {isOpen ? (
                 <div className="space-y-xs">
-                  <p className="text-body-sm font-semibold uppercase tracking-wide text-accent">
+                  <p className="text-body-sm font-bold uppercase tracking-wide text-accent">
                     Détails
                   </p>
                   <p>{offer.details}</p>
                 </div>
               ) : (
                 <div>
-                  <p className="mb-1 text-body-sm font-semibold uppercase tracking-wide text-orange">
+                  <p className="mb-1 text-body-sm font-bold uppercase tracking-wide text-orange">
                     Résumé
                   </p>
                   <p>{offer.summary}</p>

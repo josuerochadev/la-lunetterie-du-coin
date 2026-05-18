@@ -115,7 +115,7 @@ export default function FormField(props: FormFieldProps) {
         <label htmlFor={fieldId} className="form-label">
           {label}
           {required && (
-            <span className="text-red-600" aria-label="requis">
+            <span className="text-error" aria-label="requis">
               {' '}
               *
             </span>
@@ -137,7 +137,7 @@ export default function FormField(props: FormFieldProps) {
           {hasCounter && (
             <span
               className={`shrink-0 text-body-xs tabular-nums ${
-                maxLength && charCount > maxLength * 0.9 ? 'text-red-600' : 'text-black'
+                maxLength && charCount > maxLength * 0.9 ? 'text-error' : 'text-black'
               }`}
               aria-live="polite"
               aria-atomic="true"

@@ -46,10 +46,7 @@ function CTADesktop() {
 
         {/* Content */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-10 px-8 pb-[15vh]">
-          <h2
-            className="text-heading text-center text-black"
-            style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
-          >
+          <h2 className="text-heading text-fluid-hero text-center text-black">
             <m.span className="block" style={{ opacity: yeux.opacity, y: yeux.y }}>
               YEUX
             </m.span>

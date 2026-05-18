@@ -36,10 +36,7 @@ function CTADesktop() {
 
         <div className="relative z-10 mx-auto max-w-container px-container-x py-section text-center">
           <m.div style={{ opacity: title.opacity, y: title.y }}>
-            <h2
-              className="text-heading text-black"
-              style={{ fontSize: 'clamp(3.5rem, 12vw, 14rem)', lineHeight: '0.95' }}
-            >
+            <h2 className="text-heading text-fluid-hero text-black">
               <ScrollWordReveal
                 as="span"
                 scrollYProgress={scrollYProgress}

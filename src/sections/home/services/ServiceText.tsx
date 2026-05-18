@@ -47,7 +47,7 @@ export function ServiceText({
       className={`${index === 0 ? '' : 'absolute inset-0'} flex flex-col justify-center`}
       style={{ opacity, y, pointerEvents }}
     >
-      <span className="mb-4 text-sm font-medium uppercase tracking-widest text-black">
+      <span className="mb-4 text-body-sm font-medium uppercase tracking-widest text-black">
         {String(index + 1).padStart(2, '0')} / {String(SERVICE_COUNT).padStart(2, '0')}
       </span>
 

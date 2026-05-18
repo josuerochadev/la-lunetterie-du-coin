@@ -41,6 +41,9 @@ const config: Config = {
         'secondary-blue': withOpacity('--color-blue-rgb') as unknown as string,
         'secondary-stone': withOpacity('--color-stone-rgb') as unknown as string,
         'secondary-orange': withOpacity('--color-orange-rgb') as unknown as string,
+
+        /* Status */
+        error: withOpacity('--color-error-rgb') as unknown as string,
       },
 
       /* ====== TYPO ====== */

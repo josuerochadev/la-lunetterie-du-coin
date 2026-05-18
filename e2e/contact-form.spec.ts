@@ -128,6 +128,7 @@ test.describe('Contact Form - E2E Tests', () => {
     await form.locator('input[name="consent"]').click({ force: true });
 
     const submitButton = form.locator('button[type="submit"]');
+    await expect(submitButton).toBeEnabled({ timeout: 3000 });
     await submitButton.click();
 
     // Vérifier le message d'erreur

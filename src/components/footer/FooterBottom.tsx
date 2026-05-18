@@ -34,7 +34,7 @@ export default function FooterBottom({ onLinkClick }: FooterBottomProps) {
             href="https://josuerocha.dev"
             target="_blank"
             rel="noopener noreferrer"
-            className="focus-style font-semibold text-secondary-blue transition-colors duration-300 hover:text-secondary-orange"
+            className="focus-style font-bold text-secondary-blue transition-colors duration-300 hover:text-secondary-orange"
           >
             Josué Rocha
           </a>
